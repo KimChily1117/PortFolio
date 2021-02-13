@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CCore" Collapsed="true">
+    <Position X="18.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>iAQAAAAAAKAAAgABAAAAIAAAUAgAAEAAADACSAAAAAM=</HashCode>
+      <FileName>Core.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CRef" Collapsed="true">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAECAQEAAAAABAAgAAAAAAAAAAIAAAAAACAAAJQIAAA=</HashCode>
+      <FileName>Core\Ref.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTimer" Collapsed="true">
+    <Position X="18.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAYAAAAAEAEAAQAAAQADAAACQAgBACAAABAGABAQAAA=</HashCode>
+      <FileName>Core\Timer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPathManager" Collapsed="true">
+    <Position X="18.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAAAAAAAgAAAAAAAAAAAAAAAQAgAAIAAAAACQAABAAA=</HashCode>
+      <FileName>Core\PathManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CInput" Collapsed="true">
+    <Position X="20.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQCQAAAACAKgAAAAAgAAAAIQAgAAAwAAAACAAAAAAA=</HashCode>
+      <FileName>Core\Input.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CInGameScene" Collapsed="true">
+    <Position X="2.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAACIAAAAAA=</HashCode>
+      <FileName>Scene\InGameScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CScene" Collapsed="true">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAGQAIAAAYAAAAAAIAAAkAAAAAAAABAGQAAAAAg=</HashCode>
+      <FileName>Scene\Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSceneManager" Collapsed="true">
+    <Position X="16.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAIAAAIAAAAiAAgAAIAAAUAgAAAgACBACAAAAAAA=</HashCode>
+      <FileName>Scene\SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLayer" Collapsed="true">
+    <Position X="16.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEUCBQEAAIAAAACgAAAAICAAFAIAQAAACBCCAIgAAAQ=</HashCode>
+      <FileName>Scene\Layer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CObj" Collapsed="true">
+    <Position X="10.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JIbA0UACAIAAAASgAAAIIUgIFCJAQAAACBCigAAAABA=</HashCode>
+      <FileName>Object\Obj.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMoveObj" Collapsed="true">
+    <Position X="9.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQEAgAACIAAGAAAQAACMBAEEAEAAAAAABAiAAAAABA=</HashCode>
+      <FileName>Object\MoveObj.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPlayer" Collapsed="true">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAAAAAAIAAAAAAAAAAIAAAEAAkAAAAABACAAAAABA=</HashCode>
+      <FileName>Object\Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGoblin" Collapsed="true">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAIAAiAAAAAAAIAAABAAEAAAAABADAgAAARA=</HashCode>
+      <FileName>Object\Goblin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBullet" Collapsed="true">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAEAIAgIAAAAAAAAIAIAAAAAAAAAAAABACAAAAIBA=</HashCode>
+      <FileName>Object\Bullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStaticObj" Collapsed="true">
+    <Position X="14.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAIAAAAAAAABAIACAEAAAAAAAABACAAAAABA=</HashCode>
+      <FileName>Object\StaticObj.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStage" Collapsed="true">
+    <Position X="14.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAIAAAAAAAAAAIAAAEAAAAAAAEDACAAAAABA=</HashCode>
+      <FileName>Object\Stage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CResourcesManager" Collapsed="true">
+    <Position X="20.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAEAAAAAEAAAgAAgAAAAAgAQAgAAQAAQAACAAABAAA=</HashCode>
+      <FileName>Resources\ResourcesManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTexture" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAEAAAAEAAAIAAAAAAAgIAAAAAAAAAAAAAAAAQIAAA=</HashCode>
+      <FileName>Resources\Texture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCollider" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAEGAIgAIIAAAAAAIAAIMACIAAAAgBgCAAgAABA=</HashCode>
+      <FileName>Collider\Collider.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CColliderManager" Collapsed="true">
+    <Position X="16.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAEAAIAAEAAACAAAAAAARAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Collider\ColliderManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CColliderRect" Collapsed="true">
+    <Position X="5.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQRAAACAIAAAQAAAAAAIAAAEAAAAEAAABACAEAAABA=</HashCode>
+      <FileName>Collider\ColliderRect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="_tagResolution" Collapsed="true">
+    <Position X="7.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="_tagPosition" Collapsed="true">
+    <Position X="3.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAABAAAAABgAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="_tagRectangle" Collapsed="true">
+    <Position X="3.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAABQQBAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="_tagKeyInfo" Collapsed="true">
+    <Position X="10.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAEgAggAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Input.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="RESOLUTION" Collapsed="true">
+    <Position X="7.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PRESOLUTION" Collapsed="true">
+    <Position X="7.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="POSITION" Collapsed="true">
+    <Position X="0.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PPOSITION" Collapsed="true">
+    <Position X="6.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="_SIZE" Collapsed="true">
+    <Position X="0.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="_PSIZE" Collapsed="true">
+    <Position X="3.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="RECTANGLE" Collapsed="true">
+    <Position X="0.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PRECTANGLE" Collapsed="true">
+    <Position X="3.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="KEYINFO" Collapsed="true">
+    <Position X="13.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Input.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PKEYINFO" Collapsed="true">
+    <Position X="10.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Input.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="SCENE_CREATE" Collapsed="true">
+    <Position X="16.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Flag.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOVE_DIR" Collapsed="true">
+    <Position X="20.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAICAAA=</HashCode>
+      <FileName>Flag.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="COLLIDER_TYPE" Collapsed="true">
+    <Position X="16.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAQAABAAAAAAAAAAAAAAAAAAACAAgAAAAA=</HashCode>
+      <FileName>Flag.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="COLLISION_STATE" Collapsed="true">
+    <Position X="18.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAABQAA=</HashCode>
+      <FileName>Flag.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
