@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MeleeAtk" Collapsed="true">
+    <Position X="7.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\MeleeAtk.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MoveState" Collapsed="true">
+    <Position X="11.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\MoveState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraController" Collapsed="true">
+    <Position X="13" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAgAABAAAAIAAAIIEAAEBAAAAAAABgAAAEAEA=</HashCode>
+      <FileName>Assets\Scripts\CameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Boss" Collapsed="true">
+    <Position X="0.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RgQABAAAEAUAAAAAAABAAAoAMAAAAAECCAAAggIAAEA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Boss\Boss.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Boss_Missile_Port" Collapsed="true">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Boss\Boss_Missile_Port.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BossMissile" Collapsed="true">
+    <Position X="9.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAgAAAIAAAAAAAAAAAAAABQEAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Boss\BossMissile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BossRock">
+    <Position X="3.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQIAAAAAAAAAAAAAAIAAAAAAAAAQAAAEAABAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Boss\BossRock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Enemy_Bullet">
+    <Position X="3.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAABQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Boss\Enemy_Bullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeleeArea" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Boss\MeleeArea.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Missile" Collapsed="true">
+    <Position X="9.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Boss\Missile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EnamyController" Collapsed="true">
+    <Position X="14.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAABBCAAAIAAAAAAACAAAggAAAGA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\EnamyController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Enemy" Collapsed="true">
+    <Position X="6" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQIgAABEiAAAAAAIABBCAAAIIABAAAADQAAggAEAGA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EnemyHpSlider" Collapsed="true">
+    <Position X="7.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAEAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Enamy\EnemyHpSlider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager" Collapsed="true">
+    <Position X="11.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAAAAAAAAAEAAAAEAABAAEAAABQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player_Dynamic" Collapsed="true">
+    <Position X="13" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAggEAAAABAAAAAAAACAAAAIAEAAAAAAAAIAAEA=</HashCode>
+      <FileName>Assets\Scripts\Player_Dynamic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player_Health_Bar" Collapsed="true">
+    <Position X="14.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAgAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player_Health_Bar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerAnimator" Collapsed="true">
+    <Position X="6" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BBAAAAAAAAAAAAAAAAQAAAAgAAAEAAAAAAAAAAAAAGA=</HashCode>
+      <FileName>Assets\Scripts\PlayerAnimator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerAttackCollision" Collapsed="true">
+    <Position X="7.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAAACAA=</HashCode>
+      <FileName>Assets\Scripts\PlayerAttackCollision.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerController" Collapsed="true">
+    <Position X="9.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAAAAAAAAAAIBBCEAAIBABAAAACAAAigAgAGA=</HashCode>
+      <FileName>Assets\Scripts\PlayerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateMachine" Collapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="StateMachine.State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\States\StateMachine.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AICAAAAAACAEQAGCAAAAAAAAAAAAAAAAAAACAAAQCoA=</HashCode>
+      <FileName>Assets\Scripts\States\StateMachine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.RandomWind" Collapsed="true">
+    <Position X="11.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAACAAAAAAAAAAAAACAAAAABAA=</HashCode>
+      <FileName>Assets\SD Unity-Chan Haon Custom\Unity-Chan!\Script\RandomWind.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.SpringBone" Collapsed="true">
+    <Position X="14.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAGCAAACCAAAAAAAACAhBAAACBYACAAEABEEAAAAEA=</HashCode>
+      <FileName>Assets\SD Unity-Chan Haon Custom\Unity-Chan!\Script\SpringBone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.SpringCollider" Collapsed="true">
+    <Position X="6" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SD Unity-Chan Haon Custom\Unity-Chan!\Script\SpringCollider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.SpringManager" Collapsed="true">
+    <Position X="7.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAACAACAAAAAQAAAAKAAAAAAAAAAAAADEAAAAAFA=</HashCode>
+      <FileName>Assets\SD Unity-Chan Haon Custom\Unity-Chan!\Script\SpringManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.AutoBlink" Collapsed="true">
+    <Position X="6" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAUBAAAgACAAAEAACAAAIBDAAAhAAiCAAAEAAEAAAEA=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\AutoBlink.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.CameraController" Collapsed="true">
+    <Position X="11.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAuEAAAgCAAAAAAAAAAAEAAAAAACAAAIgIAA=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\CameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.FaceUpdate" Collapsed="true">
+    <Position X="9.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACASAAAAAAAAAAAAhAAAEAAAAQCAQAAAAAA=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\FaceUpdate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.IdleChanger" Collapsed="true">
+    <Position X="13" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAIAAAAABAAAAIAAAAAQiAAAAAAAE=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\IdleChanger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.IKCtrlRightHand" Collapsed="true">
+    <Position X="14.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAAAAAEAAAAAAAAAAAAAAAAAAAAQCEAAgAAEA=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\IKCtrlRightHand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.ThirdPersonCamera" Collapsed="true">
+    <Position X="9.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEACAAAiAAAAAAAIEAAAAgAAAAQBAAEAAAAAAAAAA=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\ThirdPersonCamera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.UnityChanControlScriptWithRgidBody" Collapsed="true">
+    <Position X="11.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABJAAjACAAAEGAAAKQKEAABAAABBAUSAAAAAAAQ=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\UnityChanControlScriptWithRgidBody.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityChan.SplashScreen" Collapsed="true">
+    <Position X="13" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\SplashScreen\Scripts\SplashScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="UnityChan.MouseButtonDown" Collapsed="true">
+    <Position X="6" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQgAAAAAA=</HashCode>
+      <FileName>Assets\unity-chan!\Unity-chan! Model\Scripts\CameraController.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
