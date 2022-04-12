@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
 
         GameManager.Input.MouseAction -= OnMouseClicked;
         GameManager.Input.MouseAction += OnMouseClicked;
-
         _state = PlayerState.Idle;
     }
 
@@ -124,37 +123,37 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //void OnKeyBoard() // Not Use
-    //{
-    //    if (Input.GetKey(KeyCode.W))
-    //    {
-    //        transform.rotation = Quaternion.Lerp(transform.rotation,
-    //            Quaternion.LookRotation(Vector3.forward)
-    //            ,0.2f);
-    //        transform.position += Vector3.forward * Time.deltaTime * _speed; 
-    //    }
-    //    if (Input.GetKey(KeyCode.S))
-    //    {
-    //        transform.rotation = Quaternion.Lerp(transform.rotation,
-    //           Quaternion.LookRotation(Vector3.back)
-    //           , 0.2f);
-    //        transform.position += Vector3.back * Time.deltaTime * _speed;
+    void OnKeyBoard() // Not Use
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation,
+                Quaternion.LookRotation(Vector3.forward)
+                , 0.2f);
+            transform.position += Vector3.forward * Time.deltaTime * _speed;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation,
+               Quaternion.LookRotation(Vector3.back)
+               , 0.2f);
+            transform.position += Vector3.back * Time.deltaTime * _speed;
 
-    //    }
-    //    if (Input.GetKey(KeyCode.A))
-    //    {
-    //        transform.rotation = Quaternion.Lerp(transform.rotation,
-    //           Quaternion.LookRotation(Vector3.left)
-    //           , 0.2f);
-    //        transform.position += Vector3.left * Time.deltaTime * _speed;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation,
+               Quaternion.LookRotation(Vector3.left)
+               , 0.2f);
+            transform.position += Vector3.left * Time.deltaTime * _speed;
 
-    //    }
-    //    if (Input.GetKey(KeyCode.D))
-    //    {
-    //        transform.rotation = Quaternion.Lerp(transform.rotation,
-    //           Quaternion.LookRotation(Vector3.right)
-    //           , 0.2f);
-    //        transform.position += Vector3.right * Time.deltaTime * _speed;
-    //    }
-    //}
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation,
+               Quaternion.LookRotation(Vector3.right)
+               , 0.2f);
+            transform.position += Vector3.right * Time.deltaTime * _speed;
+        }
+    }
 }

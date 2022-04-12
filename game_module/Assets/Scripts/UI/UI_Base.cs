@@ -38,11 +38,10 @@ public class UI_Base : MonoBehaviour
 
             if (objects[i] == null)
             {
-                Debug.LogError($"Bind Error {gameObject.name} , {name[i]}");
+                Debug.LogError($"Bind Error {gameObject.name}");
             }
 
         }
-
     }
 
     protected T Get<T>(int idx) where T : UnityEngine.Object
@@ -54,7 +53,6 @@ public class UI_Base : MonoBehaviour
     }
 
     #region Getter
-
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }
     protected Text GetText(int idx) { return Get<Text>(idx); }
     protected Button GetButton(int idx) { return Get<Button>(idx); }
