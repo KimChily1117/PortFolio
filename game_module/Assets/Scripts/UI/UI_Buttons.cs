@@ -24,7 +24,6 @@ public class UI_Buttons : UI_Base
         {
             GetText((int)Texts.PointText).text = "OnClickBtn Tab";
         }
-
     }
 
 }
