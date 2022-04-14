@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_EventSystem : MonoBehaviour, IPointerClickHandler ,IBeginDragHandler , IEndDragHandler 
+public class UI_EventHandler : MonoBehaviour, IPointerClickHandler ,IBeginDragHandler , IEndDragHandler 
 {
-    public Action<PointerEventData> ClickEventAction;
+    public Action<PointerEventData> ClickEventAction = null;
     public Action<PointerEventData> DragEventAction = null;
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -24,6 +24,6 @@ public class UI_EventSystem : MonoBehaviour, IPointerClickHandler ,IBeginDragHan
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        throw new NotImplementedException();
+        ClickEventAction.Invoke(eventData);
     }
 }

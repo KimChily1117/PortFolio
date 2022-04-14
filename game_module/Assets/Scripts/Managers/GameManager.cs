@@ -44,9 +44,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(obj);
 
             s_instance = obj.GetComponent<GameManager>();
-        }
-
-        
+        }        
     }
 
 

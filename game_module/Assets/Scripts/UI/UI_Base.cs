@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UI_Base : MonoBehaviour
@@ -52,6 +53,29 @@ public class UI_Base : MonoBehaviour
         return objects[idx] as T;
     }
 
+    public static void BindEvent(GameObject go , Action<PointerEventData> action , Define.UIEvent type = Define.UIEvent.Click)
+    {
+        UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
+
+        switch (type)
+        {
+            case Define.UIEvent.Click:
+                evt.ClickEventAction -= action;
+                evt.ClickEventAction += action;
+                break;
+            case Define.UIEvent.Drag:
+                evt.DragEventAction -= action;
+                evt.DragEventAction += action;
+                break;
+            default:
+                Debug.Log($"BindEvent] type param error");
+                break;
+        }
+
+
+    }
+    
+    
     #region Getter
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }
     protected Text GetText(int idx) { return Get<Text>(idx); }
