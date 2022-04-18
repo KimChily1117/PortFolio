@@ -8,17 +8,21 @@ using UnityEngine.UI;
 public class UI_Base : MonoBehaviour
 {
     Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
-    public enum Buttons // ÇÏÀÌ¾î¶óÅ°¿¡ ÀÖ´Â ÀÌ¸§("Name")À» Enum¿¡ ¿­°ÅÇÏ¿© Bind½ÃÅ³¶§ »ç¿ë
+    public enum Buttons // ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½Å°ï¿½ï¿?? ï¿½Ö´ï¿½ ï¿½Ì¸ï¿½("Name")ï¿½ï¿½ Enumï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ Bindï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ï¿??
     {
         PointButton
     }
 
-    public enum Texts // ÇÏÀÌ¾î¶óÅ°¿¡ ÀÖ´Â ÀÌ¸§("Name")À» Enum¿¡ ¿­°ÅÇÏ¿© Bind½ÃÅ³¶§ »ç¿ë
+    public enum Texts // ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½Å°ï¿½ï¿?? ï¿½Ö´ï¿½ ï¿½Ì¸ï¿½("Name")ï¿½ï¿½ Enumï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ Bindï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ï¿??
     {
         PointText,
         ScoreText
     }
 
+    public enum Images
+    {
+        IconTest,  
+    }
 
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
@@ -49,7 +53,7 @@ public class UI_Base : MonoBehaviour
     {
         UnityEngine.Object[] objects = null;
         if (_objects.TryGetValue(typeof(T), out objects) == false) return null;
-
+        
         return objects[idx] as T;
     }
 
@@ -64,24 +68,20 @@ public class UI_Base : MonoBehaviour
                 evt.ClickEventAction += action;
                 break;
             case Define.UIEvent.Drag:
-                evt.DragEventAction -= action;
+                //evt.DragEventAction -= action;
                 evt.DragEventAction += action;
                 break;
             default:
                 Debug.Log($"BindEvent] type param error");
                 break;
         }
-
-
-    }
-    
+    }    
     
     #region Getter
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }
     protected Text GetText(int idx) { return Get<Text>(idx); }
     protected Button GetButton(int idx) { return Get<Button>(idx); }
     protected Image GetImage(int idx) { return Get<Image>(idx); } 
-
     #endregion Getter
 
 }

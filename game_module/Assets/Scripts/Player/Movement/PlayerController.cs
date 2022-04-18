@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_state == PlayerState.Walk)
         {
-            Vector3 dir = _destPos - this.transform.position; // ¹æÇâ¹éÅÍ ÃßÃâ;
+            Vector3 dir = _destPos - this.transform.position; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½;
             if (dir.magnitude < 0.00001f)
             {
                 _state = PlayerState.Idle;

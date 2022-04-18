@@ -4,26 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_EventHandler : MonoBehaviour, IPointerClickHandler ,IBeginDragHandler , IEndDragHandler 
+public class UI_EventHandler : MonoBehaviour, IPointerClickHandler ,IDragHandler 
 {
-    public Action<PointerEventData> ClickEventAction = null;
-    public Action<PointerEventData> DragEventAction = null;
+    public Action<PointerEventData> ClickEventAction;
+    public Action<PointerEventData> DragEventAction;
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnDrag(PointerEventData eventData)
     {
-        if (DragEventAction != null)
+        if(DragEventAction != null)
         {
             DragEventAction.Invoke(eventData);
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
-        ClickEventAction.Invoke(eventData);
+        if(ClickEventAction != null) {ClickEventAction.Invoke(eventData);}
     }
+
+
+
+    
 }

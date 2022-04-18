@@ -3,17 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_Buttons : UI_Base
 {    
     void Start()
     {
-        Bind<Button>(typeof(Buttons)); // typeof·Î Çüº¯È¯À» ÇÏ¿© C#¿¡¼­ ±âº»À¸·Î Á¦°øÇÏ´Â object Å¬·¡½º¸¦ »ó¼Ó¹Ş´Â °´Ã¼¸¦ ¸Å°³º¯¼ö·Î ³Ñ±ä´Ù.
-        Bind<Text>(typeof(Texts)); // typeof·Î Çüº¯È¯À» ÇÏ¿© C#¿¡¼­ ±âº»À¸·Î Á¦°øÇÏ´Â object Å¬·¡½º¸¦ »ó¼Ó¹Ş´Â °´Ã¼¸¦ ¸Å°³º¯¼ö·Î ³Ñ±ä´Ù.
+        Bind<Button>(typeof(Buttons)); // typeofë¡œ í˜•ë³€í™˜ì„ í•˜ì—¬ C#ì—ì„œ ê¸°ë³¸ìœ¼ë¡œ ì œê³µí•˜ëŠ” object í´ë˜ìŠ¤ë¥¼ ìƒì†ë°›ëŠ” ê°ì²´ë¥¼ ë§¤ê°œë³€ìˆ˜ë¡œ ë„˜ê¸´ë‹¤.
+        Bind<Text>(typeof(Texts)); // typeofë¡œ í˜•ë³€í™˜ì„ í•˜ì—¬ C#ì—ì„œ ê¸°ë³¸ìœ¼ë¡œ ì œê³µí•˜ëŠ” object í´ë˜ìŠ¤ë¥¼ ìƒì†ë°›ëŠ” ê°ì²´ë¥¼ ë§¤ê°œë³€ìˆ˜ë¡œ ë„˜ê¸´ë‹¤.
+        Bind<Image>(typeof(Images));        
+
 
         Get<Text>((int)Texts.PointText).text = "Getter Test";
         Get<Button>((int)Buttons.PointButton).onClick.AddListener(() => { Get<Text>((int)Texts.PointText).text = "Btn Click"; });
         
+        GameObject go = GetImage((int)Images.IconTest).gameObject;
+
+        BindEvent(go,(PointerEventData data) => {go.gameObject.transform.position = data.position;},Define.UIEvent.Drag);
+
 
         GameManager.Input.KeyAction -= InputTest;
         GameManager.Input.KeyAction += InputTest;
