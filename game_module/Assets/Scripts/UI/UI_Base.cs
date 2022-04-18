@@ -8,12 +8,12 @@ using UnityEngine.UI;
 public class UI_Base : MonoBehaviour
 {
     Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
-    public enum Buttons // ���̾��Ű��?? �ִ� �̸�("Name")�� Enum�� �����Ͽ� Bind��ų�� ���??
+    public enum Buttons 
     {
         PointButton
     }
 
-    public enum Texts // ���̾��Ű��?? �ִ� �̸�("Name")�� Enum�� �����Ͽ� Bind��ų�� ���??
+    public enum Texts
     {
         PointText,
         ScoreText
@@ -68,7 +68,7 @@ public class UI_Base : MonoBehaviour
                 evt.ClickEventAction += action;
                 break;
             case Define.UIEvent.Drag:
-                //evt.DragEventAction -= action;
+                evt.DragEventAction -= action;
                 evt.DragEventAction += action;
                 break;
             default:
@@ -76,6 +76,8 @@ public class UI_Base : MonoBehaviour
                 break;
         }
     }    
+
+
     
     #region Getter
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }
