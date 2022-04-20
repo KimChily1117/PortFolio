@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,6 +42,7 @@
      <Compile Include="Assets/Scripts/Player/Movement/PlayerController.cs" />
      <Compile Include="Assets/Scripts/Managers/GameManager.cs" />
      <Compile Include="Assets/Scripts/UI/UI_Buttons.cs" />
+     <Compile Include="Assets/Scripts/Managers/UIManager.cs" />
      <Compile Include="Assets/Scripts/UI/UI_EventHandler.cs" />
      <Compile Include="Assets/Scripts/Managers/ResourcesManager.cs" />
      <Compile Include="Assets/Scripts/Utils/Util.cs" />
@@ -53,12 +54,14 @@
      <Compile Include="Assets/Scripts/UI/UI_Base.cs" />
      <Compile Include="Assets/Import_Assets/unity-chan!/Unity-chan! Model/Scripts/ThirdPersonCamera.cs" />
      <Compile Include="Assets/Import_Assets/unity-chan!/Unity-chan! Model/Scripts/AutoBlink.cs" />
+     <Compile Include="Assets/Scripts/UI/UI_PopUp.cs" />
      <Compile Include="Assets/Import_Assets/unity-chan!/Unity-chan! Model/Scripts/UnityChanControlScriptWithRgidBody.cs" />
      <Compile Include="Assets/Scripts/Utils/Extention.cs" />
      <Compile Include="Assets/Scripts/Camera/CameraController.cs" />
      <Compile Include="Assets/Import_Assets/unity-chan!/Unity-chan! Model/Scripts/FaceUpdate.cs" />
      <Compile Include="Assets/Import_Assets/unity-chan!/Unity-chan! Model/SplashScreen/Scripts/SplashScreen.cs" />
      <Compile Include="Assets/Import_Assets/unity-chan!/Unity-chan! Model/Scripts/SpringBone.cs" />
+     <Compile Include="Assets/Scripts/UI/UI_Scene.cs" />
      <None Include="Assets/Resources/Art/Art/UnityChanShader/Shader/Unitychan_chara_fuku.shader" />
      <None Include="Assets/Import_Assets/SD Unity-Chan Haon Custom/Shader/Unity-chan Toon Shader Ver 2.0.6/Toon_DoubleShadeWithFeather_Mobile_TransClipping_StencilMask.shader" />
      <None Include="Assets/Import_Assets/SD Unity-Chan Haon Custom/Shader/Unity-chan Toon Shader Ver 2.0.6/Toon_ShadingGradeMap_Mobile_StencilMask.shader" />

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_Base : MonoBehaviour
+public abstract class UI_Base : MonoBehaviour
 {
     Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
     public enum Buttons 
@@ -77,7 +77,7 @@ public class UI_Base : MonoBehaviour
         }
     }    
 
-
+    public abstract void Init();
     
     #region Getter
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }

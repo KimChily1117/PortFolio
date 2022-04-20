@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UI_PopUp : UI_Base
 {
-
+    public override void Init()
+    {
+        
+    }
 
 }

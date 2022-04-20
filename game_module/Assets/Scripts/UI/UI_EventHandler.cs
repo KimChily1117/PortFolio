@@ -21,5 +21,4 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IDragHandler
     {
         if (ClickEventAction != null) { ClickEventAction.Invoke(eventData); }
     }
-
 }
