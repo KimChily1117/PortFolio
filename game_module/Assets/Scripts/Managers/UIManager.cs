@@ -7,25 +7,29 @@ using UnityEngine;
 // UI의 sort order를 
 public class UIManager
 {
-    public int _order = 0;
+    public int _order = 10;
     Stack<UI_PopUp> _popupStack = new Stack<UI_PopUp>();
+
+    UI_Scene _scene = null;
 
     public void SetCanvas(GameObject go , bool sort = true)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;    
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-        if(sort) //팝업이랑 관련 있는 Sorting이 필요한 UI 
+        canvas.overrideSorting = true;
+        if(sort) //팝업이랑 관련 있는 Sorting이 필요한 UI
         {
             canvas.sortingOrder = _order;
             _order++;
         }
-
         else
         {
             canvas.sortingOrder = 0;
         }
     }
+
+
     public T ShowPopupUI<T>(string name) where T : UI_PopUp
     {
         if(string.IsNullOrEmpty(name) == true)
@@ -46,7 +50,7 @@ public class UIManager
         return popup;
     }
 
-    public T ShowSceneUI<T>(string name = null) where T : UI_Scene // 22.04.20 작업중
+    public T ShowSceneUI<T>(string name = null) where T : UI_Scene 
     {
         if(string.IsNullOrEmpty(name) == true) 
         {
@@ -57,6 +61,9 @@ public class UIManager
         GameObject go = GameManager.Resources.Instantiate($"UI/Scene/{name}");
         
         T sceneUI = Util.GetOrAddComponent<T>(go);
+
+        _scene = sceneUI;
+
         return null;
     }
 
