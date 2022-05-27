@@ -6,14 +6,14 @@ using UnityEngine;
 public class InputManager
 {
     public Action KeyAction = null;
-    public Action<Define.MouseEvent> MouseAction = null; // Define¿¡ ¼±¾ðµÇ¾î ÀÖ´Â EnumÀ¸·Î ¸¶¿ì½º KeyEvent¸¸ ÀûÃâÇØ³½´Ù. 
+    public Action<Define.MouseEvent> MouseAction = null; // Defineï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ ï¿½Ö´ï¿½ Enumï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º KeyEventï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½. 
  
     bool _pressed = false;
     public void OnUpdate()
     {
         if (Input.anyKey && KeyAction != null)
         {
-            KeyAction.Invoke(); // µî·ÏµÈ ÇÔ¼ö¸¦ ½ÇÇà½ÃÅ²´Ù.
+            KeyAction.Invoke(); // ï¿½ï¿½Ïµï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½.
         }
 
         if (MouseAction != null)
