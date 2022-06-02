@@ -16,9 +16,29 @@ public class GameManager : MonoBehaviour
     }
 
 
-    static NetworkManager s_networkManager = new NetworkManager();
+    public static NetworkManager s_networkManager;
 
-    public static NetworkManager Network { get { return s_networkManager; } }
+    public static NetworkManager Network 
+    { 
+        get 
+        { 
+            if(s_networkManager == null)
+            {
+                GameObject obj = GameObject.Find("@NetworkManager");
+
+                if(!obj)
+                {
+
+                    obj = new GameObject { name = "@NetworkManager" };
+                    obj.AddComponent<NetworkManager>();
+                }
+                s_networkManager = obj.GetComponent<NetworkManager>();
+                DontDestroyOnLoad(obj);
+            }
+            return s_networkManager;         
+        }    
+    
+    }
 
 
     static void Init()

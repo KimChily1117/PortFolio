@@ -8,5 +8,152 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     private TypedLobby testLobby = new TypedLobby("testLobby", LobbyType.Default);
 
+    public Dictionary<string, RoomInfo> cachedroomData = new Dictionary<string, RoomInfo>();
+    // Dictionary에 key에는 방이름을 value에는 방정보를 넣어서 관리해준다.
+
+    string gameVersion = "1";
+
+
+    #region ButtonActionMethod
+
+    public void SetRegion(Define.RegionType type)
+    {
+        PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = Utils.GetRegionToken(type);
+    }
+
+    public void OnClickConnect()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnJoinRandomFailed() and we'll create one.
+            PhotonNetwork.JoinRandomRoom();
+        }
+        else
+        {
+            // #Critical, we must first and foremost connect to Photon Online Server.
+            PhotonNetwork.GameVersion = gameVersion;
+            // ConnectToMaster, ConnectToRegion 기능 통합
+            PhotonNetwork.ConnectUsingSettings();
+        }
+    }
+
+    public void OnClickDisconnect()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Disconnect();
+        }
+    }
+
+
+    #endregion ButtonActionMethod
+
+
+    #region photonCallbackMethod
+
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() was called by PUN");
+
+        // we don't want to do anything if we are not attempting to join a room.
+        // this case where isConnecting is false is typically when you lost or quit the game, when this level is loaded, OnConnectedToMaster will be called, in that case
+        // we don't want to do anything.
+        if (PhotonNetwork.IsConnected)
+        {           
+            PhotonNetwork.JoinLobby(testLobby);
+            //StartCoroutine(Co_CheckRoomList());
+            // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnJoinRandomFailed()
+            //PhotonNetwork.JoinRandomRoom();
+        }
+        else
+        {
+            Debug.LogError("Photon Disconnect");
+        }
+    }
+
+    //public void InitRoom()
+    //{
+    //    cachedRoomList.Clear();
+
+    //    cachedRoomList.Add("서비스플랫폼사업본부", new RoomInfo("서비스플랫폼사업본부", 69));
+    //    cachedRoomList.Add("미디어서비스사업본부", new RoomInfo("미디어서비스사업본부", 34));
+    //    cachedRoomList.Add("스마트컨버전스사업본부", new RoomInfo("스마트컨버전스사업본부", 37));
+    //}
+
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("OnJoinedLobby");       
+    }
+
+    //private void UpdateCachedRoomList(List<RoomInfo> roomList)
+    //{
+    //    for (int i = 0; i < roomList.Count; i++)
+    //    {
+    //        RoomInfo info = roomList[i];
+    //        if (info.RemovedFromList)
+    //        {
+    //            cachedRoomList.Remove(info.Name);
+    //        }
+    //        else
+    //        {
+    //            cachedRoomList[info.Name] = info;
+    //        }
+    //    }
+
+    //    LauncherUI.UpdateRoomList(cachedRoomList);
+    //}
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        Debug.Log("OnRoomListUpdate Count : " + roomList.Count);
+
+        //UpdateCachedRoomList(roomList);
+    }
+
+    public override void OnLeftLobby()
+    {
+        Debug.Log("OnLeftLobby");
+
+        //InitRoom();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.Log("OnDisconnected");
+
+        //InitRoom();
+
+        //LauncherUI.OnDisconnectUI();
+
+        Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("PUN Basics Tutorial/Launcher:OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
+
+        // 랜덤 룸 참가에 실패한 경우 룸 생성
+        //PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = maxPlayersPerRoom });
+    }
+
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+
+        // #Critical: We only load if we are the first player, else we rely on `PhotonNetwork.AutomaticallySyncScene` to sync our instance scene.
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            Debug.Log("We load the 'Room for 1' ");
+
+
+            // #Critical
+            // Load the Room Level.
+            PhotonNetwork.LoadLevel("Room");
+        }
+    }
+
+
+
+    #endregion 
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Utils
 {
-    public static string GetRegion(Define.RegionType regionType)
+    public static string GetRegionToken(Define.RegionType regionType)
     {
         string returnvalue = string.Empty;
 

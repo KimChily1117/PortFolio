@@ -430,7 +430,6 @@ GameObject:
   m_Component:
   - component: {fileID: 536737173}
   - component: {fileID: 536737172}
-  - component: {fileID: 536737174}
   m_Layer: 0
   m_Name: '@GameManager'
   m_TagString: Untagged
@@ -464,19 +463,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &536737174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 536737171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2072b1d47138a349aa93fe75af577c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Region_dropdown: {fileID: 758456711}
 --- !u!1 &546567711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1431,6 +1417,7 @@ GameObject:
   - component: {fileID: 1371272937}
   - component: {fileID: 1371272939}
   - component: {fileID: 1371272938}
+  - component: {fileID: 1371272940}
   m_Layer: 5
   m_Name: RegionText
   m_TagString: Untagged
@@ -1455,7 +1442,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -736, y: 204}
-  m_SizeDelta: {x: 340, y: 69.4}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1371272938
 MonoBehaviour:
@@ -1499,6 +1486,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1371272936}
   m_CullTransparentMesh: 1
+--- !u!114 &1371272940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371272936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &1490331113
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,7 +1649,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: Input UserName
 --- !u!222 &1508904990
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1859,6 +1860,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Region_dropdown: {fileID: 758456711}
+  CurrentRegionText: {fileID: 1371272938}
+  controlPanel: {fileID: 0}
+  progressLabel: {fileID: 0}
+  successText: {fileID: 0}
+  createRoomPanel: {fileID: 0}
+  JoinRoomPanel: {fileID: 0}
+  disconnectButton: {fileID: 0}
+  regionInfoPanel: {fileID: 0}
+  btn_Connect: {fileID: 1340974419}
+  btn_Disconnect: {fileID: 780932483}
+  NameField: {fileID: 459214811}
 --- !u!1 &1645104699
 GameObject:
   m_ObjectHideFlags: 0
