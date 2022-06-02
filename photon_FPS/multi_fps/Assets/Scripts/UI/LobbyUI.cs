@@ -79,7 +79,7 @@ public class LobbyUI : MonoBehaviour
         if (btn_Disconnect != null)
         {
             btn_Disconnect.onClick.RemoveAllListeners();
-            btn_Connect.onClick.AddListener(() => GameManager.Network.OnClickDisconnect());
+            btn_Disconnect.onClick.AddListener(() => GameManager.Network.OnClickDisconnect());
 
         }
 
@@ -139,7 +139,6 @@ public class LobbyUI : MonoBehaviour
         {
             return;
         }
-
         PhotonNetwork.NickName = value;
     }
 }

@@ -14,6 +14,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     string gameVersion = "1";
 
 
+    public GameObject playerpref;
+
     #region ButtonActionMethod
 
     public void SetRegion(Define.RegionType type)
@@ -23,6 +25,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void OnClickConnect()
     {
+        Debug.Log($"OnClick Connect button");
         if (PhotonNetwork.IsConnected)
         {
             // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnJoinRandomFailed() and we'll create one.
@@ -31,7 +34,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else
         {
             // #Critical, we must first and foremost connect to Photon Online Server.
-            PhotonNetwork.GameVersion = gameVersion;
+            PhotonNetwork.GameVersion = "1";
             // ConnectToMaster, ConnectToRegion 기능 통합
             PhotonNetwork.ConnectUsingSettings();
         }
@@ -39,6 +42,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void OnClickDisconnect()
     {
+        Debug.Log($"OnClick Disconnect button");
+
         if (PhotonNetwork.IsConnected)
         {
             PhotonNetwork.Disconnect();
@@ -82,7 +87,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("OnJoinedLobby");       
+        Debug.Log("OnJoinedLobby");  
+        
+        if(PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.JoinOrCreateRoom("exam",
+                new RoomOptions() { MaxPlayers = 4 }, testLobby);
+        }
     }
 
     //private void UpdateCachedRoomList(List<RoomInfo> roomList)
@@ -103,13 +114,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //    LauncherUI.UpdateRoomList(cachedRoomList);
     //}
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        Debug.Log("OnRoomListUpdate Count : " + roomList.Count);
-
-        //UpdateCachedRoomList(roomList);
-    }
-
+   
     public override void OnLeftLobby()
     {
         Debug.Log("OnLeftLobby");
@@ -143,17 +148,36 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // #Critical: We only load if we are the first player, else we rely on `PhotonNetwork.AutomaticallySyncScene` to sync our instance scene.
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
-            Debug.Log("We load the 'Room for 1' ");
-
+            Debug.Log($"We load the 'Room' playerCount : {PhotonNetwork.CurrentRoom.PlayerCount} ");
 
             // #Critical
             // Load the Room Level.
             PhotonNetwork.LoadLevel("Room");
         }
+
+        else
+        {
+            Debug.Log($"We load the 'Room' playerCount : {PhotonNetwork.CurrentRoom.PlayerCount} ");
+
+            PhotonNetwork.LoadLevel("Room");
+        }
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        Debug.Log($"Player Info : {newPlayer}");
+
+       
     }
 
 
+    #endregion
 
-    #endregion 
+    #region UnityMethod
+    private void Start()
+    {
+        
+    }
 
+    #endregion
 }
