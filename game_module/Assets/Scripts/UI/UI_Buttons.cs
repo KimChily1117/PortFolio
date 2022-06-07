@@ -28,7 +28,7 @@ public class UI_Buttons : UI_Base
 
         go.BindEvent((PointerEventData data) => { go.transform.position = data.position; }, Define.UIEvent.Drag);
 
-        GameManager.Input.KeyAction -= InputTest;
+        GameManager.Input.KeyAction -= InputTest; // when input keycode.tab change UI Element
         GameManager.Input.KeyAction += InputTest;
     }
 
@@ -44,9 +44,8 @@ public class UI_Buttons : UI_Base
     public void OnClickButtonEvent(PointerEventData data)
     {
         _count++;
-
         Get<Text>((int)Texts.PointText).text = $"버튼을 누르면 올라갑니다->{_count}";
-
+        
     }
 
 }

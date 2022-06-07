@@ -32,7 +32,7 @@ public abstract class UI_Base : MonoBehaviour
 
         for (int i = 0; i < names.Length; i++)
         {
-            if (typeof(T) == typeof(GameObject))
+            if (typeof(T) == typeof(GameObject)) // when type gameObject --> Different Function
             {
                 objects[i] = Util.FindChild(gameObject, names[i], true);
             }
@@ -43,7 +43,7 @@ public abstract class UI_Base : MonoBehaviour
 
             if (objects[i] == null)
             {
-                Debug.LogError($"Bind Error {gameObject.name}");
+                Debug.LogError($"Bind Error {names[i]}");
             }
 
         }
@@ -53,11 +53,11 @@ public abstract class UI_Base : MonoBehaviour
     {
         UnityEngine.Object[] objects = null;
         if (_objects.TryGetValue(typeof(T), out objects) == false) return null;
-        
+
         return objects[idx] as T;
     }
 
-    public static void BindEvent(GameObject go , Action<PointerEventData> action , Define.UIEvent type = Define.UIEvent.Click)
+    public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
     {
         UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
 
@@ -75,15 +75,17 @@ public abstract class UI_Base : MonoBehaviour
                 Debug.Log($"BindEvent] type param error");
                 break;
         }
-    }    
+    }
 
     public abstract void Init();
-    
+
     #region Getter
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }
     protected Text GetText(int idx) { return Get<Text>(idx); }
     protected Button GetButton(int idx) { return Get<Button>(idx); }
-    protected Image GetImage(int idx) { return Get<Image>(idx); } 
+    protected Image GetImage(int idx) { return Get<Image>(idx); }
     #endregion Getter
+
+
 
 }
