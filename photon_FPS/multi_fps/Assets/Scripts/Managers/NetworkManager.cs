@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon.Chat;
+using ExitGames.Client.Photon;
 
-public class NetworkManager : MonoBehaviourPunCallbacks
+public class NetworkManager : MonoBehaviourPunCallbacks, IChatClientListener
 {
+
+
     private TypedLobby testLobby = new TypedLobby("testLobby", LobbyType.Default);
 
     public Dictionary<string, RoomInfo> cachedroomData = new Dictionary<string, RoomInfo>();
     // Dictionary에 key에는 방이름을 value에는 방정보를 넣어서 관리해준다.
 
     string gameVersion = "1";
-
 
     public GameObject playerpref;
 
@@ -64,7 +67,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // this case where isConnecting is false is typically when you lost or quit the game, when this level is loaded, OnConnectedToMaster will be called, in that case
         // we don't want to do anything.
         if (PhotonNetwork.IsConnected)
-        {           
+        {
             PhotonNetwork.JoinLobby(testLobby);
             //StartCoroutine(Co_CheckRoomList());
             // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnJoinRandomFailed()
@@ -87,34 +90,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("OnJoinedLobby");  
-        
-        if(PhotonNetwork.IsConnected)
+        Debug.Log("OnJoinedLobby");
+
+        if (PhotonNetwork.IsConnected)
         {
             PhotonNetwork.JoinOrCreateRoom("exam",
                 new RoomOptions() { MaxPlayers = 4 }, testLobby);
         }
     }
 
-    //private void UpdateCachedRoomList(List<RoomInfo> roomList)
-    //{
-    //    for (int i = 0; i < roomList.Count; i++)
-    //    {
-    //        RoomInfo info = roomList[i];
-    //        if (info.RemovedFromList)
-    //        {
-    //            cachedRoomList.Remove(info.Name);
-    //        }
-    //        else
-    //        {
-    //            cachedRoomList[info.Name] = info;
-    //        }
-    //    }
-
-    //    LauncherUI.UpdateRoomList(cachedRoomList);
-    //}
-
-   
     public override void OnLeftLobby()
     {
         Debug.Log("OnLeftLobby");
@@ -165,19 +149,77 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log($"Player Info : {newPlayer}");
+        Debug.Log($"Player Info : {newPlayer.NickName}");
+    }
 
-       
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Debug.Log($"OnPlayerLeftRoom : {otherPlayer.NickName}");
     }
 
 
     #endregion
 
+    #region Chat
+
+    public void DebugReturn(DebugLevel level, string message)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnChatStateChange(ChatState state)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnDisconnected()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnGetMessages(string channelName, string[] senders, object[] messages)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPrivateMessage(string sender, object message, string channelName)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnSubscribed(string[] channels, bool[] results)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnUnsubscribed(string[] channels)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnUserSubscribed(string channel, string user)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnUserUnsubscribed(string channel, string user)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    #endregion Chat
+
+
+
     #region UnityMethod
     private void Start()
     {
-        
-    }
 
+    }
     #endregion
 }

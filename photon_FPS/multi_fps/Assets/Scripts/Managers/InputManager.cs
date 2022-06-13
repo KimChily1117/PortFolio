@@ -18,7 +18,7 @@ public class InputManager
 
         if (MouseAction != null)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0)|| Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 Debug.Log($"OnClick Left Mouse Button case : press");
                 MouseAction.Invoke(Define.MouseEvent.Press);
