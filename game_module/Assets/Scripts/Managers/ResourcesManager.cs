@@ -5,7 +5,7 @@ using System;
 
 public class ResourcesManager
 {
-    public T Load<T>(string path) where T : UnityEngine.Object
+    private T Load<T>(string path) where T : UnityEngine.Object
     {
         return Resources.Load<T>(path);
     }
@@ -19,7 +19,14 @@ public class ResourcesManager
             return null;
         }
 
-        return UnityEngine.Object.Instantiate(prefab, parent);
+        GameObject go = UnityEngine.Object.Instantiate(prefab, parent);
+
+        int index = go.name.IndexOf("(Clone)");
+        if(index > 0) // Clone(Prefab을 인스턴스화 하면 생김)
+        {
+          go.name = go.name.Substring(0,index);
+        }
+        return go;
     }
 
     public void Destroy(GameObject go)

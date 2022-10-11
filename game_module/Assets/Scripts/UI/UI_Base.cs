@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
 public abstract class UI_Base : MonoBehaviour
 {
     Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
@@ -15,15 +16,14 @@ public abstract class UI_Base : MonoBehaviour
 
     public enum Texts
     {
-        PointText,
-        ScoreText
+        PointText        
     }
 
     public enum Images
     {
         IconTest,  
     }
-
+    
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
         string[] names = Enum.GetNames(type);
@@ -34,18 +34,20 @@ public abstract class UI_Base : MonoBehaviour
         {
             if (typeof(T) == typeof(GameObject)) // when type gameObject --> Different Function
             {
+
+
                 objects[i] = Util.FindChild(gameObject, names[i], true);
             }
+
             else
             {
-                objects[i] = Util.FindChild<T>(gameObject, names[i], false);
+                objects[i] = Util.FindChild<T>(gameObject, names[i], true);
             }
 
             if (objects[i] == null)
             {
-                Debug.LogError($"Bind Error {names[i]}");
+                Debug.LogError($"Bind Error : index : {i} {names[i]}");
             }
-
         }
     }
 
@@ -79,11 +81,21 @@ public abstract class UI_Base : MonoBehaviour
 
     public abstract void Init();
 
+
+    
+
+    private void Start()
+    {
+      
+    }
+
+
     #region Getter
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }
     protected Text GetText(int idx) { return Get<Text>(idx); }
     protected Button GetButton(int idx) { return Get<Button>(idx); }
     protected Image GetImage(int idx) { return Get<Image>(idx); }
+    
     #endregion Getter
 
 

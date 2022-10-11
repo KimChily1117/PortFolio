@@ -14,10 +14,12 @@ public class UI_Buttons : UI_Base
     }
     void Start()
     {
+        
+        
+       
         Bind<Button>(typeof(Buttons)); // typeof로 형변환을 하여 C#에서 기본으로 제공하는 object 클래스를 상속받는 객체를 매개변수로 넘긴다.
         Bind<Text>(typeof(Texts)); // typeof로 형변환을 하여 C#에서 기본으로 제공하는 object 클래스를 상속받는 객체를 매개변수로 넘긴다.
         Bind<Image>(typeof(Images));
-
 
         Get<Button>((int)Buttons.PointButton).gameObject.BindEvent(OnClickButtonEvent);
         // get함수를 사용해서 게임 오브젝트를 받아온다음에. 그 GameObject에다가 event를 bind해준다.

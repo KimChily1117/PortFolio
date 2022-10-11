@@ -7,14 +7,14 @@ using UnityEngine.EventSystems;
 public class InputManager
 {
     public Action KeyAction = null;
-    public Action<Define.MouseEvent> MouseAction = null; // Define�� ����Ǿ�? �ִ� Enum���� ���콺 KeyEvent�� �����س���. 
+    public Action<Define.MouseEvent> MouseAction = null; // Define�� ����Ǿ�? �ִ� Enum���� ���콺 KeyEvent�� �����س���. 
  
     bool _pressed = false;
     public void OnUpdate()
     {
         if(EventSystem.current.IsPointerOverGameObject() == true)
         {   
-            Debug.Log($"OnClick Over UI Object");
+            //Debug.Log($"OnClick Over UI Object");
             return;
         }
 
@@ -22,7 +22,7 @@ public class InputManager
 
         if (Input.anyKey && KeyAction != null)
         {
-            KeyAction.Invoke(); // ��ϵ�? �Լ��� �����Ų��?.
+            KeyAction.Invoke(); // ��ϵ�? �Լ��� �����Ų��?.
         }
 
         if (MouseAction != null)

@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     float wait_run_ratio = 0;   
 
 
+    UI_PopUp Inven;
+
     #endregion 
 
 
@@ -36,6 +38,9 @@ public class PlayerController : MonoBehaviour
 
         GameManager.Input.MouseAction -= OnMouseClicked;
         GameManager.Input.MouseAction += OnMouseClicked;
+
+        GameManager.Input.KeyAction -= OnKeyBoard;
+        GameManager.Input.KeyAction += OnKeyBoard;
         _state = PlayerState.Idle;
     }
 
@@ -127,38 +132,59 @@ public class PlayerController : MonoBehaviour
         throw new NotImplementedException();
     }
 
+    bool _isInventory; //이미 인벤토리가 활성화되어있는지 확인하기 위함
+
 
     void OnKeyBoard() // Not Use
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation,
-                Quaternion.LookRotation(Vector3.forward)
-                , 0.2f);
-            transform.position += Vector3.forward * Time.deltaTime * _speed;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation,
-               Quaternion.LookRotation(Vector3.back)
-               , 0.2f);
-            transform.position += Vector3.back * Time.deltaTime * _speed;
+        // if (Input.GetKey(KeyCode.W))
+        // {
+        //     transform.rotation = Quaternion.Lerp(transform.rotation,
+        //         Quaternion.LookRotation(Vector3.forward)
+        //         , 0.2f);
+        //     transform.position += Vector3.forward * Time.deltaTime * _speed;
+        // }
+        // if (Input.GetKey(KeyCode.S))
+        // {
+        //     transform.rotation = Quaternion.Lerp(transform.rotation,
+        //        Quaternion.LookRotation(Vector3.back)
+        //        , 0.2f);
+        //     transform.position += Vector3.back * Time.deltaTime * _speed;
 
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation,
-               Quaternion.LookRotation(Vector3.left)
-               , 0.2f);
-            transform.position += Vector3.left * Time.deltaTime * _speed;
+        // }
+        // if (Input.GetKey(KeyCode.A))
+        // {
+        //     transform.rotation = Quaternion.Lerp(transform.rotation,
+        //        Quaternion.LookRotation(Vector3.left)
+        //        , 0.2f);
+        //     transform.position += Vector3.left * Time.deltaTime * _speed;
 
-        }
-        if (Input.GetKey(KeyCode.D))
+        // }
+        // if (Input.GetKey(KeyCode.D))
+        // {
+        //     transform.rotation = Quaternion.Lerp(transform.rotation,
+        //        Quaternion.LookRotation(Vector3.right)
+        //        , 0.2f);
+        //     transform.position += Vector3.right * Time.deltaTime * _speed;
+        // }
+
+        if(Input.GetKeyDown(KeyCode.I))
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation,
-               Quaternion.LookRotation(Vector3.right)
-               , 0.2f);
-            transform.position += Vector3.right * Time.deltaTime * _speed;
+          if(_isInventory == false)
+          {
+            Inven = GameManager.UI.ShowPopupUI<UI_Inven>("Popup_Inven");
+            _isInventory = true;
+          }
+          else
+          {
+            
+            GameManager.UI.ClosePopupUI(Inven);
+            _isInventory = false;          
+          }          
         }
     }
+
+
+
+
 }

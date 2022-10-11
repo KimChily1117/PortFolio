@@ -8,6 +8,7 @@ public static class Extention
 {  
     public static void BindEvent(this GameObject go , Action<PointerEventData> action , Define.UIEvent type = Define.UIEvent.Click)
     {
+        Debug.Log($"event binding : {go}");
         UI_Base.BindEvent(go, action, type);
     }
 }

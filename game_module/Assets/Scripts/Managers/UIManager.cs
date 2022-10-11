@@ -12,6 +12,22 @@ public class UIManager
 
     UI_Scene _scene = null;
 
+    public GameObject Root
+    { 
+      get 
+      {
+        GameObject root = GameObject.Find("@UI_Root");
+
+        if(root == null)
+        {
+          root = new GameObject{ name = "@UI_Root"};
+        }
+
+        return root;
+      } 
+    }
+
+
     public void SetCanvas(GameObject go , bool sort = true)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
@@ -27,10 +43,12 @@ public class UIManager
         {
             canvas.sortingOrder = 0;
         }
+
+        go.transform.SetParent(Root.transform);
     }
 
 
-    public T ShowPopupUI<T>(string name) where T : UI_PopUp
+    public T ShowPopupUI<T>(string name = null) where T : UI_PopUp
     {
         if(string.IsNullOrEmpty(name) == true)
         {
@@ -47,6 +65,9 @@ public class UIManager
         _popupStack.Push(popup);
         
         _order++;
+
+        go.transform.SetParent(Root.transform);
+
         return popup;
     }
 
@@ -81,7 +102,7 @@ public class UIManager
     }
 
 
-    public void ClosePopupUI()
+    private void ClosePopupUI()
     {
         if(_popupStack.Count <= 0)
         { Debug.Log ($"Popup UI is empty"); return; }

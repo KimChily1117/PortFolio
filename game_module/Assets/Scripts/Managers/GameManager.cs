@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour
     static UIManager s_uimanager = new UIManager();
     public static UIManager UI { get { return s_uimanager; } }
 
+    static SceneManangers s_scenemanagers = new SceneManangers();
+
+    public static SceneManangers SCENE { get { return s_scenemanagers; } }
+
     static void Init()
     {
         if (!s_instance)
