@@ -5,8 +5,8 @@ using UnityEngine;
 
 public abstract class BaseScene : MonoBehaviour
 {
-  private static Define.Scenes _currentScene = Define.Scenes.NONE;
-  public static Define.Scenes CurrentScene { get { return _currentScene;} set { } }
+    protected Define.Scenes _currentScene = Define.Scenes.NONE;
+    public Define.Scenes CurrentScene { get { return _currentScene;} set { } }
     
     // Start is called before the first frame update
     protected virtual void Awake()
@@ -16,8 +16,6 @@ public abstract class BaseScene : MonoBehaviour
 
     protected virtual void Initialize()
     {
-
-
 
     }
 
