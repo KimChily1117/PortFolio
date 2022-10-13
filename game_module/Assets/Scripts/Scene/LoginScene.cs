@@ -9,9 +9,7 @@ public class LoginScene : BaseScene
     protected override void Initialize()
     {   
         base.Initialize();
-        _currentScene = Define.Scenes.LOGIN;  
-
-
+        _currentScene = Define.Scenes.LOGIN; 
         UnityEngine.Object obj = FindObjectOfType(typeof(EventSystem));
 
         if (obj == null)

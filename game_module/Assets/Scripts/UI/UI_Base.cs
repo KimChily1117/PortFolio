@@ -34,8 +34,6 @@ public abstract class UI_Base : MonoBehaviour
         {
             if (typeof(T) == typeof(GameObject)) // when type gameObject --> Different Function
             {
-
-
                 objects[i] = Util.FindChild(gameObject, names[i], true);
             }
 

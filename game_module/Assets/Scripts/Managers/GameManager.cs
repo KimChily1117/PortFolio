@@ -26,8 +26,11 @@ public class GameManager : MonoBehaviour
     public static UIManager UI { get { return s_uimanager; } }
 
     static SceneManangers s_scenemanagers = new SceneManangers();
-
     public static SceneManangers SCENE { get { return s_scenemanagers; } }
+    
+    private static SoundManager s_soundmanagers = new SoundManager();
+    public static SoundManager Sound { get { return s_soundmanagers; }
+    }
 
     static void Init()
     {
@@ -42,7 +45,9 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(obj);
 
             s_instance = obj.GetComponent<GameManager>();
-        }        
+        }
+
+        Sound.Init();
     }
 
     void Start()

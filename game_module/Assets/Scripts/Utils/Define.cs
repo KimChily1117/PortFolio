@@ -14,8 +14,7 @@ public class Define
         Press,
         Click
     }
-
-
+    
     public enum UIEvent
     {
         Click,
@@ -28,6 +27,13 @@ public class Define
       LOGIN,
       LOBBY,
       IN_GAME      
+    }
+
+    public enum SoundType
+    {
+        BGM,
+        Effect,
+        MaxCount
     }
 
 }
