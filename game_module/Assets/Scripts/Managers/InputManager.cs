@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 public class InputManager
 {
     public Action KeyAction = null;
-    public Action<Define.MouseEvent> MouseAction = null; // Define�� ����Ǿ�? �ִ� Enum���� ���콺 KeyEvent�� �����س���. 
+    public Action<Define.MouseEvent> MouseAction = null; 
+   
  
     bool _pressed = false;
     public void OnUpdate()
@@ -22,7 +23,7 @@ public class InputManager
 
         if (Input.anyKey && KeyAction != null)
         {
-            KeyAction.Invoke(); // ��ϵ�? �Լ��� �����Ų��?.
+            KeyAction.Invoke(); 
         }
 
         if (MouseAction != null)

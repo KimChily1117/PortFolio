@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class SoundManager
 {
+    public AudioSource[] audioSources = new AudioSource[(int)Define.SoundType.MaxCount];
     private Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
     public void Init()
     {
@@ -25,15 +26,27 @@ public class SoundManager
         {
             GameObject go = new GameObject { name = SoundNames[i] };
             go.transform.SetParent(obj.transform);
-            SetAudioComponent(go);
+            audioSources[i] = go.GetOrAddComponent<AudioSource>();
         }
+
+        audioSources[(int)Define.SoundType.BGM].loop = true;
     }
 
-
-
-
-    void SetAudioComponent(GameObject targetObj)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    AudioClip GetorAddAuidioClip(string path, Define.SoundType type = Define.SoundType.Effect)
     {
-        targetObj.AddComponent<AudioSource>();
+        if (path.Contains("Sounds") == false)
+        {
+            return null;
+        }
+
+        AudioClip audioClip = null;
+        
+        return audioClip;
     }
 }

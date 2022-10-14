@@ -58,11 +58,10 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerState.Die:
                 ProcDie();
-                break;
-           
+                break;           
         }        
     }
-
+    
     private void OnMouseClicked(Define.MouseEvent evt)
     {
         if (_state == PlayerState.Die)
@@ -86,7 +85,6 @@ public class PlayerController : MonoBehaviour
             _destPos = hit.point;
             _state = PlayerState.Walk;
         }
-
         Debug.Log($"OnMouseClicked!");
     }
     private void ProcIdle()

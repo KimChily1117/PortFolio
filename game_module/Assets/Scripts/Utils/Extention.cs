@@ -11,4 +11,9 @@ public static class Extention
         Debug.Log($"event binding : {go}");
         UI_Base.BindEvent(go, action, type);
     }
+
+    public static T GetOrAddComponent<T>(this GameObject go) where T : UnityEngine.Component
+    {
+        return Util.GetOrAddComponent<T>(go);
+    }
 }
