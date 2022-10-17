@@ -46,8 +46,8 @@ public class GameManager : MonoBehaviour
 
             s_instance = obj.GetComponent<GameManager>();
         }
-
         Sound.Init();
+        Sound.Play("Sounds/town_bgm_elven",Define.SoundType.BGM);
     }
 
     void Start()
@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         s_input.OnUpdate();
+        
+        
     }
 
 }

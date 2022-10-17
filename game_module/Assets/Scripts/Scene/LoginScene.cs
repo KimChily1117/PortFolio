@@ -18,12 +18,27 @@ public class LoginScene : BaseScene
         }
     }
 
-    private void Update() 
+    private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return))
+        if (Application.platform == RuntimePlatform.Android)
         {
-            GameManager.SCENE.LoadScene(Define.Scenes.IN_GAME);        
-        }  
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+
+                if (touch.phase == TouchPhase.Began)
+                {
+                    GameManager.SCENE.LoadScene(Define.Scenes.IN_GAME);
+                }
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                GameManager.SCENE.LoadScene(Define.Scenes.IN_GAME);
+            }
+        }
     }
 
 }

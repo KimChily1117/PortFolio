@@ -32,6 +32,44 @@ public class SoundManager
         audioSources[(int)Define.SoundType.BGM].loop = true;
     }
 
+    public void Play(string path , Define.SoundType soundType = Define.SoundType.Effect , float pitch = 1.0f)
+    {
+        AudioClip audioClip = GetorAddAuidioClip(path,soundType);
+       
+        switch (soundType)
+        {
+            case Define.SoundType.BGM:
+            {
+                if (!audioClip)
+                {
+                    Debug.Log(($"Bgm File is null"));
+                }
+                audioSources[(int)Define.SoundType.BGM].clip = audioClip;
+                
+                
+                audioSources[(int)Define.SoundType.BGM].loop = true;
+                audioSources[(int)Define.SoundType.BGM].pitch = pitch;
+                audioSources[(int)Define.SoundType.BGM].Play();
+                
+            }
+                break;
+            case Define.SoundType.Effect:
+            {
+                if (!audioClip)
+                {
+                }
+                audioSources[(int)Define.SoundType.Effect].pitch = pitch;
+                
+                
+                audioSources[(int)Define.SoundType.Effect].PlayOneShot((audioClip));
+            }
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(soundType), soundType, null);
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -42,11 +80,27 @@ public class SoundManager
     {
         if (path.Contains("Sounds") == false)
         {
-            return null;
+            path = $"Sounds/{path}";
         }
 
         AudioClip audioClip = null;
-        
+
+        switch (type)
+        {
+            case Define.SoundType.BGM:
+                audioClip = GameManager.Resources.Load<AudioClip>(path);
+                break;
+            case Define.SoundType.Effect:
+                if (_audioClips.TryGetValue(path,out audioClip) == false)
+                {
+                    audioClip = GameManager.Resources.Load<AudioClip>(path);
+                    _audioClips.Add(path,audioClip);
+                }
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
         return audioClip;
     }
+
 }

@@ -180,6 +180,16 @@ public class PlayerController : MonoBehaviour
             _isInventory = false;          
           }          
         }
+        
+        if(Input.GetKeyDown(KeyCode.Minus)) // 시로코 레이드에서 나오는 느려지는 슬로우 모션 효과는 Pitch값을 조정해서 사용하던거같음
+        {
+            GameManager.Sound.audioSources[(int)Define.SoundType.BGM].pitch -= 0.1f;
+        }
+        
+        if(Input.GetKeyDown(KeyCode.Plus))
+        {
+            GameManager.Sound.audioSources[(int)Define.SoundType.BGM].pitch += 0.1f;
+        }
     }
 
 
