@@ -13,24 +13,25 @@ public class GameManager : MonoBehaviour
             return s_instance;
         }
     }
-    
-    
-    
-    static InputManager s_input = new InputManager();
+
+    private static InputManager s_input = new InputManager();
     public static InputManager Input { get { return s_input; } }
 
-    static ResourcesManager s_resources = new ResourcesManager();
+    private static ResourcesManager s_resources = new ResourcesManager();
     public static ResourcesManager Resources { get { return s_resources; } }
 
-    static UIManager s_uimanager = new UIManager();
+    private static UIManager s_uimanager = new UIManager();
     public static UIManager UI { get { return s_uimanager; } }
 
-    static SceneManangers s_scenemanagers = new SceneManangers();
+    private static SceneManangers s_scenemanagers = new SceneManangers();
     public static SceneManangers SCENE { get { return s_scenemanagers; } }
     
     private static SoundManager s_soundmanagers = new SoundManager();
-    public static SoundManager Sound { get { return s_soundmanagers; }
-    }
+    public static SoundManager Sound { get { return s_soundmanagers; } }
+
+    private static PoolManager s_poolmanagers = new PoolManager();
+    
+    public static PoolManager ObjectPool  { get { return s_poolmanagers; }}
 
     static void Init()
     {
@@ -49,17 +50,16 @@ public class GameManager : MonoBehaviour
         Sound.Init();
         Sound.Play("Sounds/town_bgm_elven",Define.SoundType.BGM);
     }
-
     void Start()
     {
         Init();
     }
-
     private void Update()
     {
         s_input.OnUpdate();
-        
-        
     }
-
+    
+    
+    
+    
 }

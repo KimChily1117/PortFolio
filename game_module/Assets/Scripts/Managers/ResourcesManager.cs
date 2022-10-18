@@ -33,7 +33,6 @@ public class ResourcesManager
     {
         if (go == null)
             return;
-
         UnityEngine.Object.Destroy(go);
     }
 

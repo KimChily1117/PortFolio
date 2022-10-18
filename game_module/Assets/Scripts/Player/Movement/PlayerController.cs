@@ -168,17 +168,17 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.I))
         {
-          if(_isInventory == false)
-          {
-            Inven = GameManager.UI.ShowPopupUI<UI_Inven>("Popup_Inven");
-            _isInventory = true;
-          }
-          else
-          {
+            if(_isInventory == false)
+            {
+                Inven = GameManager.UI.ShowPopupUI<UI_Inven>("Popup_Inven");
+                _isInventory = true;
+            }
+            else
+            {
             
-            GameManager.UI.ClosePopupUI(Inven);
-            _isInventory = false;          
-          }          
+                GameManager.UI.ClosePopupUI(Inven);
+                _isInventory = false;          
+            }          
         }
         
         if(Input.GetKeyDown(KeyCode.Minus)) // 시로코 레이드에서 나오는 느려지는 슬로우 모션 효과는 Pitch값을 조정해서 사용하던거같음
@@ -189,6 +189,11 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Plus))
         {
             GameManager.Sound.audioSources[(int)Define.SoundType.BGM].pitch += 0.1f;
+        }
+        
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.Sound.Play("Sounds/Voice/univ0005");
         }
     }
 

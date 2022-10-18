@@ -8,6 +8,7 @@ public class SoundManager
 {
     public AudioSource[] audioSources = new AudioSource[(int)Define.SoundType.MaxCount];
     private Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
+    
     public void Init()
     {
         Debug.Log(($"SoundManager ] Initialized"));
@@ -21,14 +22,12 @@ public class SoundManager
 
         string[] SoundNames = Enum.GetNames(typeof(Define.SoundType));
 
-
         for (int i = 0; i < SoundNames.Length-1; i++)
         {
             GameObject go = new GameObject { name = SoundNames[i] };
             go.transform.SetParent(obj.transform);
             audioSources[i] = go.GetOrAddComponent<AudioSource>();
         }
-
         audioSources[(int)Define.SoundType.BGM].loop = true;
     }
 
@@ -42,7 +41,7 @@ public class SoundManager
             {
                 if (!audioClip)
                 {
-                    Debug.Log(($"Bgm File is null"));
+                    Debug.Log(($"Bgm File is null!!"));
                 }
                 audioSources[(int)Define.SoundType.BGM].clip = audioClip;
                 
@@ -57,10 +56,9 @@ public class SoundManager
             {
                 if (!audioClip)
                 {
+                    Debug.Log($"Effect Sound File is null!");
                 }
                 audioSources[(int)Define.SoundType.Effect].pitch = pitch;
-                
-                
                 audioSources[(int)Define.SoundType.Effect].PlayOneShot((audioClip));
             }
                 break;
@@ -82,7 +80,6 @@ public class SoundManager
         {
             path = $"Sounds/{path}";
         }
-
         AudioClip audioClip = null;
 
         switch (type)
