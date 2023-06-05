@@ -1,0 +1,14 @@
+D:\csharp_proj\Server\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.exe
+D:\csharp_proj\Server\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.deps.json
+D:\csharp_proj\Server\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.runtimeconfig.json
+D:\csharp_proj\Server\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.runtimeconfig.dev.json
+D:\csharp_proj\Server\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.dll
+D:\csharp_proj\Server\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.pdb
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.csproj.AssemblyReference.cache
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.GeneratedMSBuildEditorConfig.editorconfig
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.AssemblyInfoInputs.cache
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.AssemblyInfo.cs
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.csproj.CoreCompileInputs.cache
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.dll
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.pdb
+D:\csharp_proj\Server\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.genruntimeconfig.cache
