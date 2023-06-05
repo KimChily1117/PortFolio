@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\csharp_proj\\Server\\ServerCore\\ServerCore.csproj",
+      "projectUniqueName": "E:\\GItHub\\PortFolio\\C#\\Server\\ServerCore\\ServerCore.csproj",
       "projectName": "ServerCore",
-      "projectPath": "D:\\csharp_proj\\Server\\ServerCore\\ServerCore.csproj",
+      "projectPath": "E:\\GItHub\\PortFolio\\C#\\Server\\ServerCore\\ServerCore.csproj",
       "packagesPath": "C:\\Users\\yeop_sun\\.nuget\\packages\\",
-      "outputPath": "D:\\csharp_proj\\Server\\ServerCore\\obj\\",
+      "outputPath": "E:\\GItHub\\PortFolio\\C#\\Server\\ServerCore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\yeop_sun\\AppData\\Roaming\\NuGet\\NuGet.Config",

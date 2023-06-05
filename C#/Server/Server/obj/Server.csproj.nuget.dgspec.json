@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\csharp_proj\\Server\\Server\\Server.csproj": {}
+    "E:\\GItHub\\PortFolio\\C#\\Server\\Server\\Server.csproj": {}
   },
   "projects": {
-    "D:\\csharp_proj\\Server\\Server\\Server.csproj": {
+    "E:\\GItHub\\PortFolio\\C#\\Server\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\csharp_proj\\Server\\Server\\Server.csproj",
+        "projectUniqueName": "E:\\GItHub\\PortFolio\\C#\\Server\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "D:\\csharp_proj\\Server\\Server\\Server.csproj",
+        "projectPath": "E:\\GItHub\\PortFolio\\C#\\Server\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\yeop_sun\\.nuget\\packages\\",
-        "outputPath": "D:\\csharp_proj\\Server\\Server\\obj\\",
+        "outputPath": "E:\\GItHub\\PortFolio\\C#\\Server\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\yeop_sun\\AppData\\Roaming\\NuGet\\NuGet.Config",
