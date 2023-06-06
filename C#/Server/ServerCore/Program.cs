@@ -10,31 +10,13 @@ namespace ServerCore
     {
         static Listener _listener = new Listener();        
 
-
-        static void Main(string[] args)
+        static void OnCompleteAccess(Socket clientSocket)
         {
-            string host = Dns.GetHostName();
-            IPHostEntry iPHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = iPHost.AddressList[0]; 
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
-
-
-            // 문지기의 역활을 함.(Server PPT 참고)
-
-            //Socket listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-
             try
             {
-                _listener.Init(endPoint);  
-
-                while (true)
-                {
-                    Console.WriteLine("Listening .....");
-
                     // 서버의 입장에서 손님(Client)을 입장시킴
 
-                    Socket clientSocket = _listener.Accept(); 
+                    //Socket clientSocket = _listener.Accept();
 
                     // 클라이언트에게 수신함
 
@@ -49,18 +31,40 @@ namespace ServerCore
 
                     byte[] sendBuff = Encoding.UTF8.GetBytes("Welcome RPG Server");
                     clientSocket.Send(sendBuff);
-                    
+
                     //메세지 전송을 완료한뒤 쫓아낸다(Kickout)
 
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Close();
 
-                }
+              
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+            }
+
+        }
+
+
+
+        static void Main(string[] args)
+        {
+            string host = Dns.GetHostName();
+            IPHostEntry iPHost = Dns.GetHostEntry(host);
+            IPAddress ipAddr = iPHost.AddressList[0]; 
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+
+
+            // 문지기의 역활을 함.(Server PPT 참고)
+
+            _listener.Init(endPoint,OnCompleteAccess);
+            Console.WriteLine("Listening .....");
+
+            while (true)
+            {
+
             }
 
         }

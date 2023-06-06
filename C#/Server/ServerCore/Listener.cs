@@ -11,15 +11,62 @@ namespace ServerCore
     {
         Socket _listenersocket;
 
+        Action<Socket> _onAcceptHandler;
 
-        public void Init(IPEndPoint iPEndPoint)
+        public void Init(IPEndPoint iPEndPoint , Action<Socket> onAcceptHandler)
         {
+
+            _onAcceptHandler = null;
+            // 혹시 모르는 상황에 대한 모르는 초기화작업
+            _onAcceptHandler += onAcceptHandler;
+
             _listenersocket = new Socket(iPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             _listenersocket.Bind(iPEndPoint);
 
             _listenersocket.Listen(10);
+
+            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+
+            args.Completed += OnAcceptCompleted;
+
+
+            //최초 접속자 검출 실행
+            RegisterAccept(args);
+
         }
+
+       
+
+        public void RegisterAccept(SocketAsyncEventArgs eventArgs)
+        {
+
+            eventArgs.AcceptSocket = null;
+
+            bool isPending = _listenersocket.AcceptAsync(eventArgs);
+            if (isPending == false)
+            {
+                OnAcceptCompleted(null, eventArgs);
+            }
+            //Accept();
+        }
+
+        private void OnAcceptCompleted(object sender, SocketAsyncEventArgs e)
+        {
+            if(e.SocketError == SocketError.Success)
+            {
+                _onAcceptHandler.Invoke(e.AcceptSocket);
+
+            }
+            else
+            {
+                Console.WriteLine($"OnAcceptCompleted ] Error!");
+
+            }
+
+            RegisterAccept(e);
+        }
+
 
 
         public Socket Accept()
@@ -32,13 +79,12 @@ namespace ServerCore
             return _listenersocket.Accept();
             */
 
-            //윗 코드와 다른 점 : return 전에 Asnyc함수를 호출함
+            //return 전에 Asnyc(비동기)함수를 호출함
 
-            _listenersocket.AcceptAsync();
+            // Idea -> Register
+
             return _listenersocket.Accept();
-
-
-
+            
 
 
 

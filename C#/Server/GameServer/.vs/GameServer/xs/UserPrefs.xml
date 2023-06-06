@@ -1,30 +1,32 @@
 ﻿<Properties StartupConfiguration="여러 프로젝트">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.ServerCore PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.ItemProperties.DummyClient PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../ServerCore/Listener.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../DummyClient/Program.cs">
     <Files>
-      <File FileName="../ServerCore/Program.cs" Line="11" Column="59" />
-      <File FileName="../ServerCore/Listener.cs" Line="12" Column="1" />
+      <File FileName="../ServerCore/Program.cs" Line="65" Column="13" />
+      <File FileName="../Server/Program.cs" Line="1" Column="1" />
+      <File FileName="../ServerCore/Listener.cs" Line="34" Column="27" NotebookId="1" />
+      <File FileName="../DummyClient/Program.cs" Line="60" Column="14" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="GameServer" expanded="True">
-            <Node name="DummyClient" expanded="True" />
-            <Node name="Server" expanded="True" />
-            <Node name="ServerCore" expanded="True">
-              <Node name="Listener.cs" selected="True" />
+            <Node name="DummyClient" expanded="True">
+              <Node name="Program.cs" selected="True" />
             </Node>
+            <Node name="Server" expanded="True" />
+            <Node name="ServerCore" expanded="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.ServerCore PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations>
     <MultiItemSolutionRunConfiguration Id="여러 프로젝트" Name="여러 프로젝트">
       <Items>
