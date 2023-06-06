@@ -1,0 +1,36 @@
+﻿<Properties StartupConfiguration="여러 프로젝트">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.DummyClient PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../ServerCore/Listener.cs">
+    <Files>
+      <File FileName="../ServerCore/Program.cs" Line="11" Column="59" />
+      <File FileName="../ServerCore/Listener.cs" Line="12" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="GameServer" expanded="True">
+            <Node name="DummyClient" expanded="True" />
+            <Node name="Server" expanded="True" />
+            <Node name="ServerCore" expanded="True">
+              <Node name="Listener.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.ServerCore PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations>
+    <MultiItemSolutionRunConfiguration Id="여러 프로젝트" Name="여러 프로젝트">
+      <Items>
+        <StartupItem ItemId="{F1C7F4F2-1227-4276-B661-D53845A330A3}" ItemName="DummyClient" ConfigurationId="Default" />
+        <StartupItem ItemId="{1C356232-F0CC-4751-8181-7844F4758BD0}" ItemName="ServerCore" ConfigurationId="Default" />
+      </Items>
+    </MultiItemSolutionRunConfiguration>
+  </MultiItemStartupConfigurations>
+</Properties>

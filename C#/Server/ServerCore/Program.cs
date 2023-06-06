@@ -8,24 +8,25 @@ namespace ServerCore
 {
     class Program
     {
+        static Listener _listener = new Listener();        
+
+
         static void Main(string[] args)
         {
             string host = Dns.GetHostName();
             IPHostEntry iPHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = iPHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+            IPAddress ipAddr = iPHost.AddressList[0]; 
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
 
 
             // 문지기의 역활을 함.(Server PPT 참고)
-            Socket listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            //Socket listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
 
             try
             {
-                listenSocket.Bind(endPoint);
-
-                listenSocket.Listen(10);
-
+                _listener.Init(endPoint);  
 
                 while (true)
                 {
@@ -33,7 +34,7 @@ namespace ServerCore
 
                     // 서버의 입장에서 손님(Client)을 입장시킴
 
-                    Socket clientSocket = listenSocket.Accept();
+                    Socket clientSocket = _listener.Accept(); 
 
                     // 클라이언트에게 수신함
 

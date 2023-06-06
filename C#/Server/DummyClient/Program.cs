@@ -12,7 +12,7 @@ namespace DummyClient
             string host = Dns.GetHostName();
             IPHostEntry iPHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = iPHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
 
 
             // 문지기의 역활을 함.(Server PPT 참고)
@@ -22,6 +22,8 @@ namespace DummyClient
 
             try
             {
+
+                Console.WriteLine($"Client On");
                 //Server에 연결
                 socket.Connect(endPoint);
 
