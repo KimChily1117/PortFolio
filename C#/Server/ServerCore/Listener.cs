@@ -42,6 +42,8 @@ namespace ServerCore
         {
 
             eventArgs.AcceptSocket = null;
+           
+            //[AcceptAsync]asnyc에서 돌아가는 함수들은 별도의 스레드에서 돌아간다.
 
             bool isPending = _listenersocket.AcceptAsync(eventArgs);
             if (isPending == false)
