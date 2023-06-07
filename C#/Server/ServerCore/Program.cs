@@ -8,36 +8,32 @@ namespace ServerCore
 {
     class Program
     {
-        static Listener _listener = new Listener();        
+        static Listener _listener = new Listener();
+        static Session _session = new Session();
 
         static void OnCompleteAccess(Socket clientSocket)
         {
             try
             {
-                    // 서버의 입장에서 손님(Client)을 입장시킴
+                // 서버의 입장에서 손님(Client)을 입장시킴
 
-                    //Socket clientSocket = _listener.Accept();
+                //Socket clientSocket = _listener.Accept();
 
-                    // 클라이언트에게 수신함
+                // 클라이언트에게 수신함
 
-                    byte[] recvBuff = new byte[1024];
-                    int recvBytes = clientSocket.Receive(recvBuff);
+                //byte[] recvBuff = new byte[1024];
+                //int recvBytes = clientSocket.Receive(recvBuff);
 
-                    string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
+                //string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
 
-                    Console.WriteLine($"From Client : {recvData}");
+                //Console.WriteLine($"From Client : {recvData}");
 
-                    //클라에게 보냄
+                ////클라에게 보냄
 
-                    byte[] sendBuff = Encoding.UTF8.GetBytes("Welcome RPG Server");
-                    clientSocket.Send(sendBuff);
+                _session.Start(clientSocket);
 
-                    //메세지 전송을 완료한뒤 쫓아낸다(Kickout)
-
-                    clientSocket.Shutdown(SocketShutdown.Both);
-                    clientSocket.Close();
-
-              
+                byte[] sendBuff = Encoding.UTF8.GetBytes("Welcome RPG Server");
+                _session.Send(sendBuff);
 
             }
             catch (Exception e)
@@ -53,13 +49,13 @@ namespace ServerCore
         {
             string host = Dns.GetHostName();
             IPHostEntry iPHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = iPHost.AddressList[0]; 
+            IPAddress ipAddr = iPHost.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 
             // 문지기의 역활을 함.(Server PPT 참고)
 
-            _listener.Init(endPoint,OnCompleteAccess);
+            _listener.Init(endPoint, OnCompleteAccess);
             Console.WriteLine("Listening .....");
 
             while (true)

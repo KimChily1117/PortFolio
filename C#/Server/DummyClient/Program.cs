@@ -17,8 +17,8 @@ namespace DummyClient
 
 
             
-            while (true)
-            {
+            //while (true)
+            //{
                 // 문지기의 역활을 함.(Server PPT 참고)
                 Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 try
@@ -43,8 +43,7 @@ namespace DummyClient
                     string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvbytes);
                     Console.WriteLine($"Server -> Client : {recvData}");
 
-                    socket.Shutdown(SocketShutdown.Both);
-                    socket.Close();
+                   
                 }
 
 
@@ -54,10 +53,10 @@ namespace DummyClient
                 }
 
 
-                Thread.Sleep(100);
+            //    Thread.Sleep(100);
 
 
-            }
+            //}
 
 
         }

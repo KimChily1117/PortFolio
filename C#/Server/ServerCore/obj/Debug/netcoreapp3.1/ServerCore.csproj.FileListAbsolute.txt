@@ -26,3 +26,17 @@ D:/csharp_proj/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.genruntimeco
 /Users/user/Documents/PortFolio/C#/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.dll
 /Users/user/Documents/PortFolio/C#/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.pdb
 /Users/user/Documents/PortFolio/C#/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.genruntimeconfig.cache
+E:\GItHub\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.exe
+E:\GItHub\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+E:\GItHub\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.runtimeconfig.json
+E:\GItHub\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.runtimeconfig.dev.json
+E:\GItHub\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+E:\GItHub\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.AssemblyReference.cache
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
+E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.genruntimeconfig.cache
