@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "Fyk9Qj7wzG0eWDjrsFGM1d14lg6fxYCEyOw+uSFiWDikITKbuuNLtwHSjI8nJEkGYTpE9OHGLiZDuvP/dsmXUQ==",
+  "dgSpecHash": "0pp/LIeNq3+g0P4KZJFbAogVuY3YelGyw3PT6VP87QTz+fdsS3SUOspC2FW1Cbf84nIBTPI9+wm1rZZFMNp2Pw==",
   "success": true,
-  "projectFilePath": "E:\\GItHub\\PortFolio\\C#\\Server\\ServerCore\\ServerCore.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "\\\\Mac\\Home\\Documents\\PortFolio\\C#\\Server\\ServerCore\\ServerCore.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.1.0\\microsoft.windowsdesktop.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.10\\microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.32\\microsoft.netcore.app.host.win-x64.3.1.32.nupkg.sha512"
+  ],
   "logs": []
 }

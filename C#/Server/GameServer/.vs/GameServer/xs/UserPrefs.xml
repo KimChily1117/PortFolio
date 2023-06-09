@@ -1,6 +1,4 @@
 ﻿<Properties StartupConfiguration="여러 프로젝트">
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MultiItemStartupConfigurations>
     <MultiItemSolutionRunConfiguration Id="여러 프로젝트" Name="여러 프로젝트">
       <Items>
@@ -9,30 +7,32 @@
       </Items>
     </MultiItemSolutionRunConfiguration>
   </MultiItemStartupConfigurations>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../ServerCore/Listener.cs">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.DummyClient PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.ItemProperties.ServerCore PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../DummyClient/Program.cs">
     <Files>
-      <File FileName="../ServerCore/Program.cs" Line="46" Column="14" />
-      <File FileName="../Server/Program.cs" Line="1" Column="1" />
-      <File FileName="../ServerCore/Listener.cs" Line="48" Column="41" NotebookId="1" />
-      <File FileName="../DummyClient/Program.cs" Line="21" Column="13" NotebookId="1" />
+      <File FileName="../ServerCore/Program.cs" Line="68" Column="10" />
+      <File FileName="../Server/Program.cs" />
+      <File FileName="../ServerCore/Session.cs" Line="73" Column="21" />
+      <File FileName="../DummyClient/Program.cs" Line="57" Column="1" NotebookId="1" IsPinned="True" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="GameServer" expanded="True">
-            <Node name="DummyClient" expanded="True" />
-            <Node name="Server" expanded="True" />
-            <Node name="ServerCore" expanded="True">
-              <Node name="Listener.cs" selected="True" />
+            <Node name="DummyClient" expanded="True">
+              <Node name="Program.cs" selected="True" />
             </Node>
+            <Node name="Server" expanded="True" />
+            <Node name="ServerCore" expanded="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.ServerCore PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.DummyClient PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>

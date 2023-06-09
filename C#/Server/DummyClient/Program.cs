@@ -27,7 +27,7 @@ namespace DummyClient
                     Console.WriteLine($"Client On");
                     //Server에 연결
 
-                    //Thread.Sleep(1);
+                    Thread.Sleep(1);
 
                     socket.Connect(endPoint);
                     //Server로 송신
@@ -38,7 +38,7 @@ namespace DummyClient
                     //결과를 받음
 
                     byte[] recvBuff = new byte[1024];
-                    int recvbytes = socket.Receive(recvBuff);
+                    int recvbytes = socket.Receive(recvBuff); 
 
                     string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvbytes);
                     Console.WriteLine($"Server -> Client : {recvData}");

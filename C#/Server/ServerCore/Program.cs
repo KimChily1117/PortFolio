@@ -58,8 +58,10 @@ namespace ServerCore
             _listener.Init(endPoint, OnCompleteAccess);
             Console.WriteLine("Listening .....");
 
+
             while (true)
             {
+                Thread.Sleep(10);
 
             }
 

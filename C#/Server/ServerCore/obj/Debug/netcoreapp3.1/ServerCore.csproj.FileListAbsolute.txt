@@ -40,3 +40,17 @@ E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.cspr
 E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
 E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
 E:\GItHub\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.genruntimeconfig.cache
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.exe
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.runtimeconfig.json
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.runtimeconfig.dev.json
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.AssemblyReference.cache
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
+\\Mac\Home\Documents\PortFolio\C#\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.genruntimeconfig.cache
