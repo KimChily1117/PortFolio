@@ -54,7 +54,7 @@ namespace ServerCore
                 }
                 catch (Exception)
                 {
- 
+
                     throw;
                 }
 
@@ -74,46 +74,57 @@ namespace ServerCore
         {
             bool isPending = _socket.SendAsync(args);
 
-            if(isPending == false)
+            if (isPending == false)
             {
-                OnSendComplete(null , args);
+                OnSendComplete(null, args);
             }
 
             else
             {
-                return;
+               
             }
-
-
         }
 
 
-        public void OnSendComplete(object sender , SocketAsyncEventArgs args)
+        public void OnSendComplete(object sender, SocketAsyncEventArgs args)
         {
-            try
+
+            if (args.SocketError == SocketError.Success && args.BytesTransferred > 0)
+
             {
+                try
+                {
 
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
-            catch (Exception ex)
+
+            else
             {
-
+                Console.WriteLine($"OnSendComplete] Error!!!");
             }
-
 
         }
 
         #endregion Network(Send)
 
 
-        public void Send(byte[] buffer)
+        public void Send(byte[] recvBuff)
         {
 
             SocketAsyncEventArgs args = new SocketAsyncEventArgs();
 
-            byte[] recvBuff = new byte[1024];
+            //byte[] recvBuff = new byte[1024];
 
-            args.SetBuffer(recvBuff, 0, 1024);
-            args.Completed += OnSendComplete;
+            //args.Completed += OnSendComplete;
+            args.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
+            // 같은 의미
+
+
+            args.SetBuffer(recvBuff, 0, recvBuff.Length);
 
             RegisterSend(args);
 
@@ -123,12 +134,12 @@ namespace ServerCore
         {
             // 예외처리 추가 Socket통신은 별도의 스레드를 사용하여 연결 하기 때문에. Interlocked를 사용하여 동시에 발생하는 이벤트를
             // 방지 할 수 있다 
-            if(Interlocked.Exchange(ref isDisconnect ,1) == 1)
+            if (Interlocked.Exchange(ref isDisconnect, 1) == 1)
             {
-                return; 
+                return;
             }
 
-            
+
 
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();

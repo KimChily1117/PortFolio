@@ -1,13 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gJrGfg4XTQBp/l8TqnJIP2yapLcGjBIA7FBo0aBhj9sAtsLISxIP0OmTkE5fL7oLAPBE0UORfg2f7k8kNQn3RA==",
+  "dgSpecHash": "KOx71+QmXPcpq0bVaoykMWuXlEfh/WTvbvfiHDLdZOuM5qr3Cx6C0edrimvqYD6N9YD8+pRXIRhnnflFDLoCuA==",
   "success": true,
-  "projectFilePath": "\\\\Mac\\Home\\Documents\\PortFolio\\C#\\Server\\DummyClient\\DummyClient.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\user\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.1.0\\microsoft.windowsdesktop.app.ref.3.1.0.nupkg.sha512",
-    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
-    "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.10\\microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512",
-    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.32\\microsoft.netcore.app.host.win-x64.3.1.32.nupkg.sha512"
-  ],
+  "projectFilePath": "E:\\GItHub\\PortFolio\\C#\\Server\\DummyClient\\DummyClient.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
