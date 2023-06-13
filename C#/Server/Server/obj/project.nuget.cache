@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TL6v35DwO9gvglGjcKiw5ughFhtCwaXtzal9+qsfXEzmy2pG/hG/ybVkcpLt1uCi4q1C1XjTBm/IbXh9/ZRIzA==",
+  "dgSpecHash": "XLyE20ZXS94aUV7vx1K9ogKcMiWtvsH5sqjwkFE0Sz1tZvtX5fYgtd2MRngTcoTG5F0ewKJQixur8h0yufliyQ==",
   "success": true,
-  "projectFilePath": "E:\\GItHub\\PortFolio\\C#\\Server\\Server\\Server.csproj",
+  "projectFilePath": "/Users/user/Documents/PortFolio/C#/Server/Server/Server.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

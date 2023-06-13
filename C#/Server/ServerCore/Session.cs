@@ -12,19 +12,31 @@ namespace ServerCore
         volatile int isDisconnect = 0;
 
 
+        private bool isPending = false;
+        
+        private Queue<byte[]> _sendBuffer = new Queue<byte[]>(); 
+        
+        
+        
+        private SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
+        private SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
+
         public void Start(Socket socket)
         {
             _socket = socket;
 
-            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+           
 
             byte[] recvBuff = new byte[1024];
 
-            args.SetBuffer(recvBuff, 0, 1024);
+            _recvArgs.SetBuffer(recvBuff, 0, 1024);
+            _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
+            
+            
+            _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
 
-            args.Completed += OnRecvCompleted;
 
-            RegisterRecv(args);
+            RegisterRecv(_recvArgs);
         }
 
         #region Network(Recv)
@@ -70,13 +82,13 @@ namespace ServerCore
         #region Network(Send)
 
 
-        public void RegisterSend(SocketAsyncEventArgs args)
+        public void RegisterSend()
         {
-            bool isPending = _socket.SendAsync(args);
-
+            
+            isPending = _socket.SendAsync(_sendArgs);
             if (isPending == false)
             {
-                OnSendComplete(null, args);
+                OnSendComplete(null, _sendArgs);
             }
 
             else
@@ -94,7 +106,10 @@ namespace ServerCore
             {
                 try
                 {
-
+                    if (isPending)
+                    {
+                        isPending = false;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -115,18 +130,9 @@ namespace ServerCore
         public void Send(byte[] recvBuff)
         {
 
-            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-
-            //byte[] recvBuff = new byte[1024];
-
-            //args.Completed += OnSendComplete;
-            args.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
-            // 같은 의미
-
-
-            args.SetBuffer(recvBuff, 0, recvBuff.Length);
-
-            RegisterSend(args);
+            _sendBuffer.Enqueue(recvBuff);
+            
+            RegisterSend();
 
         }
 
@@ -138,8 +144,6 @@ namespace ServerCore
             {
                 return;
             }
-
-
 
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();

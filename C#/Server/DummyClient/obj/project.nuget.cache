@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KOx71+QmXPcpq0bVaoykMWuXlEfh/WTvbvfiHDLdZOuM5qr3Cx6C0edrimvqYD6N9YD8+pRXIRhnnflFDLoCuA==",
+  "dgSpecHash": "yBHEBspdXf4awYLCGVGjOo829hNYmZRlhBoP0Rawhzo05X639FpVFfoYwsQMFKGBds1RZ0ufZoijCkZes897wA==",
   "success": true,
-  "projectFilePath": "E:\\GItHub\\PortFolio\\C#\\Server\\DummyClient\\DummyClient.csproj",
+  "projectFilePath": "/Users/user/Documents/PortFolio/C#/Server/DummyClient/DummyClient.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
