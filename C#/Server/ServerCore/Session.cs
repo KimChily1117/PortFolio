@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
 namespace ServerCore
 {
-    class Session
+    public abstract class Session
     {
         Socket _socket;
         volatile int isDisconnect = 0;
@@ -18,13 +19,21 @@ namespace ServerCore
         private object _lock = new object();
 
 
-        private List<Array>
-
-
-
         private SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
         private SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
+        #region CallbackMethod(개발자가 임의로 만든 CallbackMethod)
+
+        public abstract void OnConected(EndPoint param);
+        public abstract int  OnRecv(ArraySegment<byte> buffer);
+        public abstract void OnSend(int numOfBytes);
+        public abstract void OnDisconnected(EndPoint endPoint);
+        
+
+        #endregion CallbackMethod(개발자가 임의로 만든 CallbackMethod)
+        
+        
+        
         public void Start(Socket socket)
         {
             _socket = socket;

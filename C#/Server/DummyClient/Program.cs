@@ -17,6 +17,7 @@ namespace DummyClient
 
 
             
+            
             //while (true)
             //{
                 // 문지기의 역활을 함.(Server PPT 참고)
