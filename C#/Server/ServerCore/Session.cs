@@ -12,12 +12,16 @@ namespace ServerCore
         volatile int isDisconnect = 0;
 
 
-        private bool isPending = false;
-        
-        private Queue<byte[]> _sendBuffer = new Queue<byte[]>(); 
-        
-        
-        
+        private bool _isPending = false;
+
+        private Queue<byte[]> _sendBuffer = new Queue<byte[]>();
+        private object _lock = new object();
+
+
+        private List<Array>
+
+
+
         private SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
         private SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
@@ -25,17 +29,15 @@ namespace ServerCore
         {
             _socket = socket;
 
-           
+
 
             byte[] recvBuff = new byte[1024];
 
             _recvArgs.SetBuffer(recvBuff, 0, 1024);
             _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
-            
-            
+
+
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
-
-
             RegisterRecv(_recvArgs);
         }
 
@@ -80,12 +82,39 @@ namespace ServerCore
 
 
         #region Network(Send)
+        public void Send(byte[] recvBuff)
+        {
 
+            lock (_lock)
+            {
+                _sendBuffer.Enqueue(recvBuff);
+                if (_isPending == false)
+                    RegisterSend();
+            }
+
+        }
 
         public void RegisterSend()
         {
+
+            _isPending = true;
             
-            isPending = _socket.SendAsync(_sendArgs);
+            ///////////////////////////////////////////////////
+            //byte[] buff = _sendBuffer.Dequeue();
+            //_sendArgs.SetBuffer(buff, 0, buff.Length);
+            //bool isPending = _socket.SendAsync(_sendArgs);
+            // 위에 code같은경우 Async함수에 단일 Buffer를 보내준다.
+            // 이 방법이 나븐건 아님(Lock을 걸어서. 하나의 작업을 완료 할때 까지 스레드를 제한 하기 때문)
+
+
+            while (_sendBuffer.Count > 0)
+            {
+                byte[] buff = _sendBuffer.Dequeue();
+                _sendArgs.BufferList.Add(new ArraySegment<byte>(buff, 0, buff.Length));// 이렇게 Set 하면 안됨.
+            }
+
+            bool isPending = _socket.SendAsync(_sendArgs);
+
             if (isPending == false)
             {
                 OnSendComplete(null, _sendArgs);
@@ -93,7 +122,7 @@ namespace ServerCore
 
             else
             {
-               
+
             }
         }
 
@@ -101,40 +130,40 @@ namespace ServerCore
         public void OnSendComplete(object sender, SocketAsyncEventArgs args)
         {
 
-            if (args.SocketError == SocketError.Success && args.BytesTransferred > 0)
-
+            lock (_lock)
             {
-                try
+                if (args.SocketError == SocketError.Success && args.BytesTransferred > 0)
+
                 {
-                    if (isPending)
+                    try
                     {
-                        isPending = false;
+                        if(_sendBuffer.Count > 0 )
+                        {
+                            RegisterSend();
+                        }
+                        else
+                        {
+                            _isPending = false;
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+
                     }
                 }
-                catch (Exception ex)
-                {
 
+                else
+                {
+                    Console.WriteLine($"OnSendComplete] Error!!");
                 }
             }
-
-            else
-            {
-                Console.WriteLine($"OnSendComplete] Error!!!");
-            }
-
         }
 
         #endregion Network(Send)
 
 
-        public void Send(byte[] recvBuff)
-        {
 
-            _sendBuffer.Enqueue(recvBuff);
-            
-            RegisterSend();
-
-        }
 
         public void Disconnect()
         {
