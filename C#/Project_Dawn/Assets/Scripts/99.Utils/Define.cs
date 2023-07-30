@@ -57,5 +57,14 @@ public class Define
         ATK3,
     }
 
+    public enum InputType
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        ATK,
+        Jump
+    }
 
 }

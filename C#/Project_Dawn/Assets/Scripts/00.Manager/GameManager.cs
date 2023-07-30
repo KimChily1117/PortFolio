@@ -61,7 +61,4 @@ public class GameManager : MonoBehaviour
         s_input.OnUpdate();
     }
     
-    
-    
-    
 }

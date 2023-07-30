@@ -29,8 +29,12 @@ public class InputManager
 
     public Action DoubleKeyAction = null;
     // Key를 뗬을 때 동작을 Invoke 시키기 위해 선언 
-    
+
     // Double Input
+
+
+    public Action<Define.InputType> inputTypeAction = null;
+
  
     bool _pressed = false;
     private bool _keypressed = false;
@@ -52,8 +56,23 @@ public class InputManager
             }
             
             if (Input.GetKeyDown(_inputKeycode))
-            {
-                Debug.Log(($"1"));
+            {                
+                if(CheckAtkButton(_inputKeycode))
+                {
+
+                    inputTypeAction.Invoke(Define.InputType.ATK);
+
+                    if (_keypressed)
+                    {
+                        Debug.Log(($"Pressed"));
+                        _keypressed = false;
+                        KeyUpAction.Invoke();
+                        doubleInputPressed = false;
+                        DoublePressed = false;
+                    }
+
+                    return;
+                }
 
                 // double input의 조건 -> 제시된 시간(0.3초)이내로 다시 입력을 하면 대쉬와 같은 입력을 처리 할 수잇다. 
                 doubleInputPressed = Time.time - lastInputElapsed  < doubleInputThreshold;
@@ -66,8 +85,7 @@ public class InputManager
                 {
                     DoublePressed = true;
                     DoubleKeyAction.Invoke();
-                }
-                
+                }                
             }
 
             else
@@ -79,7 +97,6 @@ public class InputManager
                     KeyUpAction.Invoke();
                     doubleInputPressed = false;
                     DoublePressed = false;
-                    //SinglePressed = false;
                 }
             }
         }
@@ -118,6 +135,12 @@ public class InputManager
     public void SetInputKeyCode(KeyCode code)
     {
         _inputKeycode = code;
+    }
+
+
+    private bool CheckAtkButton(KeyCode code)
+    {
+        return code == KeyCode.X;
     }
     
 }

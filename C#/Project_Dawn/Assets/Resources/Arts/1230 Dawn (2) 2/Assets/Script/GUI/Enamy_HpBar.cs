@@ -1,22 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+//using UnityEngine.UI;
 
-public class Enamy_HpBar : MonoBehaviour
-{
-    public Slider m_nHP_Slider;
+//public class Enamy_HpBar : MonoBehaviour
+//{
+//    public Slider m_nHP_Slider;
 
 
-    void Start()
-    {
+//    void Start()
+//    {
 
-    }
+//    }
 
-    // Update is called once per frame
-    void Update()
-    {
+//    // Update is called once per frame
+//    void Update()
+//    {
 
-    }
-}
+//    }
+//}
 

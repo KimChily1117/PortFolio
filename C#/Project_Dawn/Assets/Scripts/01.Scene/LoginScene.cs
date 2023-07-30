@@ -8,9 +8,10 @@ public class LoginScene : BaseScene
 {
     protected override void Initialize()
     {   
+        GameManager.Input.Clear();
         _currentScene = Define.Scenes.LOGIN;
-        
-        
+
+
     }
 
     private void Update()
