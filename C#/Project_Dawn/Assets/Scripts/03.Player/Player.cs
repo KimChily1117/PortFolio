@@ -55,7 +55,7 @@ public class Player : BaseCharacter
     {
         Debug.Log($"Start Test");
 
-        _inputBuffer = new InputBuffer();
+        // _inputBuffer = new InputBuffer();
 
 
         GameManager.Input.KeyDownAction -= OnKeyDownMoveAction;
@@ -169,18 +169,19 @@ public class Player : BaseCharacter
 
             GameManager.Input.SetInputKeyCode(KeyCode.X);
             //_state = Define.PlayerState.ATKIDLE;
-
-            if (_state == Define.PlayerState.IDLE ||
-                _state == Define.PlayerState.ATKIDLE)
-            {
+            //currentAtkCount++;
+            //lastInputTime = Time.time;
+            
                 // 콤보 어택 관련 변수 초기화
-                if (Time.time - lastInputTime > inputBufferTime)
-                    currentAtkCount = 0;
+                // if (Time.time - lastComboTime > inputBufferTime)
+                //     currentAtkCount = 0;
 
-                lastInputTime = Time.time;
+                currentAtkCount++;
 
                 _state = Define.PlayerState.ATK1;
-            }
+                
+                Debug.Log($"is here?");
+            
 
             // 최초 Idle에서 평타키를 눌렀을 때 or 평타 대기 상태에서 평타키를 눌렀을 떄.
             // Atk 1타 상타로 진입함.
@@ -218,6 +219,7 @@ public class Player : BaseCharacter
             }
             _state = Define.PlayerState.IDLE;
         }
+
     }
 
     public void DoubleKeyAction()
@@ -278,7 +280,6 @@ public class Player : BaseCharacter
             transform.position = initialPosition + new Vector2(0, yOffset);
 
             // To-do 여기다가 키보드 입력시 x축으로 움직이는 code 추가필요
-
             _animator.SetBool("isJump", true);
         }
         else
@@ -300,36 +301,62 @@ public class Player : BaseCharacter
         _animator.SetBool("isWalk", false);
         _animator.SetBool("isRun", false);
         _animator.SetBool("isAtkIdle",true);
-        currentAtkCount = 0;
     }
 
     public void ProcAtkPlayer()
     {
+        if (currentAtkCount > 3)
+        {
+            currentAtkCount = 0;
+            _state = Define.PlayerState.IDLE;
+            _animator.SetBool("isAtk3",false);
+
+            _animator.SetBool("isAtkIdle",true);
+        }
+        
+        
         if (Time.time - lastComboTime > comboTimeWindow)
         {
             lastComboTime = Time.time;
             switch (currentAtkCount)
             {
-                case 0:
-                    Debug.Log($"Atk1");
-                    currentAtkCount++;
-                    _state = Define.PlayerState.ATK2;
-
-                    break;
                 case 1:
-                    Debug.Log($"Atk2");
-                    currentAtkCount++;
-                    _state = Define.PlayerState.ATK3;
+                    Debug.Log($"Atk1");
+                    //_animator.SetBool("isAtkIdle",false);
+                    //_animator.SetBool("isAtkIdle",false);
+
+                    //_state = Define.PlayerState.ATK1;
+                    _animator.SetBool("isAtk1",true);
+
 
                     break;
                 case 2:
-                    Debug.Log($"Atk3");
-                    currentAtkCount = 0;
-                    _state = Define.PlayerState.ATKIDLE;
-                    break;              
-            }
+                    Debug.Log($"Atk2");
+                    //_animator.SetBool("isAtkIdle",false);
+                    _state = Define.PlayerState.ATK2;
+                    _animator.SetBool("isAtk1",false);
 
+                    _animator.SetBool("isAtk2",true);
+                    _animator.SetBool("isAtk2",false);
+
+                    break;
+                case 3:
+                    Debug.Log($"Atk3");
+                    //_animator.SetBool("isAtkIdle",false);
+                    _state = Define.PlayerState.ATK3;
+                    _animator.SetBool("isAtk2",false);
+
+                    _animator.SetBool("isAtk3",true);
+                    
+                    _animator.SetBool("isAtk3",false);
+                    currentAtkCount = 0;
+
+                    break;              
+                
+            }
         }
+        
+        
     }
 
 
