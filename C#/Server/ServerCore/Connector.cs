@@ -1,52 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace ServerCore
 {
-	public class Connector
-	{
-		Func<Session> _sessionFactory;
+    public class Connector
+    {
+        public Func<Session> _sessionFactory;
 
-		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory)
-		{
-			// 휴대폰 설정
-			Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-			_sessionFactory = sessionFactory;
+        public void Initialize(IPEndPoint endPoint , Func<Session> sessionFactory)
+        {
+            Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-			SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-			args.Completed += OnConnectCompleted;
-			args.RemoteEndPoint = endPoint;
-			args.UserToken = socket;
+            _sessionFactory = sessionFactory;
 
-			RegisterConnect(args);
-		}
+            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
 
-		void RegisterConnect(SocketAsyncEventArgs args)
-		{
-			Socket socket = args.UserToken as Socket;
-			if (socket == null)
-				return;
+            args.Completed += OnConnectCompleted;
+            args.RemoteEndPoint = endPoint;
+            args.UserToken = socket;
+            
+            RegisterAccept(args);
 
-			bool pending = socket.ConnectAsync(args);
-			if (pending == false)
-				OnConnectCompleted(null, args);
-		}
+        }
 
-		void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
-		{
-			if (args.SocketError == SocketError.Success)
-			{
-				Session session = _sessionFactory.Invoke();
-				session.Start(args.ConnectSocket);
-				session.OnConnected(args.RemoteEndPoint);
-			}
-			else
-			{
-				Console.WriteLine($"OnConnectCompleted Fail: {args.SocketError}");
-			}
-		}
-	}
+        private void RegisterAccept(SocketAsyncEventArgs eventArgs)
+        {
+            Socket connectSocket = eventArgs.UserToken as Socket;
+
+            bool isPending = connectSocket.ConnectAsync(eventArgs);
+
+            if (isPending == false)
+            {
+                OnConnectCompleted(null,eventArgs);
+            }
+        }
+        
+        void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
+        {
+            // 여기 부터 모르겠소요
+            if (args.SocketError == SocketError.Success)
+            {
+                Session session = _sessionFactory.Invoke();
+                session.Start(args.ConnectSocket);
+                session.OnConected(args.RemoteEndPoint);
+            }
+            
+        }
+    }
 }
