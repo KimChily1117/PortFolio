@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<PDL>
+	// packet이란 타입은 사용자가 직접 설정 할 수 있다.
+	<packet name="Player InforReq">
+    	<long name="playerId"/> // 한 줄이라면 
+        // 바로 끝에 '/'를 넣어 닫아줄 수 도 있다.
+		<string name="name"/>
+		<list name ="skill">
+			<int name="id"/>
+			<short name="level"/>
+			<float name="duration"/>
+		</list>
+    </packet> // <packet>을 통해 열었다면 </packet>으로 닫아주어야한다.
+</PDL>
+

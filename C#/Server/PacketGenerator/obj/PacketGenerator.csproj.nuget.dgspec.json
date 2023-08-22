@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/user/Documents/PortFolio/C#/Server/PacketGenerator/PacketGenerator.csproj": {}
+    "/Users/user/Documents/Task_server/PacketGenerator/PacketGenerator.csproj": {}
   },
   "projects": {
-    "/Users/user/Documents/PortFolio/C#/Server/PacketGenerator/PacketGenerator.csproj": {
+    "/Users/user/Documents/Task_server/PacketGenerator/PacketGenerator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/user/Documents/PortFolio/C#/Server/PacketGenerator/PacketGenerator.csproj",
+        "projectUniqueName": "/Users/user/Documents/Task_server/PacketGenerator/PacketGenerator.csproj",
         "projectName": "PacketGenerator",
-        "projectPath": "/Users/user/Documents/PortFolio/C#/Server/PacketGenerator/PacketGenerator.csproj",
+        "projectPath": "/Users/user/Documents/Task_server/PacketGenerator/PacketGenerator.csproj",
         "packagesPath": "/Users/user/.nuget/packages/",
-        "outputPath": "/Users/user/Documents/PortFolio/C#/Server/PacketGenerator/obj/",
+        "outputPath": "/Users/user/Documents/Task_server/PacketGenerator/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/user/.nuget/NuGet/NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.Extensions.Configuration.UserSecrets": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -53,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.302/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.307/RuntimeIdentifierGraph.json"
         }
       }
     }

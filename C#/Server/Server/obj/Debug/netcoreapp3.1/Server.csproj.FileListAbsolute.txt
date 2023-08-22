@@ -1,0 +1,17 @@
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.csproj.AssemblyReference.cache
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.GeneratedMSBuildEditorConfig.editorconfig
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.AssemblyInfoInputs.cache
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.AssemblyInfo.cs
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.csproj.CoreCompileInputs.cache
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/Server
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/Server.deps.json
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/Server.runtimeconfig.json
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/Server.runtimeconfig.dev.json
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/Server.dll
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/Server.pdb
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/ServerCore.dll
+/Users/user/Documents/Task_server/Server/bin/Debug/netcoreapp3.1/ServerCore.pdb
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.csproj.CopyComplete
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.dll
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.pdb
+/Users/user/Documents/Task_server/Server/obj/Debug/netcoreapp3.1/Server.genruntimeconfig.cache
