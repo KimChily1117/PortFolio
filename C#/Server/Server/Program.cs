@@ -1,19 +1,4 @@
 ﻿using System;
-<<<<<<< Updated upstream
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-
-namespace Server
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-          
-        }
-    }
-=======
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -41,10 +26,10 @@ namespace Server
 
 			while (true)
 			{
-				;
-				//Thread.Sleep(1);
+				//;
+
+				Thread.Sleep(1);
 			}
 		}
 	}
->>>>>>> Stashed changes
 }
