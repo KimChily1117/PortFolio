@@ -1,0 +1,13 @@
+E:\task\Server_\PacketGenerator\bin\PacketGenerator.exe
+E:\task\Server_\PacketGenerator\bin\PacketGenerator.deps.json
+E:\task\Server_\PacketGenerator\bin\PacketGenerator.runtimeconfig.json
+E:\task\Server_\PacketGenerator\bin\PacketGenerator.runtimeconfig.dev.json
+E:\task\Server_\PacketGenerator\bin\PacketGenerator.dll
+E:\task\Server_\PacketGenerator\bin\PacketGenerator.pdb
+E:\task\Server_\PacketGenerator\obj\Debug\PacketGenerator.GeneratedMSBuildEditorConfig.editorconfig
+E:\task\Server_\PacketGenerator\obj\Debug\PacketGenerator.AssemblyInfoInputs.cache
+E:\task\Server_\PacketGenerator\obj\Debug\PacketGenerator.AssemblyInfo.cs
+E:\task\Server_\PacketGenerator\obj\Debug\PacketGenerator.csproj.CoreCompileInputs.cache
+E:\task\Server_\PacketGenerator\obj\Debug\PacketGenerator.dll
+E:\task\Server_\PacketGenerator\obj\Debug\PacketGenerator.pdb
+E:\task\Server_\PacketGenerator\obj\Debug\PacketGenerator.genruntimeconfig.cache
