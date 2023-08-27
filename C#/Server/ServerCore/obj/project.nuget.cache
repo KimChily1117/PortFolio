@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mnecqutRjyRTrdx2ghmn6aRFue7RYsIsYPl7hKKBEoaXd22ykxdrviroyNkTaphqhayLTlj8D3pRBL+jzYFcbw==",
+  "dgSpecHash": "ZUdaIMfZaqz9wubSNWPfWMKL8ON80jDdkGO7a3ZKU8TinUGf8I05IlSEFHCHdcLqln5fwggndSzyUY2gMs0nEg==",
   "success": true,
-  "projectFilePath": "/Users/user/Documents/Task_server/ServerCore/ServerCore.csproj",
+  "projectFilePath": "E:\\task\\Server_\\ServerCore\\ServerCore.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

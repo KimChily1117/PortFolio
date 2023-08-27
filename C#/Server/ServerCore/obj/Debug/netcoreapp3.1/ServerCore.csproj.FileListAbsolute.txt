@@ -38,3 +38,12 @@
 \\Mac\Home\Documents\Task_server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
 \\Mac\Home\Documents\Task_server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
 \\Mac\Home\Documents\Task_server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
+E:\task\Server_\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+E:\task\Server_\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+E:\task\Server_\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+E:\task\Server_\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+E:\task\Server_\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+E:\task\Server_\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+E:\task\Server_\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+E:\task\Server_\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+E:\task\Server_\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb

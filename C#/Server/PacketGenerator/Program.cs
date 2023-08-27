@@ -14,10 +14,8 @@ namespace PacketGenerator
     class Program
     {
 
-        static string Genpacket;
-
-
-        static string filePath = "/Users/user/Documents/Task_server/PacketGenerator/PDL.xml";
+        //static string filePath = "/Users/user/Documents/Task_server/PacketGenerator/PDL.xml";
+        static string filePath = "../../../PDL.xml";
 
         static void Main(string[] args)
         {
@@ -49,10 +47,9 @@ namespace PacketGenerator
                         ParsePacket(x);
 
                     Console.WriteLine(x.Name + " " + x["name"]);
+                    // 첫번째 x.Name은 XML 기준 Type을 뽑아오고 , 그 뒤에 attribute는 그 뒤에 있는 변수명을 뽑아온다
                 }
             }
-
-            File.WriteAllText("GenPacket.cs", Genpacket);
         }
 
         public static void ParsePacket(XmlReader r)
@@ -89,7 +86,7 @@ namespace PacketGenerator
             int depth = r.Depth + 1;
             while (r.Read())
             {
-                // 패킷의 끝 부분을 만남 
+                // 패킷의 끝 부분을 만남 (xml기준 </packet>
                 if (r.Depth != depth)
                     break;
 
@@ -101,6 +98,7 @@ namespace PacketGenerator
                 }
 
                 string memberType = r.Name.ToLower();
+                // 혹시 모를 예외상황을 대비해서 모든 Type을 소문자로 바꿔서 Switch문에 집어넣어 분기 처리 함
 
                 switch (memberType)
                 {
