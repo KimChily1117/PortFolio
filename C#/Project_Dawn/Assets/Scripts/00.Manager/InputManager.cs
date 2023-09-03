@@ -60,7 +60,7 @@ public class InputManager
                 if(CheckAtkButton(_inputKeycode))
                 {
 
-                    inputTypeAction.Invoke(Define.InputType.ATK);
+                    //inputTypeAction.Invoke(Define.InputType.ATK);
 
                     if (_keypressed)
                     {
