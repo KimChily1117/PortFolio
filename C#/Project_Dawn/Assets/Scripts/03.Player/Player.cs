@@ -13,8 +13,6 @@ public class Player : BaseCharacter
 
     private float _speed = 1.0f;
 
-
-
     // * 점프를 위해서 따로 선언
 
     public float jumpHeight = 2f;
@@ -31,19 +29,13 @@ public class Player : BaseCharacter
 
     InputBuffer _inputBuffer;
 
-
-
-    // Atk
-
-    // 입력 버퍼 관련 변수들
-    private float inputBufferTime = 0.2f; // 입력 버퍼의 시간 윈도우 (초 단위)
-    private float lastInputTime = 0f;     // 마지막 입력 시간
-
     public int currentAtkCount;
-    private float comboTimeWindow = 0.8f; // 콤보 어택 유효 시간 (초 단위)
+    private float comboTimeWindow = 0.2f; // 콤보 어택 유효 시간 (초 단위)
     private float lastComboTime = 0f;   // 마지막 콤보 어택 시간
 
 
+    [Header("Player HitBox")]
+    public BoxCollider2D _HitBox;   
 
     protected override void InitializeStat(Stat stat)
     {
@@ -55,7 +47,7 @@ public class Player : BaseCharacter
     {
         Debug.Log($"Start Test");
 
-        _inputBuffer = new InputBuffer();
+        // _inputBuffer = new InputBuffer();
 
 
         GameManager.Input.KeyDownAction -= OnKeyDownMoveAction;
@@ -78,6 +70,11 @@ public class Player : BaseCharacter
         _moveDir = Vector2.zero;
         _SpriteRenderer = this.GetOrAddComponent<SpriteRenderer>();
         _animator = this.GetOrAddComponent<Animator>();
+
+        _HitBox = Util.FindChild<BoxCollider2D>(this.gameObject, "Hitbox");
+
+        _HitBox.gameObject.SetActive(false);
+        
     }
 
     private void Update()
@@ -101,16 +98,6 @@ public class Player : BaseCharacter
             case Define.PlayerState.ATKIDLE:
                 ProcAtkIdle();
                 break;
-            case Define.PlayerState.ATK1:
-                ProcAtkPlayer();
-                break;
-            case Define.PlayerState.ATK2:
-                ProcAtkPlayer();
-                break;
-            case Define.PlayerState.ATK3:
-                ProcAtkPlayer();
-                break;
-
         }
 
        
@@ -126,7 +113,6 @@ public class Player : BaseCharacter
             Debug.Log($"up");
             _moveDir = Vector2.up;
             GameManager.Input.SetInputKeyCode(KeyCode.UpArrow);
-            transform.Translate(_moveDir * Time.deltaTime * _speed);
 
         }
         if (Input.GetKey(KeyCode.DownArrow))
@@ -135,7 +121,6 @@ public class Player : BaseCharacter
             Debug.Log($"down");
             _moveDir = Vector2.down;
             GameManager.Input.SetInputKeyCode(KeyCode.DownArrow);
-            transform.Translate(_moveDir * Time.deltaTime * _speed);
 
         }
 
@@ -145,8 +130,6 @@ public class Player : BaseCharacter
             Debug.Log($"left");
             _moveDir = Vector2.left;
             GameManager.Input.SetInputKeyCode(KeyCode.LeftArrow);
-            transform.Translate(_moveDir * Time.deltaTime * _speed);
-
 
         }
 
@@ -156,7 +139,6 @@ public class Player : BaseCharacter
             Debug.Log($"right");
             _moveDir = Vector2.right;
             GameManager.Input.SetInputKeyCode(KeyCode.RightArrow);
-            transform.Translate(_moveDir * Time.deltaTime * _speed);
         }
 
     }
@@ -166,22 +148,39 @@ public class Player : BaseCharacter
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+             if (Time.time - lastComboTime > comboTimeWindow)
+             {
+                 lastComboTime = Time.time;
+                if (currentAtkCount == 0)
+                {
+                    // 첫 번째 공격
+                    _state = Define.PlayerState.ATK1;
+                    _animator.SetTrigger("Attack1");
+                    _HitBox.gameObject.SetActive(true);
 
-            GameManager.Input.SetInputKeyCode(KeyCode.X);
-            //_state = Define.PlayerState.ATKIDLE;
+                    currentAtkCount = 1;
+                    
+                }
+                else if (currentAtkCount == 1)
+                {
+                    _state = Define.PlayerState.ATK2;
+                    _HitBox.gameObject.SetActive(true);
 
-            if (_state == Define.PlayerState.IDLE ||
-                _state == Define.PlayerState.ATKIDLE)
-            {
-                // 콤보 어택 관련 변수 초기화
-                if (Time.time - lastInputTime > inputBufferTime)
+                    _animator.SetTrigger("Attack2");
+                    // 두 번째 공격
+                    currentAtkCount = 2;
+                }
+                else if (currentAtkCount == 2)
+                {
+                    // 세 번째 공격 (3단 근접 공격)
+                    _state = Define.PlayerState.ATK3;
+                    _HitBox.gameObject.SetActive(true);
+
+                    _animator.SetTrigger("Attack3");
                     currentAtkCount = 0;
 
-                lastInputTime = Time.time;
-
-                _state = Define.PlayerState.ATK1;
+                }
             }
-
             // 최초 Idle에서 평타키를 눌렀을 때 or 평타 대기 상태에서 평타키를 눌렀을 떄.
             // Atk 1타 상타로 진입함.
 
@@ -218,6 +217,7 @@ public class Player : BaseCharacter
             }
             _state = Define.PlayerState.IDLE;
         }
+
     }
 
     public void DoubleKeyAction()
@@ -231,9 +231,10 @@ public class Player : BaseCharacter
     public void ProcIdlePlayer()
     {
         _speed = 1.0f;
-
+        
         _animator.SetBool("isWalk", false);
         _animator.SetBool("isRun", false);
+        _HitBox.gameObject.SetActive(false);
 
     }
 
@@ -241,13 +242,18 @@ public class Player : BaseCharacter
     {
         Debug.Log($"walk State");
         _animator.SetBool("isWalk", true);
-        if (_moveDir.x <= -1)
-            _SpriteRenderer.flipX = true;
-        else
+        _HitBox.gameObject.SetActive(false);
+
+
+        if (_moveDir.x < 0)
+            transform.localScale = new Vector3(-1, 1, 1);
+        else if(_moveDir.x > 0)
         {
-            _SpriteRenderer.flipX = false;
+            transform.localScale = new Vector3(1, 1, 1);
+
         }
 
+        transform.Translate(_moveDir * Time.deltaTime * _speed);
     }
 
     public void ProcRunPlayer()
@@ -255,13 +261,18 @@ public class Player : BaseCharacter
         _speed = 2.25f;
 
         _animator.SetBool("isRun", true);
-        transform.Translate(_moveDir * Time.deltaTime * _speed);
-        if (_moveDir.x <= -1)
-            _SpriteRenderer.flipX = true;
-        else
+        _HitBox.gameObject.SetActive(false);
+
+        
+        if (_moveDir.x < 0)
+            transform.localScale = new Vector3(-1, 1, 1);
+        else if(_moveDir.x > 0)
         {
-            _SpriteRenderer.flipX = false;
+            transform.localScale = new Vector3(1, 1, 1);
+
         }
+
+        transform.Translate(_moveDir * Time.deltaTime * _speed);
     }
 
     public void ProcJumpPlayer()
@@ -278,7 +289,6 @@ public class Player : BaseCharacter
             transform.position = initialPosition + new Vector2(0, yOffset);
 
             // To-do 여기다가 키보드 입력시 x축으로 움직이는 code 추가필요
-
             _animator.SetBool("isJump", true);
         }
         else
@@ -300,38 +310,7 @@ public class Player : BaseCharacter
         _animator.SetBool("isWalk", false);
         _animator.SetBool("isRun", false);
         _animator.SetBool("isAtkIdle",true);
-        currentAtkCount = 0;
     }
-
-    public void ProcAtkPlayer()
-    {
-        if (Time.time - lastComboTime > comboTimeWindow)
-        {
-            lastComboTime = Time.time;
-            switch (currentAtkCount)
-            {
-                case 0:
-                    Debug.Log($"Atk1");
-                    currentAtkCount++;
-                    _state = Define.PlayerState.ATK2;
-
-                    break;
-                case 1:
-                    Debug.Log($"Atk2");
-                    currentAtkCount++;
-                    _state = Define.PlayerState.ATK3;
-
-                    break;
-                case 2:
-                    Debug.Log($"Atk3");
-                    currentAtkCount = 0;
-                    _state = Define.PlayerState.ATKIDLE;
-                    break;              
-            }
-
-        }
-    }
-
 
     #endregion
 
