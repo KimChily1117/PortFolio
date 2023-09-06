@@ -24,7 +24,7 @@ public class LoginScene : BaseScene
 
                 if (touch.phase == TouchPhase.Began)
                 {
-                    GameManager.SCENE.LoadScene(Define.Scenes.INGAME);
+                    GameManager.SCENE.LoadScene(Define.Scenes.DUNGEON);
                 }
             }
         }
@@ -32,7 +32,7 @@ public class LoginScene : BaseScene
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                GameManager.SCENE.LoadScene(Define.Scenes.INGAME);
+                GameManager.SCENE.LoadScene(Define.Scenes.DUNGEON);
             }
         }
     }

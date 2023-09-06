@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
     
     public static PoolManager ObjectPool  { get { return s_poolmanagers; }}
 
+    private static NetworkManager s_networkmanager = new NetworkManager();
+
+    public static NetworkManager Network { get { return s_networkmanager; } }
+
+
     static void Init()
     {
         if (!s_instance)
@@ -59,6 +64,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         s_input.OnUpdate();
+        s_networkmanager.OnUpdate();
     }
     
 }

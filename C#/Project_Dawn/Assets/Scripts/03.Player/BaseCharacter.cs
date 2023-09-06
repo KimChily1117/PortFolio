@@ -24,9 +24,6 @@ namespace Character
                 _playerStat = this.GetOrAddComponent<Stat>();
             }
             _playerStat.HP = stat.HP;
-            _playerStat.HP = stat.HP;
-            _playerStat.HP = stat.HP;
-            _playerStat.HP = stat.HP;
         }
 
     }

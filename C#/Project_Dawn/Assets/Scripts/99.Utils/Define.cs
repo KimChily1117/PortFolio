@@ -34,7 +34,9 @@ public class Define
       NONE,
       LOGIN,
       LOBBY,
-      INGAME      
+      DUNGEON,
+      DUNGEONSELECT,
+      BAKAL
     }
 
     public enum SoundType

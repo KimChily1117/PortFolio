@@ -9,7 +9,7 @@ public class InGameScene : BaseScene
     protected override void Initialize()
     {
 
-        _currentScene = Define.Scenes.INGAME;
+        _currentScene = Define.Scenes.DUNGEON;
         Debug.Log($"IngameScene ] InGameScene!!! ");
         
         // 배경음 및 온갖것들 다 초기화
