@@ -27,4 +27,26 @@ public class SceneManangers
     {
         SceneManager.LoadScene(scenename);
     }
+
+    #region 씬전환에 들어가는 연출 code
+
+    public void SceneTransferLefttoRight()
+    {
+        //GameManager.UI.
+
+
+    }
+
+    public void SceneTransferFadeInout()
+    {
+
+
+
+    }
+
+
+
+    #endregion
+
+
 }

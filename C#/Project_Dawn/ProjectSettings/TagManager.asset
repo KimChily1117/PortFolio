@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3475080873
+    locked: 0
+  - name: MapObj
+    uniqueID: 714413733
+    locked: 0
+  - name: Tile
+    uniqueID: 15025237
+    locked: 0
