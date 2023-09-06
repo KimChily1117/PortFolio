@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DummyClient;
 using ServerCore;
 using System.Net;
+using Google.Protobuf;
 
 public class NetworkManager
 {
@@ -25,7 +26,7 @@ public class NetworkManager
         string host = Dns.GetHostName();
         IPHostEntry ipHost = Dns.GetHostEntry(host);
         IPAddress ipAddr = ipHost.AddressList[0];
-        IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+        IPEndPoint endPoint = new IPEndPoint(ipAddr, 7000);
 
 
         connector.Connect(endPoint,()=>{ 
@@ -37,6 +38,17 @@ public class NetworkManager
     // Update is called once per frame
     public void OnUpdate()
     {
-        
+        List<PacketMessage> list = PacketQueue.Instance.PopAll();
+
+        foreach (PacketMessage packet in list)
+        {
+            Action<PacketSession,IMessage> handler = PacketManager.Instance.GetPacketHandler(packet.Id);
+
+            if (handler != null)
+            {
+                handler.Invoke(_session, packet.Message);
+            }
+            
+        }
     }
 }
