@@ -15,9 +15,7 @@ public class InGameScene : BaseScene
         // 배경음 및 온갖것들 다 초기화
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/AshyGraveyard",Define.SoundType.BGM);
-        
-        // 이런식으로 리소스 매니저에서 받아온다.
-        GameManager.Resources.Instantiate($"Character/male_ghostknight");
-        
+
+
     }
 }
