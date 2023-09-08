@@ -1,0 +1,113 @@
+using Character;
+using Google.Protobuf.Protocol;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ObjectManager
+{
+    public BaseCharacter MyPlayer { set; get; }
+    Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
+
+    public void Add(PlayerInfo playerInfo , bool isMyPlayer)
+    {
+        if(isMyPlayer) 
+        {
+            // 이런식으로 리소스 매니저에서 받아온다.
+            GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
+            go.AddComponent<MyPlayer>();
+            go.name = playerInfo.Name;
+
+            
+
+            _objects.Add(playerInfo.PlayerId, go);
+
+            MyPlayer = go.GetComponent<MyPlayer>();
+            MyPlayer.Id = playerInfo.PlayerId;
+            MyPlayer.CellPos = new Vector2Int(playerInfo.PosX, playerInfo.PosY);
+
+        }
+
+        else
+        {
+            GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
+           
+            go.AddComponent<OtherPlayer>();
+            go.name = playerInfo.Name;
+
+            _objects.Add(playerInfo.PlayerId, go);
+
+            OtherPlayer Op = go.GetComponent<OtherPlayer>();
+            Op.Id = playerInfo.PlayerId;
+            Op.CellPos = new Vector2Int(playerInfo.PosX, playerInfo.PosY);
+        }
+    }
+
+
+
+
+
+    public void Add(int id , GameObject go)
+    {
+        _objects.Add(id, go);   
+    }
+
+
+    public void Remove(int id) 
+    {
+        _objects.Remove(id);
+    }
+
+    public void RemoveMyPlayer()
+    {
+        if (MyPlayer == null)
+            return;
+
+        Remove(MyPlayer.Id);
+        MyPlayer = null;
+    }
+
+
+
+    public GameObject GetterinId(int id)
+    {
+        GameObject value;
+
+        _objects.TryGetValue(id, out value);
+
+        return value;
+    }
+
+    public GameObject Find(Vector2Int cellPos)
+    {
+        foreach (GameObject obj in _objects.Values)
+        {
+            BaseCharacter bc = obj.GetComponent<BaseCharacter>();
+            if (bc == null)
+                continue;
+
+            if (bc.CellPos == cellPos)
+                return obj;
+        }
+
+        return null;
+    }
+
+    public GameObject Find(Func<GameObject, bool> condition)
+    {
+        foreach (GameObject obj in _objects.Values)
+        {
+            if (condition.Invoke(obj))
+                return obj;
+        }
+
+        return null;
+    }
+
+
+    public void Clear()
+    { 
+        _objects.Clear();
+    }
+}
