@@ -13,7 +13,13 @@ namespace Character
         public Vector2 _moveDir;
         public SpriteRenderer _SpriteRenderer;
         public Animator _animator;
-        
+
+
+        public int Id { set; get; }
+        public Vector2 CellPos { set; get; }
+
+
+
         protected virtual void InitializeStat(Stat stat)
         {
             if (stat == null)
@@ -26,6 +32,11 @@ namespace Character
             _playerStat.HP = stat.HP;
         }
 
+        protected virtual void Update() 
+        {
+        
+        
+        }
     }
 
 }
