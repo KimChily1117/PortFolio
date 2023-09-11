@@ -4,10 +4,10 @@ using System.Text;
 
 namespace PacketGenerator
 {
-	class PacketFormat
-	{
-		// {0} 패킷 등록
-		public static string managerFormat =
+    class PacketFormat
+    {
+        // {0} 패킷 등록
+        public static string managerFormat =
 @"using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
@@ -75,12 +75,12 @@ class PacketManager
 	}}
 }}";
 
-		// {0} MsgId
-		// {1} 패킷 이름
-		public static string managerRegisterFormat =
+        // {0} MsgId
+        // {1} 패킷 이름
+        public static string managerRegisterFormat =
 @"		
 		_onRecv.Add((ushort)MsgId.{0}, MakePacket<{1}>);
 		_handler.Add((ushort)MsgId.{0}, PacketHandler.{1}Handler);";
 
-	}
+    }
 }

@@ -14,8 +14,6 @@ public class InGameScene : BaseScene
         
         // 배경음 및 온갖것들 다 초기화
         GameManager.Sound.BGMStop();
-        GameManager.Sound.Play("Sounds/AshyGraveyard",Define.SoundType.BGM);
-
-
+        //GameManager.Sound.Play("Sounds/AshyGraveyard",Define.SoundType.BGM);
     }
 }

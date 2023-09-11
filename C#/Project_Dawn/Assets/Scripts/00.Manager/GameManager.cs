@@ -60,20 +60,20 @@ public class GameManager : MonoBehaviour
 
             s_instance = obj.GetComponent<GameManager>();
         }
-        
-        
-        
-        
-        Sound.Init();
-        Sound.Play($"Sounds/CharacterSelect",Define.SoundType.BGM);
-        // 수정 해야 할 수도 있음, 그러나 게임매니저 초기화는 무조건 초기(로그인)화면에서 진행되기때문에 상관없음 23.07.14
 
+        Sound.Init();
+        Sound.Play($"Sounds/Bakal",Define.SoundType.BGM);
+
+        Screen.SetResolution(800, 600, false);
+
+        Application.runInBackground = true;
 
     }
+
     void Start()
     {
         Init();
-        StartCoroutine(InitializeNetwork());
+        //StartCoroutine(InitializeNetwork());
 
     }
     private void Update()
@@ -82,13 +82,10 @@ public class GameManager : MonoBehaviour
         s_networkmanager.OnUpdate();
     }
 
-    IEnumerator InitializeNetwork()
-    {
-        Debug.Log($"Start Network Init");
-        yield return new WaitForSeconds(1);
-        Debug.Log($"Start Network Init After");
-
-        Network.Init();
-    }
+    //IEnumerator InitializeNetwork()
+    //{
+    //    yield return new WaitForSeconds(1);
+    //    Network.Init();
+    //}
 
 }

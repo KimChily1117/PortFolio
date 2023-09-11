@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using Character;
+using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
 using System.Collections;
@@ -57,6 +58,41 @@ class PacketHandler
         S_Move movePacket = packet as S_Move;
         ServerSession serverSession = session as ServerSession;
 
+
         Debug.Log("S_MoveHandler");
+
+        GameObject go = GameManager.ObjectManager.FindById(movePacket.PlayerId);
+        if (go == null)
+            return;
+
+        OtherPlayer op = go.GetComponent<OtherPlayer>();
+        if (op == null)
+            return;
+
+        op.PosInfo = movePacket.PosInfo;
     }
+
+    public static void S_SkillHandler(PacketSession session, IMessage packet)
+    {
+        S_Skill skillPacket = packet as S_Skill;
+
+        GameObject go = GameManager.ObjectManager.FindById(skillPacket.PlayerId);
+        if (go == null)
+            return;
+
+        OtherPlayer op = go.GetComponent<OtherPlayer>();
+        if (op != null)
+        {
+            op.UseSkill(skillPacket.Info.SkillId);
+        }
+
+    }
+
+    public static void S_RunHandler(PacketSession session, IMessage packet)
+    {
+       
+
+    }
+
+
 }

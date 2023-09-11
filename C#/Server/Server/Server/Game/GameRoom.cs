@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Protocol;
+﻿using Google.Protobuf;
+using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -79,5 +80,112 @@ namespace Server.Game
 				}
 			}
 		}
+
+		public void HandleMove(Player player, C_Move movePacket)
+		{
+            if (player == null)
+                return;
+
+            lock (_lock)
+            {
+                // TODO : 검증
+
+                // 일단 서버에서 좌표 이동
+                PlayerInfo info = player.Info;
+                info.PosInfo = movePacket.PosInfo;
+
+                // 다른 플레이어한테도 알려준다
+                S_Move resMovePacket = new S_Move();
+                resMovePacket.PlayerId = player.Info.PlayerId;
+                resMovePacket.PosInfo = movePacket.PosInfo;
+
+                Broadcast(resMovePacket);
+            }
+        }
+
+
+        public void HandleJump(Player player, C_Jump jumpPacket)
+        {
+            if (player == null)
+                return;
+
+            lock (_lock)
+            {
+                // TODO : 검증
+
+                // 일단 서버에서 좌표 이동
+                PlayerInfo info = player.Info;
+                info.PosInfo = jumpPacket.PosInfo;
+
+                // 다른 플레이어한테도 알려준다
+                S_Jump resJumpPacket = new S_Jump();
+                resJumpPacket.PlayerId = player.Info.PlayerId;
+                resJumpPacket.PosInfo = jumpPacket.PosInfo;
+
+                Broadcast(resJumpPacket);
+            }
+        }
+
+
+        public void HandleRun(Player player, C_Run runPacket)
+        {
+            if (player == null)
+                return;
+
+            lock (_lock)
+            {
+                // TODO : 검증
+
+                // 일단 서버에서 좌표 이동
+                PlayerInfo info = player.Info;
+                info.PosInfo = runPacket.PosInfo;
+
+                // 다른 플레이어한테도 알려준다
+                S_Run resRunPacket = new S_Run();
+                resRunPacket.PlayerId = player.Info.PlayerId;
+                resRunPacket.PosInfo = runPacket.PosInfo;
+
+                Broadcast(resRunPacket);
+            }
+        }
+
+        public void HandleSkill(Player player, C_Skill skillPacket)
+        {
+            if (player == null)
+                return;
+
+            lock (_lock)
+            {
+                PlayerInfo info = player.Info;
+                if (info.PosInfo.State != PlayerState.Idle)
+                    return;
+
+                // TODO : 스킬 사용 가능 여부 체크
+
+                // 통과
+                info.PosInfo.State = PlayerState.Skill;
+
+                S_Skill skill = new S_Skill() { Info = new SkillInfo() };
+                skill.PlayerId = info.PlayerId;
+                skill.Info.SkillId = skillPacket.Info.SkillId;
+                Broadcast(skill);
+
+                // TODO : 데미지 판정
+            }
+        }
+
+
+        // Game Room 내부에 패킷을 보낼때 사용
+        private void Broadcast(IMessage message) 
+		{
+			lock ( _lock) 
+			{
+				foreach (Player player in _players)
+				{
+					player.Session.Send(message);
+				}
+			}
+		}
+
 	}
 }

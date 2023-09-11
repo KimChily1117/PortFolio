@@ -4,316 +4,111 @@ using System.Collections.Generic;
 using UnityEngine;
 using Character;
 using Unity.VisualScripting;
+using Google.Protobuf.Protocol;
 
 public class OtherPlayer : BaseCharacter
 {
-    [SerializeField] private Vector2 _vec;
-
-    public Define.PlayerState _state = Define.PlayerState.NONE;
-
-    private float _speed = 1.0f;
-
-    // * 점프를 위해서 따로 선언
-
-    public float jumpHeight = 2f;
-    // 점프력
-    public float jumpDuration = 1.0f;
-    // 점프 할 시간을 정함
-
-    private bool isJumping = false;
-    private float jumpTimer = 0.0f;
-    public Vector2 initialPosition;
-    // 점프를 시작한 최초의 위치 백터
-
-    // **  Input Buffer **
-
-    InputBuffer _inputBuffer;
-
-    public int currentAtkCount;
-    private float comboTimeWindow = 0.2f; // 콤보 어택 유효 시간 (초 단위)
-    private float lastComboTime = 0f;   // 마지막 콤보 어택 시간
-
-
-    [Header("Player HitBox")]
-    public BoxCollider2D _HitBox;   
-
+    
     protected override void InitializeStat(Stat stat)
     {
         base.InitializeStat(stat);
         // 장비에 따라 여기서 스텟 값을 바꿔준다.
     }
 
-    private void Start()
-    {
-        Debug.Log($"Start Test");
+   
 
-        // _inputBuffer = new InputBuffer();
-
-
-        //GameManager.Input.KeyDownAction -= OnKeyDownMoveAction;
-        //GameManager.Input.KeyDownAction += OnKeyDownMoveAction;
-
-
-        //GameManager.Input.KeyDownAction -= OnKeyAction;
-        //GameManager.Input.KeyDownAction += OnKeyAction;
-
-
-        //GameManager.Input.KeyUpAction -= OnKeyUpAction;
-        //GameManager.Input.KeyUpAction += OnKeyUpAction;
-
-
-        //GameManager.Input.DoubleKeyAction -= DoubleKeyAction;
-        //GameManager.Input.DoubleKeyAction += DoubleKeyAction;
-
-
-        _state = Define.PlayerState.NONE;
-        _moveDir = Vector2.zero;
-        _SpriteRenderer = this.GetOrAddComponent<SpriteRenderer>();
-        _animator = this.GetOrAddComponent<Animator>();
-
-        _HitBox = Util.FindChild<BoxCollider2D>(this.gameObject, "Hitbox");
-
-        _HitBox.gameObject.SetActive(false);
-        
-    }
-
-    protected override void Update()
-    {
-
-        base.Update();
-
-        switch (_state)
-        {
-            case Define.PlayerState.NONE:
-                break;
-            case Define.PlayerState.IDLE:
-                ProcIdlePlayer();
-                break;
-            case Define.PlayerState.WALK:
-                ProcWalkPlayer();
-                break;
-            case Define.PlayerState.RUN:
-                ProcRunPlayer();
-                break;
-            case Define.PlayerState.JUMP:
-                ProcJumpPlayer();
-                break;
-            case Define.PlayerState.ATKIDLE:
-                ProcAtkIdle();
-                break;
-        }
-
-    }
-
-    public void OnKeyDownMoveAction()
-    {
-
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            _state = Define.PlayerState.WALK;
-            Debug.Log($"up");
-            _moveDir = Vector2.up;
-            GameManager.Input.SetInputKeyCode(KeyCode.UpArrow);
-
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            _state = Define.PlayerState.WALK;
-            Debug.Log($"down");
-            _moveDir = Vector2.down;
-            GameManager.Input.SetInputKeyCode(KeyCode.DownArrow);
-
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            _state = Define.PlayerState.WALK;
-            Debug.Log($"left");
-            _moveDir = Vector2.left;
-            GameManager.Input.SetInputKeyCode(KeyCode.LeftArrow);
-
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            _state = Define.PlayerState.WALK;
-            Debug.Log($"right");
-            _moveDir = Vector2.right;
-            GameManager.Input.SetInputKeyCode(KeyCode.RightArrow);
-        }
-
-    }
-
-
-    private void OnKeyAction()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-             if (Time.time - lastComboTime > comboTimeWindow)
-             {
-                 lastComboTime = Time.time;
-                if (currentAtkCount == 0)
-                {
-                    // 첫 번째 공격
-                    _state = Define.PlayerState.ATK1;
-                    _animator.SetTrigger("Attack1");
-                    _HitBox.gameObject.SetActive(true);
-
-                    currentAtkCount = 1;
-                    
-                }
-                else if (currentAtkCount == 1)
-                {
-                    _state = Define.PlayerState.ATK2;
-                    _HitBox.gameObject.SetActive(true);
-
-                    _animator.SetTrigger("Attack2");
-                    // 두 번째 공격
-                    currentAtkCount = 2;
-                }
-                else if (currentAtkCount == 2)
-                {
-                    // 세 번째 공격 (3단 근접 공격)
-                    _state = Define.PlayerState.ATK3;
-                    _HitBox.gameObject.SetActive(true);
-
-                    _animator.SetTrigger("Attack3");
-                    currentAtkCount = 0;
-
-                }
-            }
-            // 최초 Idle에서 평타키를 눌렀을 때 or 평타 대기 상태에서 평타키를 눌렀을 떄.
-            // Atk 1타 상타로 진입함.
-
-            if (_state == Define.PlayerState.JUMP)
-                // To-do : 점프 상태에서 점프 평타 모션 넣어야함
-                return;
-            if (_state == Define.PlayerState.RUN)
-                // To-do : 대쉬 상태에서 대쉬 평타 모션 넣어야함
-                return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (_state == Define.PlayerState.JUMP)
-                return;
-
-            initialPosition = transform.position;
-
-            _state = Define.PlayerState.JUMP;
-
-        }
-    }
-
-
-
-
-    public void OnKeyUpAction()
-    {
-        if (_state != Define.PlayerState.JUMP)            
-        {
-            if(_state.ToString().Contains("ATK"))
-            {
-                return;
-            }
-            _state = Define.PlayerState.IDLE;
-        }
-
-    }
-
-    public void DoubleKeyAction()
-    {
-        _state = Define.PlayerState.RUN;
-    }
 
 
     #region ProcMethod
 
-    public void ProcIdlePlayer()
+    public override void ProcIdlePlayer()
     {
-        _speed = 1.0f;
-        
+        base.ProcIdlePlayer();
+
         _animator.SetBool("isWalk", false);
         _animator.SetBool("isRun", false);
-        _HitBox.gameObject.SetActive(false);
+        //_HitBox.gameObject.SetActive(false);
 
     }
 
-    public void ProcWalkPlayer()
+    public override void ProcWalkPlayer()
     {
-        Debug.Log($"walk State");
+        base.ProcWalkPlayer();
+
+
+        Debug.Log($"Other Player : Walk Proc");
         _animator.SetBool("isWalk", true);
-        _HitBox.gameObject.SetActive(false);
 
-
-        if (_moveDir.x < 0)
-            transform.localScale = new Vector3(-1, 1, 1);
-        else if(_moveDir.x > 0)
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-
-        }
-
-        transform.Translate(_moveDir * Time.deltaTime * _speed);
+        //_HitBox.gameObject.SetActive(false);
+       
     }
 
-    public void ProcRunPlayer()
+    public override void ProcRunPlayer()
     {
-        _speed = 2.25f;
-
+        base.ProcRunPlayer();
         _animator.SetBool("isRun", true);
-        _HitBox.gameObject.SetActive(false);
 
+        //_HitBox.gameObject.SetActive(false);
         
-        if (_moveDir.x < 0)
-            transform.localScale = new Vector3(-1, 1, 1);
-        else if(_moveDir.x > 0)
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-
-        }
-
-        transform.Translate(_moveDir * Time.deltaTime * _speed);
     }
 
-    public void ProcJumpPlayer()
+
+
+    public override void ProcAtk()
     {
-
-        jumpTimer += Time.deltaTime;
-        //Debug.Log($"Jump Timer : {jumpTimer}");
-
-
-        if (jumpTimer <= jumpDuration)
-        {
-            float jumpProgress = jumpTimer / jumpDuration;
-            float yOffset = Mathf.Sin(jumpProgress * Mathf.PI) * jumpHeight;
-            transform.position = initialPosition + new Vector2(0, yOffset);
-
-            // To-do 여기다가 키보드 입력시 x축으로 움직이는 code 추가필요
-            _animator.SetBool("isJump", true);
-        }
-        else
-        {
-            isJumping = false;
-            jumpTimer = 0.0f;
-            transform.position = initialPosition;
-            _animator.SetBool("isJump", false);
-            _state = Define.PlayerState.IDLE;
-
-        }
-
-
-    }
-        
-
-    public void ProcAtkIdle()
-    {
+        base.ProcAtk();
         _animator.SetBool("isWalk", false);
         _animator.SetBool("isRun", false);
-        _animator.SetBool("isAtkIdle",true);
+        _animator.SetBool("isAtkIdle", true);
     }
 
     #endregion
 
+
+    protected override void CheckUpdatedFlag()
+    {
+
+    }
+
+
+    public void UseSkill(int skillId)
+    {
+        if(skillId == 1) // 점프
+        {
+            Debug.Log($"Use Skill!!! 1");
+            ProcJumpPlayer();
+        }
+
+        if (skillId == 2) //평1
+        {
+            Debug.Log($"Use Skill!!! 2");
+            PosInfo.State = PlayerState.Atk;
+            _animator.SetTrigger($"Attack1");
+
+        }
+        if (skillId == 3) //평2
+        {
+            Debug.Log($"Use Skill!!! 3");
+            PosInfo.State = PlayerState.Atk;
+            _animator.SetTrigger($"Attack2");
+
+
+        }
+        if (skillId == 4) //평3
+        {
+            Debug.Log($"Use Skill!!! 4");
+
+            _animator.SetTrigger($"Attack3");
+            PosInfo.State = PlayerState.Idle;
+
+        }
+
+    }
+
+
+    public override void ProcJumpPlayer()
+    {
+        base.ProcJumpPlayer();
+    }
 
 }
