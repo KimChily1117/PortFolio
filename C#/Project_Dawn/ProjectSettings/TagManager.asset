@@ -50,3 +50,6 @@ TagManager:
   - name: Tile
     uniqueID: 15025237
     locked: 0
+  - name: Charecter
+    uniqueID: 3309458741
+    locked: 0

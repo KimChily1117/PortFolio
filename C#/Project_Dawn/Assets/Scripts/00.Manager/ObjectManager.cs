@@ -17,22 +17,20 @@ public class ObjectManager
             // 이런식으로 리소스 매니저에서 받아온다.
             GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
             go.AddComponent<MyPlayer>();
-            go.name = playerInfo.Name;
-
-            
+            go.name = playerInfo.Name;            
 
             _objects.Add(playerInfo.PlayerId, go);
 
             MyPlayer = go.GetComponent<MyPlayer>();
             MyPlayer.Id = playerInfo.PlayerId;
-            MyPlayer.CellPos = new Vector2Int(playerInfo.PosX, playerInfo.PosY);
-
+            //MyPlayer.CellPos = new Vector2Int(playerInfo.PosInfo.PosX, playerInfo.PosInfo.PosY);
+            MyPlayer.PosInfo = playerInfo.PosInfo;
         }
 
         else
         {
             GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
-           
+
             go.AddComponent<OtherPlayer>();
             go.name = playerInfo.Name;
 
@@ -40,7 +38,7 @@ public class ObjectManager
 
             OtherPlayer Op = go.GetComponent<OtherPlayer>();
             Op.Id = playerInfo.PlayerId;
-            Op.CellPos = new Vector2Int(playerInfo.PosX, playerInfo.PosY);
+            Op.PosInfo = playerInfo.PosInfo;
         }
     }
 
@@ -70,7 +68,7 @@ public class ObjectManager
 
 
 
-    public GameObject GetterinId(int id)
+    public GameObject FindById(int id)
     {
         GameObject value;
 

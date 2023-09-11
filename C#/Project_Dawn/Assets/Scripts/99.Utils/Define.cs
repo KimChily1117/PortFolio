@@ -46,18 +46,18 @@ public class Define
         MaxCount
     }
     
-    public enum PlayerState
-    {
-        NONE,
-        IDLE,
-        WALK,
-        RUN,
-        JUMP,
-        ATKIDLE,
-        ATK1,
-        ATK2,
-        ATK3,
-    }
+    //public enum PlayerState
+    //{
+    //    NONE,
+    //    IDLE,
+    //    WALK,
+    //    RUN,
+    //    JUMP,
+    //    ATKIDLE,
+    //    ATK1,
+    //    ATK2,
+    //    ATK3,
+    //}
 
     public enum InputType
     {

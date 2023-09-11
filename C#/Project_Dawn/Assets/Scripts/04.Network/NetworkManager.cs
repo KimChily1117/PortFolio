@@ -5,18 +5,28 @@ using UnityEngine;
 using ServerCore;
 using System.Net;
 using Google.Protobuf;
+using Google.Protobuf.Protocol;
 
 public class NetworkManager
 {
     ServerSession _session = new ServerSession();
-    
 
 
-    public NetworkManager() 
+
+    public NetworkManager()
     {
         Init();
-    }    
-    
+    }
+
+    public void Send(IMessage packet)
+    {
+        _session.Send(packet);
+    }
+
+
+
+
+
     // Start is called before the first frame update
     public void Init()
     {
@@ -26,11 +36,12 @@ public class NetworkManager
         string host = Dns.GetHostName();
         IPHostEntry ipHost = Dns.GetHostEntry(host);
         IPAddress ipAddr = ipHost.AddressList[0];
-        IPEndPoint endPoint = new IPEndPoint(ipAddr, 7000);
+        IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 
-        connector.Connect(endPoint,()=>{ 
-            return _session; 
+        connector.Connect(endPoint, () =>
+        {
+            return _session;
         });
 
     }
@@ -42,13 +53,13 @@ public class NetworkManager
 
         foreach (PacketMessage packet in list)
         {
-            Action<PacketSession,IMessage> handler = PacketManager.Instance.GetPacketHandler(packet.Id);
+            Action<PacketSession, IMessage> handler = PacketManager.Instance.GetPacketHandler(packet.Id);
 
             if (handler != null)
             {
                 handler.Invoke(_session, packet.Message);
             }
-            
+
         }
     }
 }
