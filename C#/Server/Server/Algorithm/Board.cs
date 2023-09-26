@@ -128,19 +128,22 @@ namespace Algorithm
         }
     }
 
-    public enum TileType
-    {
-        Empty,   // 갈 수 있는 타일
-        Wall,    // 갈 수 없는 타일
-    }
-
+    
 
     public class Board
     {
+        public enum TileType
+        {
+            Empty,   // 갈 수 있는 타일
+            Wall,    // 갈 수 없는 타일
+        }
+
+
+
         const char CIRCLE = '\u25cf';
         public TileType[,] _tile;
         public int _size;
-        Player _player;
+        public Player _player;
 
 
 
@@ -152,7 +155,7 @@ namespace Algorithm
             if (size % 2 == 0) // 가장자리는 항상 홀수 여야 하기에. 매개변수로 짝수가 넘어오면 함수 종료
                 return;
 
-            _player = player
+            _player = player;
 
             _size = size;
 
