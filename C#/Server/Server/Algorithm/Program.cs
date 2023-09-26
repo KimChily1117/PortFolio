@@ -36,6 +36,9 @@ namespace Algorithm
 
                 // 로직
                
+
+
+
                 // 렌더링
                 Console.SetCursorPosition(0, 0);
                 
