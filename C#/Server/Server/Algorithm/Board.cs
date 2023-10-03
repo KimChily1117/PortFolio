@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Algorithm
 {
@@ -128,7 +130,7 @@ namespace Algorithm
         }
     }
 
-    
+
 
     public class Board
     {
@@ -146,10 +148,79 @@ namespace Algorithm
         public Player _player;
 
 
+        public int DestX { get; private set; }
+        public int DestY { get; private set; }
+
 
         MyLinkedList<int> myTest = new MyLinkedList<int>();
 
-        public void Initialize(int size , Player player)
+
+        public int[,] adj = new int[6, 6]
+        {
+            { 0, 1, 0, 1, 0, 0 },
+            { 1, 0, 1, 1, 0, 0 },
+            { 0, 1, 0, 0, 0, 0 },
+            { 1, 1, 0, 0, 1, 0 },
+            { 0, 0, 0, 1, 0, 1 },
+            { 0, 0, 0, 0, 1, 0 }
+        };
+
+        public void BFSTest(int start)
+        {
+            bool[] found = new bool[6];
+            int[] parent = new int[6];  // 내 부모가 누구인지
+            int[] distance = new int[6]; // 내가 오기까지 얼마의 거리가 걸렸는지
+
+
+
+            Queue<int> q = new Queue<int>();
+
+
+
+
+            q.Enqueue(start);
+
+
+            parent[start] = start;
+            found[start] = true;
+            distance[start] = 0;
+
+
+            while (q.Count > 0)
+            {
+                // 1. 방문
+                int now = q.Dequeue();
+                Console.WriteLine(now);
+
+                // 2. 나와 가까운 정점들 중 방문하지 않은 애가 있다면 큐에 추가하여 예약
+                for (int next = 0; next < 6; next++)
+                {
+                    if (adj[now, next] == 0)  // 연결 되어 있지 않으면 스킵
+                        continue;
+                    if (found[next])  // 이미 방문한 애라면 스킵
+                        continue;
+
+                    // 예약
+                    q.Enqueue(next);
+                    found[next] = true;
+                    parent[next] = now;
+                    distance[next] = distance[now] + 1;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        public void Initialize(int size, Player player)
         {
 
             if (size % 2 == 0) // 가장자리는 항상 홀수 여야 하기에. 매개변수로 짝수가 넘어오면 함수 종료
@@ -160,6 +231,13 @@ namespace Algorithm
             _size = size;
 
             _tile = new TileType[size, size];
+
+
+
+            DestX = _size - 2;
+            DestY = _size - 2;
+
+
 
             // 2차원 배열에서는 [열,행] 순으로 배치하고 for문도
             // y,x로 해야함
@@ -295,28 +373,6 @@ namespace Algorithm
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public void Render()
         {
             ConsoleColor prevColor = Console.ForegroundColor;
@@ -325,7 +381,19 @@ namespace Algorithm
             {
                 for (int x = 0; x < _size; x++)
                 {
-                    Console.ForegroundColor = GetTileColor(_tile[y, x]);
+                    if (_player.PosX == x && _player.PosY == y)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    }
+                    else if (y == DestY && x == DestX)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = GetTileColor(_tile[y, x]);
+                    }
+
                     Console.Write(CIRCLE);  // 동그라미 1개 그림
                 }
                 Console.WriteLine();  // 개행
