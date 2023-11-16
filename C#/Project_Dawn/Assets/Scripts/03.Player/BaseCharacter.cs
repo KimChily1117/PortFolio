@@ -12,35 +12,32 @@ namespace Character
     {
     
         private Stat _playerStat;
-        private float _speed = 1.0f;
+        public float _speed = 1.0f;
 
 
-        public Vector3 _moveDir;
+        public Vector2 _moveDir;
         public MoveDir _lastDir = MoveDir.None;
 
         public bool _updated = false;
 
 
         // * 점프를 위해서 따로 선언
-
         public float jumpHeight = 2f;
         // 점프력
         public float jumpDuration = 1.0f;
         // 점프 할 시간을 정함
-
-        private bool isJumping = false;
-        private float jumpTimer = 0.0f;
+        protected bool isJumping = false;
+        protected float jumpTimer = 0.0f;
         public Vector2 initialPosition;
         // 점프를 시작한 최초의 위치 백터
 
 
-
-        [Header("Player HitBox")]
-        public BoxCollider2D _HitBox;
-
+        //근접 공격 피격처리를 위한 Class
+        protected CombatSystem _combatSystem;
 
 
-        public SpriteRenderer _SpriteRenderer;
+        [SerializeField] protected GameObject _Sprite;
+        [SerializeField] public GameObject _shadowObject;
         public Animator _animator;
 
 
@@ -74,9 +71,11 @@ namespace Character
             {
                 if (_positionInfo.Equals(value))
                     return;
-                
-                _state = value.State;
-                Dir = value.MoveDir;
+
+                PosInfo.PosX = value.PosX;
+                PosInfo.PosY = value.PosY;
+                PosInfo.MoveDir = value.MoveDir;
+                PosInfo.State = value.State;                
 
                 _moveDir = GetVecFromDir(Dir);
                 Debug.Log($"Dir Set , state {_state} , Dir {Dir} , vec : {_moveDir}");
@@ -93,7 +92,6 @@ namespace Character
             {
                 if (PosInfo.State == value)
                     return;
-
                 PosInfo.State = value;
             }
         }
@@ -137,33 +135,26 @@ namespace Character
                 return MoveDir.None;
         }
 
-        public Vector3 GetVecFromDir(MoveDir dir)
-        {
-            Vector3 _dirvec = _moveDir;
-
-            switch (_lastDir)
+        public Vector2 GetVecFromDir(MoveDir dir)
+        {         
+            
+            switch (dir)
             {
                 case MoveDir.None:
-                    _dirvec = Vector3.zero;
-                    break;
+                    return Vector2.zero;
                 case MoveDir.Up:
-                    _dirvec = Vector3.up;
-
-                    break;
+                    return Vector2.up;
                 case MoveDir.Down:
-                    _dirvec = Vector3.down;
-
-                    break;
+                    return Vector2.down;
                 case MoveDir.Left:
-                    _dirvec = Vector3.left;
-
-                    break;
+                    return Vector2.left;
                 case MoveDir.Right:
-                    _dirvec = Vector3.right;
+                    return Vector2.right;
 
-                    break;
+                default:
+                    Debug.LogError("dir Error!!!");
+                    return Vector2.zero;
             }
-            return _dirvec;
         }
 
 
@@ -181,29 +172,37 @@ namespace Character
             _playerStat.HP = stat.HP;
         }
 
-
+        protected void Awake()
+        {
+            _Sprite = this.GetComponentInChildren<SpriteRenderer>().gameObject;
+            _animator = this.GetComponentInChildren<Animator>();
+            _shadowObject = Util.FindChild<SpriteRenderer>(this.gameObject, "Base/Shadow", true).gameObject;
+            
+        }
 
         protected virtual void Start()
         {
-            Debug.Log($"Start Test");
+
+            transform.position = CellPos;
+            _moveDir = GetVecFromDir(Dir);
+
+            if (_moveDir.x < 0)
+                _Sprite.transform.localScale = new Vector3(-1, 1, 1);
+            else if (_moveDir.x > 0)
+            {
+                _Sprite.transform.localScale = new Vector3(1, 1, 1);
+            }
 
             // _inputBuffer = new InputBuffer();
-
-
             //PosInfo.State = PlayerState.Idle;
-
-            _moveDir = Vector2.zero;
-            _SpriteRenderer = this.GetOrAddComponent<SpriteRenderer>();
-            _animator = this.GetOrAddComponent<Animator>();
-
-            _HitBox = Util.FindChild<BoxCollider2D>(this.gameObject, "Hitbox");
-
-            _HitBox.gameObject.SetActive(false);
 
         }
 
         void Update() 
         {
+
+            if (_combatSystem != null) _combatSystem.OnUpdate();
+
             switch (_state)
             {
                 case PlayerState.Idle:
@@ -235,19 +234,28 @@ namespace Character
 
         public virtual void ProcWalkPlayer()
         {
-            Debug.Log($"walk State");
-            
+            Debug.Log($"walk State");    
 
             if (_moveDir.x < 0)
-                transform.localScale = new Vector3(-1, 1, 1);
+            { 
+                _Sprite.transform.localScale = new Vector3(-1, 1, 1);
+                _shadowObject.transform.localScale = new Vector3(-1, 1, 1);
+            }
             else if (_moveDir.x > 0)
             {
-                transform.localScale = new Vector3(1, 1, 1);
+                _Sprite.transform.localScale = new Vector3(1, 1, 1);
+                _shadowObject.transform.localScale = new Vector3(1, 1, 1);
+
             }
 
-
             //이전 이동 코드
-            transform.Translate(_moveDir * Time.deltaTime * _speed);
+            //transform.Translate(_moveDir * Time.deltaTime * _speed);
+            _Sprite.transform.Translate(_moveDir * Time.deltaTime * _speed);
+            _shadowObject.transform.position = _Sprite.transform.position;
+
+
+            //_shadowObject.transform.Translate(_moveDir * Time.deltaTime * _speed);
+
 
 
             //// 수정된 코드
@@ -274,18 +282,24 @@ namespace Character
 
         public virtual void ProcRunPlayer()
         {
-            _speed = 2.25f;
 
+            Debug.Log($"Run State!!!");
+
+            _speed = 1.8f;
 
             if (_moveDir.x < 0)
-                transform.localScale = new Vector3(-1, 1, 1);
+                _Sprite.transform.localScale = new Vector3(-1, 1, 1);
             else if (_moveDir.x > 0)
             {
-                transform.localScale = new Vector3(1, 1, 1);
-
+                _Sprite.transform.localScale = new Vector3(1, 1, 1);
             }
 
-            transform.Translate(_moveDir * Time.deltaTime * _speed);
+            //transform.Translate(_moveDir * Time.deltaTime * _speed);
+            _Sprite.transform.Translate(_moveDir * Time.deltaTime * _speed);
+            _shadowObject.transform.position = _Sprite.transform.position;
+            //_shadowObject.transform.Translate(_moveDir * Time.deltaTime * _speed);
+
+
         }
 
 
@@ -298,27 +312,30 @@ namespace Character
         public virtual void ProcJumpPlayer()
         {
 
+            initialPosition = CellPos;
+
             jumpTimer += Time.deltaTime;
-            Debug.Log($"Jump Timer : {jumpTimer}");
+            //Debug.Log($"Jump Timer : {jumpTimer}");
 
 
             if (jumpTimer <= jumpDuration)
             {
                 float jumpProgress = jumpTimer / jumpDuration;
                 float yOffset = Mathf.Sin(jumpProgress * Mathf.PI) * jumpHeight;
-                transform.position = initialPosition + new Vector2(0, yOffset);
-
-                // To-do 여기다가 키보드 입력시 x축으로 움직이는 code 추가필요
-                _animator.SetBool("isJump", true);
+                _Sprite.transform.position = initialPosition + new Vector2(0, yOffset);
+                _animator.SetBool("isJump", true);              
+            
             }
             else
-            {
+            { 
                 isJumping = false;
                 jumpTimer = 0.0f;
-                transform.position = initialPosition;
+                _Sprite.transform.position = initialPosition;
+                
+                _shadowObject.transform.position = _Sprite.transform.position;
+
                 _animator.SetBool("isJump", false);
                 PosInfo.State = PlayerState.Idle;
-
             }
         }
 

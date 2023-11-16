@@ -17,6 +17,7 @@ public class ObjectManager
             // 이런식으로 리소스 매니저에서 받아온다.
             GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
             go.AddComponent<MyPlayer>();
+
             go.name = playerInfo.Name;            
 
             _objects.Add(playerInfo.PlayerId, go);
@@ -25,6 +26,8 @@ public class ObjectManager
             MyPlayer.Id = playerInfo.PlayerId;
             //MyPlayer.CellPos = new Vector2Int(playerInfo.PosInfo.PosX, playerInfo.PosInfo.PosY);
             MyPlayer.PosInfo = playerInfo.PosInfo;
+
+            
         }
 
         else
@@ -54,7 +57,12 @@ public class ObjectManager
 
     public void Remove(int id) 
     {
+        GameObject go = FindById(id);
+        if (go == null)
+            return;
+
         _objects.Remove(id);
+        GameManager.Resources.Destroy(go);
     }
 
     public void RemoveMyPlayer()
@@ -105,7 +113,9 @@ public class ObjectManager
 
 
     public void Clear()
-    { 
+    {
+        foreach (GameObject obj in _objects.Values)
+            GameManager.Resources.Destroy(obj);
         _objects.Clear();
     }
 }

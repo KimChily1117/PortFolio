@@ -22,16 +22,9 @@ public class NetworkManager
     {
         _session.Send(packet);
     }
-
-
-
-
-
-    // Start is called before the first frame update
     public void Init()
     {
         Connector connector = new Connector();
-
 
         string host = Dns.GetHostName();
         IPHostEntry ipHost = Dns.GetHostEntry(host);

@@ -34,7 +34,7 @@ public class Define
       NONE,
       LOGIN,
       LOBBY,
-      DUNGEON,
+      TOWN,
       DUNGEONSELECT,
       BAKAL
     }

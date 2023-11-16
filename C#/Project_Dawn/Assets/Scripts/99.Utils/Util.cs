@@ -48,9 +48,7 @@ public static class Util
                     Debug.Log($"KSY ]  {component.name} , {name}");
                     return component;
                 }
-            }
-            
-
+            }          
         }
 
 

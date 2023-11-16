@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
 
         Application.runInBackground = true;
 
+
     }
 
     void Start()
