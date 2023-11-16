@@ -6,6 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class SceneManangers
 {
+
+    private Define.Scenes _currentScene = Define.Scenes.NONE;
+    public Define.Scenes CurrentScene { get { return _currentScene; } set { _currentScene = value; } }
+
+    private Define.Scenes _nextScene = Define.Scenes.NONE;
+    public Define.Scenes NextScene { get { return _nextScene; } set { _nextScene = value; } }
+
+
     public BaseScene CurrentActiveScene
     {
         get { return GameObject.FindObjectOfType<BaseScene>(); }
@@ -20,6 +28,8 @@ public class SceneManangers
 
     public void LoadScene(Define.Scenes type)
     {
+        NextScene = type;
+        //TODO : SwitchScene으로 넘어가는 효과 연출 추가 코드 필요
         LoadScene(GetSceneNames((type)));
     }
 
@@ -32,21 +42,13 @@ public class SceneManangers
 
     public void SceneTransferLefttoRight()
     {
-        //GameManager.UI.
-
 
     }
 
     public void SceneTransferFadeInout()
     {
 
-
-
     }
 
-
-
     #endregion
-
-
 }

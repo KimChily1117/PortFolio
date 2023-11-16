@@ -8,9 +8,8 @@ public class LoginScene : BaseScene
 {
     protected override void Initialize()
     {   
-        GameManager.Input.Clear();
-        _currentScene = Define.Scenes.LOGIN;
-
+        GameManager.Input.Clear(); 
+        GameManager.SCENE.CurrentScene = Define.Scenes.LOGIN;
 
     }
 
@@ -24,7 +23,7 @@ public class LoginScene : BaseScene
 
                 if (touch.phase == TouchPhase.Began)
                 {
-                    GameManager.SCENE.LoadScene(Define.Scenes.DUNGEON);
+                    GameManager.SCENE.LoadScene(Define.Scenes.TOWN);
                 }
             }
         }
@@ -32,7 +31,7 @@ public class LoginScene : BaseScene
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                GameManager.SCENE.LoadScene(Define.Scenes.DUNGEON);
+                GameManager.SCENE.LoadScene(Define.Scenes.TOWN);
             }
         }
     }

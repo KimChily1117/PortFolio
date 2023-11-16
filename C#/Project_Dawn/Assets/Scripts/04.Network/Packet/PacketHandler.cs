@@ -11,15 +11,14 @@ class PacketHandler
     public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
         S_EnterGame enterGamePacket = packet as S_EnterGame;
-        // Upcasting
 
-        //Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
+
+        ServerSession serverSession = session as ServerSession;
 
         GameManager.ObjectManager.Add(enterGamePacket.Player, isMyPlayer: true);
 
-
-
         Debug.Log("S_EnterGameHandler");
+        Debug.Log($"{enterGamePacket.Player}");
 
     }
 
@@ -28,18 +27,15 @@ class PacketHandler
         S_LeaveGame leaveGameHandler = packet as S_LeaveGame;
 
         GameManager.ObjectManager.RemoveMyPlayer();
-
-        //Managers.Object.RemoveMyPlayer();
     }
 
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         S_Spawn spawnPacket = packet as S_Spawn;
+
         foreach (PlayerInfo player in spawnPacket.Players)
         {
             GameManager.ObjectManager.Add(player, isMyPlayer : false);
-
-            //Object.Add(player, myPlayer: false);
         }
     }
 
@@ -49,7 +45,6 @@ class PacketHandler
         foreach (int id in despawnPacket.PlayerIds)
         {
             GameManager.ObjectManager.Remove(id);
-            //Managers.Object.Remove(id);
         }
     }
 
@@ -70,6 +65,28 @@ class PacketHandler
             return;
 
         op.PosInfo = movePacket.PosInfo;
+    }
+
+
+    public static void S_JumpHandler(PacketSession session, IMessage packet)
+    {
+        S_Jump jumpPacket = packet as S_Jump;
+        ServerSession serverSession = session as ServerSession;
+
+        Debug.Log("S_MoveHandler");
+
+        GameObject go = GameManager.ObjectManager.FindById(jumpPacket.PlayerId);
+
+        OtherPlayer op = go.GetComponent<OtherPlayer>();
+
+        if (go == null)
+            return;
+
+        if (op == null)
+            return;
+
+        op.PosInfo = jumpPacket.PosInfo;
+
     }
 
     public static void S_SkillHandler(PacketSession session, IMessage packet)
