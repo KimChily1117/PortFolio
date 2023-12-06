@@ -37,7 +37,7 @@ public class InputManager
 
  
     bool _pressed = false;
-    private bool _keypressed = false;
+    public bool _keypressed = false;
     public void OnUpdate()
     {
         // if(EventSystem.current.IsPointerOverGameObject() == true)

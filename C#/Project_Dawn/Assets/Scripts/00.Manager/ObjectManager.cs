@@ -10,7 +10,7 @@ public class ObjectManager
     public BaseCharacter MyPlayer { set; get; }
     Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
 
-    public void Add(PlayerInfo playerInfo , bool isMyPlayer)
+    public void Add(ObjectInfo playerInfo , bool isMyPlayer)
     {
         if(isMyPlayer) 
         {
@@ -20,10 +20,11 @@ public class ObjectManager
 
             go.name = playerInfo.Name;            
 
-            _objects.Add(playerInfo.PlayerId, go);
+            _objects.Add(playerInfo.ObjectId, go);
 
             MyPlayer = go.GetComponent<MyPlayer>();
-            MyPlayer.Id = playerInfo.PlayerId;
+            MyPlayer.Id = playerInfo.ObjectId;
+            MyPlayer.ObjInfo = playerInfo;
             //MyPlayer.CellPos = new Vector2Int(playerInfo.PosInfo.PosX, playerInfo.PosInfo.PosY);
             MyPlayer.PosInfo = playerInfo.PosInfo;
 
@@ -32,16 +33,17 @@ public class ObjectManager
 
         else
         {
-            GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
+            GameObject go = GameManager.Resources.Instantiate($"Character/other_male_ghostnight");
 
             go.AddComponent<OtherPlayer>();
             go.name = playerInfo.Name;
 
-            _objects.Add(playerInfo.PlayerId, go);
+            _objects.Add(playerInfo.ObjectId, go);
 
             OtherPlayer Op = go.GetComponent<OtherPlayer>();
-            Op.Id = playerInfo.PlayerId;
+            Op.Id = playerInfo.ObjectId;
             Op.PosInfo = playerInfo.PosInfo;
+            Op.ObjInfo = playerInfo;
         }
     }
 
