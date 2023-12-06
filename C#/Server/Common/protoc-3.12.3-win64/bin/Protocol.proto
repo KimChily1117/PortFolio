@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package Protocol;
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+enum MsgId {
+  S_ENTER_GAME = 0;
+  S_LEAVE_GAME = 1;
+  S_SPAWN = 2;
+  S_DESPAWN = 3;
+  C_MOVE = 4;
+  S_MOVE = 5;
+  C_SKILL = 6;
+  S_SKILL = 7;
+  C_SCENEMOVE = 8;
+  S_SCENEMOVE = 9;
+  C_JUMP = 10;
+  S_JUMP = 11;
+  C_COLLISION = 12;
+  S_COLLISION = 13;
+}
+
+enum PlayerState {
+  IDLE = 0;
+  MOVING = 1;
+  RUN = 2;
+  SKILL = 3;
+  ATK = 4;
+  DEAD = 5;
+  JUMP = 6;
+}
+
+enum MoveDir {
+  NONE = 0;
+  UP = 1;
+  DOWN = 2;
+  LEFT = 3;
+  RIGHT = 4;
+}
+
+enum GameObjectType{
+	PLAYER = 0;
+	ENEMY = 1;
+	PROJECTILE = 2;
+}
+
+enum RoomType
+{
+	TOWN = 0;
+	BAKAL = 1;
+	PARTY = 2;
+}
+
+
+
+message S_EnterGame {
+  ObjectInfo player = 1;
+}
+
+message S_LeaveGame {
+}
+
+message S_Spawn {
+  repeated ObjectInfo objects = 1;
+}
+
+message S_Despawn {
+  repeated int32 playerIds = 1;
+}
+
+message C_Move {
+  PositionInfo posInfo = 1;
+}
+
+message S_Move {
+  int32 playerId = 1;
+  PositionInfo posInfo = 2;
+}
+
+message C_Collision {
+	ObjectInfo playerinfo = 1;
+}
+
+message S_Collision {
+	int32 playerId = 1;
+	ObjectInfo playerinfo = 2;
+}
+
+message C_SceneMove {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_SceneMove {
+  ObjectInfo playerinfo = 1;
+}
+
+message C_Jump {
+  PositionInfo posInfo = 1;
+}
+
+message S_Jump {
+  int32 playerId = 1;
+  PositionInfo posInfo = 2;
+}
+
+message C_Skill {
+  SkillInfo info = 1;
+}
+
+message S_Skill {
+  int32 playerId = 1;
+  SkillInfo info = 2;
+}
+
+message ObjectInfo {
+  int32 objectId = 1;
+  string name = 2;
+  PositionInfo posInfo = 3;
+  SkillInfo skillInfo = 4;
+}
+
+message PositionInfo {
+  PlayerState state = 1;
+  MoveDir moveDir = 2;
+  float posX = 3;
+  float posY = 4;
+}
+
+message SkillInfo {
+  int32 skillId = 1;
+}
