@@ -33,7 +33,7 @@ class PacketHandler
     {
         S_Spawn spawnPacket = packet as S_Spawn;
 
-        foreach (PlayerInfo player in spawnPacket.Players)
+        foreach (ObjectInfo player in spawnPacket.Objects)
         {
             GameManager.ObjectManager.Add(player, isMyPlayer : false);
         }
@@ -105,11 +105,26 @@ class PacketHandler
 
     }
 
-    public static void S_RunHandler(PacketSession session, IMessage packet)
+    public static void S_SceneMoveHandler(PacketSession session, IMessage packet)
     {
-       
-
+       S_SceneMove s_SCENEMOVE = packet as S_SceneMove;
     }
 
+    public static void S_CollisionHandler(PacketSession session, IMessage packet) 
+    {
+        S_Collision s_Collision = packet as S_Collision;
 
+        GameObject go = GameManager.ObjectManager.FindById(s_Collision.PlayerId);
+
+        if(go == null) 
+            return;
+
+        BaseCharacter bc = go.GetComponent<BaseCharacter>();
+
+        if(bc != null)
+        {
+            bc.TakeDamage();
+            // 내가 데미지를 입는다.
+        }
+    }
 }

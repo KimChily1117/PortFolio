@@ -43,6 +43,7 @@ namespace Character
 
         public int Id { set; get; }
 
+        public ObjectInfo ObjInfo { set; get; }
 
         public Vector2 CellPos
         {
@@ -95,14 +96,6 @@ namespace Character
                 PosInfo.State = value;
             }
         }
-
-
-
-
-
-
-
-
         public MoveDir Dir
         {
             get { return PosInfo.MoveDir; }
@@ -346,16 +339,25 @@ namespace Character
 
         }
 
-
-
-
-
         /// <summary>
         /// 위치좌표를 갱신해주었는지 확인하고 Network에게 packet를 Send해주는기능을 하는 함수 
         /// </summary>
         protected virtual void CheckUpdatedFlag()
         {
             
+        }
+
+        Coroutine Co_spritechange;
+        public virtual void TakeDamage()
+        {
+            Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));          
+        }
+
+        IEnumerator hiteffect(SpriteRenderer sp)
+        {
+            sp.color = Color.red;
+            yield return new WaitForSeconds(0.3f);
+            sp.color = Color.white;
         }
 
     }

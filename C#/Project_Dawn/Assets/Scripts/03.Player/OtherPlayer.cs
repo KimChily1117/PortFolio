@@ -101,14 +101,7 @@ public class OtherPlayer : BaseCharacter
 
 
     public void UseSkill(int skillId)
-    {
-        //if(skillId == 1) // 점프
-        //{
-        //    Debug.Log($"Use Skill!!! 1");
-        //    _state = PlayerState.Jump;
-        //    ProcJumpPlayer();
-        //}
-
+    {  
         if (skillId == 2) //평1
         {
             Debug.Log($"Use Skill!!! 2");

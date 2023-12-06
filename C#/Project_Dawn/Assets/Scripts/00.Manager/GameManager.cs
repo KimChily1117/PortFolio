@@ -32,12 +32,11 @@ public class GameManager : MonoBehaviour
     private static PoolManager s_poolmanagers = new PoolManager();
     public static PoolManager ObjectPool  { get { return s_poolmanagers; }}
 
-
     private static ObjectManager s_objectmanager = new ObjectManager();
     public static ObjectManager ObjectManager { get { return s_objectmanager; }}
 
-
-
+    private static DataManager s_dataManager = new DataManager();
+    public static DataManager DataManager { get { return s_dataManager; }}
 
     private static NetworkManager s_networkmanager = new NetworkManager();
     public static NetworkManager Network { get { return s_networkmanager; } }
@@ -64,8 +63,7 @@ public class GameManager : MonoBehaviour
         Sound.Init();
         Sound.Play($"Sounds/Bakal",Define.SoundType.BGM);
 
-        Screen.SetResolution(800, 600, false);
-
+        Screen.SetResolution(1280 , 720, false);
         Application.runInBackground = true;
 
 

@@ -22,16 +22,13 @@ public class CombatSystem : MonoBehaviour
 
         enemyLayer = 1 << LayerMask.NameToLayer("Enemy");  // Player 레이어만 충돌 체크함
         contactFilter.SetLayerMask(enemyLayer);
-
-
-
+        contactFilter.useTriggers = true;
     }
 
-    // Update is called once per frame
     public void OnUpdate()
     {
         Debug.Log($"Combat Update");
-        if (_player._state == PlayerState.Atk)
+        if (_player._state == PlayerState.Atk && Input.anyKeyDown)
         {
             inLineCollider.OverlapCollider(contactFilter, cols);
             
@@ -42,13 +39,25 @@ public class CombatSystem : MonoBehaviour
                 if(Mathf.Abs(col.transform.position.y) - 
                     Mathf.Abs(_player._shadowObject.transform.position.y) < 0.02f)
                 {
-                    if (col.TryGetComponent(out SpriteRenderer spriteRenderer))
+                    if(col.TryGetComponent(out OtherPlayer baseCharacter))
                     {
-                        spriteRenderer.color = Color.red;
+                        GiveDamage(baseCharacter);
+                        //Co_spritechange = StartCoroutine(hiteffect(spriteRenderer));                        
                     }
                 }
             }
 
         }
     }
+
+   
+    private void GiveDamage(BaseCharacter collisionChar)
+    {
+        C_Collision s_Collision = new C_Collision();
+        s_Collision.Playerinfo = collisionChar.ObjInfo;
+
+        GameManager.Network.Send(s_Collision);
+    }
+
+
 }

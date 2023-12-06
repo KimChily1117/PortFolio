@@ -35,10 +35,12 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
 		_onRecv.Add((ushort)MsgId.SSkill, MakePacket<S_Skill>);
 		_handler.Add((ushort)MsgId.SSkill, PacketHandler.S_SkillHandler);		
-		_onRecv.Add((ushort)MsgId.SRun, MakePacket<S_Run>);
-		_handler.Add((ushort)MsgId.SRun, PacketHandler.S_RunHandler);		
+		_onRecv.Add((ushort)MsgId.SScenemove, MakePacket<S_SceneMove>);
+		_handler.Add((ushort)MsgId.SScenemove, PacketHandler.S_SceneMoveHandler);		
 		_onRecv.Add((ushort)MsgId.SJump, MakePacket<S_Jump>);
-		_handler.Add((ushort)MsgId.SJump, PacketHandler.S_JumpHandler);
+		_handler.Add((ushort)MsgId.SJump, PacketHandler.S_JumpHandler);		
+		_onRecv.Add((ushort)MsgId.SCollision, MakePacket<S_Collision>);
+		_handler.Add((ushort)MsgId.SCollision, PacketHandler.S_CollisionHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

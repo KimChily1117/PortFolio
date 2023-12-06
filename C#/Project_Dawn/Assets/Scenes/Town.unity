@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 51813823}
   - component: {fileID: 51813822}
-  m_Layer: 1
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,6 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5055114d134684eae94672537ccbcece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerEvent: {fileID: 1081718657}
 --- !u!1 &1081718653
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +317,8 @@ GameObject:
   - component: {fileID: 1081718654}
   - component: {fileID: 1081718656}
   - component: {fileID: 1081718655}
-  m_Layer: 1
+  - component: {fileID: 1081718657}
+  m_Layer: 6
   m_Name: Portal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,6 +418,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1081718657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081718653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3261dc0e7f8bb3a4482984728e354f9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1526045790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -423,6 +437,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1607473718}
     m_Modifications:
+    - target: {fileID: 524446211635396120, guid: 6c42421f42c7a48eab1ed0335c6e236b, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 524446211635396120, guid: 6c42421f42c7a48eab1ed0335c6e236b, type: 3}
+      propertyPath: m_Color.g
+      value: 0.25830564
+      objectReference: {fileID: 0}
+    - target: {fileID: 524446211635396120, guid: 6c42421f42c7a48eab1ed0335c6e236b, type: 3}
+      propertyPath: m_Color.r
+      value: 0.15566039
+      objectReference: {fileID: 0}
+    - target: {fileID: 829984897219215854, guid: 6c42421f42c7a48eab1ed0335c6e236b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -378.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 829984897219215854, guid: 6c42421f42c7a48eab1ed0335c6e236b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -6.35
+      objectReference: {fileID: 0}
     - target: {fileID: 1270717907655325676, guid: 6c42421f42c7a48eab1ed0335c6e236b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
