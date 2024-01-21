@@ -2,6 +2,7 @@ using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -43,6 +44,10 @@ namespace Character
 
         public int Id { set; get; }
 
+
+        /// <summary>
+        /// ObjectInfo에 관한 
+        /// </summary>
         public ObjectInfo ObjInfo { set; get; }
 
         public Vector2 CellPos
@@ -170,7 +175,7 @@ namespace Character
             _Sprite = this.GetComponentInChildren<SpriteRenderer>().gameObject;
             _animator = this.GetComponentInChildren<Animator>();
             _shadowObject = Util.FindChild<SpriteRenderer>(this.gameObject, "Base/Shadow", true).gameObject;
-            
+
         }
 
         protected virtual void Start()
@@ -191,7 +196,7 @@ namespace Character
 
         }
 
-        void Update() 
+        protected virtual void Update() 
         {
 
             if (_combatSystem != null) _combatSystem.OnUpdate();
@@ -348,8 +353,15 @@ namespace Character
         }
 
         Coroutine Co_spritechange;
-        public virtual void TakeDamage()
+        public virtual void TakeDamage(float Damage = 0f)
         {
+            int hitAnimNumber = UnityEngine.Random.Range(1, 2);
+            //TODO 피격 이펙트(팡팡 터지는거) , 피격 애니메이션 넣기 , Die까지 
+
+            string hitanim = "Hit" + hitAnimNumber.ToString();
+
+            _animator.SetTrigger(hitanim);
+            Debug.Log($"Take Damage : {Damage} ");
             Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));          
         }
 

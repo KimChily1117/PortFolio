@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
+using Server.DB;
 using Server.Game.Room;
 using ServerCore;
 
@@ -22,12 +23,13 @@ namespace Server
 		{
 			JobTimer.Instance.Push(FlushRoom, 250);
 		}
-
+		 
 		static void Main(string[] args)
 		{
 			RoomManager.Instance.Add(RoomType.Town);
 			RoomManager.Instance.Add(RoomType.Bakal);
 
+			
             // DNS (Domain Name System)
             string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);

@@ -11,11 +11,19 @@ public class MyPlayer : BaseCharacter
 
     // **  Input Buffer **
     InputBuffer _inputBuffer;
+    // **  Input Buffer **
 
+
+    // ** Combo **
     public int currentAtkCount;
-    private float comboTimeWindow = 0.2f; // 콤보 어택 유효 시간 (초 단위)
+    private readonly float comboTimeWindow = 0.6f; // 콤보 어택 유효 시간 (초 단위)
+    [SerializeField]
     private float lastComboTime = 0f;   // 마지막 콤보 어택 시간
 
+    private bool isActiveComboDetect;
+
+
+    // ** Combo **
 
     protected override void InitializeStat(Stat stat)
     {
@@ -33,8 +41,10 @@ public class MyPlayer : BaseCharacter
         _combatSystem = this.GetOrAddComponent<CombatSystem>();
         _combatSystem.Init(this);
         _combatSystem.inLineCollider = Util.FindChild<BoxCollider2D>(this.gameObject, "Base/Shadow", true);
-       
 
+
+        lastComboTime = comboTimeWindow;
+        currentAtkCount = 0;
 
         GameManager.Input.KeyDownAction -= OnKeyDownMoveAction;
         GameManager.Input.KeyDownAction += OnKeyDownMoveAction;
@@ -180,75 +190,119 @@ public class MyPlayer : BaseCharacter
 
     private void OnKeyAction()
     {
+        // TODO : 평타 로직 다시 만들어야함
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (Time.time - lastComboTime > comboTimeWindow)
+            if (currentAtkCount == 3)
+                return;
+
+
+            isActiveComboDetect = true;
+            lastComboTime = comboTimeWindow;
+            _state = PlayerState.Atk;
+            currentAtkCount++;
+
+            switch (currentAtkCount)
             {
-                PosInfo.State = PlayerState.Atk;
-                lastComboTime = Time.time;
-                if (currentAtkCount == 0)
-                {
-                    C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-                    skill.Info.SkillId = 2;
-                    GameManager.Network.Send(skill);
+
+                case 1:
+                    {
+                        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+
+                        skill.Info.SkillId = 2;
+                        GameManager.Network.Send(skill);
+                        _animator.SetTrigger("Attack1");
+
+                        break;
+                    }
+                case 2:
+                    {
+                        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+
+                        skill.Info.SkillId = 3;
+                        GameManager.Network.Send(skill);
+                        _animator.SetTrigger("Attack2");
+                        break;
+                    }
+                case 3:
+                    {
+                        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
 
 
-
-                    // 첫 번째 공격
-                    _animator.SetTrigger("Attack1");
-                    //_HitBox.gameObject.SetActive(true);
-
-                    currentAtkCount = 1;
-
-
-                    //_coSkillCoolTime = StartCoroutine("CoInputCooltime", 0.2f);
-
-
-
-                }
-                else if (currentAtkCount == 1)
-                {
-
-                    C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-                    skill.Info.SkillId = 3;
-                    GameManager.Network.Send(skill);
-
-
-                    //PosInfo.State = PlayerState.Atk;
-
-                    //_HitBox.gameObject.SetActive(true);
-
-                    _animator.SetTrigger("Attack2");
-                    // 두 번째 공격
-                    currentAtkCount = 2;
-                }
-                else if (currentAtkCount == 2)
-                {
-
-                    C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-                    skill.Info.SkillId = 4;
-                    GameManager.Network.Send(skill);
-
-
-                    // 세 번째 공격 (3단 근접 공격)
-                    PosInfo.State = PlayerState.Idle;
-
-                    //_HitBox.gameObject.SetActive(true);
-
-                    _animator.SetTrigger("Attack3");
-                    currentAtkCount = 0;
-
-                }
+                        skill.Info.SkillId = 4;
+                        GameManager.Network.Send(skill);
+                        _animator.SetTrigger("Attack3");
+                        break;
+                    }
             }
-            // 최초 Idle에서 평타키를 눌렀을 때 or 평타 대기 상태에서 평타키를 눌렀을 떄.
-            // Atk 1타 상타로 진입함.
 
-            if (PosInfo.State == PlayerState.Jump)
-                // To-do : 점프 상태에서 점프 평타 모션 넣어야함
-                return;
-            if (PosInfo.State == PlayerState.Run)
-                // To-do : 대쉬 상태에서 대쉬 평타 모션 넣어야함
-                return;
+            //if (Time.time - lastComboTime > comboTimeWindow)
+            //{
+            //    PosInfo.State = PlayerState.Atk;
+            //    lastComboTime = Time.time;
+            //    if (currentAtkCount == 0)
+            //    {
+            //        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            //        skill.Info.SkillId = 2;
+            //        GameManager.Network.Send(skill);
+
+
+
+            //        // 첫 번째 공격
+            //        _animator.SetTrigger("Attack1");
+            //        //_HitBox.gameObject.SetActive(true);
+
+            //        currentAtkCount = 1;
+
+
+            //        //_coSkillCoolTime = StartCoroutine("CoInputCooltime", 0.2f);
+
+
+
+            //    }
+            //    else if (currentAtkCount == 1)
+            //    {
+
+            //        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            //        skill.Info.SkillId = 3;
+            //        GameManager.Network.Send(skill);
+
+
+            //        //PosInfo.State = PlayerState.Atk;
+
+            //        //_HitBox.gameObject.SetActive(true);
+
+            //        _animator.SetTrigger("Attack2");
+            //        // 두 번째 공격
+            //        currentAtkCount = 2;
+            //    }
+            //    else if (currentAtkCount == 2)
+            //    {
+
+            //        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            //        skill.Info.SkillId = 4;
+            //        GameManager.Network.Send(skill);
+
+
+            //        // 세 번째 공격 (3단 근접 공격)
+            //        PosInfo.State = PlayerState.Idle;
+
+            //        //_HitBox.gameObject.SetActive(true);
+
+            //        _animator.SetTrigger("Attack3");
+            //        currentAtkCount = 0;
+
+            //    }
+            //}
+            //// 최초 Idle에서 평타키를 눌렀을 때 or 평타 대기 상태에서 평타키를 눌렀을 떄.
+            //// Atk 1타 상타로 진입함.
+
+            //if (PosInfo.State == PlayerState.Jump)
+            //    // To-do : 점프 상태에서 점프 평타 모션 넣어야함
+            //    return;
+            //if (PosInfo.State == PlayerState.Run)
+            //    // To-do : 대쉬 상태에서 대쉬 평타 모션 넣어야함
+            //    return;
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -270,12 +324,12 @@ public class MyPlayer : BaseCharacter
 
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-            skill.Info.SkillId = 1;
-            GameManager.Network.Send(skill);
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+        //    skill.Info.SkillId = 1;
+        //    GameManager.Network.Send(skill);
+        //}
     }
 
 
@@ -316,8 +370,8 @@ public class MyPlayer : BaseCharacter
     {
         base.ProcIdlePlayer();
 
-        _animator.SetBool("isWalk", false);
-        _animator.SetBool("isRun", false);
+        _animator?.SetBool("isWalk", false);
+        _animator?.SetBool("isRun", false);
 
     }
 
@@ -374,4 +428,36 @@ public class MyPlayer : BaseCharacter
 
     }
 
+
+
+    private void ResetComboState()
+    {
+        if (isActiveComboDetect)
+        {
+            lastComboTime -= Time.deltaTime;
+            if (lastComboTime <= 0)
+            {
+                isActiveComboDetect = false;
+                _state = PlayerState.Idle;
+                lastComboTime = comboTimeWindow;
+                currentAtkCount = 0;
+            }
+
+        }
+    }
+
+
+
+    #region Unity Method
+
+
+    protected override void Update()
+    {
+        base.Update();
+        ResetComboState();
+
+
+    }
+
+    #endregion
 }
