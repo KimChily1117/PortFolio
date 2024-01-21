@@ -122,7 +122,6 @@ public class OtherPlayer : BaseCharacter
             Debug.Log($"Use Skill!!! 4");
 
             _animator.SetTrigger($"Attack3");
-            PosInfo.State = PlayerState.Idle;
         }
 
     }

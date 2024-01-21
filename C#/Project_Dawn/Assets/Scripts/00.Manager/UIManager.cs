@@ -8,8 +8,6 @@ public class UIController
     
 }
 
-
-
 // UI의 sort order를 
 public class UIManager
 {

@@ -13,12 +13,15 @@ using Server.Game.Object;
 
 namespace Server
 {
-    public class ClientSession : PacketSession
+    public partial class ClientSession : PacketSession
 	{
+		public PlayerServerState ServerState { get; private set; }
+		
 		public Player MyPlayer { get; set; }
 		public int SessionId { get; set; }
 
-		public void Send(IMessage packet)
+        #region Network
+        public void Send(IMessage packet)
 		{
 			string msgName = packet.Descriptor.Name.Replace("_", string.Empty);
 			MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
@@ -33,20 +36,10 @@ namespace Server
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Console.WriteLine($"OnConnected : {endPoint}");
-
-			MyPlayer = ObjectManager.Instance.Add<Player>();
 			{
-				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.ObjectId}";
-
-				MyPlayer.Info.PosInfo.State = PlayerState.Idle;
-				MyPlayer.Info.PosInfo.MoveDir = MoveDir.Right;
-
-				MyPlayer.Info.PosInfo.PosX = 0;
-				MyPlayer.Info.PosInfo.PosY = 0;
-				MyPlayer.Session = this;
-			}
-
-			RoomManager.Instance.Find(1).EnterGame(MyPlayer);
+				S_Connected s_Connected = new S_Connected();
+				Send(s_Connected);
+			}			
 		}
 
 		public override void OnRecvPacket(ArraySegment<byte> buffer)
@@ -67,5 +60,8 @@ namespace Server
 		{
 			//Console.WriteLine($"Transferred bytes: {numOfBytes}");
 		}
-	}
+        #endregion Network
+
+
+    }
 }

@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         }
 
         Sound.Init();
-        Sound.Play($"Sounds/Bakal",Define.SoundType.BGM);
+        //Sound.Play($"Sounds/Bakal",Define.SoundType.BGM);
 
         Screen.SetResolution(1280 , 720, false);
         Application.runInBackground = true;
@@ -81,10 +81,10 @@ public class GameManager : MonoBehaviour
         s_networkmanager.OnUpdate();
     }
 
-    //IEnumerator InitializeNetwork()
-    //{
-    //    yield return new WaitForSeconds(1);
-    //    Network.Init();
-    //}
+    IEnumerator InitializeNetwork()
+    {
+        yield return new WaitForSeconds(1f);
+        Network.Init();
+    }
 
 }

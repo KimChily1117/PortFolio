@@ -19,6 +19,12 @@ enum MsgId {
   S_JUMP = 11;
   C_COLLISION = 12;
   S_COLLISION = 13;
+  C_LOGIN = 14;
+  S_LOGIN = 15;
+  S_CONNECTED = 16;
+  C_CREATEPLAYER = 17;
+  S_CREATEPLAYER = 18;
+  C_ENTERGAME = 19;
 }
 
 enum PlayerState {
@@ -52,11 +58,58 @@ enum RoomType
 	PARTY = 2;
 }
 
+enum PlayerServerState
+{
+	SERVER_STATE_LOGIN = 0;
+	SERVER_STATE_CHARECTERSELECT = 1;
+	SERVER_STATE_INGAME = 2;
+}
+
+
+message S_Connected
+{
+}
+
+message C_Login
+{
+	string uniqueId = 1;
+}
+
+message S_Login
+{
+	int32 loginOK = 1;	
+	repeated LobbyPlayerInfo players = 2;
+}
+
+message C_CreatePlayer
+{	
+	string name = 1;
+}
+
+
+message S_CreatePlayer
+{
+	LobbyPlayerInfo player = 1;
+}
+
+
+message LobbyPlayerInfo
+{
+	string name = 1;
+}
 
 
 message S_EnterGame {
   ObjectInfo player = 1;
 }
+
+message C_EnterGame 
+{
+	string name = 1;
+}
+
+
+
 
 message S_LeaveGame {
 }
@@ -118,6 +171,8 @@ message ObjectInfo {
   string name = 2;
   PositionInfo posInfo = 3;
   SkillInfo skillInfo = 4;
+  float damage = 5;
+  
 }
 
 message PositionInfo {

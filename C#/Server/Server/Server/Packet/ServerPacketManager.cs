@@ -32,7 +32,13 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.CJump, MakePacket<C_Jump>);
 		_handler.Add((ushort)MsgId.CJump, PacketHandler.C_JumpHandler);		
 		_onRecv.Add((ushort)MsgId.CCollision, MakePacket<C_Collision>);
-		_handler.Add((ushort)MsgId.CCollision, PacketHandler.C_CollisionHandler);
+		_handler.Add((ushort)MsgId.CCollision, PacketHandler.C_CollisionHandler);		
+		_onRecv.Add((ushort)MsgId.CLogin, MakePacket<C_Login>);
+		_handler.Add((ushort)MsgId.CLogin, PacketHandler.C_LoginHandler);		
+		_onRecv.Add((ushort)MsgId.CCreatePlayer, MakePacket<C_CreatePlayer>);
+		_handler.Add((ushort)MsgId.CCreatePlayer, PacketHandler.C_CreatePlayerHandler);		
+		_onRecv.Add((ushort)MsgId.CEnterGame, MakePacket<C_EnterGame>);
+		_handler.Add((ushort)MsgId.CEnterGame, PacketHandler.C_EnterGameHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
