@@ -73,6 +73,8 @@ public class GameManager : MonoBehaviour
     {
         Init();
         //StartCoroutine(InitializeNetwork());
+        Network.apiHelper.MakeURL();
+        Debug.Log(Network.apiHelper.TEST_URL);
 
     }
     private void Update()

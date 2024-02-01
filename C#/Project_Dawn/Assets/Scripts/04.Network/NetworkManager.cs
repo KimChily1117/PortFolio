@@ -9,10 +9,10 @@ using Google.Protobuf.Protocol;
 
 public class NetworkManager
 {
+
+    public ApiHelper apiHelper = new ApiHelper();
+
     ServerSession _session = new ServerSession();
-
-
-
     public NetworkManager()
     {
         Init();
