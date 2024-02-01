@@ -65,4 +65,25 @@ namespace Data
         }
     }
     #endregion
+
+    #region API_Character_info(NEOPLE)
+
+    [Serializable]
+    public class ApiCharInfo
+    {
+        public string serverId;
+        public string characterId;
+        public string characterName;
+        public int level;
+        public string jobId;
+        public string jobGrowId;
+        public string jobName;
+        public string jobGrowName;
+        public int fame;
+
+    }
+
+
+    #endregion
+
 }
