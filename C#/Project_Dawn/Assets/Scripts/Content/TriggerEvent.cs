@@ -70,34 +70,6 @@ public class TriggerEvent : MonoBehaviour
     {       
         _exitAction?.Invoke(other);
     }
-
-    //private bool IsTriggerNoneAction(Collider other)
-    //{
-    //    return other.gameObject != TargetObj()
-    //        || (AgoraManager.instance != null && AgoraManager.instance.AgoraState == Com.Pineone.Metaverce.AgoraState.SCREEN_SHARE);
-
-    //}
-
-    /// <summary>
-    /// Photon targetObject(isMine)
-    /// </summary>
-    /// <returns></returns>
-    //private GameObject TargetObj()
-    //{
-        //if (Com.Pineone.Metaverce.MainUI.Instance != null)
-        //{
-        //    if (Com.Pineone.Metaverce.MainUI.Instance.Target != null)
-        //    {
-        //        return Com.Pineone.Metaverce.MainUI.Instance.Target.gameObject;
-        //    }
-        //    else
-        //        Debug.Log("TriggerEvent] MainUI Target null");
-        //}
-        //else
-        //    Debug.Log("TriggerEvent] MainUI null");
-
-        //return null;
-    //}
 }
 
 

@@ -14,10 +14,10 @@ public class TownScene : BaseScene
 
 
         Debug.Log($"IngameScene ] InGameScene!!! ");
-        
-        // 배경음 및 온갖것들 다 초기화
-        //GameManager.Sound.BGMStop();
-        //GameManager.Sound.Play("Sounds/AshyGraveyard",Define.SoundType.BGM);
+
+        //배경음 및 온갖것들 다 초기화
+        GameManager.Sound.BGMStop();
+        GameManager.Sound.Play("Sounds/seria_gate", Define.SoundType.BGM);
 
 
         //triggerEvent.AddTriggerEnterEvent.

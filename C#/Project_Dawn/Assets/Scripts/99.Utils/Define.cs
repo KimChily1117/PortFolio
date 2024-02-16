@@ -71,9 +71,6 @@ public class Define
 
     public enum SkillType
     {
-
-
-
     }
 
 }
