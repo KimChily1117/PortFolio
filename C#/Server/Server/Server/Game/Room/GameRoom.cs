@@ -180,17 +180,14 @@ namespace Server.Game.Room
         {
             if (player == null) return;
 
-
-
             S_Collision s_Collision = new S_Collision();
 
             s_Collision.Playerinfo = collisionPacket.Playerinfo;
 
             s_Collision.PlayerId = player.Info.ObjectId;
             s_Collision.Playerinfo.Damage = 10.0f;
-
+            
             Broadcast(s_Collision);
-
         }
 
 
@@ -245,11 +242,6 @@ namespace Server.Game.Room
                 projectile.PosInfo.PosY = player.PosInfo.PosY;
                 EnterGame(projectile);
             }
-
-
-
-
-
 
             // TODO : 데미지 판정
         }

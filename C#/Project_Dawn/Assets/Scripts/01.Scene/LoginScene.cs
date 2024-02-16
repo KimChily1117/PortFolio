@@ -11,6 +11,11 @@ public class LoginScene : BaseScene
         GameManager.Input.Clear(); 
         GameManager.SCENE.CurrentScene = Define.Scenes.LOGIN;
 
+
+        GameManager.Sound.BGMStop();
+        GameManager.Sound.Play("Sounds/CharacterSelect", Define.SoundType.BGM);
+
+
     }
 
     // Todo : Added Login Scene

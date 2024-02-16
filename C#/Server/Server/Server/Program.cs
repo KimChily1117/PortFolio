@@ -44,7 +44,7 @@ namespace Server
 
 			while (true)
 			{
-				//JobTimer.Instance.Flush();
+				JobTimer.Instance.Flush();
 				Thread.Sleep(100);
 			}
 		}

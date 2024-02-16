@@ -30,7 +30,6 @@ namespace Data
         }
     }
     #endregion
-
     #region Skill
     [Serializable]
     public class Skill
@@ -68,8 +67,45 @@ namespace Data
 
     #region API_Character_info(NEOPLE)
 
-    [Serializable]
-    public class ApiCharInfo
+    [System.Serializable]
+    public class ApiCharInfo : ILoader<string, CharInfo>
+    {
+        public List<CharInfo> rows = new List<CharInfo>();
+        public Dictionary<string, CharInfo> MakeDict()
+        {
+            Dictionary<string, CharInfo> dict = new Dictionary<string, CharInfo>();
+
+            GameManager.DataManager.CHARID = rows[0].characterId;
+
+            foreach (CharInfo info in rows)
+            {
+                dict.Add(info.characterId, info);
+            }
+            return dict;
+        }
+    }
+
+
+    [System.Serializable]
+    public class ApiCharDetailInfo : ILoader<string, CharDetailInfo>
+    {
+        public Dictionary<string, CharDetailInfo> MakeDict()
+        {
+            Dictionary<string, CharDetailInfo> dict = new Dictionary<string, CharDetailInfo>();
+
+            //foreach (CharDetailInfo info in rows)
+            //{
+            //    dict.Add(info.characterId, info);
+            //}
+            return dict;
+        }
+    }
+
+
+
+
+    [System.Serializable]
+    public class CharInfo
     {
         public string serverId;
         public string characterId;
@@ -80,7 +116,22 @@ namespace Data
         public string jobName;
         public string jobGrowName;
         public int fame;
+    }
 
+
+    [System.Serializable]
+    public class CharDetailInfo
+    {
+        public string characterId;
+        public string characterName;
+        public int level;
+        public string jobId;
+        public string jobGrowId;
+        public string jobName;
+        public string jobGrowName;
+        public string adventureName;
+        public string guildId;
+        public string guildName;
     }
 
 
