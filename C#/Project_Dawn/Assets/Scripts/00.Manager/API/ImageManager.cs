@@ -7,7 +7,7 @@ using System.Web;
 
 
 /// <summary>
-/// url을 받고나서 그 url을 Image로 Pasing하기위함 
+/// url을 받고나서 그 url을 Image로 Parsing하기위함 
 /// </summary>
 
 public class ImageManager

@@ -66,8 +66,6 @@ public class GameManager : MonoBehaviour
         Sound.Init();
 
         DataManager.Init();
-        Sound.Play($"Sounds/Bakal",Define.SoundType.BGM);
-
         Screen.SetResolution(1280, 720, false);
         Application.runInBackground = true;
 
