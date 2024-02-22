@@ -20,14 +20,14 @@ public class TownScene : BaseScene
         GameManager.Sound.Play("Sounds/seria_gate", Define.SoundType.BGM);
 
 
-        //triggerEvent.AddTriggerEnterEvent.
+        triggerEvent.AddTriggerEnterEvent(TriggerEnterEvent);
 
     }
 
 
-    private void TriggerEnterEvent(Collider collider)
+    private void TriggerEnterEvent(Collider2D collider)
     {
-        Debug.Log(collider.GetComponent<BaseCharacter>().Id);
+        Debug.Log("Trigger Enter!!");
 
         GameManager.SCENE.LoadScene(Define.Scenes.BAKAL);
     }

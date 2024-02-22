@@ -33,6 +33,9 @@ public class MyPlayer : BaseCharacter
 
     protected override void Start()
     {
+
+        DontDestroyOnLoad(this);
+
         Debug.Log($"Start Test");
 
         // _inputBuffer = new InputBuffer();
