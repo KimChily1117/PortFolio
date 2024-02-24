@@ -26,7 +26,8 @@ public class Define
     public enum UIEvent
     {
         Click,
-        Drag
+        Drag,
+        Enter
     }
 
     public enum Scenes

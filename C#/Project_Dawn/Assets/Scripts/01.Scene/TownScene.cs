@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class TownScene : BaseScene
 {
-    public TriggerEvent triggerEvent;
+    public TriggerEvent _triggerEvent;
 
+    private UI_PartyEntry PartyEntry { get; set; }
 
     protected override void Initialize()
     {
@@ -19,9 +20,10 @@ public class TownScene : BaseScene
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/seria_gate", Define.SoundType.BGM);
 
+        GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
 
-        triggerEvent.AddTriggerEnterEvent(TriggerEnterEvent);
 
+        _triggerEvent.AddTriggerEnterEvent(TriggerEnterEvent);
     }
 
 
@@ -29,6 +31,17 @@ public class TownScene : BaseScene
     {
         Debug.Log("Trigger Enter!!");
 
-        GameManager.SCENE.LoadScene(Define.Scenes.BAKAL);
+        /*
+         Todo : 
+
+
+         */
+
+
+
+
+        PartyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
+
+        //GameManager.SCENE.LoadScene(Define.Scenes.BAKAL);
     }
 }

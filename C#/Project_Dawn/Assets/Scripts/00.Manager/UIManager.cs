@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class UIController
@@ -32,10 +33,12 @@ public class UIManager
     }
 
 
-    public void SetCanvas(GameObject go , bool sort = true)
+    public void SetCanvas(bool sort = true)
     {
-        Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
+        Canvas canvas = Util.GetOrAddComponent<Canvas>(Root);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        Util.GetOrAddComponent<GraphicRaycaster>(Root);
 
         canvas.overrideSorting = true;
         if(sort) //팝업이랑 관련 있는 Sorting이 필요한 UI
@@ -48,7 +51,10 @@ public class UIManager
             canvas.sortingOrder = 0;
         }
 
-        go.transform.SetParent(Root.transform);
+
+
+
+        //go.transform.SetParent(Root.transform);
     }
 
 
@@ -60,7 +66,7 @@ public class UIManager
             Debug.Log($"Type of Generic T {typeof(T).Name} ");
             name = typeof(T).Name;
         }        
-        string path = $"UI/Popup/{name}";
+        string path = $"UI/PopUp/{name}";
         
         GameObject go = GameManager.Resources.Instantiate(path);
 
@@ -88,6 +94,8 @@ public class UIManager
         T sceneUI = Util.GetOrAddComponent<T>(go);
 
         _scene = sceneUI;
+
+        go.transform.SetParent(Root.transform);
 
         return null;
     }

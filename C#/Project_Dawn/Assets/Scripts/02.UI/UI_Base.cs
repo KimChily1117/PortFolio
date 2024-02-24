@@ -11,12 +11,12 @@ public abstract class UI_Base : MonoBehaviour
     Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
     public enum Buttons 
     {
-        PointButton
+        StartButton
     }
 
     public enum Texts
     {
-        PointText        
+        StartBtnText
     }
 
     public enum Images
@@ -71,6 +71,10 @@ public abstract class UI_Base : MonoBehaviour
                 evt.DragEventAction -= action;
                 evt.DragEventAction += action;
                 break;
+            case Define.UIEvent.Enter:
+                evt.EnterEventAction -= action;
+                evt.EnterEventAction += action;
+                break;
             default:
                 Debug.Log($"BindEvent] type param error");
                 break;
@@ -82,7 +86,7 @@ public abstract class UI_Base : MonoBehaviour
 
     
 
-    private void Start()
+    protected virtual void Start()
     {
       
     }
