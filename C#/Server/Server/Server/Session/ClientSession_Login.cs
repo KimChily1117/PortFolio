@@ -101,10 +101,9 @@ namespace Server
 
             ServerState = PlayerServerState.ServerStateIngame;
 
+            GameRoom room = RoomManager.Instance.Find(RoomType.Town);
 
-            GameRoom room = RoomManager.Instance.Find(1);
-
-            room.Push(room.EnterGame, MyPlayer);
+            room.Push(room.EnterRoom, MyPlayer);
         }
 
 
