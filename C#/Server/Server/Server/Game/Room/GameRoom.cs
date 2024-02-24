@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Microsoft.EntityFrameworkCore.Internal;
 using Server.Game.Object;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,10 @@ namespace Server.Game.Room
         Dictionary<int, Enemy> _Enemys = new Dictionary<int, Enemy>();
         Dictionary<int, Projectile> _Projectiles = new Dictionary<int, Projectile>();
 
-        public void EnterGame(GameObject gameObject)
+        public void EnterRoom(GameObject gameObject)
         {
             if (gameObject == null)
                 return;
-
-
 
             if (gameObject.ObjectType == GameObjectType.Player)
             {
@@ -38,6 +37,20 @@ namespace Server.Game.Room
                     player.Session.Send(enterPacket);
 
                     S_Spawn spawnPacket = new S_Spawn();
+
+                    /*
+                   ->feel values:스스로를 가치있게 여기는, 자존감이 있는
+                        김선엽 요새 자존감 개쩖)
+
+                        if (player = 서뇹,)
+                            Add(밍)
+                     너 왜 내꺼에다가 이런걸 써놓았니? 
+                    내 맘 임 ㅋ
+                    ;;;;
+                     */
+
+
+
                     foreach (Player p in _players.Values)
                     {
                         if (player != p)
@@ -74,7 +87,7 @@ namespace Server.Game.Room
 
         }
 
-        public void LeaveGame(int objectId)
+        public void LeaveRoom(int objectId)
         {
 
             Player player = null;
@@ -152,13 +165,9 @@ namespace Server.Game.Room
 
         public void HandleMoveScene(Player player, C_SceneMove scenePacket)
         {
-            //if (player == null)
-            //    return;
+            if (player == null)
+                return;
 
-            //    // TODO : 검증
-
-            //    // 일단 서버에서 좌표 이동
-            //    ObjectInfo info = player.Info;
 
 
             //    // 다른 플레이어한테도 알려준다
@@ -194,9 +203,6 @@ namespace Server.Game.Room
 
         public void HandleSkill(Player player, C_Skill skillPacket)
         {
-
-
-            // lock 떄문에 생긴 issue로 생각됨
             if (player == null)
                 return;
 
@@ -240,7 +246,7 @@ namespace Server.Game.Room
                 projectile.PosInfo.MoveDir = player.PosInfo.MoveDir;
                 projectile.PosInfo.PosX = player.PosInfo.PosX;
                 projectile.PosInfo.PosY = player.PosInfo.PosY;
-                EnterGame(projectile);
+                EnterRoom(projectile);
             }
 
             // TODO : 데미지 판정

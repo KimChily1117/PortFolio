@@ -76,6 +76,16 @@ class PacketHandler
 
         ClientSession clientSession = session as ClientSession;
 
+        // Step 1 : 개설 된 방이 없다면 방(Room , 파티)를 새로 개설.
+
+        if(RoomManager.Instance.Find(RoomType.Bakal) == null)
+        {
+           RoomManager.Instance.Add(RoomType.Bakal);
+        }
+
+        clientSession.ServerState
+
+
 
         // Todo : SceneMove 발생할때. Client -> Server로 Scene 전환 패킷 보내 놓고 서버에서 
         // Scene에대한 요청?(던전입장을 어떻게 할것인지에 대한 설계가 필요함) 
@@ -127,4 +137,8 @@ class PacketHandler
         clientSession.HandleEnterGame(c_EnterGame);
     
     }
+
+
+
+
 }

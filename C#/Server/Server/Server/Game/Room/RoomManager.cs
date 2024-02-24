@@ -28,13 +28,6 @@ namespace Server.Game.Room
             return gameRoom;
         }
 
-        public bool Remove(int roomId)
-        {
-            lock (_lock)
-            {
-                return _rooms.Remove(roomId);
-            }
-        }
 
         public GameRoom Find(int roomId)
         {
@@ -48,9 +41,8 @@ namespace Server.Game.Room
             }
         }
 
-        public bool Remove(RoomType roomType)
+        public bool Remove(int roomId)
         {
-            int roomId = (int)roomType + 1;
             lock (_lock)
             {
                 return _rooms.Remove(roomId);
@@ -71,6 +63,14 @@ namespace Server.Game.Room
             }
         }
 
+        public bool Remove(RoomType roomType)
+        {
+            int roomId = (int)roomType + 1;
+            lock (_lock)
+            {
+                return _rooms.Remove(roomId);
+            }
+        }
 
     }
 }

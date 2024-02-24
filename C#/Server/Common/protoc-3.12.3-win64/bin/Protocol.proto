@@ -25,6 +25,8 @@ enum MsgId {
   C_CREATEPLAYER = 17;
   S_CREATEPLAYER = 18;
   C_ENTERGAME = 19;
+  C_CREATEROOM = 20;
+  S_CREATEROOM = 21;
 }
 
 enum PlayerState {
@@ -63,6 +65,7 @@ enum PlayerServerState
 	SERVER_STATE_LOGIN = 0;
 	SERVER_STATE_CHARECTERSELECT = 1;
 	SERVER_STATE_INGAME = 2;
+	SERVER_STATE_DUNGEON = 3;
 }
 
 
@@ -111,7 +114,9 @@ message C_EnterGame
 
 
 
-message S_LeaveGame {
+message S_LeaveGame 
+{
+
 }
 
 message S_Spawn {
@@ -171,8 +176,9 @@ message ObjectInfo {
   string name = 2;
   PositionInfo posInfo = 3;
   SkillInfo skillInfo = 4;
-  float damage = 5;
-  
+  float damage = 5;  
+  bool isReady = 6;
+  bool isMaster = 7;
 }
 
 message PositionInfo {
