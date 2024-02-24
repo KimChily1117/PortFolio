@@ -66,9 +66,21 @@ public class GameManager : MonoBehaviour
         Sound.Init();
 
         DataManager.Init();
-        Screen.SetResolution(1280, 720, false);
-        Application.runInBackground = true;
 
+
+        GameObject evt = GameObject.Find("EventSystem");
+        if(!evt)
+        {
+            evt = Resources.Instantiate("UI/EventSystem");
+        }
+
+        DontDestroyOnLoad(evt);
+
+
+
+        Screen.SetResolution(1280, 720, false);
+        Application.runInBackground = true;       
+        
 
     }
 

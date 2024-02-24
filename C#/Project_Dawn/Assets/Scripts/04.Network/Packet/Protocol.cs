@@ -47,30 +47,31 @@ namespace Google.Protobuf.Protocol {
             "BlNfSnVtcBIQCghwbGF5ZXJJZBgBIAEoBRInCgdwb3NJbmZvGAIgASgLMhYu",
             "UHJvdG9jb2wuUG9zaXRpb25JbmZvIiwKB0NfU2tpbGwSIQoEaW5mbxgBIAEo",
             "CzITLlByb3RvY29sLlNraWxsSW5mbyI+CgdTX1NraWxsEhAKCHBsYXllcklk",
-            "GAEgASgFEiEKBGluZm8YAiABKAsyEy5Qcm90b2NvbC5Ta2lsbEluZm8ijQEK",
+            "GAEgASgFEiEKBGluZm8YAiABKAsyEy5Qcm90b2NvbC5Ta2lsbEluZm8isAEK",
             "Ck9iamVjdEluZm8SEAoIb2JqZWN0SWQYASABKAUSDAoEbmFtZRgCIAEoCRIn",
             "Cgdwb3NJbmZvGAMgASgLMhYuUHJvdG9jb2wuUG9zaXRpb25JbmZvEiYKCXNr",
             "aWxsSW5mbxgEIAEoCzITLlByb3RvY29sLlNraWxsSW5mbxIOCgZkYW1hZ2UY",
-            "BSABKAIidAoMUG9zaXRpb25JbmZvEiQKBXN0YXRlGAEgASgOMhUuUHJvdG9j",
-            "b2wuUGxheWVyU3RhdGUSIgoHbW92ZURpchgCIAEoDjIRLlByb3RvY29sLk1v",
-            "dmVEaXISDAoEcG9zWBgDIAEoAhIMCgRwb3NZGAQgASgCIhwKCVNraWxsSW5m",
-            "bxIPCgdza2lsbElkGAEgASgFKrkCCgVNc2dJZBIQCgxTX0VOVEVSX0dBTUUQ",
-            "ABIQCgxTX0xFQVZFX0dBTUUQARILCgdTX1NQQVdOEAISDQoJU19ERVNQQVdO",
-            "EAMSCgoGQ19NT1ZFEAQSCgoGU19NT1ZFEAUSCwoHQ19TS0lMTBAGEgsKB1Nf",
-            "U0tJTEwQBxIPCgtDX1NDRU5FTU9WRRAIEg8KC1NfU0NFTkVNT1ZFEAkSCgoG",
-            "Q19KVU1QEAoSCgoGU19KVU1QEAsSDwoLQ19DT0xMSVNJT04QDBIPCgtTX0NP",
-            "TExJU0lPThANEgsKB0NfTE9HSU4QDhILCgdTX0xPR0lOEA8SDwoLU19DT05O",
-            "RUNURUQQEBISCg5DX0NSRUFURVBMQVlFUhAREhIKDlNfQ1JFQVRFUExBWUVS",
-            "EBISDwoLQ19FTlRFUkdBTUUQEypUCgtQbGF5ZXJTdGF0ZRIICgRJRExFEAAS",
-            "CgoGTU9WSU5HEAESBwoDUlVOEAISCQoFU0tJTEwQAxIHCgNBVEsQBBIICgRE",
-            "RUFEEAUSCAoESlVNUBAGKjoKB01vdmVEaXISCAoETk9ORRAAEgYKAlVQEAES",
-            "CAoERE9XThACEggKBExFRlQQAxIJCgVSSUdIVBAEKjcKDkdhbWVPYmplY3RU",
-            "eXBlEgoKBlBMQVlFUhAAEgkKBUVORU1ZEAESDgoKUFJPSkVDVElMRRACKioK",
-            "CFJvb21UeXBlEggKBFRPV04QABIJCgVCQUtBTBABEgkKBVBBUlRZEAIqZgoR",
-            "UGxheWVyU2VydmVyU3RhdGUSFgoSU0VSVkVSX1NUQVRFX0xPR0lOEAASIAoc",
-            "U0VSVkVSX1NUQVRFX0NIQVJFQ1RFUlNFTEVDVBABEhcKE1NFUlZFUl9TVEFU",
-            "RV9JTkdBTUUQAkIbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29sYgZwcm90",
-            "bzM="));
+            "BSABKAISDwoHaXNSZWFkeRgGIAEoCBIQCghpc01hc3RlchgHIAEoCCJ0CgxQ",
+            "b3NpdGlvbkluZm8SJAoFc3RhdGUYASABKA4yFS5Qcm90b2NvbC5QbGF5ZXJT",
+            "dGF0ZRIiCgdtb3ZlRGlyGAIgASgOMhEuUHJvdG9jb2wuTW92ZURpchIMCgRw",
+            "b3NYGAMgASgCEgwKBHBvc1kYBCABKAIiHAoJU2tpbGxJbmZvEg8KB3NraWxs",
+            "SWQYASABKAUquQIKBU1zZ0lkEhAKDFNfRU5URVJfR0FNRRAAEhAKDFNfTEVB",
+            "VkVfR0FNRRABEgsKB1NfU1BBV04QAhINCglTX0RFU1BBV04QAxIKCgZDX01P",
+            "VkUQBBIKCgZTX01PVkUQBRILCgdDX1NLSUxMEAYSCwoHU19TS0lMTBAHEg8K",
+            "C0NfU0NFTkVNT1ZFEAgSDwoLU19TQ0VORU1PVkUQCRIKCgZDX0pVTVAQChIK",
+            "CgZTX0pVTVAQCxIPCgtDX0NPTExJU0lPThAMEg8KC1NfQ09MTElTSU9OEA0S",
+            "CwoHQ19MT0dJThAOEgsKB1NfTE9HSU4QDxIPCgtTX0NPTk5FQ1RFRBAQEhIK",
+            "DkNfQ1JFQVRFUExBWUVSEBESEgoOU19DUkVBVEVQTEFZRVIQEhIPCgtDX0VO",
+            "VEVSR0FNRRATKlQKC1BsYXllclN0YXRlEggKBElETEUQABIKCgZNT1ZJTkcQ",
+            "ARIHCgNSVU4QAhIJCgVTS0lMTBADEgcKA0FUSxAEEggKBERFQUQQBRIICgRK",
+            "VU1QEAYqOgoHTW92ZURpchIICgROT05FEAASBgoCVVAQARIICgRET1dOEAIS",
+            "CAoETEVGVBADEgkKBVJJR0hUEAQqNwoOR2FtZU9iamVjdFR5cGUSCgoGUExB",
+            "WUVSEAASCQoFRU5FTVkQARIOCgpQUk9KRUNUSUxFEAIqKgoIUm9vbVR5cGUS",
+            "CAoEVE9XThAAEgkKBUJBS0FMEAESCQoFUEFSVFkQAiqAAQoRUGxheWVyU2Vy",
+            "dmVyU3RhdGUSFgoSU0VSVkVSX1NUQVRFX0xPR0lOEAASIAocU0VSVkVSX1NU",
+            "QVRFX0NIQVJFQ1RFUlNFTEVDVBABEhcKE1NFUlZFUl9TVEFURV9JTkdBTUUQ",
+            "AhIYChRTRVJWRVJfU1RBVEVfRFVOR0VPThADQhuqAhhHb29nbGUuUHJvdG9i",
+            "dWYuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.PlayerState), typeof(global::Google.Protobuf.Protocol.MoveDir), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.RoomType), typeof(global::Google.Protobuf.Protocol.PlayerServerState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -95,7 +96,7 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Jump), global::Google.Protobuf.Protocol.S_Jump.Parser, new[]{ "PlayerId", "PosInfo" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Skill), global::Google.Protobuf.Protocol.C_Skill.Parser, new[]{ "Info" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Skill), global::Google.Protobuf.Protocol.S_Skill.Parser, new[]{ "PlayerId", "Info" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ObjectInfo), global::Google.Protobuf.Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "Name", "PosInfo", "SkillInfo", "Damage" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ObjectInfo), global::Google.Protobuf.Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "Name", "PosInfo", "SkillInfo", "Damage", "IsReady", "IsMaster" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "State", "MoveDir", "PosX", "PosY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.SkillInfo), global::Google.Protobuf.Protocol.SkillInfo.Parser, new[]{ "SkillId" }, null, null, null, null)
           }));
@@ -122,8 +123,8 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("C_LOGIN")] CLogin = 14,
     [pbr::OriginalName("S_LOGIN")] SLogin = 15,
     [pbr::OriginalName("S_CONNECTED")] SConnected = 16,
-    [pbr::OriginalName("C_CREATEPLAYER")] CCreatePlayer = 17,
-    [pbr::OriginalName("S_CREATEPLAYER")] SCreatePlayer = 18,
+    [pbr::OriginalName("C_CREATEPLAYER")] CCreateplayer = 17,
+    [pbr::OriginalName("S_CREATEPLAYER")] SCreateplayer = 18,
     [pbr::OriginalName("C_ENTERGAME")] CEnterGame = 19,
   }
 
@@ -161,6 +162,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("SERVER_STATE_LOGIN")] ServerStateLogin = 0,
     [pbr::OriginalName("SERVER_STATE_CHARECTERSELECT")] ServerStateCharecterselect = 1,
     [pbr::OriginalName("SERVER_STATE_INGAME")] ServerStateIngame = 2,
+    [pbr::OriginalName("SERVER_STATE_DUNGEON")] ServerStateDungeon = 3,
   }
 
   #endregion
@@ -3038,6 +3040,8 @@ namespace Google.Protobuf.Protocol {
       posInfo_ = other.posInfo_ != null ? other.posInfo_.Clone() : null;
       skillInfo_ = other.skillInfo_ != null ? other.skillInfo_.Clone() : null;
       damage_ = other.damage_;
+      isReady_ = other.isReady_;
+      isMaster_ = other.isMaster_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3101,6 +3105,28 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
+    /// <summary>Field number for the "isReady" field.</summary>
+    public const int IsReadyFieldNumber = 6;
+    private bool isReady_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsReady {
+      get { return isReady_; }
+      set {
+        isReady_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isMaster" field.</summary>
+    public const int IsMasterFieldNumber = 7;
+    private bool isMaster_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsMaster {
+      get { return isMaster_; }
+      set {
+        isMaster_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as ObjectInfo);
@@ -3119,6 +3145,8 @@ namespace Google.Protobuf.Protocol {
       if (!object.Equals(PosInfo, other.PosInfo)) return false;
       if (!object.Equals(SkillInfo, other.SkillInfo)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Damage, other.Damage)) return false;
+      if (IsReady != other.IsReady) return false;
+      if (IsMaster != other.IsMaster) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3130,6 +3158,8 @@ namespace Google.Protobuf.Protocol {
       if (posInfo_ != null) hash ^= PosInfo.GetHashCode();
       if (skillInfo_ != null) hash ^= SkillInfo.GetHashCode();
       if (Damage != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Damage);
+      if (IsReady != false) hash ^= IsReady.GetHashCode();
+      if (IsMaster != false) hash ^= IsMaster.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3163,6 +3193,14 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(45);
         output.WriteFloat(Damage);
       }
+      if (IsReady != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsReady);
+      }
+      if (IsMaster != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(IsMaster);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3185,6 +3223,12 @@ namespace Google.Protobuf.Protocol {
       }
       if (Damage != 0F) {
         size += 1 + 4;
+      }
+      if (IsReady != false) {
+        size += 1 + 1;
+      }
+      if (IsMaster != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3217,6 +3261,12 @@ namespace Google.Protobuf.Protocol {
       }
       if (other.Damage != 0F) {
         Damage = other.Damage;
+      }
+      if (other.IsReady != false) {
+        IsReady = other.IsReady;
+      }
+      if (other.IsMaster != false) {
+        IsMaster = other.IsMaster;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3253,6 +3303,14 @@ namespace Google.Protobuf.Protocol {
           }
           case 45: {
             Damage = input.ReadFloat();
+            break;
+          }
+          case 48: {
+            IsReady = input.ReadBool();
+            break;
+          }
+          case 56: {
+            IsMaster = input.ReadBool();
             break;
           }
         }

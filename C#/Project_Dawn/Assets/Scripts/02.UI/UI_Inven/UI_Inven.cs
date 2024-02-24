@@ -37,7 +37,7 @@ public class UI_Inven : UI_PopUp
 
    }
 
-    private void Start() 
+    protected override void Start() 
     {
       Init();
     }
