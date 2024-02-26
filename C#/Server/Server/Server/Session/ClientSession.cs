@@ -66,5 +66,24 @@ namespace Server
         #endregion Network
 
 
+        public void HandleCreateRoom(C_CreateRoom c_CreateRoom)
+        {
+            // Step 1 : 개설 된 방이 없다면 방(Room , 파티)를 새로 개설.
+
+            if (RoomManager.Instance.Find(RoomType.Bakal) == null)
+            {
+                RoomManager.Instance.Add(RoomType.Bakal);
+            }
+
+            S_CreateRoom s_CreateRoom = new S_CreateRoom
+            {
+                Playerinfo = c_CreateRoom.Playerinfo,
+                ResponseCode = 1
+            };
+
+            // 그리고 클라에 보내준다
+            Send(s_CreateRoom);
+        }
+
     }
 }

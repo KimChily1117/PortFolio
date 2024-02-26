@@ -153,6 +153,17 @@ message S_SceneMove {
   ObjectInfo playerinfo = 1;
 }
 
+
+
+message C_CreateRoom {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_CreateRoom {
+  ObjectInfo playerinfo = 1;
+  int32 ResponseCode = 2;
+}
+
 message C_Jump {
   PositionInfo posInfo = 1;
 }
