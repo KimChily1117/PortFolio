@@ -80,8 +80,6 @@ namespace Server
                 }
             }
         }
-
-
         public void HandleEnterGame(C_EnterGame c_EnterGame)
         {
             if (ServerState != PlayerServerState.ServerStateCharecterselect)
@@ -105,9 +103,6 @@ namespace Server
 
             room.Push(room.EnterRoom, MyPlayer);
         }
-
-
-
         public void HandleCreateCharecter(C_CreatePlayer c_CreatePlayer)
         {
             // TODO : 중복이벤트를 방지하기 위한 보안처리

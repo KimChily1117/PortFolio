@@ -194,4 +194,22 @@ class PacketHandler
         }
 
     }
+
+    public static void S_CreateRoomHandler(PacketSession session, IMessage packet)
+    {
+        S_CreateRoom s_CreateRoom = (S_CreateRoom)packet;
+
+        Debug.Log($"S_CreateRoomHandler : {s_CreateRoom.ResponseCode}");
+
+
+
+        if (s_CreateRoom.ResponseCode == 1)
+        {
+            if(GameManager.ObjectManager.MyPlayer.ObjInfo.ObjectId == s_CreateRoom.Playerinfo.ObjectId)
+            {
+                GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
+            
+            }
+        }
+    }
 }

@@ -1,4 +1,5 @@
 using Character;
+using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,14 +34,15 @@ public class TownScene : BaseScene
 
         /*
          Todo : 
-
-
          */
 
 
+        C_CreateRoom c_room = new C_CreateRoom();
+        c_room.Playerinfo = GameManager.ObjectManager.MyPlayer.ObjInfo;
+        GameManager.Network.Send(c_room);
 
 
-        PartyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
+        //PartyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
 
         //GameManager.SCENE.LoadScene(Define.Scenes.BAKAL);
     }

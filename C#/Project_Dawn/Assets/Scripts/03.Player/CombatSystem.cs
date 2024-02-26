@@ -53,10 +53,10 @@ public class CombatSystem : MonoBehaviour
 
     private void GiveDamage(BaseCharacter collisionChar)
     {
-        C_Collision s_Collision = new C_Collision();
-        s_Collision.Playerinfo = collisionChar.ObjInfo;
+        C_Collision c_Collision = new C_Collision();
+        c_Collision.Playerinfo = collisionChar.ObjInfo;
 
-        GameManager.Network.Send(s_Collision);
+        GameManager.Network.Send(c_Collision);
 
         // 우선 여기서 피격 정보를 보내주고 나서
         // 서버에서 다시 takeDamge Packet을 보내주어서 그것으로 처리를 한다.
