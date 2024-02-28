@@ -22,6 +22,7 @@ public class ObjectManager
             go.AddComponent<MyPlayer>();
 
             go.name = playerInfo.Name;
+            GameManager.MyName = playerInfo.Name;
 
             if (_objects.ContainsKey(playerInfo.ObjectId) == false)
             {

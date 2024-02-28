@@ -225,8 +225,7 @@ class PacketHandler
             partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
 
 
-        bool RoomMaster = s_EnterParty.PartyMembers[0].Name == GameManager.ObjectManager.MyPlayer.name
-            && s_EnterParty.ResponseCode == 1;
+        bool RoomMaster = s_EnterParty.ResponseCode == 1;
 
 
         partyEntry.SetUIElement(RoomMaster,
