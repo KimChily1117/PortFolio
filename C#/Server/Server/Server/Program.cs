@@ -27,11 +27,6 @@ namespace Server
 		static void Main(string[] args)
 		{
 			RoomManager.Instance.Add(RoomType.Town);
-			
-			
-			
-			
-			//RoomManager.Instance.Add(RoomType.Bakal);
 
 			
             // DNS (Domain Name System)

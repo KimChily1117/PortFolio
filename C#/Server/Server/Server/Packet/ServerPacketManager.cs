@@ -27,20 +27,22 @@ class PacketManager
 		_handler.Add((ushort)MsgId.CMove, PacketHandler.C_MoveHandler);		
 		_onRecv.Add((ushort)MsgId.CSkill, MakePacket<C_Skill>);
 		_handler.Add((ushort)MsgId.CSkill, PacketHandler.C_SkillHandler);		
-		_onRecv.Add((ushort)MsgId.CScenemove, MakePacket<C_SceneMove>);
-		_handler.Add((ushort)MsgId.CScenemove, PacketHandler.C_ScenemoveHandler);		
+		_onRecv.Add((ushort)MsgId.CSceneMove, MakePacket<C_Scene_Move>);
+		_handler.Add((ushort)MsgId.CSceneMove, PacketHandler.C_SceneMoveHandler);		
 		_onRecv.Add((ushort)MsgId.CJump, MakePacket<C_Jump>);
 		_handler.Add((ushort)MsgId.CJump, PacketHandler.C_JumpHandler);		
 		_onRecv.Add((ushort)MsgId.CCollision, MakePacket<C_Collision>);
 		_handler.Add((ushort)MsgId.CCollision, PacketHandler.C_CollisionHandler);		
 		_onRecv.Add((ushort)MsgId.CLogin, MakePacket<C_Login>);
 		_handler.Add((ushort)MsgId.CLogin, PacketHandler.C_LoginHandler);		
-		_onRecv.Add((ushort)MsgId.CCreateplayer, MakePacket<C_CreatePlayer>);
-		_handler.Add((ushort)MsgId.CCreateplayer, PacketHandler.C_CreatePlayerHandler);		
-		_onRecv.Add((ushort)MsgId.CEntergame, MakePacket<C_EnterGame>);
-		_handler.Add((ushort)MsgId.CEntergame, PacketHandler.C_EnterGameHandler);		
-		_onRecv.Add((ushort)MsgId.CCreateRoom, MakePacket<C_CreateRoom>);
-		_handler.Add((ushort)MsgId.CCreateRoom, PacketHandler.C_CreateRoomHandler);
+		_onRecv.Add((ushort)MsgId.CCreatePlayer, MakePacket<C_Create_Player>);
+		_handler.Add((ushort)MsgId.CCreatePlayer, PacketHandler.C_CreatePlayerHandler);		
+		_onRecv.Add((ushort)MsgId.CEnterGame, MakePacket<C_Enter_Game>);
+		_handler.Add((ushort)MsgId.CEnterGame, PacketHandler.C_EnterGameHandler);		
+		_onRecv.Add((ushort)MsgId.CCreateRoom, MakePacket<C_Create_Room>);
+		_handler.Add((ushort)MsgId.CCreateRoom, PacketHandler.C_CreateRoomHandler);		
+		_onRecv.Add((ushort)MsgId.CEnterParty, MakePacket<C_Enter_Party>);
+		_handler.Add((ushort)MsgId.CEnterParty, PacketHandler.C_EnterPartyHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

@@ -9,9 +9,14 @@ using UnityEngine;
 
 class PacketHandler
 {
+
+
+    static UI_PartyEntry partyEntry;
+
+
     public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
-        S_EnterGame enterGamePacket = packet as S_EnterGame;
+        S_Enter_Game enterGamePacket = packet as S_Enter_Game;
 
 
         ServerSession serverSession = session as ServerSession;
@@ -25,7 +30,7 @@ class PacketHandler
 
     public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
     {
-        S_LeaveGame leaveGameHandler = packet as S_LeaveGame;
+        S_Leave_Game leaveGameHandler = packet as S_Leave_Game;
 
         GameManager.ObjectManager.RemoveMyPlayer();
     }
@@ -114,7 +119,7 @@ class PacketHandler
 
     public static void S_SceneMoveHandler(PacketSession session, IMessage packet)
     {
-        S_SceneMove s_SCENEMOVE = packet as S_SceneMove;
+        S_Scene_Move s_SCENEMOVE = packet as S_Scene_Move;
     }
 
     public static void S_CollisionHandler(PacketSession session, IMessage packet)
@@ -156,7 +161,7 @@ class PacketHandler
 
         if (s_Login.Players == null || s_Login.Players.Count == 0)
         {
-            C_CreatePlayer createPlayer = new C_CreatePlayer();
+            C_Create_Player createPlayer = new C_Create_Player();
             createPlayer.Name = $"Player_{UnityEngine.Random.Range(1, 100).ToString("0000")}";
             GameManager.Network.Send(createPlayer);
         }
@@ -164,7 +169,7 @@ class PacketHandler
         else
         {
             LobbyPlayerInfo info = s_Login.Players[0];
-            C_EnterGame c_EnterGame = new C_EnterGame();
+            C_Enter_Game c_EnterGame = new C_Enter_Game();
             c_EnterGame.Name = info.Name;
 
             GameManager.Network.Send(c_EnterGame);
@@ -177,17 +182,17 @@ class PacketHandler
 
     public static void S_CreatePlayerHandler(PacketSession session, IMessage packet)
     {
-        S_CreatePlayer s_CreatePlayer = (S_CreatePlayer)packet;
+        S_Create_Player s_CreatePlayer = (S_Create_Player)packet;
 
         if(s_CreatePlayer.Player == null)
         {
-            C_CreatePlayer createPlayer = new C_CreatePlayer();
+            C_Create_Player createPlayer = new C_Create_Player();
             createPlayer.Name = $"Player_{UnityEngine.Random.Range(1, 100).ToString("0000")}";
             GameManager.Network.Send(createPlayer);
         }
         else
         {            
-            C_EnterGame c_EnterGame = new C_EnterGame();
+            C_Enter_Game c_EnterGame = new C_Enter_Game();
             c_EnterGame.Name = s_CreatePlayer.Player.Name;
 
             GameManager.Network.Send(c_EnterGame);
@@ -197,19 +202,29 @@ class PacketHandler
 
     public static void S_CreateRoomHandler(PacketSession session, IMessage packet)
     {
-        S_CreateRoom s_CreateRoom = (S_CreateRoom)packet;
+        S_Create_Room s_CreateRoom = (S_Create_Room)packet;
 
         Debug.Log($"S_CreateRoomHandler : {s_CreateRoom.ResponseCode}");
 
+        // 여기서 따로 분기해서 Set해준다?
 
 
         if (s_CreateRoom.ResponseCode == 1)
         {
             if(GameManager.ObjectManager.MyPlayer.ObjInfo.ObjectId == s_CreateRoom.Playerinfo.ObjectId)
             {
-                GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
-            
+                partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
+                partyEntry.SetUIElement(true, $"{GameManager.ObjectManager.MyPlayer.name}");            
             }
         }
+    }
+
+    public static void S_EnterPartyHandler(PacketSession session, IMessage message)
+    {
+        S_Enter_Party s_EnterParty = (S_Enter_Party)message;
+
+
+        partyEntry.SetUIElement(s_EnterParty.Playerinfo.IsMaster,
+            s_EnterParty.PartyMembers);
     }
 }

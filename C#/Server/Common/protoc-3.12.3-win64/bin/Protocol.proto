@@ -13,8 +13,8 @@ enum MsgId {
   S_MOVE = 5;
   C_SKILL = 6;
   S_SKILL = 7;
-  C_SCENEMOVE = 8;
-  S_SCENEMOVE = 9;
+  C_SCENE_MOVE = 8;
+  S_SCENE_MOVE = 9;
   C_JUMP = 10;
   S_JUMP = 11;
   C_COLLISION = 12;
@@ -22,11 +22,13 @@ enum MsgId {
   C_LOGIN = 14;
   S_LOGIN = 15;
   S_CONNECTED = 16;
-  C_CREATEPLAYER = 17;
-  S_CREATEPLAYER = 18;
-  C_ENTERGAME = 19;
-  C_CREATEROOM = 20;
-  S_CREATEROOM = 21;
+  C_CREATE_PLAYER = 17;
+  S_CREATE_PLAYER = 18;
+  C_ENTER_GAME = 19;
+  C_CREATE_ROOM = 20;
+  S_CREATE_ROOM = 21;
+  C_ENTER_PARTY = 22;
+  S_ENTER_PARTY = 23;
 }
 
 enum PlayerState {
@@ -84,13 +86,13 @@ message S_Login
 	repeated LobbyPlayerInfo players = 2;
 }
 
-message C_CreatePlayer
+message C_Create_Player
 {	
 	string name = 1;
 }
 
 
-message S_CreatePlayer
+message S_Create_Player
 {
 	LobbyPlayerInfo player = 1;
 }
@@ -102,25 +104,23 @@ message LobbyPlayerInfo
 }
 
 
-message S_EnterGame {
+message S_Enter_Game {
   ObjectInfo player = 1;
 }
 
-message C_EnterGame 
+message C_Enter_Game 
 {
 	string name = 1;
 }
 
-
-
-
-message S_LeaveGame 
+message S_Leave_Game 
 {
 
 }
 
 message S_Spawn {
   repeated ObjectInfo objects = 1;
+  repeated LobbyPlayerInfo players = 2;
 }
 
 message S_Despawn {
@@ -145,24 +145,35 @@ message S_Collision {
 	ObjectInfo playerinfo = 2;
 }
 
-message C_SceneMove {
+message C_Scene_Move {
   ObjectInfo playerinfo = 1;
 }
 
-message S_SceneMove {
+message S_Scene_Move {
   ObjectInfo playerinfo = 1;
 }
 
 
 
-message C_CreateRoom {
+message C_Create_Room {
   ObjectInfo playerinfo = 1;
 }
 
-message S_CreateRoom {
+message S_Create_Room {
   ObjectInfo playerinfo = 1;
   int32 ResponseCode = 2;
 }
+
+message C_Enter_Party {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_Enter_Party {
+  ObjectInfo playerinfo = 1;
+  int32 ResponseCode = 2;
+  repeated LobbyPlayerInfo PartyMembers = 3;
+}
+
 
 message C_Jump {
   PositionInfo posInfo = 1;

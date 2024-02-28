@@ -16,9 +16,12 @@ public abstract class UI_Base : MonoBehaviour
 
     public enum Texts
     {
-        StartBtnText
+        StartBtnText,
+        Slot_1_PlayerName,
+        Slot_2_PlayerName,
+        Slot_3_PlayerName,
+        Slot_4_PlayerName
     }
-
     public enum Images
     {
         IconTest,  
@@ -90,6 +93,17 @@ public abstract class UI_Base : MonoBehaviour
     {
       
     }
+
+
+
+    protected virtual void OnEnable()
+    {
+
+
+
+    }
+
+
 
 
     #region Getter

@@ -130,13 +130,7 @@ public class GameManager : MonoBehaviour
         s_input.OnUpdate();
         s_networkmanager.OnUpdate();
     }
-
-    IEnumerator InitializeNetwork()
-    {
-        yield return new WaitForSeconds(1f);
-        Network.Init();
-    }
-
+    
 
     #region ServerResponse 
 

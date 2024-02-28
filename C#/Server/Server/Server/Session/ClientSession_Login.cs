@@ -40,6 +40,7 @@ namespace Server
                     AccountDbId = findDb.AccountDbId;
                     s_Login.LoginOK = 1;
 
+
                     foreach (PlayerDb playerDb in findDb.Players)
                     {
 
@@ -80,9 +81,11 @@ namespace Server
                 }
             }
         }
-        public void HandleEnterGame(C_EnterGame c_EnterGame)
+        public void HandleEnterGame(C_Enter_Game c_EnterGame)
         {
             if (ServerState != PlayerServerState.ServerStateCharecterselect)
+                return;
+            if (ServerState == PlayerServerState.ServerStateIngame)
                 return;
 
             MyPlayer = ObjectManager.Instance.Add<Player>();
@@ -103,14 +106,12 @@ namespace Server
 
             room.Push(room.EnterRoom, MyPlayer);
         }
-        public void HandleCreateCharecter(C_CreatePlayer c_CreatePlayer)
+        public void HandleCreateCharecter(C_Create_Player c_CreatePlayer)
         {
             // TODO : 중복이벤트를 방지하기 위한 보안처리
 
             if (ServerState != PlayerServerState.ServerStateCharecterselect)
                 return;
-
-
 
             using (AppDbContext db = new AppDbContext())
             {
@@ -120,7 +121,7 @@ namespace Server
                 if (findPlayer != null)
                 {
                     // 비어있는 패킷을 보냄으로서 의미가없다는걸 알려줌
-                    Send(new C_CreatePlayer());
+                    Send(new C_Create_Player());
                 }
                 else
                 {
@@ -142,7 +143,7 @@ namespace Server
                     LobbyPlayers.Add(lobbyPlayer);
 
                     // 클라에 전송
-                    S_CreatePlayer newPlayer = new S_CreatePlayer() { Player = new LobbyPlayerInfo() };
+                    S_Create_Player newPlayer = new S_Create_Player() { Player = new LobbyPlayerInfo() };
                     newPlayer.Player.MergeFrom(lobbyPlayer);
 
                     Send(newPlayer);
@@ -151,5 +152,7 @@ namespace Server
 
             }
         }
+
+        
     }
 }
