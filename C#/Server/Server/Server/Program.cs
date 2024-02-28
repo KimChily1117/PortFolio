@@ -33,9 +33,13 @@ namespace Server
             string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
 			IPAddress ipAddr = ipHost.AddressList[0];
-			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
-			_listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
+            ipAddr = IPAddress.Parse("192.168.0.3");
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 9239);
+
+            //IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+
+            _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
 			Console.WriteLine("Listening...");
 
 			//FlushRoom();

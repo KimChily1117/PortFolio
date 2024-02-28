@@ -28,6 +28,7 @@ public class UI_PartyEntry : UI_PopUp
         {
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).text = "Start";
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).color = Color.red;
+            Get<TextMeshProUGUI>((int)Texts.Slot_1_PlayerName).text = MemberTxt;
         }
         else
         {
@@ -60,7 +61,7 @@ public class UI_PartyEntry : UI_PopUp
 
         for (int i = 1; i < SlotCounts; i++)
         {
-            if (String.IsNullOrEmpty(playerInfos[i].Name))
+            if (!String.IsNullOrEmpty(playerInfos[i].Name))
                 Get<TextMeshProUGUI>(i).text = playerInfos[i].Name;
         }
 
