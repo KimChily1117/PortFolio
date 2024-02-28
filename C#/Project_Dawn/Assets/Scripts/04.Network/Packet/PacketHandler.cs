@@ -184,14 +184,14 @@ class PacketHandler
     {
         S_Create_Player s_CreatePlayer = (S_Create_Player)packet;
 
-        if(s_CreatePlayer.Player == null)
+        if (s_CreatePlayer.Player == null)
         {
             C_Create_Player createPlayer = new C_Create_Player();
             createPlayer.Name = $"Player_{UnityEngine.Random.Range(1, 100).ToString("0000")}";
             GameManager.Network.Send(createPlayer);
         }
         else
-        {            
+        {
             C_Enter_Game c_EnterGame = new C_Enter_Game();
             c_EnterGame.Name = s_CreatePlayer.Player.Name;
 
@@ -211,11 +211,9 @@ class PacketHandler
 
         if (s_CreateRoom.ResponseCode == 1)
         {
-            if(GameManager.ObjectManager.MyPlayer.ObjInfo.ObjectId == s_CreateRoom.Playerinfo.ObjectId)
-            {
-                partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
-                partyEntry.SetUIElement(true, $"{GameManager.ObjectManager.MyPlayer.name}");            
-            }
+            partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
+            partyEntry.SetUIElement(true, $"{GameManager.ObjectManager.MyPlayer.name}");
+
         }
     }
 
@@ -223,8 +221,15 @@ class PacketHandler
     {
         S_Enter_Party s_EnterParty = (S_Enter_Party)message;
 
+        if (partyEntry == null)
+            partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
 
-        partyEntry.SetUIElement(s_EnterParty.Playerinfo.IsMaster,
+
+        bool RoomMaster = s_EnterParty.PartyMembers[0].Name == GameManager.ObjectManager.MyPlayer.name
+            && s_EnterParty.ResponseCode == 1;
+
+
+        partyEntry.SetUIElement(RoomMaster,
             s_EnterParty.PartyMembers);
     }
 }
