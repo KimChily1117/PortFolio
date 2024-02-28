@@ -148,7 +148,12 @@ namespace Server.Game.Room
                         enterPacket.PartyMembers.Add(Lp);
                     }
                     player.Session.Send(enterPacket);
-
+                
+                    foreach (Player p in _players.Values)
+                    {
+                        if (gameObject.Id != p.Id)
+                            p.Session.Send(enterPacket);
+                    }
                 }
             }
         }
