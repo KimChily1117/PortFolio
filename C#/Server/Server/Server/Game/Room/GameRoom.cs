@@ -142,7 +142,7 @@ namespace Server.Game.Room
                 {
                     S_Enter_Party enterPacket = new S_Enter_Party();
                     enterPacket.Playerinfo = player.Info;
-
+                    enterPacket.ResponseCode = player.Info.IsMaster == true ? 1 : 2;
                     foreach (LobbyPlayerInfo Lp in _playerList)
                     {
                         enterPacket.PartyMembers.Add(Lp);

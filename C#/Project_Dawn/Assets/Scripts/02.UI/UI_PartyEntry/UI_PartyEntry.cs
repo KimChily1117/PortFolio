@@ -41,12 +41,14 @@ public class UI_PartyEntry : UI_PopUp
 
     }
 
-    public void SetUIElement(bool isMaster, RepeatedField<LobbyPlayerInfo> playerInfos = null)
+    public void SetUIElement(bool isMaster , RepeatedField<LobbyPlayerInfo> playerInfos = null)
     {
         rectTransform.anchoredPosition = new Vector2(0, 0);
         string[] SlotArr = Enum.GetNames(typeof(Texts));
 
         int SlotCounts = SlotArr.Length;
+
+
 
         if (isMaster)
         {
@@ -58,11 +60,12 @@ public class UI_PartyEntry : UI_PopUp
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).text = "Ready";
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).color = Color.yellow;
         }
+       
 
-        for (int i = 1; i < SlotCounts; i++)
+        for (int i = 1; i <= playerInfos.Count; i++)
         {
-            if (!String.IsNullOrEmpty(playerInfos[i].Name))
-                Get<TextMeshProUGUI>(i).text = playerInfos[i].Name;
+            if (!String.IsNullOrEmpty(playerInfos[i-1].Name))
+                Get<TextMeshProUGUI>(i).text = playerInfos[i-1].Name;
         }
 
     }

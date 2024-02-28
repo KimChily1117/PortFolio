@@ -74,20 +74,20 @@ namespace Server
             {
                 GameRoom room = RoomManager.Instance.Add(RoomType.Bakal);
                 Player p = ObjectManager.Instance.Find(c_CreateRoom.Playerinfo.ObjectId);
-                c_CreateRoom.Playerinfo.IsMaster = true;
+                p.Info.IsMaster = true;
                 RoomManager.Instance.Find(RoomType.Town).LeaveRoom(p.Info.ObjectId);
 
                 room.Push(room.EnterParty, p);
             }
 
-            S_Create_Room s_CreateRoom = new S_Create_Room
-            {
-                Playerinfo = c_CreateRoom.Playerinfo,
-                ResponseCode = 1
-            };
+            ////S_Create_Room s_CreateRoom = new S_Create_Room
+            ////{
+            ////    Playerinfo = c_CreateRoom.Playerinfo,
+            ////    ResponseCode = 1
+            ////};
 
-            // 그리고 클라에 보내준다
-            Send(s_CreateRoom);
+            //// 그리고 클라에 보내준다
+            //Send(s_CreateRoom);
         }
 
 
