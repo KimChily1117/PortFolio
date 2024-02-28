@@ -23,9 +23,9 @@ class PacketManager
 
 	public void Register()
 	{		
-		_onRecv.Add((ushort)MsgId.SEnterGame, MakePacket<S_EnterGame>);
+		_onRecv.Add((ushort)MsgId.SEnterGame, MakePacket<S_Enter_Game>);
 		_handler.Add((ushort)MsgId.SEnterGame, PacketHandler.S_EnterGameHandler);		
-		_onRecv.Add((ushort)MsgId.SLeaveGame, MakePacket<S_LeaveGame>);
+		_onRecv.Add((ushort)MsgId.SLeaveGame, MakePacket<S_Leave_Game>);
 		_handler.Add((ushort)MsgId.SLeaveGame, PacketHandler.S_LeaveGameHandler);		
 		_onRecv.Add((ushort)MsgId.SSpawn, MakePacket<S_Spawn>);
 		_handler.Add((ushort)MsgId.SSpawn, PacketHandler.S_SpawnHandler);		
@@ -35,8 +35,8 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
 		_onRecv.Add((ushort)MsgId.SSkill, MakePacket<S_Skill>);
 		_handler.Add((ushort)MsgId.SSkill, PacketHandler.S_SkillHandler);		
-		_onRecv.Add((ushort)MsgId.SScenemove, MakePacket<S_SceneMove>);
-		_handler.Add((ushort)MsgId.SScenemove, PacketHandler.S_SceneMoveHandler);		
+		_onRecv.Add((ushort)MsgId.SSceneMove, MakePacket<S_Scene_Move>);
+		_handler.Add((ushort)MsgId.SSceneMove, PacketHandler.S_SceneMoveHandler);		
 		_onRecv.Add((ushort)MsgId.SJump, MakePacket<S_Jump>);
 		_handler.Add((ushort)MsgId.SJump, PacketHandler.S_JumpHandler);		
 		_onRecv.Add((ushort)MsgId.SCollision, MakePacket<S_Collision>);
@@ -45,10 +45,12 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SLogin, PacketHandler.S_LoginHandler);		
 		_onRecv.Add((ushort)MsgId.SConnected, MakePacket<S_Connected>);
 		_handler.Add((ushort)MsgId.SConnected, PacketHandler.S_ConnectedHandler);		
-		_onRecv.Add((ushort)MsgId.SCreateplayer, MakePacket<S_CreatePlayer>);
-		_handler.Add((ushort)MsgId.SCreateplayer, PacketHandler.S_CreatePlayerHandler);		
-		_onRecv.Add((ushort)MsgId.SCreateRoom, MakePacket<S_CreateRoom>);
-		_handler.Add((ushort)MsgId.SCreateRoom, PacketHandler.S_CreateRoomHandler);
+		_onRecv.Add((ushort)MsgId.SCreatePlayer, MakePacket<S_Create_Player>);
+		_handler.Add((ushort)MsgId.SCreatePlayer, PacketHandler.S_CreatePlayerHandler);		
+		_onRecv.Add((ushort)MsgId.SCreateRoom, MakePacket<S_Create_Room>);
+		_handler.Add((ushort)MsgId.SCreateRoom, PacketHandler.S_CreateRoomHandler);		
+		_onRecv.Add((ushort)MsgId.SEnterParty, MakePacket<S_Enter_Party>);
+		_handler.Add((ushort)MsgId.SEnterParty, PacketHandler.S_EnterPartyHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

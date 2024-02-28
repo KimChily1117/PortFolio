@@ -40,6 +40,13 @@ public class UIManager
 
         Util.GetOrAddComponent<GraphicRaycaster>(Root);
 
+        CanvasScaler sc = Util.GetOrAddComponent<CanvasScaler>(Root);
+
+        sc.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        sc.referenceResolution = new Vector2(1920, 1080);
+        
+
+
         canvas.overrideSorting = true;
         if(sort) //팝업이랑 관련 있는 Sorting이 필요한 UI
         {

@@ -35,8 +35,8 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
 		_onRecv.Add((ushort)MsgId.SSkill, MakePacket<S_Skill>);
 		_handler.Add((ushort)MsgId.SSkill, PacketHandler.S_SkillHandler);		
-		_onRecv.Add((ushort)MsgId.SScenemove, MakePacket<S_Scenemove>);
-		_handler.Add((ushort)MsgId.SScenemove, PacketHandler.S_ScenemoveHandler);		
+		_onRecv.Add((ushort)MsgId.SSceneMove, MakePacket<S_SceneMove>);
+		_handler.Add((ushort)MsgId.SSceneMove, PacketHandler.S_SceneMoveHandler);		
 		_onRecv.Add((ushort)MsgId.SJump, MakePacket<S_Jump>);
 		_handler.Add((ushort)MsgId.SJump, PacketHandler.S_JumpHandler);		
 		_onRecv.Add((ushort)MsgId.SCollision, MakePacket<S_Collision>);
@@ -45,10 +45,12 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SLogin, PacketHandler.S_LoginHandler);		
 		_onRecv.Add((ushort)MsgId.SConnected, MakePacket<S_Connected>);
 		_handler.Add((ushort)MsgId.SConnected, PacketHandler.S_ConnectedHandler);		
-		_onRecv.Add((ushort)MsgId.SCreateplayer, MakePacket<S_Createplayer>);
-		_handler.Add((ushort)MsgId.SCreateplayer, PacketHandler.S_CreateplayerHandler);		
-		_onRecv.Add((ushort)MsgId.SCreateroom, MakePacket<S_Createroom>);
-		_handler.Add((ushort)MsgId.SCreateroom, PacketHandler.S_CreateroomHandler);
+		_onRecv.Add((ushort)MsgId.SCreatePlayer, MakePacket<S_CreatePlayer>);
+		_handler.Add((ushort)MsgId.SCreatePlayer, PacketHandler.S_CreatePlayerHandler);		
+		_onRecv.Add((ushort)MsgId.SCreateRoom, MakePacket<S_CreateRoom>);
+		_handler.Add((ushort)MsgId.SCreateRoom, PacketHandler.S_CreateRoomHandler);		
+		_onRecv.Add((ushort)MsgId.SEnterParty, MakePacket<S_EnterParty>);
+		_handler.Add((ushort)MsgId.SEnterParty, PacketHandler.S_EnterPartyHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

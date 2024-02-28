@@ -70,9 +70,9 @@ class PacketHandler
         room.HandleJump(player, jumpPacket);
     }
 
-    public static void C_ScenemoveHandler(PacketSession session, IMessage packet)
+    public static void C_SceneMoveHandler(PacketSession session, IMessage packet)
     {
-        C_SceneMove c_SceneMove = packet as C_SceneMove;
+        C_Scene_Move c_SceneMove = packet as C_Scene_Move;
 
         ClientSession clientSession = session as ClientSession;
 
@@ -111,7 +111,7 @@ class PacketHandler
 
     public static void C_CreatePlayerHandler(PacketSession session, IMessage packet)
     {
-        C_CreatePlayer c_CreatePlayer = (C_CreatePlayer)packet;
+        C_Create_Player c_CreatePlayer = (C_Create_Player)packet;
         ClientSession clientSession = (ClientSession)session;
 
 
@@ -120,7 +120,7 @@ class PacketHandler
 
     public static void C_EnterGameHandler(PacketSession session, IMessage packet)
     {
-        C_EnterGame c_EnterGame = (C_EnterGame)packet;
+        C_Enter_Game c_EnterGame = (C_Enter_Game)packet;
         ClientSession clientSession = (ClientSession)session;
  
         clientSession.HandleEnterGame(c_EnterGame);
@@ -128,13 +128,20 @@ class PacketHandler
     }
 
     public static void C_CreateRoomHandler(PacketSession session, IMessage packet)
-    {
-        
-        
-        C_CreateRoom c_CreateRoom = (C_CreateRoom)packet;
+    {   
+        C_Create_Room c_CreateRoom = (C_Create_Room)packet;
         ClientSession clientSession = (ClientSession)session;
 
         Console.WriteLine($"C_CreateRoomHandler!!! ");
         clientSession.HandleCreateRoom(c_CreateRoom);
+    }
+
+    public static void C_EnterPartyHandler(PacketSession session, IMessage packet)
+    {
+        C_Enter_Party c_EnterParty = (C_Enter_Party)packet;
+        
+        ClientSession clientSession = (ClientSession)session;
+
+        clientSession.HandleEnterParty(c_EnterParty);
     }
 }

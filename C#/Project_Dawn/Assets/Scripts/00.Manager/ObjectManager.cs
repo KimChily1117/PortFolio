@@ -12,23 +12,28 @@ public class ObjectManager
 
     public void Add(ObjectInfo playerInfo , bool isMyPlayer)
     {
-        if(isMyPlayer) 
+        //if (_objects.ContainsKey(playerInfo.ObjectId) == true)
+        //    return;
+
+        if (isMyPlayer) 
         {
             // 이런식으로 리소스 매니저에서 받아온다.
             GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
             go.AddComponent<MyPlayer>();
 
-            go.name = playerInfo.Name;            
+            go.name = playerInfo.Name;
 
-            _objects.Add(playerInfo.ObjectId, go);
+            if (_objects.ContainsKey(playerInfo.ObjectId) == false)
+            {
+                _objects.Add(playerInfo.ObjectId, go);
+            }
+
 
             MyPlayer = go.GetComponent<MyPlayer>();
             MyPlayer.Id = playerInfo.ObjectId;
             MyPlayer.ObjInfo = playerInfo;
             //MyPlayer.CellPos = new Vector2Int(playerInfo.PosInfo.PosX, playerInfo.PosInfo.PosY);
             MyPlayer.PosInfo = playerInfo.PosInfo;
-
-            
             
         }
 
@@ -39,8 +44,11 @@ public class ObjectManager
             go.AddComponent<OtherPlayer>();
             go.name = playerInfo.Name;
 
-            _objects.Add(playerInfo.ObjectId, go);
 
+            if (_objects.ContainsKey(playerInfo.ObjectId) == false)
+            {
+                _objects.Add(playerInfo.ObjectId, go);
+            }
             OtherPlayer Op = go.GetComponent<OtherPlayer>();
             Op.Id = playerInfo.ObjectId;
             Op.PosInfo = playerInfo.PosInfo;

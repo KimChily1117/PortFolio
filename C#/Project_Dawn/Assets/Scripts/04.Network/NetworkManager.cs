@@ -13,16 +13,12 @@ public class NetworkManager
     public ApiHelper apiHelper = new ApiHelper();
 
     ServerSession _session = new ServerSession();
-    public NetworkManager()
-    {
-        Init();
-    }
-
+    
     public void Send(IMessage packet)
     {
         _session.Send(packet);
     }
-    public void Init()
+    public void ConnectToGame()
     {
         Connector connector = new Connector();
 
@@ -39,7 +35,6 @@ public class NetworkManager
 
     }
 
-    // Update is called once per frame
     public void OnUpdate()
     {
         List<PacketMessage> list = PacketQueue.Instance.PopAll();

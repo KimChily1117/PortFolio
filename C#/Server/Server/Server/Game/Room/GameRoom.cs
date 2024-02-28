@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Microsoft.EntityFrameworkCore.Internal;
+using Server.DB;
 using Server.Game.Object;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ namespace Server.Game.Room
         Dictionary<int, Enemy> _Enemys = new Dictionary<int, Enemy>();
         Dictionary<int, Projectile> _Projectiles = new Dictionary<int, Projectile>();
 
+        List<LobbyPlayerInfo> _playerList = new List<LobbyPlayerInfo>();
+
+        #region EnterRoom
         public void EnterRoom(GameObject gameObject)
         {
             if (gameObject == null)
@@ -29,27 +33,22 @@ namespace Server.Game.Room
                 _players.Add(gameObject.Id, player);
                 player.Room = this;
 
+                LobbyPlayerInfo playerInfo = new LobbyPlayerInfo()
+                {
+                    Name = player.Info.Name
+                };
+
+
+                _playerList.Add(playerInfo);
+                
 
                 // 본인한테 정보 전송
                 {
-                    S_EnterGame enterPacket = new S_EnterGame();
+                    S_Enter_Game enterPacket = new S_Enter_Game();
                     enterPacket.Player = player.Info;
                     player.Session.Send(enterPacket);
 
                     S_Spawn spawnPacket = new S_Spawn();
-
-                    /*
-                   ->feel values:스스로를 가치있게 여기는, 자존감이 있는
-                        김선엽 요새 자존감 개쩖)
-
-                        if (player = 서뇹,)
-                            Add(밍)
-                     너 왜 내꺼에다가 이런걸 써놓았니? 
-                    내 맘 임 ㅋ
-                    ;;;;
-                     */
-
-
 
                     foreach (Player p in _players.Values)
                     {
@@ -71,8 +70,6 @@ namespace Server.Game.Room
                 Projectile projectile = gameObject as Projectile;
                 _Projectiles.Add(gameObject.Id, projectile);
             }
-
-
 
             // 타인한테 정보 전송
             {
@@ -99,7 +96,7 @@ namespace Server.Game.Room
 
             // 본인한테 정보 전송
             {
-                S_LeaveGame leavePacket = new S_LeaveGame();
+                S_Leave_Game leavePacket = new S_Leave_Game();
                 player.Session.Send(leavePacket);
             }
 
@@ -115,6 +112,78 @@ namespace Server.Game.Room
             }
 
         }
+
+        #endregion EnterRoom
+
+
+
+        public void EnterParty(GameObject gameObject)
+        {
+            if (gameObject == null)
+                return;
+
+            if (gameObject.ObjectType == GameObjectType.Player)
+            {
+                Player player = gameObject as Player;
+
+                _players.Add(gameObject.Id, player);
+                player.Room = this;
+
+                LobbyPlayerInfo playerInfo = new LobbyPlayerInfo()
+                {
+                    Name = player.Info.Name
+                };
+
+
+                _playerList.Add(playerInfo);
+
+
+                // 본인한테 정보 전송
+                {
+                    S_Enter_Party enterPacket = new S_Enter_Party();
+                    enterPacket.Playerinfo = player.Info;
+
+                    foreach (LobbyPlayerInfo Lp in _playerList)
+                    {
+                        enterPacket.PartyMembers.Add(Lp);
+                    }
+                    player.Session.Send(enterPacket);
+
+                }
+            }
+        }
+
+        public void LeaveParty(int objectId)
+        {
+
+            Player player = null;
+            if (_players.TryGetValue(objectId, out player) == false)
+                return;
+
+            _players.Remove(objectId);
+            player.Room = null;
+
+            // 본인한테 정보 전송
+            {
+                S_Leave_Game leavePacket = new S_Leave_Game();
+                player.Session.Send(leavePacket);
+            }
+
+            // 타인한테 정보 전송
+            {
+                S_Despawn despawnPacket = new S_Despawn();
+                despawnPacket.PlayerIds.Add(player.Info.ObjectId);
+                foreach (Player p in _players.Values)
+                {
+                    if (player != p)
+                        p.Session.Send(despawnPacket);
+                }
+            }
+
+        }
+
+
+
 
         public void HandleMove(Player player, C_Move movePacket)
         {
@@ -136,7 +205,6 @@ namespace Server.Game.Room
             Broadcast(resMovePacket);
 
         }
-
 
         public void HandleJump(Player player, C_Jump jumpPacket)
         {
@@ -163,7 +231,7 @@ namespace Server.Game.Room
         }
 
 
-        public void HandleMoveScene(Player player, C_SceneMove scenePacket)
+        public void HandleMoveScene(Player player, C_Scene_Move scenePacket)
         {
             if (player == null)
                 return;
@@ -198,8 +266,6 @@ namespace Server.Game.Room
             
             Broadcast(s_Collision);
         }
-
-
 
         public void HandleSkill(Player player, C_Skill skillPacket)
         {
@@ -251,7 +317,6 @@ namespace Server.Game.Room
 
             // TODO : 데미지 판정
         }
-
 
 
         // Game Room 내부에 패킷을 보낼때 사용

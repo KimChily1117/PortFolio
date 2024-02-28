@@ -11,7 +11,7 @@ namespace Character
 {
     public abstract class BaseCharacter : MonoBehaviour
     {
-    
+
         private Stat _playerStat;
         public float _speed = 1.0f;
 
@@ -37,7 +37,7 @@ namespace Character
         protected CombatSystem _combatSystem;
 
 
-        [SerializeField] protected GameObject _Sprite;
+        public GameObject _Sprite { get; protected set; }
         [SerializeField] public GameObject _shadowObject;
         public Animator _animator;
 

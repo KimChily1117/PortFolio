@@ -66,16 +66,21 @@ namespace Server
         #endregion Network
 
 
-        public void HandleCreateRoom(C_CreateRoom c_CreateRoom)
+        public void HandleCreateRoom(C_Create_Room c_CreateRoom)
         {
             // Step 1 : 개설 된 방이 없다면 방(Room , 파티)를 새로 개설.
 
             if (RoomManager.Instance.Find(RoomType.Bakal) == null)
             {
-                RoomManager.Instance.Add(RoomType.Bakal);
+                GameRoom room = RoomManager.Instance.Add(RoomType.Bakal);
+                Player p = ObjectManager.Instance.Find(c_CreateRoom.Playerinfo.ObjectId);
+                c_CreateRoom.Playerinfo.IsMaster = true;
+                RoomManager.Instance.Find(RoomType.Town).LeaveRoom(p.Info.ObjectId);
+
+                room.Push(room.EnterParty, p);
             }
 
-            S_CreateRoom s_CreateRoom = new S_CreateRoom
+            S_Create_Room s_CreateRoom = new S_Create_Room
             {
                 Playerinfo = c_CreateRoom.Playerinfo,
                 ResponseCode = 1
@@ -83,6 +88,19 @@ namespace Server
 
             // 그리고 클라에 보내준다
             Send(s_CreateRoom);
+        }
+
+
+        public void HandleEnterParty(C_Enter_Party c_EnterParty)
+        {
+            // 이미 만들어져있음.(파장이 아닌 일반 파티원이 들어간다는뜻)
+            GameRoom room = RoomManager.Instance.Find(RoomType.Bakal);
+
+            Player p = ObjectManager.Instance.Find(c_EnterParty.Playerinfo.ObjectId);
+            c_EnterParty.Playerinfo.IsMaster = false;
+
+            RoomManager.Instance.Find(RoomType.Town).LeaveRoom(p.Info.ObjectId);
+            room.Push(room.EnterParty, p);
         }
 
     }

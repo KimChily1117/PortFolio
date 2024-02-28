@@ -8,19 +8,24 @@ public class TownScene : BaseScene
 {
     public TriggerEvent _triggerEvent;
 
+
+    public Transform _dungeonEntranceSpawn;
+
+
+
     private UI_PartyEntry PartyEntry { get; set; }
 
     protected override void Initialize()
     {
         GameManager.SCENE.CurrentScene = Define.Scenes.TOWN;
 
-
         Debug.Log($"IngameScene ] InGameScene!!! ");
+
+        GameManager.Network.ConnectToGame();
 
         //배경음 및 온갖것들 다 초기화
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/seria_gate", Define.SoundType.BGM);
-
         GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
 
 
@@ -32,12 +37,13 @@ public class TownScene : BaseScene
     {
         Debug.Log("Trigger Enter!!");
 
-        /*
-         Todo : 
-         */
+
+        //GameManager.ObjectManager.MyPlayer.transform.position = _dungeonEntranceSpawn.position;
+        //GameManager.Sound.BGMStop();
+        //GameManager.Sound.Play("Sounds/bakal_ready", Define.SoundType.BGM);
 
 
-        C_CreateRoom c_room = new C_CreateRoom();
+        C_Create_Room c_room = new C_Create_Room();
         c_room.Playerinfo = GameManager.ObjectManager.MyPlayer.ObjInfo;
         GameManager.Network.Send(c_room);
 
