@@ -41,14 +41,14 @@ public class UI_PartyEntry : UI_PopUp
 
     }
 
-    public void SetUIElement(bool isMaster , RepeatedField<LobbyPlayerInfo> playerInfos = null)
+    public void SetUIElement(RepeatedField<LobbyPlayerInfo> playerInfos = null)
     {
         rectTransform.anchoredPosition = new Vector2(0, 0);
         string[] SlotArr = Enum.GetNames(typeof(Texts));
 
         int SlotCounts = SlotArr.Length;
 
-
+        bool isMaster = GameManager.MyName == playerInfos[0].Name
 
         if (isMaster)
         {

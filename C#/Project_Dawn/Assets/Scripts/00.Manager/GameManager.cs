@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     public static NetworkManager Network { get { return s_networkmanager; } }
 
 
-
+    public static string MyName = "";
 
 
     static void Init()
