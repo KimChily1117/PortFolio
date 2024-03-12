@@ -20,6 +20,18 @@ namespace Server.Game.Room
 
         List<LobbyPlayerInfo> _playerList = new List<LobbyPlayerInfo>();
 
+
+        public void InitEnemy()
+        {
+
+            Enemy enemy = ObjectManager.Instance.Add<Enemy>();
+
+            enemy.Info.Name = $"Bakal_Hismar";
+            enemy.Info.PosInfo.PosX = -2f;
+            enemy.Info.PosInfo.PosY = -0.55f;
+            EnterRoom(enemy);
+        }
+
         #region EnterRoom
         public void EnterRoom(GameObject gameObject)
         {
@@ -30,20 +42,26 @@ namespace Server.Game.Room
             {
                 Player player = gameObject as Player;
 
-                _players.Add(gameObject.Id, player);
-                player.Room = this;
-
-                LobbyPlayerInfo playerInfo = new LobbyPlayerInfo()
+                if (_players.ContainsKey(player.Id) == false)
                 {
-                    Name = player.Info.Name
-                };
+                    _players.Add(gameObject.Id, player);
+                    player.Room = this;
+
+                    LobbyPlayerInfo playerInfo = new LobbyPlayerInfo()
+                    {
+                        Name = player.Info.Name
+                    };
 
 
-                _playerList.Add(playerInfo);
-                
+                    _playerList.Add(playerInfo);
+                }
+
 
                 // 본인한테 정보 전송
                 {
+                    
+
+
                     S_Enter_Game enterPacket = new S_Enter_Game();
                     enterPacket.Player = player.Info;
                     player.Session.Send(enterPacket);
@@ -53,16 +71,30 @@ namespace Server.Game.Room
                     foreach (Player p in _players.Values)
                     {
                         if (player != p)
-                            spawnPacket.Objects.Add(p.Info);
+                            spawnPacket.Objects.Add(p.Info);    
                     }
+
+                    foreach (Enemy e in _Enemys.Values)
+                    {
+
+                        spawnPacket.Objects.Add(e.Info);
+                    }
+
+
                     player.Session.Send(spawnPacket);
+
                 }
             }
 
             else if (gameObject.ObjectType == GameObjectType.Enemy)
             {
-                Enemy enemy = gameObject as Enemy;
-                _Enemys.Add(enemy.Id, enemy);
+                if (_Enemys.ContainsKey(gameObject.Id) == false)
+                {
+                    Enemy enemy = gameObject as Enemy;
+                    enemy.Room = this;
+                    _Enemys.Add(enemy.Id, enemy);
+                
+                }
             }
 
             else if (gameObject.ObjectType == GameObjectType.Projectile)
@@ -148,13 +180,19 @@ namespace Server.Game.Room
                         enterPacket.PartyMembers.Add(Lp);
                     }
                     player.Session.Send(enterPacket);
-                
+
                     foreach (Player p in _players.Values)
                     {
                         if (gameObject.Id != p.Id)
                             p.Session.Send(enterPacket);
                     }
                 }
+            }
+
+            else if (gameObject.ObjectType == GameObjectType.Enemy)
+            {
+                Enemy enemy = gameObject as Enemy;
+                _Enemys.Add(enemy.Id, enemy);
             }
         }
 
@@ -241,15 +279,13 @@ namespace Server.Game.Room
             if (player == null)
                 return;
 
+            S_Scene_Move s_Scene_Move = new S_Scene_Move();
+            s_Scene_Move.Playerinfo = player.Info;
 
-
-            //    // 다른 플레이어한테도 알려준다
-            //    S_Run resRunPacket = new S_Run();
-            //    resRunPacket.PlayerId = player.Info.ObjectId;
-            //    resRunPacket.PosInfo = runPacket.PosInfo;
-
-            //    Broadcast(resRunPacket);
-
+            if (scenePacket.Playerinfo.IsMaster)
+            {
+                Broadcast(s_Scene_Move);
+            }
         }
 
 
@@ -268,7 +304,7 @@ namespace Server.Game.Room
 
             s_Collision.PlayerId = player.Info.ObjectId;
             s_Collision.Playerinfo.Damage = 10.0f;
-            
+
             Broadcast(s_Collision);
         }
 
@@ -280,7 +316,7 @@ namespace Server.Game.Room
 
             ObjectInfo info = player.Info;
             S_Skill skill = new S_Skill() { Info = new SkillInfo() };
-                   
+
             //info.PosInfo.State = PlayerState.Skill;
             Console.WriteLine($"skill ??? : {skillPacket.Info.SkillId}");
 

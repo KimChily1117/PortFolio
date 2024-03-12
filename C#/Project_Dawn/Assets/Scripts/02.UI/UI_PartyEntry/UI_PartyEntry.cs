@@ -10,6 +10,10 @@ using UnityEngine.UI;
 
 public class UI_PartyEntry : UI_PopUp
 {
+    List<LobbyPlayerInfo> _alreadyPlayerInfos = new List<LobbyPlayerInfo>();
+
+    bool _isMaster = false;
+
     public override void Init()
     {
         base.Init();
@@ -43,29 +47,39 @@ public class UI_PartyEntry : UI_PopUp
 
     public void SetUIElement(RepeatedField<LobbyPlayerInfo> playerInfos = null)
     {
+        _alreadyPlayerInfos.Clear();
+
+        foreach (LobbyPlayerInfo item in playerInfos)
+        {
+            _alreadyPlayerInfos.Add(item);
+        }
+
+
+
         rectTransform.anchoredPosition = new Vector2(0, 0);
         string[] SlotArr = Enum.GetNames(typeof(Texts));
 
         int SlotCounts = SlotArr.Length;
 
-        bool isMaster = GameManager.MyName == playerInfos[0].Name
+        _isMaster = GameManager.MyName == _alreadyPlayerInfos[0].Name;
 
-        if (isMaster)
+        if (_isMaster)
         {
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).text = "Start";
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).color = Color.red;
+
         }
         else
         {
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).text = "Ready";
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).color = Color.yellow;
         }
-       
 
-        for (int i = 1; i <= playerInfos.Count; i++)
+
+        for (int i = 1; i <= _alreadyPlayerInfos.Count; i++)
         {
-            if (!String.IsNullOrEmpty(playerInfos[i-1].Name))
-                Get<TextMeshProUGUI>(i).text = playerInfos[i-1].Name;
+            if (!String.IsNullOrEmpty(_alreadyPlayerInfos[i - 1].Name))
+                Get<TextMeshProUGUI>(i).text = _alreadyPlayerInfos[i - 1].Name;
         }
 
     }
@@ -84,7 +98,22 @@ public class UI_PartyEntry : UI_PopUp
     #region Button Interaction
     public void OnClickEnterBtn(PointerEventData evt)
     {
-        Debug.Log($"OnClick!!! Start or Ready btn!!!");
+
+        C_Scene_Move c_Scene_Move = new C_Scene_Move();
+
+
+        if (c_Scene_Move.Playerinfo == null)
+        {
+            c_Scene_Move.Playerinfo = new ObjectInfo();
+        }
+        
+        c_Scene_Move.Playerinfo.Name = GameManager.MyName;
+        c_Scene_Move.Playerinfo.IsMaster = true;
+
+
+
+        GameManager.Network.Send(c_Scene_Move);
+
     }
 
     #endregion Button Interaction

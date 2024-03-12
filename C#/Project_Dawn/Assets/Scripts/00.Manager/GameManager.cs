@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour
     private static UIManager s_uimanager = new UIManager();
     public static UIManager UI { get { return s_uimanager; } }
 
-    private static SceneManangers s_scenemanagers = new SceneManangers();
-    public static SceneManangers SCENE { get { return s_scenemanagers; } }
+    private static SceneManagers s_scenemanagers;
+    public static SceneManagers SCENE { get { return s_scenemanagers; } }
 
     private static SoundManager s_soundmanagers = new SoundManager();
     public static SoundManager Sound { get { return s_soundmanagers; } }
@@ -61,30 +61,30 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(obj);
 
             s_instance = obj.GetComponent<GameManager>();
+
+
+            GameObject SceneMgr = new GameObject { name = "@SceneMgr" };
+            s_scenemanagers = SceneMgr.GetOrAddComponent<SceneManagers>();
+            SceneMgr.transform.SetParent(obj.transform);
         }
+
+
+
+
 
         Sound.Init();
 
         DataManager.Init();
-
-
         GameObject evt = GameObject.Find("EventSystem");
         if(!evt)
         {
             evt = Resources.Instantiate("UI/EventSystem");
         }
-
+        Application.runInBackground = true;
         DontDestroyOnLoad(evt);
-
-
-
-        Screen.SetResolution(1280, 720, false);
-        Application.runInBackground = true;       
-        
-
     }
 
-    void Start()
+    void OnEnable()
     {
         Init();
         //StartCoroutine(InitializeNetwork());
@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
         }));
 
 
+        
 
 
 

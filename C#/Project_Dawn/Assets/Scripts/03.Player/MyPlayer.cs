@@ -31,11 +31,11 @@ public class MyPlayer : BaseCharacter
         // 장비에 따라 여기서 스텟 값을 바꿔준다.
     }
 
+    
+
+
     protected override void Start()
-    {
-
-        DontDestroyOnLoad(this);
-
+    {    
         Debug.Log($"Start Test");
 
         // _inputBuffer = new InputBuffer();
@@ -48,6 +48,9 @@ public class MyPlayer : BaseCharacter
 
         lastComboTime = comboTimeWindow;
         currentAtkCount = 0;
+
+        GameManager.Input.Clear();
+
 
         GameManager.Input.KeyDownAction -= OnKeyDownMoveAction;
         GameManager.Input.KeyDownAction += OnKeyDownMoveAction;
@@ -82,13 +85,13 @@ public class MyPlayer : BaseCharacter
                 return;
             }
 
-            PosInfo.State = PlayerState.Moving;
+            PositionInfo.State = PlayerState.Moving;
             _moveDir = Vector2.up;
 
             Dir = GetDirFromVec(_moveDir);
 
             GameManager.Input.SetInputKeyCode(KeyCode.UpArrow);
-            CheckUpdatedFlag();
+            //CheckUpdatedFlag();
 
         }
         else if (Input.GetKey(KeyCode.DownArrow))
@@ -101,7 +104,7 @@ public class MyPlayer : BaseCharacter
                 _shadowObject.transform.position = CellPos;
                 return;
             }
-            PosInfo.State = PlayerState.Moving;
+            PositionInfo.State = PlayerState.Moving;
 
 
             Debug.Log($"down");
@@ -109,7 +112,7 @@ public class MyPlayer : BaseCharacter
             Dir = GetDirFromVec(_moveDir);
 
             GameManager.Input.SetInputKeyCode(KeyCode.DownArrow);
-            CheckUpdatedFlag();
+            //CheckUpdatedFlag();
         }
 
         else if (Input.GetKey(KeyCode.LeftArrow))
@@ -121,12 +124,12 @@ public class MyPlayer : BaseCharacter
                 return;
             }
 
-            PosInfo.State = PlayerState.Moving;
+            PositionInfo.State = PlayerState.Moving;
             _moveDir = Vector2.left;
             Dir = GetDirFromVec(_moveDir);
 
             GameManager.Input.SetInputKeyCode(KeyCode.LeftArrow);
-            CheckUpdatedFlag();
+            //CheckUpdatedFlag();
         }
 
         else if (Input.GetKey(KeyCode.RightArrow))
@@ -135,15 +138,15 @@ public class MyPlayer : BaseCharacter
             if (_state == PlayerState.Jump)
             {
                 CellPos += Vector2.right * _speed * Time.deltaTime;
-                _shadowObject.transform.position = CellPos;
+                _shadowObject.transform.position = CellPos;     
                 return;
             }
-            PosInfo.State = PlayerState.Moving;
+            PositionInfo.State = PlayerState.Moving;
             _moveDir = Vector2.right;
             Dir = GetDirFromVec(_moveDir);
 
             GameManager.Input.SetInputKeyCode(KeyCode.RightArrow);
-            CheckUpdatedFlag();
+            //CheckUpdatedFlag();
         }
         //else
         //{
@@ -157,7 +160,7 @@ public class MyPlayer : BaseCharacter
     {
         if (Dir == MoveDir.None) // 키 입력이 없을 때.
         {
-            PosInfo.State = PlayerState.Idle;
+            PositionInfo.State = PlayerState.Idle;
             CheckUpdatedFlag();
             return;
         }
@@ -198,8 +201,6 @@ public class MyPlayer : BaseCharacter
         {
             if (currentAtkCount == 3)
                 return;
-
-
             isActiveComboDetect = true;
             lastComboTime = comboTimeWindow;
             _state = PlayerState.Atk;
@@ -216,6 +217,8 @@ public class MyPlayer : BaseCharacter
                         GameManager.Network.Send(skill);
                         _animator.SetTrigger("Attack1");
 
+                        GameManager.Sound.Play($"Effect/Swordman/sm_atk_01");
+
                         break;
                     }
                 case 2:
@@ -224,7 +227,10 @@ public class MyPlayer : BaseCharacter
 
                         skill.Info.SkillId = 3;
                         GameManager.Network.Send(skill);
+
                         _animator.SetTrigger("Attack2");
+                        GameManager.Sound.Play($"Effect/Swordman/sm_atk_02");
+
                         break;
                     }
                 case 3:
@@ -234,7 +240,10 @@ public class MyPlayer : BaseCharacter
 
                         skill.Info.SkillId = 4;
                         GameManager.Network.Send(skill);
+
                         _animator.SetTrigger("Attack3");
+                        GameManager.Sound.Play($"Effect/Swordman/sm_atk_03");
+
                         break;
                     }
             }
@@ -310,20 +319,22 @@ public class MyPlayer : BaseCharacter
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            if (PosInfo.State == PlayerState.Jump)
+            if (PositionInfo.State == PlayerState.Jump)
                 return;
 
             initialPosition = _Sprite.transform.position;
             CellPos = _Sprite.transform.position;
-            PosInfo.State = PlayerState.Jump;
+            PositionInfo.State = PlayerState.Jump;
 
             //C_Skill skill = new C_Skill() { Info = new SkillInfo() };
             //skill.Info.SkillId = 1;
             //GameManager.Network.Send(skill);
 
             C_Jump c_Jump = new C_Jump();
-            c_Jump.PosInfo = PosInfo;
+            c_Jump.PosInfo = PositionInfo;
             GameManager.Network.Send(c_Jump);
+
+            GameManager.Sound.Play($"Effect/Swordman/sm_jump");
 
         }
 
@@ -340,14 +351,16 @@ public class MyPlayer : BaseCharacter
 
     public void OnKeyUpAction()
     {
-        if (PosInfo.State != PlayerState.Jump)
+        if (PositionInfo.State != PlayerState.Jump)
         {
-            if (PosInfo.State == PlayerState.Atk)
+            if (PositionInfo.State == PlayerState.Atk)
             {
                 return;
             }
-            PosInfo.State = PlayerState.Idle;
-            PosInfo.MoveDir = MoveDir.None;
+            PositionInfo.State = PlayerState.Idle;
+            PositionInfo.MoveDir = MoveDir.None;
+            _updated = true;
+
             CheckUpdatedFlag();
         }
 
@@ -361,9 +374,9 @@ public class MyPlayer : BaseCharacter
             _shadowObject.transform.position = CellPos;
             return;
         }
-        PosInfo.State = PlayerState.Run;
+        PositionInfo.State = PlayerState.Run;
 
-        CheckUpdatedFlag();
+        //CheckUpdatedFlag();
     }
 
 
@@ -384,7 +397,7 @@ public class MyPlayer : BaseCharacter
 
         _animator.SetBool("isWalk", true);
 
-        CellPos = transform.position;
+        //CellPos = transform.position;
 
         //_HitBox.gameObject.SetActive(false);
     }
@@ -423,12 +436,24 @@ public class MyPlayer : BaseCharacter
         //    _updated = false;
         //}
 
-        C_Move movePacket = new C_Move();
-        movePacket.PosInfo = PosInfo;
-        GameManager.Network.Send(movePacket);
+        if(_updated)
+        {
+            C_Move movePacket = new C_Move();
 
-        //_updated = false;
 
+
+            movePacket.PosInfo = new PositionInfo();
+
+            movePacket.PosInfo.PosX = PositionInfo.PosX;
+            movePacket.PosInfo.PosY = PositionInfo.PosY;
+            movePacket.PosInfo.MoveDir = PositionInfo.MoveDir;
+            movePacket.PosInfo.State = PositionInfo.State;
+
+
+            Debug.Log($"Current Pos? : {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY} , {movePacket.PosInfo.State} , {movePacket.PosInfo.MoveDir}");
+            GameManager.Network.Send(movePacket);
+            _updated = false;
+        }
     }
 
 
@@ -458,8 +483,6 @@ public class MyPlayer : BaseCharacter
     {
         base.Update();
         ResetComboState();
-
-
     }
 
     #endregion

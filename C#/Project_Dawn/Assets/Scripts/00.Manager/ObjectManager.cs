@@ -5,55 +5,96 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
+
 public class ObjectManager
 {
     public BaseCharacter MyPlayer { set; get; }
     Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
 
-    public void Add(ObjectInfo playerInfo , bool isMyPlayer)
+    public static GameObjectType GetObjectTypeId(int id)
     {
-        //if (_objects.ContainsKey(playerInfo.ObjectId) == true)
-        //    return;
+        int type = (id >> 24) & 0x7F;
+        return (GameObjectType)type;
+    }
 
-        if (isMyPlayer) 
+
+
+    public void Add(ObjectInfo objectInfo, bool isMyPlayer)
+    {
+        GameObjectType gameObjectType = GetObjectTypeId(objectInfo.ObjectId);
+        
+        
+        if (gameObjectType == GameObjectType.Player)
         {
-            // 이런식으로 리소스 매니저에서 받아온다.
-            GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
-            go.AddComponent<MyPlayer>();
 
-            go.name = playerInfo.Name;
-            GameManager.MyName = playerInfo.Name;
-
-            if (_objects.ContainsKey(playerInfo.ObjectId) == false)
+            if (isMyPlayer)
             {
-                _objects.Add(playerInfo.ObjectId, go);
+                // 이런식으로 리소스 매니저에서 받아온다.
+                GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
+                go.AddComponent<MyPlayer>();
+
+                go.name = objectInfo.Name;
+                GameManager.MyName = objectInfo.Name;
+
+                if (_objects.ContainsKey(objectInfo.ObjectId) == false)
+                {
+                    _objects.Add(objectInfo.ObjectId, go);
+                }
+
+
+                MyPlayer = go.GetComponent<MyPlayer>();
+                MyPlayer.Id = objectInfo.ObjectId;
+                MyPlayer.ObjInfo = objectInfo;
+                //MyPlayer.CellPos = new Vector2Int(playerInfo.PosInfo.PosX, playerInfo.PosInfo.PosY);
+                MyPlayer.PositionInfo = objectInfo.PosInfo;
+
+
+                MyPlayer.SyncPos();
             }
 
+            else
+            {
+                GameObject go = GameManager.Resources.Instantiate($"Character/other_male_ghostnight");
 
-            MyPlayer = go.GetComponent<MyPlayer>();
-            MyPlayer.Id = playerInfo.ObjectId;
-            MyPlayer.ObjInfo = playerInfo;
-            //MyPlayer.CellPos = new Vector2Int(playerInfo.PosInfo.PosX, playerInfo.PosInfo.PosY);
-            MyPlayer.PosInfo = playerInfo.PosInfo;
-            
+                go.AddComponent<OtherPlayer>();
+                go.name = objectInfo.Name;
+
+
+                if (_objects.ContainsKey(objectInfo.ObjectId) == false)
+                {
+                    _objects.Add(objectInfo.ObjectId, go);
+                }
+                OtherPlayer Op = go.GetComponent<OtherPlayer>();
+                Op.Id = objectInfo.ObjectId;
+                Op.PositionInfo = objectInfo.PosInfo;
+                Op.ObjInfo = objectInfo;
+
+                Op.SyncPos();
+            }
         }
 
-        else
+        else if (gameObjectType == GameObjectType.Enemy)
         {
-            GameObject go = GameManager.Resources.Instantiate($"Character/other_male_ghostnight");
+            GameObject go = GameManager.Resources.Instantiate($"Enemy/enemy_hismar");
+            go.AddComponent<EnemyPlayer>();
 
-            go.AddComponent<OtherPlayer>();
-            go.name = playerInfo.Name;
+            go.name = objectInfo.Name;
 
-
-            if (_objects.ContainsKey(playerInfo.ObjectId) == false)
+            if(_objects.ContainsKey(objectInfo.ObjectId) == false)
             {
-                _objects.Add(playerInfo.ObjectId, go);
+                _objects.Add(objectInfo.ObjectId, go);
             }
-            OtherPlayer Op = go.GetComponent<OtherPlayer>();
-            Op.Id = playerInfo.ObjectId;
-            Op.PosInfo = playerInfo.PosInfo;
-            Op.ObjInfo = playerInfo;
+
+            EnemyPlayer Ep = go.GetComponent<EnemyPlayer>();
+
+            Ep.Id = objectInfo.ObjectId;
+            Ep.PositionInfo = objectInfo.PosInfo;
+            Ep.ObjInfo = objectInfo;
+
+            Ep.SyncPos();
         }
     }
 
@@ -61,13 +102,13 @@ public class ObjectManager
 
 
 
-    public void Add(int id , GameObject go)
+    public void Add(int id, GameObject go)
     {
-        _objects.Add(id, go);   
+        _objects.Add(id, go);
     }
 
 
-    public void Remove(int id) 
+    public void Remove(int id)
     {
         GameObject go = FindById(id);
         if (go == null)

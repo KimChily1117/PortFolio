@@ -11,21 +11,23 @@ public class OtherPlayer : BaseCharacter
 
     public override PlayerState _state 
     {
-        get { return PosInfo.State; }
+        get { return PositionInfo.State; }
         set 
         {          
 
             Debug.Log($"Posinfo ?? : {value}");
-            if (PosInfo.State == PlayerState.Moving || PosInfo.State == PlayerState.Run)
+            if (PositionInfo.State == PlayerState.Moving || PositionInfo.State == PlayerState.Run)
             {
                 if (value == PlayerState.Jump)
                 {
-                    PosInfo.State = value;
+                    PositionInfo.State = value;
                     ProcJumpPlayer();
                     return;
                 }
             }
             base._state = value;
+
+            //_updated = true;
         }
     }
 
@@ -63,10 +65,6 @@ public class OtherPlayer : BaseCharacter
 
         Debug.Log($"Other Player : Walk Proc");
         _animator.SetBool("isWalk", true);
-
-        CellPos = transform.position;
-
-
         //_HitBox.gameObject.SetActive(false);
 
     }
@@ -91,48 +89,12 @@ public class OtherPlayer : BaseCharacter
         _animator.SetBool("isAtkIdle", true);
     }
 
-    #endregion
-
-
-    protected override void CheckUpdatedFlag()
-    {
-
-    }
-
-
-    public void UseSkill(int skillId)
-    {  
-        if (skillId == 2) //평1
-        {
-            Debug.Log($"Use Skill!!! 2");
-            PosInfo.State = PlayerState.Atk;
-            _animator.SetTrigger($"Attack1");
-
-        }
-        if (skillId == 3) //평2
-        {
-            Debug.Log($"Use Skill!!! 3");
-            PosInfo.State = PlayerState.Atk;
-            _animator.SetTrigger($"Attack2");
-
-
-        }
-        if (skillId == 4) //평3
-        {
-            Debug.Log($"Use Skill!!! 4");
-
-            _animator.SetTrigger($"Attack3");
-        }
-
-    }
-
-
     public override void ProcJumpPlayer()
     {
         //base.ProcJumpPlayer();
 
-        CellPos += GetVecFromDir(PosInfo.MoveDir) * _speed * Time.deltaTime;
-        _shadowObject.transform.position = CellPos;        
+        CellPos += GetVecFromDir(PositionInfo.MoveDir) * _speed * Time.deltaTime;
+        _shadowObject.transform.position = CellPos;
         initialPosition = CellPos;
 
         jumpTimer += Time.deltaTime;
@@ -153,10 +115,53 @@ public class OtherPlayer : BaseCharacter
             jumpTimer = 0.0f;
             _Sprite.transform.position = initialPosition;
             _animator.SetBool("isJump", false);
-            PosInfo.State = PlayerState.Idle;
+            PositionInfo.State = PlayerState.Idle;
         }
 
 
     }
+
+    #endregion
+
+
+    protected override void CheckUpdatedFlag()
+    {
+
+    }
+
+
+    public void UseSkill(int skillId)
+    {  
+        if (skillId == 2) //평1
+        {
+            Debug.Log($"Use Skill!!! 2");
+            PositionInfo.State = PlayerState.Atk;
+            _animator.SetTrigger($"Attack1");
+
+        }
+        if (skillId == 3) //평2
+        {
+            Debug.Log($"Use Skill!!! 3");
+            PositionInfo.State = PlayerState.Atk;
+            _animator.SetTrigger($"Attack2");
+
+
+        }
+        if (skillId == 4) //평3
+        {
+            Debug.Log($"Use Skill!!! 4");
+
+            _animator.SetTrigger($"Attack3");
+        }
+
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        transform.position = new Vector2(PositionInfo.PosX,PositionInfo.PosY);
+    }
+
 
 }

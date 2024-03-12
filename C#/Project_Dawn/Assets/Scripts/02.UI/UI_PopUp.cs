@@ -9,6 +9,7 @@ public class UI_PopUp : UI_Base
 
     public override void Init()
     {
+        GameManager.UI.SetCanvas(false);
         rectTransform = GetComponent<RectTransform>();
     }
 

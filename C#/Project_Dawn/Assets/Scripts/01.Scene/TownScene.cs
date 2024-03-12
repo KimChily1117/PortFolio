@@ -4,52 +4,97 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum TownMapState
+{
+    SERIAROOM,
+    DUNGEONENTRANCE
+}
+
+
+
+
+
+
 public class TownScene : BaseScene
 {
-    public TriggerEvent _triggerEvent;
+    public TownMapState CurrentMapState { get; set; }
 
+
+    public TriggerEvent _seriaTriggerEvent;
+    public TriggerEvent _dungeonTriggerEvent;
 
     public Transform _dungeonEntranceSpawn;
-
-
-
     private UI_PartyEntry PartyEntry { get; set; }
 
+    public CameraController _cameraController;
     protected override void Initialize()
     {
+        Debug.Log($"IngameScene ] InGameScene!!! ");
+
         GameManager.SCENE.CurrentScene = Define.Scenes.TOWN;
 
-        Debug.Log($"IngameScene ] InGameScene!!! ");
+        CurrentMapState = TownMapState.SERIAROOM;
 
         GameManager.Network.ConnectToGame();
 
         //배경음 및 온갖것들 다 초기화
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/seria_gate", Define.SoundType.BGM);
-        GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
+        //GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
+
+        if (_seriaTriggerEvent == null)
+        {
+            _seriaTriggerEvent = GameObject.Find("SeriaPortal").GetComponent<TriggerEvent>();
+        }
+
+        if (_dungeonTriggerEvent == null)
+        {
+            _dungeonTriggerEvent = GameObject.Find("BakalPortal").GetComponent<TriggerEvent>();
+        }
+
+        _seriaTriggerEvent.ClearTriggerEvent();
+        _dungeonTriggerEvent.ClearTriggerEvent();
+        _seriaTriggerEvent.AddTriggerEnterEvent(SeriaTriggerEnterEvent);
+        _dungeonTriggerEvent.AddTriggerEnterEvent(DungeonTriggerEnterEvent);
 
 
-        _triggerEvent.AddTriggerEnterEvent(TriggerEnterEvent);
+        _cameraController.SetCameraLimit(CurrentMapState);
+
     }
 
 
-    private void TriggerEnterEvent(Collider2D collider)
+    private void SeriaTriggerEnterEvent(Collider2D collider)
     {
-        Debug.Log("Trigger Enter!!");
+        Debug.Log("Seria Trigger Enter!!");
+        
+        if (collider.CompareTag("Enemy"))
+            return;
+
+        if (collider.CompareTag("Player"))
+        {
+            CurrentMapState = TownMapState.DUNGEONENTRANCE;
+            _cameraController.SetCameraLimit(CurrentMapState);
+            GameManager.Sound.BGMStop();
+            GameManager.Sound.Play("Sounds/bakal_ready", Define.SoundType.BGM);
+        }
 
 
-        //GameManager.ObjectManager.MyPlayer.transform.position = _dungeonEntranceSpawn.position;
-        //GameManager.Sound.BGMStop();
-        //GameManager.Sound.Play("Sounds/bakal_ready", Define.SoundType.BGM);
-
-
-        C_Create_Room c_room = new C_Create_Room();
-        c_room.Playerinfo = GameManager.ObjectManager.MyPlayer.ObjInfo;
-        GameManager.Network.Send(c_room);
-
-
-        //PartyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
-
-        //GameManager.SCENE.LoadScene(Define.Scenes.BAKAL);
+        collider.transform.parent.position = _dungeonEntranceSpawn.position;
     }
+
+    private void DungeonTriggerEnterEvent(Collider2D collider)
+    {
+        Debug.Log("Dungeon Trigger Enter!!");
+
+
+        if (collider.CompareTag("Player"))
+        {
+            C_Create_Room c_room = new C_Create_Room();
+            c_room.Playerinfo = GameManager.ObjectManager.MyPlayer.ObjInfo;
+            GameManager.Network.Send(c_room);
+        }
+     }
+
+
 }

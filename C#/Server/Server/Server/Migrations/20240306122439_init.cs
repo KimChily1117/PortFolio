@@ -2,7 +2,7 @@
 
 namespace Server.Migrations
 {
-    public partial class init : Migration
+    public partial class init : Migration 
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,7 +26,7 @@ namespace Server.Migrations
                     PlayerDbId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PlayerName = table.Column<string>(nullable: true),
-                    AccountDbId = table.Column<int>(nullable: true)
+                    AccountDbId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,7 +36,7 @@ namespace Server.Migrations
                         column: x => x.AccountDbId,
                         principalTable: "Account",
                         principalColumn: "AccountDbId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

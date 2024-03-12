@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneManangers
+public class SceneManagers : MonoBehaviour 
 {
 
     private Define.Scenes _currentScene = Define.Scenes.NONE;
@@ -32,11 +32,32 @@ public class SceneManangers
         //TODO : SwitchScene으로 넘어가는 효과 연출 추가 코드 필요
         LoadScene(GetSceneNames((type)));
     }
-
     private void LoadScene(string scenename)
     {
         SceneManager.LoadScene(scenename);
     }
+
+
+    public void LoadSceneAsync(Define.Scenes type , Action cbAction)
+    {
+        NextScene = type;
+        StartCoroutine(LoadSceneAsnyc(GetSceneNames(type), cbAction));
+    }
+
+    private IEnumerator LoadSceneAsnyc(string scenename , Action cbCompleteAction)
+    {
+        AsyncOperation ao = SceneManager.LoadSceneAsync(scenename);
+
+        while(!ao.isDone) 
+        {
+            yield return null;
+        }
+
+        cbCompleteAction.Invoke();
+    }
+
+
+
 
     #region 씬전환에 들어가는 연출 code
 
@@ -49,6 +70,7 @@ public class SceneManangers
     {
 
     }
+
 
     #endregion
 }

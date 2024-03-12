@@ -36,17 +36,18 @@ public class CombatSystem : MonoBehaviour
             {
                 Debug.Log(col.transform.name);
 
+ 
                 if (Mathf.Abs(col.transform.position.y) -
                     Mathf.Abs(_player._shadowObject.transform.position.y) < 0.02f)
                 {
-                    if (col.TryGetComponent(out OtherPlayer baseCharacter))
+                    if (col.transform.TryGetComponent(out BaseCharacter baseCharacter))
                     {
                         GiveDamage(baseCharacter);
                         //Co_spritechange = StartCoroutine(hiteffect(spriteRenderer));                        
                     }
                 }
             }
-
+    
         }
     }
 
