@@ -70,7 +70,7 @@ class PacketHandler
         if (op == null)
             return;
 
-        op.PosInfo = movePacket.PosInfo;
+        op.PositionInfo = movePacket.PosInfo;
     }
 
 
@@ -91,17 +91,14 @@ class PacketHandler
         if (op == null)
             return;
 
-        op.PosInfo = jumpPacket.PosInfo;
+        op.PositionInfo = jumpPacket.PosInfo;
+
 
     }
 
     public static void S_SkillHandler(PacketSession session, IMessage packet)
     {
-
-
-
         S_Skill skillPacket = packet as S_Skill;
-
 
         Debug.Log($"recive? {skillPacket.Info.SkillId}");
 
@@ -120,6 +117,15 @@ class PacketHandler
     public static void S_SceneMoveHandler(PacketSession session, IMessage packet)
     {
         S_Scene_Move s_SCENEMOVE = packet as S_Scene_Move;
+
+        Debug.Log($"SceneMove Handler!!!");
+
+        GameManager.SCENE.LoadSceneAsync(Define.Scenes.BAKAL, () => {
+
+            C_Enter_Game c_Enter_Game = new C_Enter_Game();
+            c_Enter_Game.Name = GameManager.MyName;
+            GameManager.Network.Send(c_Enter_Game);
+        });
     }
 
     public static void S_CollisionHandler(PacketSession session, IMessage packet)
@@ -131,7 +137,7 @@ class PacketHandler
         if (go == null)
             return;
 
-        Debug.Log($"{s_Collision.PlayerId}이가 {s_Collision.Playerinfo.ObjectId}에게 {s_Collision.Playerinfo.Damage}만큼의 피해를 주었습니다");
+        Debug.Log($"{s_Collision.Playerinfo.ObjectId}이가 {s_Collision.Playerinfo.ObjectId}에게 {s_Collision.Playerinfo.Damage}만큼의 피해를 주었습니다");
 
 
         BaseCharacter bc = go.GetComponent<BaseCharacter>();
@@ -175,10 +181,8 @@ class PacketHandler
             GameManager.Network.Send(c_EnterGame);
 
         }
-
-
     }
-
+    
 
     public static void S_CreatePlayerHandler(PacketSession session, IMessage packet)
     {
@@ -206,9 +210,6 @@ class PacketHandler
 
         Debug.Log($"S_CreateRoomHandler : {s_CreateRoom.ResponseCode}");
 
-        // 여기서 따로 분기해서 Set해준다?
-
-
         if (s_CreateRoom.ResponseCode == 1)
         {
             partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
@@ -224,11 +225,6 @@ class PacketHandler
         if (partyEntry == null)
             partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
 
-
-        bool RoomMaster = s_EnterParty.ResponseCode == 1;
-
-
-        partyEntry.SetUIElement(RoomMaster,
-            s_EnterParty.PartyMembers);
+        partyEntry.SetUIElement(s_EnterParty.PartyMembers);
     }
 }

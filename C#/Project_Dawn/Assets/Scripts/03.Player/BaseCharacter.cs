@@ -42,6 +42,9 @@ namespace Character
         public Animator _animator;
 
 
+        public float HP = 100;
+
+
         public int Id { set; get; }
 
 
@@ -54,23 +57,24 @@ namespace Character
         {
             get
             {
-                return new Vector2(PosInfo.PosX, PosInfo.PosY);
+                return new Vector2(PositionInfo.PosX, PositionInfo.PosY);
             }
 
             set
             {
-                if (PosInfo.PosX == value.x && PosInfo.PosY == value.y)
+                if (PositionInfo.PosX == value.x && PositionInfo.PosY == value.y)
                     return;
 
-                PosInfo.PosX = value.x;
-                PosInfo.PosY = value.y;
+                PositionInfo.PosX = value.x;
+                PositionInfo.PosY = value.y;
                 _updated = true;
+                CheckUpdatedFlag();
             }
         }
         // 현재 위치 좌표
 
         PositionInfo _positionInfo = new PositionInfo();
-        public PositionInfo PosInfo 
+        public PositionInfo PositionInfo
         {
             get { return _positionInfo; }
             set
@@ -78,14 +82,15 @@ namespace Character
                 if (_positionInfo.Equals(value))
                     return;
 
-                PosInfo.PosX = value.PosX;
-                PosInfo.PosY = value.PosY;
-                PosInfo.MoveDir = value.MoveDir;
-                PosInfo.State = value.State;                
+                PositionInfo.PosX = value.PosX;
+                PositionInfo.PosY = value.PosY;
+                PositionInfo.MoveDir = value.MoveDir;
+                PositionInfo.State = value.State;
+
 
                 _moveDir = GetVecFromDir(Dir);
                 Debug.Log($"Dir Set , state {_state} , Dir {Dir} , vec : {_moveDir}");
-                //ProcWalkPlayer();
+
             }
         }
 
@@ -93,24 +98,25 @@ namespace Character
 
         public virtual PlayerState _state
         {
-            get { return PosInfo.State; }
+            get { return PositionInfo.State; }
             set
             {
-                if (PosInfo.State == value)
+                if (PositionInfo.State == value)
                     return;
-                PosInfo.State = value;
+                PositionInfo.State = value;
+                _updated = true;
             }
         }
         public MoveDir Dir
         {
-            get { return PosInfo.MoveDir; }
+            get { return PositionInfo.MoveDir; }
             set
             {
 
-                if (PosInfo.MoveDir == value)
+                if (PositionInfo.MoveDir == value)
                     return;
 
-                PosInfo.MoveDir = value;
+                PositionInfo.MoveDir = value;
                 if (value != MoveDir.None)
                     _lastDir = value;
 
@@ -134,8 +140,8 @@ namespace Character
         }
 
         public Vector2 GetVecFromDir(MoveDir dir)
-        {         
-            
+        {
+
             switch (dir)
             {
                 case MoveDir.None:
@@ -157,7 +163,6 @@ namespace Character
 
 
 
-
         protected virtual void InitializeStat(Stat stat)
         {
             if (stat == null)
@@ -170,18 +175,18 @@ namespace Character
             _playerStat.HP = stat.HP;
         }
 
-        protected void Awake()
+        public void SyncPos()
+        {
+            transform.position = new Vector3(CellPos.x, CellPos.y);
+        }
+
+
+        protected virtual void Start()
         {
             _Sprite = this.GetComponentInChildren<SpriteRenderer>().gameObject;
             _animator = this.GetComponentInChildren<Animator>();
             _shadowObject = Util.FindChild<SpriteRenderer>(this.gameObject, "Base/Shadow", true).gameObject;
 
-        }
-
-        protected virtual void Start()
-        {
-
-            transform.position = CellPos;
             _moveDir = GetVecFromDir(Dir);
 
             if (_moveDir.x < 0)
@@ -196,7 +201,7 @@ namespace Character
 
         }
 
-        protected virtual void Update() 
+        protected virtual void Update()
         {
 
             if (_combatSystem != null) _combatSystem.OnUpdate();
@@ -219,12 +224,18 @@ namespace Character
                     ProcAtk();
                     break;
             }
+
+            if ((Vector2)transform.position != CellPos)
+            {
+
+            }
+
         }
 
         public virtual void ProcIdlePlayer()
         {
             _speed = 1.0f;
-            
+
             //_HitBox.gameObject.SetActive(false);
 
         }
@@ -232,10 +243,10 @@ namespace Character
 
         public virtual void ProcWalkPlayer()
         {
-            Debug.Log($"walk State");    
+            Debug.Log($"walk State");
 
             if (_moveDir.x < 0)
-            { 
+            {
                 _Sprite.transform.localScale = new Vector3(-1, 1, 1);
                 _shadowObject.transform.localScale = new Vector3(-1, 1, 1);
             }
@@ -248,34 +259,12 @@ namespace Character
 
             //이전 이동 코드
             //transform.Translate(_moveDir * Time.deltaTime * _speed);
-            _Sprite.transform.Translate(_moveDir * Time.deltaTime * _speed);
-            _shadowObject.transform.position = _Sprite.transform.position;
+            //_Sprite.transform.Translate(_moveDir * Time.deltaTime * _speed);
+            //_shadowObject.transform.position = _Sprite.transform.position;
 
+            this.transform.Translate(_moveDir * Time.deltaTime * _speed);
 
-            //_shadowObject.transform.Translate(_moveDir * Time.deltaTime * _speed);
-
-
-
-            //// 수정된 코드
-
-            ////Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
-            ////Vector3 moveDir = destPos - transform.position;
-
-            //// 도착 여부 체크
-            //float dist = _moveDir.magnitude;
-            //if (dist < _speed * Time.deltaTime)
-            //{
-            //    transform.position = CellPos;
-            //    MoveToNextPos();
-            //}
-            //else
-            //{
-            //    transform.position += _moveDir.normalized * _speed * Time.deltaTime;
-            //    PosInfo.State = PlayerState.Moving;
-            //}
-
-
-
+            CellPos = new Vector2(transform.position.x, transform.position.y);
         }
 
         public virtual void ProcRunPlayer()
@@ -293,11 +282,12 @@ namespace Character
             }
 
             //transform.Translate(_moveDir * Time.deltaTime * _speed);
-            _Sprite.transform.Translate(_moveDir * Time.deltaTime * _speed);
-            _shadowObject.transform.position = _Sprite.transform.position;
+            //_Sprite.transform.Translate(_moveDir * Time.deltaTime * _speed);
+            //_shadowObject.transform.position = _Sprite.transform.position;
             //_shadowObject.transform.Translate(_moveDir * Time.deltaTime * _speed);
 
-
+            this.transform.Translate(_moveDir * Time.deltaTime * _speed);
+            CellPos = new Vector2(transform.position.x, transform.position.y);
         }
 
 
@@ -321,19 +311,19 @@ namespace Character
                 float jumpProgress = jumpTimer / jumpDuration;
                 float yOffset = Mathf.Sin(jumpProgress * Mathf.PI) * jumpHeight;
                 _Sprite.transform.position = initialPosition + new Vector2(0, yOffset);
-                _animator.SetBool("isJump", true);              
-            
+                _animator.SetBool("isJump", true);
+
             }
             else
-            { 
+            {
                 isJumping = false;
                 jumpTimer = 0.0f;
                 _Sprite.transform.position = initialPosition;
-                
+
                 _shadowObject.transform.position = _Sprite.transform.position;
 
                 _animator.SetBool("isJump", false);
-                PosInfo.State = PlayerState.Idle;
+                PositionInfo.State = PlayerState.Idle;
             }
         }
 
@@ -349,7 +339,7 @@ namespace Character
         /// </summary>
         protected virtual void CheckUpdatedFlag()
         {
-            
+
         }
 
         Coroutine Co_spritechange;
@@ -362,7 +352,15 @@ namespace Character
 
             _animator.SetTrigger(hitanim);
             Debug.Log($"Take Damage : {Damage} ");
-            Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));          
+            Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));
+
+            HP -= Damage;
+
+            if (HP <= 0)
+            {
+                Debug.Log($"Character Die!!!");
+            }
+
         }
 
         IEnumerator hiteffect(SpriteRenderer sp)

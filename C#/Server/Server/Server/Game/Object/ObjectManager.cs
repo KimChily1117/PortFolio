@@ -38,12 +38,6 @@ namespace Server.Game.Object
                     _players.Add(gameObject.Id, gameObject as Player);
                 }
             }
-
-
-
-
-
-
             return gameObject;
         }
 

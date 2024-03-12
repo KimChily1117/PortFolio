@@ -53,6 +53,7 @@ public class TriggerEvent : MonoBehaviour
     }
 
 
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         _enterAction?.Invoke(collision);

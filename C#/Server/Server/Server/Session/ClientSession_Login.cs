@@ -46,7 +46,7 @@ namespace Server
 
                         LobbyPlayerInfo playerInfo = new LobbyPlayerInfo()
                         {
-                             Name = playerDb.PlayerName
+                            Name = playerDb.PlayerName
                             // 이곳에 캐선창에 있는 캐릭터들(스텟이라거나. 기타 다른 정보들을 넣어줘야함)
                         };
 
@@ -70,7 +70,7 @@ namespace Server
 
                     AccountDbId = newDb.AccountDbId;
 
-              
+
 
                     S_Login s_Login = new S_Login();
                     s_Login.LoginOK = 1;
@@ -83,15 +83,26 @@ namespace Server
         }
         public void HandleEnterGame(C_Enter_Game c_EnterGame)
         {
+            if (ServerState == PlayerServerState.ServerStateIngame)
+            {
+                if (c_EnterGame.Name == MyPlayer.Info.Name)
+                {
+                    GameRoom findroom = RoomManager.Instance.Find(RoomType.Bakal);
+
+                    MyPlayer.Info.PosInfo.PosX = 0f;
+                    MyPlayer.Info.PosInfo.PosY = 0f;
+                    findroom.EnterRoom(MyPlayer);
+                    return;
+                }
+            }
+
             if (ServerState != PlayerServerState.ServerStateCharecterselect)
                 return;
-            if (ServerState == PlayerServerState.ServerStateIngame)
-                return;
-
+            
             MyPlayer = ObjectManager.Instance.Add<Player>();
             {
                 MyPlayer.Info.Name = c_EnterGame.Name;
-                
+
                 MyPlayer.Info.PosInfo.State = PlayerState.Idle;
                 MyPlayer.Info.PosInfo.MoveDir = MoveDir.Right;
 
@@ -133,12 +144,12 @@ namespace Server
 
                     db.Players.Add(createDB);
                     db.SaveChanges();
-                    
+
                     LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
                     {
-                        Name = c_CreatePlayer.Name                        
+                        Name = c_CreatePlayer.Name
                     };
-                    
+
                     // 메모리에도 들고 있다
                     LobbyPlayers.Add(lobbyPlayer);
 
@@ -153,6 +164,6 @@ namespace Server
             }
         }
 
-        
+
     }
 }

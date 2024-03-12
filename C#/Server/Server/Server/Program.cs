@@ -34,10 +34,9 @@ namespace Server
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
 			IPAddress ipAddr = ipHost.AddressList[0];
 
-            ipAddr = IPAddress.Parse("192.168.0.3");
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 9239);
-
-            //IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+			ipAddr = IPAddress.Parse("172.31.10.77");
+			
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
 			Console.WriteLine("Listening...");

@@ -76,8 +76,27 @@ class PacketHandler
 
         ClientSession clientSession = session as ClientSession;
 
-        // Todo : SceneMove 발생할때. Client -> Server로 Scene 전환 패킷 보내 놓고 서버에서 
-        // Scene에대한 요청?(던전입장을 어떻게 할것인지에 대한 설계가 필요함) 
+        Player player = new Player();
+
+        player = clientSession.MyPlayer;
+
+
+
+        if (player == null)
+        {
+            Console.WriteLine($"C_SceneMOveHandler ] Player is null!!");
+            return;
+
+        }
+
+
+        GameRoom room = player.Room;
+        if (room == null)
+            return;
+
+        room.HandleMoveScene(player, c_SceneMove);
+
+
     }
 
     public static void C_CollisionHandler(PacketSession session, IMessage packet)
@@ -122,26 +141,33 @@ class PacketHandler
     {
         C_Enter_Game c_EnterGame = (C_Enter_Game)packet;
         ClientSession clientSession = (ClientSession)session;
- 
+
         clientSession.HandleEnterGame(c_EnterGame);
-    
     }
 
     public static void C_CreateRoomHandler(PacketSession session, IMessage packet)
-    {   
+    {
         C_Create_Room c_CreateRoom = (C_Create_Room)packet;
         ClientSession clientSession = (ClientSession)session;
 
         Console.WriteLine($"C_CreateRoomHandler!!! ");
-        clientSession.HandleCreateRoom(c_CreateRoom);
+
+        if (RoomManager.Instance.Find(RoomType.Bakal) == null)
+        {
+            clientSession.HandleCreateRoom(c_CreateRoom);
+
+        }
+
+        else
+        {
+            clientSession.HandleEnterParty(c_CreateRoom);
+        }
     }
 
     public static void C_EnterPartyHandler(PacketSession session, IMessage packet)
     {
         C_Enter_Party c_EnterParty = (C_Enter_Party)packet;
-        
         ClientSession clientSession = (ClientSession)session;
-
         clientSession.HandleEnterParty(c_EnterParty);
     }
 }

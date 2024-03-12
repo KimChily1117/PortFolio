@@ -115,7 +115,6 @@ message C_Enter_Game
 
 message S_Leave_Game 
 {
-
 }
 
 message S_Spawn {
@@ -173,6 +172,9 @@ message S_Enter_Party {
   int32 ResponseCode = 2;
   repeated LobbyPlayerInfo PartyMembers = 3;
 }
+
+
+
 
 
 message C_Jump {

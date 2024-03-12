@@ -73,21 +73,16 @@ namespace Server
             if (RoomManager.Instance.Find(RoomType.Bakal) == null)
             {
                 GameRoom room = RoomManager.Instance.Add(RoomType.Bakal);
+              
+                
                 Player p = ObjectManager.Instance.Find(c_CreateRoom.Playerinfo.ObjectId);
                 p.Info.IsMaster = true;
                 RoomManager.Instance.Find(RoomType.Town).LeaveRoom(p.Info.ObjectId);
 
                 room.Push(room.EnterParty, p);
-            }
 
-            ////S_Create_Room s_CreateRoom = new S_Create_Room
-            ////{
-            ////    Playerinfo = c_CreateRoom.Playerinfo,
-            ////    ResponseCode = 1
-            ////};
-
-            //// 그리고 클라에 보내준다
-            //Send(s_CreateRoom);
+                room.InitEnemy();
+            };
         }
 
 
@@ -103,5 +98,16 @@ namespace Server
             room.Push(room.EnterParty, p);
         }
 
-    }
+        public void HandleEnterParty(C_Create_Room c_Create_Room)
+        {
+            GameRoom room = RoomManager.Instance.Find(RoomType.Bakal);
+
+            Player p = ObjectManager.Instance.Find(c_Create_Room.Playerinfo.ObjectId);
+            c_Create_Room.Playerinfo.IsMaster = false;
+
+            RoomManager.Instance.Find(RoomType.Town).LeaveRoom(p.Info.ObjectId);
+            room.Push(room.EnterParty, p);
+        }
+
+    } 
 }
