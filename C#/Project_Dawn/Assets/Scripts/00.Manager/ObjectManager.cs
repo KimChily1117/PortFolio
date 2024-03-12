@@ -39,11 +39,12 @@ public class ObjectManager
                 go.name = objectInfo.Name;
                 GameManager.MyName = objectInfo.Name;
 
-                if (_objects.ContainsKey(objectInfo.ObjectId) == false)
-                {
-                    _objects.Add(objectInfo.ObjectId, go);
-                }
 
+                if (_objects.ContainsKey(objectInfo.ObjectId))
+                {
+                    _objects.Remove(objectInfo.ObjectId);
+                }
+                _objects.Add(objectInfo.ObjectId, go);
 
                 MyPlayer = go.GetComponent<MyPlayer>();
                 MyPlayer.Id = objectInfo.ObjectId;
@@ -57,16 +58,21 @@ public class ObjectManager
 
             else
             {
+                
+                
                 GameObject go = GameManager.Resources.Instantiate($"Character/other_male_ghostnight");
 
                 go.AddComponent<OtherPlayer>();
                 go.name = objectInfo.Name;
 
 
-                if (_objects.ContainsKey(objectInfo.ObjectId) == false)
+                if (_objects.ContainsKey(objectInfo.ObjectId))
                 {
-                    _objects.Add(objectInfo.ObjectId, go);
+                    _objects.Remove(objectInfo.ObjectId);
+                    Remove(objectInfo.ObjectId);
                 }
+
+                _objects.Add(objectInfo.ObjectId, go);
                 OtherPlayer Op = go.GetComponent<OtherPlayer>();
                 Op.Id = objectInfo.ObjectId;
                 Op.PositionInfo = objectInfo.PosInfo;
@@ -83,10 +89,13 @@ public class ObjectManager
 
             go.name = objectInfo.Name;
 
-            if(_objects.ContainsKey(objectInfo.ObjectId) == false)
+
+            if (_objects.ContainsKey(objectInfo.ObjectId))
             {
-                _objects.Add(objectInfo.ObjectId, go);
+                _objects.Remove(objectInfo.ObjectId);
             }
+
+            _objects.Add(objectInfo.ObjectId, go);
 
             EnemyPlayer Ep = go.GetComponent<EnemyPlayer>();
 

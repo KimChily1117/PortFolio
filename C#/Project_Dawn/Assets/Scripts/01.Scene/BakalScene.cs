@@ -7,8 +7,11 @@ public class BakalScene : BaseScene
 {
     protected override void Initialize()
     {
+
+
         GameManager.SCENE.CurrentScene = Define.Scenes.BAKAL;
 
+        GameManager.ObjectManager.Clear();
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/Bakal", Define.SoundType.BGM);
         

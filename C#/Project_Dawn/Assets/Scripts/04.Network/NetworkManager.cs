@@ -27,7 +27,6 @@ public class NetworkManager
         IPAddress ipAddr = ipHost.AddressList[0];
         ipAddr = IPAddress.Parse("3.24.16.107");
         IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
-        //IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 
         connector.Connect(endPoint, () =>
