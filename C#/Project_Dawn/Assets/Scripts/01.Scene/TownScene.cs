@@ -41,6 +41,7 @@ public class TownScene : BaseScene
         //배경음 및 온갖것들 다 초기화
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/seria_gate", Define.SoundType.BGM);
+        GameManager.Sound.SetAudioVolume(0.55f);
         //GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
 
         if (_seriaTriggerEvent == null)
@@ -87,13 +88,20 @@ public class TownScene : BaseScene
     {
         Debug.Log("Dungeon Trigger Enter!!");
 
+        if (collider.CompareTag("OtherPlayer"))
+            return;
 
         if (collider.CompareTag("Player"))
         {
+
             C_Create_Room c_room = new C_Create_Room();
-            c_room.Playerinfo = GameManager.ObjectManager.MyPlayer.ObjInfo;
+            c_room.Playerinfo = collider.transform.parent.GetComponent<MyPlayer>().ObjInfo;
             GameManager.Network.Send(c_room);
+
+            //Destroy(collider.gameObject);
         }
+
+        _dungeonTriggerEvent.ClearTriggerEvent();
      }
 
 

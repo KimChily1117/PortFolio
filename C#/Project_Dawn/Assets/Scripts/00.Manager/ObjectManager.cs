@@ -25,13 +25,19 @@ public class ObjectManager
     public void Add(ObjectInfo objectInfo, bool isMyPlayer)
     {
         GameObjectType gameObjectType = GetObjectTypeId(objectInfo.ObjectId);
-        
-        
+
+
         if (gameObjectType == GameObjectType.Player)
         {
 
             if (isMyPlayer)
             {
+                if (_objects.ContainsKey(objectInfo.ObjectId))
+                {
+                    Remove(objectInfo.ObjectId);
+                }
+
+
                 // 이런식으로 리소스 매니저에서 받아온다.
                 GameObject go = GameManager.Resources.Instantiate($"Character/male_ghostknight");
                 go.AddComponent<MyPlayer>();
@@ -40,10 +46,6 @@ public class ObjectManager
                 GameManager.MyName = objectInfo.Name;
 
 
-                if (_objects.ContainsKey(objectInfo.ObjectId))
-                {
-                    _objects.Remove(objectInfo.ObjectId);
-                }
                 _objects.Add(objectInfo.ObjectId, go);
 
                 MyPlayer = go.GetComponent<MyPlayer>();
@@ -58,19 +60,18 @@ public class ObjectManager
 
             else
             {
-                
-                
+
+                if (_objects.ContainsKey(objectInfo.ObjectId))
+                {
+                    Remove(objectInfo.ObjectId);
+                }
+
                 GameObject go = GameManager.Resources.Instantiate($"Character/other_male_ghostnight");
 
                 go.AddComponent<OtherPlayer>();
                 go.name = objectInfo.Name;
 
 
-                if (_objects.ContainsKey(objectInfo.ObjectId))
-                {
-                    _objects.Remove(objectInfo.ObjectId);
-                    Remove(objectInfo.ObjectId);
-                }
 
                 _objects.Add(objectInfo.ObjectId, go);
                 OtherPlayer Op = go.GetComponent<OtherPlayer>();
@@ -84,16 +85,20 @@ public class ObjectManager
 
         else if (gameObjectType == GameObjectType.Enemy)
         {
-            GameObject go = GameManager.Resources.Instantiate($"Enemy/enemy_hismar");
+
+            if (_objects.ContainsKey(objectInfo.ObjectId))
+            {
+                Remove(objectInfo.ObjectId);
+            }
+
+
+
+            GameObject go = GameManager.Resources.Instantiate($"Enemy/enemy_Bakal");
             go.AddComponent<EnemyPlayer>();
 
             go.name = objectInfo.Name;
 
 
-            if (_objects.ContainsKey(objectInfo.ObjectId))
-            {
-                _objects.Remove(objectInfo.ObjectId);
-            }
 
             _objects.Add(objectInfo.ObjectId, go);
 

@@ -74,15 +74,10 @@ class PacketHandler
     {
         C_Scene_Move c_SceneMove = packet as C_Scene_Move;
 
-        ClientSession clientSession = session as ClientSession;
-
-        Player player = new Player();
-
-        player = clientSession.MyPlayer;
+        ClientSession clientSession = session as ClientSession;       
 
 
-
-        if (player == null)
+        if (clientSession.MyPlayer == null)
         {
             Console.WriteLine($"C_SceneMOveHandler ] Player is null!!");
             return;
@@ -90,11 +85,11 @@ class PacketHandler
         }
 
 
-        GameRoom room = player.Room;
+        GameRoom room = clientSession.MyPlayer.Room;
         if (room == null)
             return;
 
-        room.HandleMoveScene(player, c_SceneMove);
+        room.HandleMoveScene(clientSession.MyPlayer, c_SceneMove);
 
 
     }

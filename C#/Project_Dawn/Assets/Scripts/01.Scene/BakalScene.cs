@@ -14,6 +14,13 @@ public class BakalScene : BaseScene
         GameManager.ObjectManager.Clear();
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/Bakal", Define.SoundType.BGM);
-        
-    }    
+        GameManager.Sound.SetAudioVolume(0.55f);
+
+
+        GameManager.Sound.Play("Sounds/mon/bakal/bakal_dragon_meet");
+        // 바칼 조우 effect 소리 들어가야함
+
+        GameManager.UI.ShowSceneUI<UI_BossHpBar>("BossHpBar");
+
+    }
 }

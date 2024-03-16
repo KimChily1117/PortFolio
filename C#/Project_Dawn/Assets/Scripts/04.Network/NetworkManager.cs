@@ -25,7 +25,7 @@ public class NetworkManager
         string host = Dns.GetHostName();
         IPHostEntry ipHost = Dns.GetHostEntry(host);
         IPAddress ipAddr = ipHost.AddressList[0];
-        ipAddr = IPAddress.Parse("3.24.16.107");
+        //ipAddr = IPAddress.Parse("3.24.16.107");
         IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
 
 

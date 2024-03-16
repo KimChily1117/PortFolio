@@ -41,6 +41,8 @@ class PacketHandler
 
         foreach (ObjectInfo player in spawnPacket.Objects)
         {
+            Debug.Log($"{player}");
+
             GameManager.ObjectManager.Add(player, isMyPlayer: false);
         }
     }
@@ -106,11 +108,29 @@ class PacketHandler
         if (go == null)
             return;
 
-        OtherPlayer op = go.GetComponent<OtherPlayer>();
-        if (op != null)
+        GameObjectType type = ObjectManager.GetObjectTypeId(skillPacket.PlayerId);
+
+
+        if(type == GameObjectType.Player) 
         {
-            op.UseSkill(skillPacket.Info.SkillId);
+            OtherPlayer op = go.GetComponent<OtherPlayer>();
+            if (op != null)
+            {
+                op.UseSkill(skillPacket.Info.SkillId);
+            }
         }
+
+        else if(type == GameObjectType.Enemy) 
+        {
+            EnemyPlayer ep = go.GetComponent<EnemyPlayer>();
+            if(ep != null) 
+            {
+                ep.UseSkill(skillPacket.Info.SkillId);            
+            }
+        
+        
+        }
+
 
     }
 
@@ -226,5 +246,16 @@ class PacketHandler
             partyEntry = GameManager.UI.ShowPopupUI<UI_PartyEntry>("PartyPopUp");
 
         partyEntry.SetUIElement(s_EnterParty.PartyMembers);
+    }
+
+    public static void S_DieHandler(PacketSession session, IMessage message)
+    {
+        S_Die s_Die = (S_Die)message;
+
+        GameObject go = GameManager.ObjectManager.FindById(s_Die.Player.ObjectId);
+
+        BaseCharacter baseCharacter = go.GetComponent<BaseCharacter>();
+
+        baseCharacter.OnDead();
     }
 }

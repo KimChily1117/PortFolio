@@ -105,10 +105,6 @@ public class GameManager : MonoBehaviour
         }));
 
 
-        
-
-
-
         //Push(RequestGetData(Network.apiHelper.TEST_URL, (cbMessage) =>
         //{
         //    Debug.Log($"ddddd : {cbMessage}");

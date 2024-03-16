@@ -29,6 +29,7 @@ enum MsgId {
   S_CREATE_ROOM = 21;
   C_ENTER_PARTY = 22;
   S_ENTER_PARTY = 23;
+  S_DIE = 24;
 }
 
 enum PlayerState {
@@ -125,6 +126,11 @@ message S_Spawn {
 message S_Despawn {
   repeated int32 playerIds = 1;
 }
+
+message S_Die{
+	ObjectInfo player = 1;
+}
+
 
 message C_Move {
   PositionInfo posInfo = 1;

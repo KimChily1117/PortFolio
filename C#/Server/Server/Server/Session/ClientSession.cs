@@ -77,10 +77,11 @@ namespace Server
                 
                 Player p = ObjectManager.Instance.Find(c_CreateRoom.Playerinfo.ObjectId);
                 p.Info.IsMaster = true;
-                RoomManager.Instance.Find(RoomType.Town).LeaveRoom(p.Info.ObjectId);
 
-                room.Push(room.EnterParty, p);
+                GameRoom preRoom = RoomManager.Instance.Find(RoomType.Town);
+                preRoom.LeaveRoom(p.Id);
 
+                room.EnterParty(p);
                 room.InitEnemy();
             };
         }
@@ -105,8 +106,11 @@ namespace Server
             Player p = ObjectManager.Instance.Find(c_Create_Room.Playerinfo.ObjectId);
             c_Create_Room.Playerinfo.IsMaster = false;
 
-            RoomManager.Instance.Find(RoomType.Town).LeaveRoom(p.Info.ObjectId);
-            room.Push(room.EnterParty, p);
+            GameRoom preRoom = RoomManager.Instance.Find(RoomType.Town);
+            preRoom.LeaveRoom(p.Id);
+
+            room.EnterParty(p);
+
         }
 
     } 
