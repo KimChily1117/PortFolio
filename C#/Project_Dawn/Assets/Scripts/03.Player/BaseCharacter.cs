@@ -23,7 +23,7 @@ namespace Character
 
 
         // * 점프를 위해서 따로 선언
-        public float jumpHeight = 2f;
+        public float jumpHeight = 1.23f;
         // 점프력
         public float jumpDuration = 1.0f;
         // 점프 할 시간을 정함
@@ -272,6 +272,8 @@ namespace Character
 
             Debug.Log($"Run State!!!");
 
+
+
             _speed = 1.8f;
 
             if (_moveDir.x < 0)
@@ -348,19 +350,27 @@ namespace Character
             int hitAnimNumber = UnityEngine.Random.Range(1, 2);
             //TODO 피격 이펙트(팡팡 터지는거) , 피격 애니메이션 넣기 , Die까지 
 
+
+            GameManager.Sound.Play($"Effect/swordman/weapon/kata_hit_0{hitAnimNumber}");
+
             string hitanim = "Hit" + hitAnimNumber.ToString();
 
             _animator.SetTrigger(hitanim);
             Debug.Log($"Take Damage : {Damage} ");
-            Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));
 
             HP -= Damage;
 
             if (HP <= 0)
             {
                 Debug.Log($"Character Die!!!");
+                GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_skill_20_2");
+                _animator.SetTrigger("DeadTrigger");
+                _shadowObject.SetActive(false);
+
+
             }
 
+            Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));
         }
 
         IEnumerator hiteffect(SpriteRenderer sp)
@@ -370,6 +380,16 @@ namespace Character
             sp.color = Color.white;
         }
 
+
+        public virtual void OnDead()
+        {
+            Invoke("AfterDeadDestroy", 5f);
+        }
+
+        private void AfterDeadDestroy()
+        {
+            GameManager.ObjectManager.Remove(Id);
+        }
     }
 
 }

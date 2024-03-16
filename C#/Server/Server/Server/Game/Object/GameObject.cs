@@ -30,6 +30,11 @@ namespace Server.Game.Object
         public ObjectInfo Info { get; set; } = new ObjectInfo();
         public PositionInfo PosInfo { get; private set; } = new PositionInfo();
 
+        public PlayerState CurrentPlayerState { get; protected set; }
+
+
+        public float HP { get; protected set; }
+
 
         public GameObject()
         {

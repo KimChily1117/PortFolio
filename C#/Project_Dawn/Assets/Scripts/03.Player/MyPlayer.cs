@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Character;
-using Unity.VisualScripting;
 using Google.Protobuf.Protocol;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class MyPlayer : BaseCharacter
 {
@@ -36,7 +34,6 @@ public class MyPlayer : BaseCharacter
 
     protected override void Start()
     {    
-        Debug.Log($"Start Test");
 
         // _inputBuffer = new InputBuffer();
 
@@ -218,6 +215,7 @@ public class MyPlayer : BaseCharacter
                         _animator.SetTrigger("Attack1");
 
                         GameManager.Sound.Play($"Effect/Swordman/sm_atk_01");
+                        GameManager.Sound.Play($"Effect/Swordman/weapon/kata_01");
 
                         break;
                     }
@@ -230,6 +228,8 @@ public class MyPlayer : BaseCharacter
 
                         _animator.SetTrigger("Attack2");
                         GameManager.Sound.Play($"Effect/Swordman/sm_atk_02");
+                        GameManager.Sound.Play($"Effect/Swordman/weapon/kata_02");
+
 
                         break;
                     }
@@ -243,6 +243,7 @@ public class MyPlayer : BaseCharacter
 
                         _animator.SetTrigger("Attack3");
                         GameManager.Sound.Play($"Effect/Swordman/sm_atk_03");
+                        GameManager.Sound.Play($"Effect/Swordman/weapon/kata_03");
 
                         break;
                     }
@@ -394,7 +395,7 @@ public class MyPlayer : BaseCharacter
     public override void ProcWalkPlayer()
     {
         base.ProcWalkPlayer();
-
+        GameManager.Sound.PlayEffectOneShot($"Effect/common/cave_walk_01");
         _animator.SetBool("isWalk", true);
 
         //CellPos = transform.position;
@@ -405,6 +406,8 @@ public class MyPlayer : BaseCharacter
     public override void ProcRunPlayer()
     {
         base.ProcRunPlayer();
+        GameManager.Sound.PlayEffectOneShot($"Effect/common/cave_walk_01");
+
         _animator.SetBool("isRun", true);
 
         //_HitBox.gameObject.SetActive(false);
@@ -450,7 +453,7 @@ public class MyPlayer : BaseCharacter
             movePacket.PosInfo.State = PositionInfo.State;
 
 
-            Debug.Log($"Current Pos? : {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY} , {movePacket.PosInfo.State} , {movePacket.PosInfo.MoveDir}");
+            //Debug.Log($"Current Pos? : {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY} , {movePacket.PosInfo.State} , {movePacket.PosInfo.MoveDir}");
             GameManager.Network.Send(movePacket);
             _updated = false;
         }

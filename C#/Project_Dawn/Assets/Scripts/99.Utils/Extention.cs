@@ -16,4 +16,9 @@ public static class Extention
     {
         return Util.GetOrAddComponent<T>(go);
     }
+
+    public static T FindChild<T>(this GameObject go, string name = null, bool reculsive = false) where T : UnityEngine.Object
+    {
+        return Util.FindChild<T>(go,name,reculsive);
+    }
 }

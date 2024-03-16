@@ -87,11 +87,13 @@ namespace Server
             {
                 if (c_EnterGame.Name == MyPlayer.Info.Name)
                 {
+                    Console.WriteLine($"HandleEnterGame : {c_EnterGame.Name} , {MyPlayer.Info.Name}");
+
                     GameRoom findroom = RoomManager.Instance.Find(RoomType.Bakal);
 
                     MyPlayer.Info.PosInfo.PosX = 0f;
                     MyPlayer.Info.PosInfo.PosY = 0f;
-                    findroom.EnterRoom(MyPlayer);
+                    findroom.Push(findroom.EnterRoom, MyPlayer);
                     return;
                 }
             }

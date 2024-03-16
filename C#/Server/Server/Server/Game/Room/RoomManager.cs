@@ -72,5 +72,12 @@ namespace Server.Game.Room
             }
         }
 
+        public void UpdateRooms()
+        {
+            foreach (GameRoom room in _rooms.Values)
+            {
+                room.Update();
+            }    
+        }
     }
 }
