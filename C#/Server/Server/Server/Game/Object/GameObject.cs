@@ -3,21 +3,22 @@ using Server.Game.Room;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Server.Game.Object
 {
 
 
     public class GameObject
-    {       
-        public GameObjectType ObjectType { get; protected set; } 
+    {
+        public GameObjectType ObjectType { get; protected set; }
 
         public int Id
-        { 
+        {
             get
             {
                 return Info.ObjectId;
-            }       
+            }
             set
             {
                 Info.ObjectId = value;
@@ -41,6 +42,25 @@ namespace Server.Game.Object
             Info.PosInfo = PosInfo;
         }
 
+
+        public void OnDamaged(float damage)
+        {
+            HP -= damage;
+
+            if (HP <= 0)
+            {
+                OnDead();
+            }
+        }
+
+        public void OnDead()
+        {
+            S_Die s_Die = new S_Die();
+
+            s_Die.Player = Info;
+
+            Room.Broadcast(s_Die);
+        }
 
     }
 }

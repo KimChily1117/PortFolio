@@ -57,6 +57,7 @@ public class CombatSystem : MonoBehaviour
         C_Collision c_Collision = new C_Collision();
         c_Collision.Playerinfo = collisionChar.ObjInfo;
 
+
         GameManager.Network.Send(c_Collision);
 
         // 우선 여기서 피격 정보를 보내주고 나서

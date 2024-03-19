@@ -4,7 +4,7 @@ using UnityEngine;
 using Character;
 public class EnemyPlayer : BaseCharacter
 {
-    UI_BossHpBar _bossHpBar;
+    UI_BakalSceneUI _bakalSceneUI;
 
     [SerializeField]
     Transform[] MeteorAreas;
@@ -17,11 +17,11 @@ public class EnemyPlayer : BaseCharacter
         Debug.Log($"Enemy Start");
 
 
-        _bossHpBar = GameManager.UI._scene as UI_BossHpBar;
+        _bakalSceneUI = GameManager.UI._scene as UI_BakalSceneUI;
 
-        if (_bossHpBar == null)
+        if (_bakalSceneUI == null)
             return;
-        _bossHpBar.targetChar = this;
+        _bakalSceneUI.targetChar = this;
 
         MeteorAreas = new Transform[6];
 
@@ -39,7 +39,7 @@ public class EnemyPlayer : BaseCharacter
         {
             t.gameObject.SetActive(false);
         }
-
+        
     }
 
     protected override void Update()
@@ -54,12 +54,18 @@ public class EnemyPlayer : BaseCharacter
     {
         base.TakeDamage(Damage);
         Invoke("triggerOn", 0.2f);
+
+        if (HP <= 0)
+        {
+            _animator.SetTrigger("DeadTrigger");
+            GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_skill_20_2");
+        }
     }
 
 
     private void triggerOn()
     {
-        _bossHpBar.isDecrease = true;
+        _bakalSceneUI.isDecrease = true;
     }
 
 
@@ -88,13 +94,14 @@ public class EnemyPlayer : BaseCharacter
 
         animTime = 0f;
 
-        yield return new WaitUntil(() => animTime >= 0.2f);
+        GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_skill_01_1");
 
+        yield return new WaitUntil(() => animTime >= 0.2f);
+        GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_fire_stomp_exp_02");
+        StartCoroutine(CameraShake.Instance.Shake(0.3f, 0.4f));
         MeteorAreas[0].gameObject.SetActive(true);
         MeteorAreas[5].gameObject.SetActive(true);
-
-        // Todo Camera Shake
-
+      
 
         //foreach (Transform t in MeteorAreas)
         //{
@@ -102,29 +109,27 @@ public class EnemyPlayer : BaseCharacter
         //}
 
         yield return new WaitUntil(() => animTime >= 0.59f);
+        GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_fire_stomp_exp_02");
+
+        StartCoroutine(CameraShake.Instance.Shake(0.3f, 0.4f));
 
         MeteorAreas[1].gameObject.SetActive(true);
         MeteorAreas[4].gameObject.SetActive(true);
 
-        // Todo Camera Shake
-
-
         yield return new WaitUntil(() => animTime >= 0.95f);
+        GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_fire_stomp_exp_03");
 
 
+        StartCoroutine(CameraShake.Instance.Shake(0.3f, 0.4f));
         MeteorAreas[2].gameObject.SetActive(true);
         MeteorAreas[3].gameObject.SetActive(true);
 
-        // Todo Camera Shake
-
-
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
 
         foreach (Transform t in MeteorAreas)
         {
             t.gameObject.SetActive(false);
         }
-
     }
     #endregion
 

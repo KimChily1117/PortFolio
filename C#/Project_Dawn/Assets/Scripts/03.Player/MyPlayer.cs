@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MyPlayer : BaseCharacter
 {
-
+    UI_BakalSceneUI _BakalSceneUI;
 
     // **  Input Buffer **
     InputBuffer _inputBuffer;
@@ -63,6 +63,12 @@ public class MyPlayer : BaseCharacter
 
         GameManager.Input.DoubleKeyAction -= DoubleKeyAction;
         GameManager.Input.DoubleKeyAction += DoubleKeyAction;
+
+        _BakalSceneUI = GameManager.UI._scene as UI_BakalSceneUI;
+        if (_BakalSceneUI)
+        {
+            _BakalSceneUI.HUD.targetChar = this;
+        }
     }
 
 
@@ -477,6 +483,17 @@ public class MyPlayer : BaseCharacter
         }
     }
 
+    public override void TakeDamage(float Damage = 0)
+    {
+        base.TakeDamage(Damage);
+
+        if(HP <= 0)
+        {
+            _animator.SetTrigger("Die");
+            _shadowObject.SetActive(false);
+            GameManager.Sound.Play("Effect/Swordman/sm_die");
+        }
+    }
 
 
     #region Unity Method

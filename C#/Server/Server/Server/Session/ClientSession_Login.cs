@@ -93,6 +93,8 @@ namespace Server
 
                     MyPlayer.Info.PosInfo.PosX = 0f;
                     MyPlayer.Info.PosInfo.PosY = 0f;
+                    MyPlayer.Info.Damage = 10.0f;
+
                     findroom.Push(findroom.EnterRoom, MyPlayer);
                     return;
                 }
@@ -108,6 +110,7 @@ namespace Server
                 MyPlayer.Info.PosInfo.State = PlayerState.Idle;
                 MyPlayer.Info.PosInfo.MoveDir = MoveDir.Right;
 
+                MyPlayer.Info.Damage = 10.0f;
                 MyPlayer.Info.PosInfo.PosX = 0;
                 MyPlayer.Info.PosInfo.PosY = 0;
                 MyPlayer.Session = this;

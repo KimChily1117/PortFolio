@@ -103,6 +103,8 @@ public class OtherPlayer : BaseCharacter
 
         if (jumpTimer <= jumpDuration)
         {
+            isJumping = true;
+
             float jumpProgress = jumpTimer / jumpDuration;
             float yOffset = Mathf.Sin(jumpProgress * Mathf.PI) * jumpHeight;
             _Sprite.transform.position = initialPosition + new Vector2(0, yOffset);
@@ -154,6 +156,17 @@ public class OtherPlayer : BaseCharacter
             _animator.SetTrigger($"Attack3");
         }
 
+    }
+    public override void TakeDamage(float Damage = 0)
+    {
+        base.TakeDamage(Damage);
+
+        if (HP <= 0)
+        {
+            _animator.SetTrigger("Die");
+            _shadowObject.SetActive(false);
+            GameManager.Sound.Play("Effect/Swordman/sm_die");
+        }
     }
 
     protected override void Update()

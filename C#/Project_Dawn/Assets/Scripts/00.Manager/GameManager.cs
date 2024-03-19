@@ -68,10 +68,6 @@ public class GameManager : MonoBehaviour
             SceneMgr.transform.SetParent(obj.transform);
         }
 
-
-
-
-
         Sound.Init();
 
         DataManager.Init();
