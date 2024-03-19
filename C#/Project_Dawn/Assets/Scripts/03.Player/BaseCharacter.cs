@@ -27,7 +27,7 @@ namespace Character
         // 점프력
         public float jumpDuration = 1.0f;
         // 점프 할 시간을 정함
-        protected bool isJumping = false;
+        public bool isJumping = false;
         protected float jumpTimer = 0.0f;
         public Vector2 initialPosition;
         // 점프를 시작한 최초의 위치 백터
@@ -310,6 +310,8 @@ namespace Character
 
             if (jumpTimer <= jumpDuration)
             {
+                isJumping = true;
+
                 float jumpProgress = jumpTimer / jumpDuration;
                 float yOffset = Mathf.Sin(jumpProgress * Mathf.PI) * jumpHeight;
                 _Sprite.transform.position = initialPosition + new Vector2(0, yOffset);
@@ -350,7 +352,6 @@ namespace Character
             int hitAnimNumber = UnityEngine.Random.Range(1, 2);
             //TODO 피격 이펙트(팡팡 터지는거) , 피격 애니메이션 넣기 , Die까지 
 
-
             GameManager.Sound.Play($"Effect/swordman/weapon/kata_hit_0{hitAnimNumber}");
 
             string hitanim = "Hit" + hitAnimNumber.ToString();
@@ -359,18 +360,13 @@ namespace Character
             Debug.Log($"Take Damage : {Damage} ");
 
             HP -= Damage;
+            Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));
 
             if (HP <= 0)
             {
                 Debug.Log($"Character Die!!!");
-                GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_skill_20_2");
-                _animator.SetTrigger("DeadTrigger");
-                _shadowObject.SetActive(false);
-
-
             }
 
-            Co_spritechange = StartCoroutine(hiteffect(_Sprite.GetComponent<SpriteRenderer>()));
         }
 
         IEnumerator hiteffect(SpriteRenderer sp)

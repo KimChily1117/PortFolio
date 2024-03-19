@@ -34,7 +34,7 @@ namespace Server
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
 			IPAddress ipAddr = ipHost.AddressList[0];
 
-			//ipAddr = IPAddress.Parse("172.31.10.77");
+			ipAddr = IPAddress.Parse("172.31.10.77");
 			
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
 

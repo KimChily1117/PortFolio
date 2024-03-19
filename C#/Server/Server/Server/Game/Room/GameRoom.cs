@@ -27,7 +27,7 @@ namespace Server.Game.Room
         {
             Enemy enemy = ObjectManager.Instance.Add<Enemy>();
 
-            enemy.Info.Name = $"Bakal_Hismar";
+            enemy.Info.Name = $"Bakal_2Phase";
             enemy.Info.PosInfo.PosX = -2f;
             enemy.Info.PosInfo.PosY = -0.55f;
             EnterRoom(enemy);
@@ -360,18 +360,34 @@ namespace Server.Game.Room
             if (!_enemys.TryGetValue(collisionPacket.Playerinfo.ObjectId, out e))
             {
                 Console.WriteLine($"_enemys is NULL(Not Found)");
-                return;
             }
 
 
             S_Collision s_Collision = new S_Collision();
 
-            s_Collision.Playerinfo = collisionPacket.Playerinfo;
 
-            s_Collision.PlayerId = player.Info.ObjectId;
-            s_Collision.Playerinfo.Damage = 10.0f;
 
-            e.OnDamaged(s_Collision.Playerinfo.Damage);
+            //s_Collision.Playerinfo = collisionPacket.Playerinfo;
+
+            //s_Collision.PlayerId = player.Info.ObjectId;
+
+
+            if (e != null)
+            {
+                s_Collision.Playerinfo = collisionPacket.Playerinfo;
+                s_Collision.Playerinfo.Damage = 10.0f;
+                s_Collision.PlayerId = collisionPacket.Playerinfo.ObjectId;
+                e.OnDamaged(10.0f);
+            }
+
+            else
+            {
+                s_Collision.PlayerId = collisionPacket.Playerinfo.ObjectId;
+                s_Collision.Playerinfo = collisionPacket.Playerinfo;
+
+                player.OnDamaged(collisionPacket.Playerinfo.Damage);
+            }
+
             Broadcast(s_Collision);
         }
 

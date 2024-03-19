@@ -9,6 +9,13 @@ namespace Server.Game.Object
     public class Player : GameObject
     {
         public ClientSession Session { get; set; }
-        public Player() { ObjectType = GameObjectType.Player;  }   
+        public Player() 
+        {
+            ObjectType = GameObjectType.Player;
+            CurrentPlayerState = PlayerState.Idle;
+            HP = 100;   
+        }   
+
+
     }
 }

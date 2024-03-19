@@ -157,7 +157,7 @@ class PacketHandler
         if (go == null)
             return;
 
-        Debug.Log($"{s_Collision.Playerinfo.ObjectId}이가 {s_Collision.Playerinfo.ObjectId}에게 {s_Collision.Playerinfo.Damage}만큼의 피해를 주었습니다");
+        Debug.Log($"{s_Collision.Playerinfo.Name}이  {s_Collision.Playerinfo.Damage}만큼의 피해를 받았습니다");
 
 
         BaseCharacter bc = go.GetComponent<BaseCharacter>();
@@ -251,6 +251,8 @@ class PacketHandler
     public static void S_DieHandler(PacketSession session, IMessage message)
     {
         S_Die s_Die = (S_Die)message;
+
+        Debug.Log($"Who Dead ? {s_Die.Player.ObjectId},{s_Die.Player.Name}");
 
         GameObject go = GameManager.ObjectManager.FindById(s_Die.Player.ObjectId);
 
