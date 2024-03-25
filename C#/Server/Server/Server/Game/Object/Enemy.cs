@@ -46,7 +46,7 @@ namespace Server.Game.Object
             _currentTime = Environment.TickCount64;
             _elapsedTime = _currentTime - _lastUsedTime;
         
-            if(_elapsedTime >= 20000) // 12초가 지났다면
+            if(_elapsedTime >= 20000) // 20초가 지났다면
             {
                 CurrentPlayerState = PlayerState.Skill;
                 _lastUsedTime = Environment.TickCount64;

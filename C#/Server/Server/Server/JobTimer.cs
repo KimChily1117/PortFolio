@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Server.Game;
 using ServerCore;
 
 namespace Server
@@ -8,11 +9,11 @@ namespace Server
 	struct JobTimerElem : IComparable<JobTimerElem>
 	{
 		public int execTick; // 실행 시간
-		public Action action;
+		public IJob job;
 
 		public int CompareTo(JobTimerElem other)
-		{
-			return other.execTick - execTick;
+			{
+				return execTick - other.execTick;
 		}
 	}
 
@@ -21,17 +22,15 @@ namespace Server
 		PriorityQueue<JobTimerElem> _pq = new PriorityQueue<JobTimerElem>();
 		object _lock = new object();
 
-		public static JobTimer Instance { get; } = new JobTimer();
-
-		public void Push(Action action, int tickAfter = 0)
+		public void Push(IJob job, int tickAfter = 0)
 		{
-			JobTimerElem job;
-			job.execTick = System.Environment.TickCount + tickAfter;
-			job.action = action;
+			JobTimerElem jobTimerElem;
+            jobTimerElem.execTick = System.Environment.TickCount + tickAfter;
+            jobTimerElem.job = job;
 
 			lock (_lock)
 			{
-				_pq.Push(job);
+				_pq.Push(jobTimerElem);
 			}
 		}
 
@@ -55,7 +54,7 @@ namespace Server
 					_pq.Pop();
 				}
 
-				job.action.Invoke();
+				job.job.Execute();
 			}
 		}
 	}

@@ -37,9 +37,10 @@ namespace Server.Game.Room
         {
             foreach (Enemy enemy in _enemys.Values)
             {
-
                 enemy.Update();
             }
+
+            Flush();
         }
 
         #region EnterRoom

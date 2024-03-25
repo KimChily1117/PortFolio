@@ -51,9 +51,6 @@ public class UI_BakalSceneUI : UI_Scene
     private void Update()
     {
         DecreaseHpBar();
-
-        // Todo : 체력바 흐르는 효과 , 감소하는 효과 조금 더 이쁘게 변경
-        
         AfterDecreaseHpBar();
     
     }

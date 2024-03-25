@@ -6,7 +6,6 @@ public static class Util
 {
     public static GameObject FindChild(GameObject go, string name = null, bool recursive = false) 
     {
-
         Debug.Log($"go : {go} , name : {name}");
 
         Transform transform = FindChild<Transform>(go,name,recursive);
@@ -14,13 +13,11 @@ public static class Util
         {
             return transform.gameObject;
         }
-
         return null;
     }
 
     public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
     {
-
         Debug.Log($"go : {go} , name : {name}");
         if (go == null) return null;
 
@@ -64,15 +61,4 @@ public static class Util
         return component;
     }
 
-
-
-
-
-
-    #region JOB QUEUE
-
-
-
-
-    #endregion
 }
