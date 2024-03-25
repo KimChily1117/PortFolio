@@ -18,13 +18,22 @@ namespace Server
     class Program
 	{
 		static Listener _listener = new Listener();
+        
+		
+		static List<System.Timers.Timer> _timers = new List<System.Timers.Timer>();
 
-		static void FlushRoom()
-		{
-			JobTimer.Instance.Push(FlushRoom, 250);
-		}
-		 
-		static void Main(string[] args)
+        static void TickRooms(int tick = 100)
+        {
+            var timer = new System.Timers.Timer();
+            timer.Interval = tick;
+            timer.Elapsed += ((s,e) => { RoomManager.Instance.UpdateRooms(); });
+            timer.AutoReset = true;
+            timer.Enabled = true;
+
+            _timers.Add(timer);
+        }
+
+        static void Main(string[] args)
 		{
 			RoomManager.Instance.Add(RoomType.Town);
 
@@ -34,21 +43,20 @@ namespace Server
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
 			IPAddress ipAddr = ipHost.AddressList[0];
 
-			ipAddr = IPAddress.Parse("172.31.10.77");
+			//ipAddr = IPAddress.Parse("172.31.10.77");
 			
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
 			Console.WriteLine("Listening...");
 
-			//FlushRoom();
+			TickRooms(); // 100ms 마다 만들어진 Room에 Update함수를 호출해줌 
+
 			//JobTimer.Instance.Push(FlushRoom);
 
 			while (true)
 			{
-				RoomManager.Instance.UpdateRooms();
-				JobTimer.Instance.Flush();
-				Thread.Sleep(250);
+				Thread.Sleep(100);
 			}
 		}
 	}

@@ -16,7 +16,6 @@ namespace Server.DB
         static readonly ILoggerFactory _logger = LoggerFactory.Create(
             builder => { builder.AddConsole();});
 
-        // Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
         //string _connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameDB;";
         string _awsConnectionString = @"Server=database-1.cte0o02aow5r.ap-southeast-2.rds.amazonaws.com;Database=GameDB;User Id=kimchily;Password=a987654!;";
 

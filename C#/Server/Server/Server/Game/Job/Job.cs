@@ -8,7 +8,7 @@ namespace Server.Game
 {
     public interface IJob
     {
-        public void Excute();
+        public void Execute();
     }
 
 
@@ -20,7 +20,7 @@ namespace Server.Game
         
         public Job(Action action) { _action = action; }
 
-        public void Excute()
+        public void Execute()
         {
             _action.Invoke();
         }
@@ -38,7 +38,7 @@ namespace Server.Game
             _t1 = t1;
         }
 
-        public void Excute()
+        public void Execute()
         {
             _action.Invoke(_t1);
         }
@@ -60,7 +60,7 @@ namespace Server.Game
 
 
 
-        public void Excute()
+        public void Execute()
         {
             _action.Invoke(_t1, _t2);
         }
@@ -85,7 +85,7 @@ namespace Server.Game
 
 
 
-        public void Excute()
+        public void Execute()
         {
             _action.Invoke(_t1, _t2, _t3);
         }
