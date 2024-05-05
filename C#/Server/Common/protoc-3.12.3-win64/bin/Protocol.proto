@@ -30,6 +30,8 @@ enum MsgId {
   C_ENTER_PARTY = 22;
   S_ENTER_PARTY = 23;
   S_DIE = 24;
+  S_ITEM_LIST = 25;
+  S_ADD_ITEM = 26;
 }
 
 enum PlayerState {
@@ -72,6 +74,31 @@ enum PlayerServerState
 }
 
 
+enum ItemType {
+  ITEM_TYPE_NONE = 0;
+  ITEM_TYPE_WEAPON = 1;
+  ITEM_TYPE_ARMOR = 2;
+  ITEM_TYPE_CONSUMABLE = 3;
+}
+
+enum WeaponType {
+  WEAPON_TYPE_NONE = 0;
+  WEAPON_TYPE_SWORD = 1;
+  WEAPON_TYPE_BOW = 2;
+}
+
+enum ArmorType {
+  ARMOR_TYPE_NONE = 0;
+  ARMOR_TYPE_HELMET = 1;
+  ARMOR_TYPE_ARMOR = 2;
+  ARMOR_TYPE_BOOTS = 3;
+}
+
+enum ConsumableType {
+   CONSUMABLE_TYPE_NONE = 0;
+   CONSUMABLE_TYPE_POTION = 1;
+}
+
 message S_Connected
 {
 }
@@ -87,13 +114,13 @@ message S_Login
 	repeated LobbyPlayerInfo players = 2;
 }
 
-message C_Create_Player
+message C_CreatePlayer
 {	
 	string name = 1;
 }
 
 
-message S_Create_Player
+message S_CreatePlayer
 {
 	LobbyPlayerInfo player = 1;
 }
@@ -101,20 +128,22 @@ message S_Create_Player
 
 message LobbyPlayerInfo
 {
-	string name = 1;
+	int32 playerDbId = 1;
+	string name = 2;
+	StatInfo statInfo = 3;
 }
 
 
-message S_Enter_Game {
+message S_EnterGame {
   ObjectInfo player = 1;
 }
 
-message C_Enter_Game 
+message C_EnterGame 
 {
 	string name = 1;
 }
 
-message S_Leave_Game 
+message S_LeaveGame 
 {
 }
 
@@ -150,39 +179,34 @@ message S_Collision {
 	ObjectInfo playerinfo = 2;
 }
 
-message C_Scene_Move {
+message C_SceneMove {
   ObjectInfo playerinfo = 1;
 }
 
-message S_Scene_Move {
+message S_SceneMove {
   ObjectInfo playerinfo = 1;
 }
 
 
 
-message C_Create_Room {
+message C_CreateRoom {
   ObjectInfo playerinfo = 1;
 }
 
-message S_Create_Room {
+message S_CreateRoom {
   ObjectInfo playerinfo = 1;
   int32 ResponseCode = 2;
 }
 
-message C_Enter_Party {
+message C_EnterParty {
   ObjectInfo playerinfo = 1;
 }
 
-message S_Enter_Party {
+message S_EnterParty {
   ObjectInfo playerinfo = 1;
   int32 ResponseCode = 2;
   repeated LobbyPlayerInfo PartyMembers = 3;
 }
-
-
-
-
-
 message C_Jump {
   PositionInfo posInfo = 1;
 }
@@ -201,6 +225,14 @@ message S_Skill {
   SkillInfo info = 2;
 }
 
+message S_ItemList {
+  repeated ItemInfo items = 1;
+}
+
+message S_AddItem {
+  repeated ItemInfo items = 1;
+}
+
 message ObjectInfo {
   int32 objectId = 1;
   string name = 2;
@@ -209,6 +241,7 @@ message ObjectInfo {
   float damage = 5;  
   bool isReady = 6;
   bool isMaster = 7;
+  StatInfo statInfo = 8;
 }
 
 message PositionInfo {
@@ -220,4 +253,20 @@ message PositionInfo {
 
 message SkillInfo {
   int32 skillId = 1;
+}
+
+message ItemInfo {
+  int32 itemDbId = 1;
+  int32 templateId = 2;
+  int32 count = 3;
+  int32 slot = 4;
+}
+
+message StatInfo {
+  int32 level = 1;
+  int32 hp = 2;
+  int32 maxHp = 3;
+  int32 attack = 4;
+  float speed = 5;
+  int32 totalExp = 6;
 }

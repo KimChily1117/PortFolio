@@ -14,6 +14,8 @@ public class DataManager
 
     public Dictionary<string, Data.CharInfo> CharDict { get; set; } = new Dictionary<string, CharInfo>();
     public Dictionary<string, Data.CharDetailInfo> DetailCharDict { get; set; } = new Dictionary<string, CharDetailInfo>();
+    public  Dictionary<int, Data.ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
+
 
     public List<Data.CharDetailInfo> DetailInfos { get; set; } = new List<CharDetailInfo>();
 
@@ -31,7 +33,7 @@ public class DataManager
         //StatDict = LoadJson<Data.StatData, int, Data.Stat>("StatData").MakeDict();
         //SkillDict = LoadJson<Data.SkillData, int, Data.Skill>("SkillData").MakeDict();
         //CharDict = LoadJson<Data.ApiCharInfo, string, Data.CharInfo>("NeopleData").MakeDict();
-
+        ItemDict = LoadJson<Data.ItemLoader, int, Data.ItemData>("ItemData").MakeDict();
     }
 
 

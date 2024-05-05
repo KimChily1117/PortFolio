@@ -49,8 +49,12 @@ public class InputManager
         
         if (KeyDownAction != null)
         {
+            if (Input.GetMouseButton(0)) { return; }
+
+
             if (Input.anyKey)
             {
+                
                 KeyDownAction.Invoke();
                 _keypressed = true;
             }

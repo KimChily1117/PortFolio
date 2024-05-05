@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Server.DB;
+using Server.Game;
 using Server.Game.Object;
 using Server.Game.Room;
 using ServerCore;
@@ -46,8 +47,9 @@ namespace Server
 
                         LobbyPlayerInfo playerInfo = new LobbyPlayerInfo()
                         {
-                            Name = playerDb.PlayerName
+                            Name = playerDb.PlayerName,
                             // 이곳에 캐선창에 있는 캐릭터들(스텟이라거나. 기타 다른 정보들을 넣어줘야함)
+                            PlayerDbId = playerDb.PlayerDbId
                         };
 
                         LobbyPlayers.Add(playerInfo);
@@ -81,8 +83,12 @@ namespace Server
                 }
             }
         }
-        public void HandleEnterGame(C_Enter_Game c_EnterGame)
+        public void HandleEnterGame(C_EnterGame c_EnterGame)
         {
+
+            LobbyPlayerInfo playerInfo = LobbyPlayers.Find(p => p.Name == c_EnterGame.Name);
+
+
             if (ServerState == PlayerServerState.ServerStateIngame)
             {
                 if (c_EnterGame.Name == MyPlayer.Info.Name)
@@ -102,11 +108,11 @@ namespace Server
 
             if (ServerState != PlayerServerState.ServerStateCharecterselect)
                 return;
-            
+
             MyPlayer = ObjectManager.Instance.Add<Player>();
             {
                 MyPlayer.Info.Name = c_EnterGame.Name;
-
+                MyPlayer.PlayerDbId = playerInfo.PlayerDbId;
                 MyPlayer.Info.PosInfo.State = PlayerState.Idle;
                 MyPlayer.Info.PosInfo.MoveDir = MoveDir.Right;
 
@@ -114,6 +120,29 @@ namespace Server
                 MyPlayer.Info.PosInfo.PosX = 0;
                 MyPlayer.Info.PosInfo.PosY = 0;
                 MyPlayer.Session = this;
+
+                S_ItemList itemListPacket = new S_ItemList();
+
+
+
+                using (AppDbContext db = new AppDbContext())    
+                {
+                    List<ItemDb> items = db.Items.Where(i => i.OwnerDbId == playerInfo.PlayerDbId).ToList();
+                    foreach (ItemDb itemDb in items)
+                    {
+                        Item item = Item.MakeItem(itemDb);
+                        if (item != null)
+                        {
+                            MyPlayer.Inven.Add(item);
+
+                            ItemInfo info = new ItemInfo();
+                            info.MergeFrom(item.Info);
+                            itemListPacket.Items.Add(info);
+                        }
+                    }
+                }
+
+                Send(itemListPacket);
             }
 
             ServerState = PlayerServerState.ServerStateIngame;
@@ -122,7 +151,8 @@ namespace Server
 
             room.Push(room.EnterRoom, MyPlayer);
         }
-        public void HandleCreateCharecter(C_Create_Player c_CreatePlayer)
+
+        public void HandleCreateCharecter(C_CreatePlayer c_CreatePlayer)
         {
             // TODO : 중복이벤트를 방지하기 위한 보안처리
 
@@ -137,7 +167,7 @@ namespace Server
                 if (findPlayer != null)
                 {
                     // 비어있는 패킷을 보냄으로서 의미가없다는걸 알려줌
-                    Send(new C_Create_Player());
+                    Send(new C_CreatePlayer());
                 }
                 else
                 {
@@ -159,7 +189,7 @@ namespace Server
                     LobbyPlayers.Add(lobbyPlayer);
 
                     // 클라에 전송
-                    S_Create_Player newPlayer = new S_Create_Player() { Player = new LobbyPlayerInfo() };
+                    S_CreatePlayer newPlayer = new S_CreatePlayer() { Player = new LobbyPlayerInfo() };
                     newPlayer.Player.MergeFrom(lobbyPlayer);
 
                     Send(newPlayer);

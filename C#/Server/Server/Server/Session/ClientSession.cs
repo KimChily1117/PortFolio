@@ -66,7 +66,7 @@ namespace Server
         #endregion Network
 
 
-        public void HandleCreateRoom(C_Create_Room c_CreateRoom)
+        public void HandleCreateRoom(C_CreateRoom c_CreateRoom)
         {
             // Step 1 : 개설 된 방이 없다면 방(Room , 파티)를 새로 개설.
 
@@ -87,7 +87,7 @@ namespace Server
         }
 
 
-        public void HandleEnterParty(C_Enter_Party c_EnterParty)
+        public void HandleEnterParty(C_EnterParty c_EnterParty)
         {
             // 이미 만들어져있음.(파장이 아닌 일반 파티원이 들어간다는뜻)
             GameRoom room = RoomManager.Instance.Find(RoomType.Bakal);
@@ -99,7 +99,7 @@ namespace Server
             room.Push(room.EnterParty, p);
         }
 
-        public void HandleEnterParty(C_Create_Room c_Create_Room)
+        public void HandleEnterParty(C_CreateRoom c_Create_Room)
         {
             GameRoom room = RoomManager.Instance.Find(RoomType.Bakal);
 

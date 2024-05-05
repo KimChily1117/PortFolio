@@ -43,23 +43,26 @@ namespace Server.Game.Object
         }
 
 
-        public void OnDamaged(float damage)
+        public void OnDamaged(float damage , GameObject attacker)
         {
+           
             HP -= damage;
 
             if (HP <= 0)
             {
-                OnDead();
+                OnDead(attacker);
             }
         }
 
-        public void OnDead()
+        public virtual void OnDead(GameObject attacker)
         {
-            S_Die s_Die = new S_Die();
+        }
 
-            s_Die.Player = Info;
 
-            Room.Broadcast(s_Die);
+
+        public GameObject GetOwner()
+        {
+            return this;
         }
 
     }

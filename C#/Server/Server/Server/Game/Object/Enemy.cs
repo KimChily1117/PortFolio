@@ -1,23 +1,36 @@
 ﻿using Google.Protobuf.Protocol;
+using Server.Data;
 using Server.Game.Room;
 using System;
 using System.Collections.Generic;
+using Server.DB;
 using System.Text;
 
 namespace Server.Game.Object
 {
     public class Enemy : GameObject
     {
+        public int TemplateId { get; private set; }
+
+
         long _currentTime = 0;
         long _elapsedTime = 0;
         long _lastUsedTime = Environment.TickCount64;// 10초
 
         public Enemy()
         {
-            ObjectType = GameObjectType.Enemy;
+            ObjectType = GameObjectType.Enemy;            
+        }
+
+
+        public void Init(int tmpId)
+        {
+            TemplateId = tmpId;
             CurrentPlayerState = PlayerState.Idle;
             HP = 100;
         }
+
+
 
         public void Update()
         {
@@ -76,11 +89,51 @@ namespace Server.Game.Object
             skill.Info.SkillId = 4;
             Room.Broadcast(skill);
 
-
             CurrentPlayerState = PlayerState.Idle;
         }
 
 
+        public override void OnDead(GameObject attacker)
+        {
+            GameObject owner = attacker.GetOwner();
 
+            if(owner.ObjectType == GameObjectType.Player)
+            {
+                RewardData rewardData = GetRewardData();
+                if(rewardData != null)
+                {
+                    Player player = (Player)owner;
+
+                    DbTransaction.RewardPlayer(player, rewardData,Room);
+                }
+            }
+
+
+            S_Die s_Die = new S_Die();
+            s_Die.Player = Info;
+
+            Room.Broadcast(s_Die);
+        }
+
+        private RewardData GetRewardData()
+        {
+            MonsterData monsterData = null;
+            DataManager.MonsterDict.TryGetValue(TemplateId, out monsterData);
+
+            int rand = new Random().Next(1, 101);
+
+            int sum = 0;
+            foreach (RewardData rewardData in monsterData.rewards)
+            {
+                sum += rewardData.probability;
+
+                if(rand <= sum)
+                {
+                    return rewardData;
+                }
+            }
+
+            return null;
+        }
     }
 }
