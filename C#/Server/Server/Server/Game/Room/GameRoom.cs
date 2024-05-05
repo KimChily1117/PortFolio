@@ -27,9 +27,13 @@ namespace Server.Game.Room
         {
             Enemy enemy = ObjectManager.Instance.Add<Enemy>();
 
-            enemy.Info.Name = $"Bakal_2Phase";
-            enemy.Info.PosInfo.PosX = -2f;
-            enemy.Info.PosInfo.PosY = -0.55f;
+
+            enemy.Init(1);
+
+
+            //enemy.Info.Name = $"Bakal_2Phase";
+            //enemy.Info.PosInfo.PosX = -2f;
+            //enemy.Info.PosInfo.PosY = -0.55f;
             EnterRoom(enemy);
         }
         public void Update()
@@ -76,7 +80,7 @@ namespace Server.Game.Room
 
                     // 본인한테 정보 전송
                     {
-                        S_Enter_Game enterPacket = new S_Enter_Game();
+                        S_EnterGame enterPacket = new S_EnterGame();
                         enterPacket.Player = player.Info;
                         player.Session.Send(enterPacket);
 
@@ -141,7 +145,6 @@ namespace Server.Game.Room
         {
             GameObjectType type = ObjectManager.GetObjectTypebyId(objectId);
 
-
             lock (_lock)
             {
 
@@ -158,7 +161,7 @@ namespace Server.Game.Room
 
                     // 본인한테 정보 전송
                     {
-                        S_Leave_Game leavePacket = new S_Leave_Game();
+                        S_LeaveGame leavePacket = new S_LeaveGame();
                         player.Session.Send(leavePacket);
                     }
 
@@ -229,7 +232,7 @@ namespace Server.Game.Room
 
                     // 본인한테 정보 전송
                     {
-                        S_Enter_Party enterPacket = new S_Enter_Party();
+                        S_EnterParty enterPacket = new S_EnterParty();
                         enterPacket.Playerinfo = player.Info;
                         enterPacket.ResponseCode = player.Info.IsMaster == true ? 1 : 2;
                         foreach (LobbyPlayerInfo Lp in _playerList)
@@ -266,7 +269,7 @@ namespace Server.Game.Room
 
             // 본인한테 정보 전송
             {
-                S_Leave_Game leavePacket = new S_Leave_Game();
+                S_LeaveGame leavePacket = new S_LeaveGame();
                 player.Session.Send(leavePacket);
             }
 
@@ -332,12 +335,12 @@ namespace Server.Game.Room
         }
 
 
-        public void HandleMoveScene(Player player, C_Scene_Move scenePacket)
+        public void HandleMoveScene(Player player, C_SceneMove scenePacket)
         {
             if (player == null)
                 return;
 
-            S_Scene_Move s_Scene_Move = new S_Scene_Move();
+            S_SceneMove s_Scene_Move = new S_SceneMove();
             s_Scene_Move.Playerinfo = player.Info;
 
             if (scenePacket.Playerinfo.IsMaster)
@@ -378,7 +381,7 @@ namespace Server.Game.Room
                 s_Collision.Playerinfo = collisionPacket.Playerinfo;
                 s_Collision.Playerinfo.Damage = 10.0f;
                 s_Collision.PlayerId = collisionPacket.Playerinfo.ObjectId;
-                e.OnDamaged(10.0f);
+                e.OnDamaged(10.0f , player);
             }
 
             else
@@ -386,7 +389,7 @@ namespace Server.Game.Room
                 s_Collision.PlayerId = collisionPacket.Playerinfo.ObjectId;
                 s_Collision.Playerinfo = collisionPacket.Playerinfo;
 
-                player.OnDamaged(collisionPacket.Playerinfo.Damage);
+                player.OnDamaged(collisionPacket.Playerinfo.Damage , player);
             }
 
             Broadcast(s_Collision);

@@ -94,7 +94,7 @@ public class TownScene : BaseScene
         if (collider.CompareTag("Player"))
         {
 
-            C_Create_Room c_room = new C_Create_Room();
+            C_CreateRoom c_room = new C_CreateRoom();
             c_room.Playerinfo = collider.transform.parent.GetComponent<MyPlayer>().ObjInfo;
             GameManager.Network.Send(c_room);
 

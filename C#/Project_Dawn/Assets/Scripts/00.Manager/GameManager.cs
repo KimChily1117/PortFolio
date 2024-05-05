@@ -17,8 +17,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #region Contents
+
     private static InputManager s_input = new InputManager();
     public static InputManager Input { get { return s_input; } }
+
+
+    private static NetworkManager s_networkmanager = new NetworkManager();
+    public static NetworkManager Network { get { return s_networkmanager; } }
+
+
+    private static InventoryManager s_inventorymanager = new InventoryManager();
+
+    public static InventoryManager Inven { get { return s_inventorymanager; } }
+
+    public static string MyName = "";
+
+
+    #endregion Contents
+
+    #region Core
 
     private static ResourcesManager s_resources = new ResourcesManager();
     public static ResourcesManager Resources { get { return s_resources; } }
@@ -41,11 +59,8 @@ public class GameManager : MonoBehaviour
     private static DataManager s_dataManager = new DataManager();
     public static DataManager DataManager { get { return s_dataManager; } }
 
-    private static NetworkManager s_networkmanager = new NetworkManager();
-    public static NetworkManager Network { get { return s_networkmanager; } }
 
-
-    public static string MyName = "";
+    #endregion Core
 
 
     static void Init()
@@ -72,7 +87,7 @@ public class GameManager : MonoBehaviour
 
         DataManager.Init();
         GameObject evt = GameObject.Find("EventSystem");
-        if(!evt)
+        if (!evt)
         {
             evt = Resources.Instantiate("UI/EventSystem");
         }
@@ -123,7 +138,7 @@ public class GameManager : MonoBehaviour
         s_input.OnUpdate();
         s_networkmanager.OnUpdate();
     }
-    
+
 
     #region ServerResponse 
 
@@ -179,7 +194,7 @@ public class GameManager : MonoBehaviour
                 return;
 
             StartCoroutine(FlushCoroutine(routine));
-        
+
         }
     }
 

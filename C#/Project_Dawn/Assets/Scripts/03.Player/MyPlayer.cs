@@ -1,5 +1,6 @@
 using Character;
 using Google.Protobuf.Protocol;
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class MyPlayer : BaseCharacter
     InputBuffer _inputBuffer;
     // **  Input Buffer **
 
+    UI_Inventory Inven;
 
     // ** Combo **
     public int currentAtkCount;
@@ -61,6 +63,10 @@ public class MyPlayer : BaseCharacter
         GameManager.Input.KeyUpAction += OnKeyUpAction;
 
 
+        GameManager.Input.KeyDownAction -= OnKeyUIAction;
+        GameManager.Input.KeyDownAction += OnKeyUIAction;
+
+
         GameManager.Input.DoubleKeyAction -= DoubleKeyAction;
         GameManager.Input.DoubleKeyAction += DoubleKeyAction;
 
@@ -70,6 +76,32 @@ public class MyPlayer : BaseCharacter
             _BakalSceneUI.HUD.targetChar = this;
         }
     }
+
+
+
+    public void OnKeyUIAction()
+    {
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            Inven = GameManager.UI.ShowPopupUI<UI_Inventory>("UI_Inventory");
+            Inven.gameObject.SetActive(false);
+
+            if (Inven.gameObject.activeSelf)
+            {
+                Inven.gameObject.SetActive(false);
+            }
+            else
+            {
+                Inven.gameObject.SetActive(true);
+                Inven.RefreshUI();
+            }
+        }
+
+
+    }
+
+
+
 
 
 

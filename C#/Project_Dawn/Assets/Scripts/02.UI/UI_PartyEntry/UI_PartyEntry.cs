@@ -99,8 +99,7 @@ public class UI_PartyEntry : UI_PopUp
     public void OnClickEnterBtn(PointerEventData evt)
     {
 
-        C_Scene_Move c_Scene_Move = new C_Scene_Move();
-
+        C_SceneMove c_Scene_Move = new C_SceneMove();
 
         if (c_Scene_Move.Playerinfo == null)
         {

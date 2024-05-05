@@ -12,18 +12,23 @@ namespace Server.DB
     {
         public DbSet<AccountDb> Accounts { get; set; }   
         public DbSet<PlayerDb> Players { get; set; }
+
+        public DbSet<ItemDb> Items { get; set; }
          
         static readonly ILoggerFactory _logger = LoggerFactory.Create(
             builder => { builder.AddConsole();});
 
-        //string _connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameDB;";
+        string _connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameDB;";
         string _awsConnectionString = @"Server=database-1.cte0o02aow5r.ap-southeast-2.rds.amazonaws.com;Database=GameDB;User Id=kimchily;Password=a987654!;";
+        
+
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder option)
         {
             option.UseLoggerFactory(_logger)
-                .UseSqlServer(_awsConnectionString);
-         }
+                .UseSqlServer(_connectionString);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

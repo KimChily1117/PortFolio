@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
+using Server.Data;
 using Server.DB;
 using Server.Game.Room;
 using ServerCore;
@@ -35,7 +37,9 @@ namespace Server
 
         static void Main(string[] args)
 		{
-			RoomManager.Instance.Add(RoomType.Town);
+			ConfigManager.LoadConfig();
+			DataManager.LoadData();
+            RoomManager.Instance.Add(RoomType.Town);
 
 			
             // DNS (Domain Name System)
@@ -57,6 +61,8 @@ namespace Server
 			while (true)
 			{
 				Thread.Sleep(100);
+
+				DbTransaction.Instance.Flush();
 			}
 		}
 	}

@@ -6,38 +6,20 @@ using UnityEngine.UI;
 
 public class UI_Inven_Item : UI_Base
 {
-  enum GameObjects
-  {
-      ItemIcon,
-      ItemName
-  }
+    [SerializeField]
+    Image _icon;
 
-  private string name;
+    public override void Init()
+    {
 
+    }
 
-  public override void Init()
-  {
-    Bind<GameObject>(typeof(GameObjects));
+    public void SetItem(int templateId, int count)
+    {
+        Data.ItemData itemData = null;
+        GameManager.DataManager.ItemDict.TryGetValue(templateId, out itemData);
 
-    Get<GameObject>((int)GameObjects.ItemName).GetComponent<Text>().text = name;
-
-    Get<GameObject>((int)GameObjects.ItemIcon).BindEvent(OnClickIconEvent);
-  }
-
-  public void SetData(string _name)
-  {
-    Debug.Log($"ksy");
-    name = _name;
-  }
-
-  private void Start() {
-    
-    Init();
-  }
-
-  private void OnClickIconEvent(PointerEventData data)
-  {
-    Debug.Log($"아이템을 클릭하셨습니다. 이름 : {name}");  
-  }
-  
+        Sprite icon = GameManager.Resources.Load<Sprite>(itemData.iconPath);
+        _icon.sprite = icon;
+    }
 }
