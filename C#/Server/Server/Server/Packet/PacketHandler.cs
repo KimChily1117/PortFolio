@@ -165,4 +165,26 @@ class PacketHandler
         ClientSession clientSession = (ClientSession)session;
         clientSession.HandleEnterParty(c_EnterParty);
     }
+
+    public static void C_EquipItemHandler(PacketSession session, IMessage packet)
+    {
+        C_EquipItem equipPacket = (C_EquipItem)packet;
+
+        ClientSession clientSession = (ClientSession)session;
+
+        Player p = clientSession.MyPlayer;
+
+
+        if (p == null)
+            return;
+
+        GameRoom room = p.Room;
+
+        if (room == null)
+            return;
+
+
+        room.Push(room.HandleEquipItem, p, equipPacket);
+        
+    }
 }
