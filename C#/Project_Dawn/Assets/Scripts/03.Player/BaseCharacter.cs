@@ -11,6 +11,8 @@ namespace Character
 {
     public abstract class BaseCharacter : MonoBehaviour
     {
+        public int WeaponDamage { get; private set; }
+        public int ArmorDefence { get; private set; }
 
         private Stat _playerStat;
         public float _speed = 1.0f;
@@ -385,6 +387,30 @@ namespace Character
         private void AfterDeadDestroy()
         {
             GameManager.ObjectManager.Remove(Id);
+        }
+
+
+
+        public void RefreshAdditionalStat()
+        {
+            WeaponDamage = 0;
+            ArmorDefence = 0;
+
+            foreach (Item item in GameManager.Inven.Items.Values)
+            {
+                if (item.Equipped == false)
+                    continue;
+
+                switch (item.ItemType)
+                {
+                    case ItemType.Weapon:
+                        WeaponDamage += ((Weapon)item).Damage;
+                        break;
+                    case ItemType.Armor:
+                        ArmorDefence += ((Armor)item).Defence;
+                        break;
+                }
+            }
         }
     }
 
