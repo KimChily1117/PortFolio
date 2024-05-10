@@ -2,10 +2,9 @@ using Character;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_HUD : UI_Scene 
+public class UI_HUD : UI_Scene
 {
     public BaseCharacter targetChar;
 

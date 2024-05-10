@@ -4,7 +4,7 @@
       "id": "1",
       "name": "창성의 구원자 - 소검",
       "weaponType": "Sword",
-      "damage": "40",
+      "damage": "10",
       "iconPath": "Textures/Item/sword"
 
     }

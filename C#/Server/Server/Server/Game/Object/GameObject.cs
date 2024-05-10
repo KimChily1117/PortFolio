@@ -45,7 +45,7 @@ namespace Server.Game.Object
 
         public void OnDamaged(float damage , GameObject attacker)
         {
-            
+           
             HP -= damage;
 
             if (HP <= 0)
