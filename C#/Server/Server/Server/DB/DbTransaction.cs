@@ -9,12 +9,13 @@ using System.Text;
 
 namespace Server.DB
 {
-    public partial class DbTransaction : JobSerializer
+    public class DbTransaction : JobSerializer
     {
         public static DbTransaction Instance = new DbTransaction();
 
         public static void RewardPlayer(Player player, RewardData rewardData, GameRoom room)
         {
+            // TODO : 살짝 문제가 있긴 하다...
             int? slot = player.Inven.GetEmptySlot();
             if (slot == null)
                 return;

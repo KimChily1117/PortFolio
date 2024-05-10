@@ -12,15 +12,7 @@ public class MyPlayer : BaseCharacter
     InputBuffer _inputBuffer;
     // **  Input Buffer **
 
-    #region UI
-    public UI_Inventory InvenUI;
-    bool _isInventory = false;
-
-
-    public UI_StatInfo StatUI;
-    bool _isStatInfo = false;
-    #endregion UI
-
+    UI_Inventory Inven;
 
     // ** Combo **
     public int currentAtkCount;
@@ -79,7 +71,6 @@ public class MyPlayer : BaseCharacter
         GameManager.Input.DoubleKeyAction += DoubleKeyAction;
 
         _BakalSceneUI = GameManager.UI._scene as UI_BakalSceneUI;
-
         if (_BakalSceneUI)
         {
             _BakalSceneUI.HUD.targetChar = this;
@@ -92,34 +83,21 @@ public class MyPlayer : BaseCharacter
     {
         if(Input.GetKeyDown(KeyCode.I))
         {
-            if (_isInventory == false)
-            {
-                InvenUI = GameManager.UI.ShowPopupUI<UI_Inventory>("UI_Inventory");
+            Inven = GameManager.UI.ShowPopupUI<UI_Inventory>("UI_Inventory");
+            Inven.gameObject.SetActive(false);
 
-                InvenUI.RefreshUI();
-                _isInventory = true;
+            if (Inven.gameObject.activeSelf)
+            {
+                Inven.gameObject.SetActive(false);
             }
             else
             {
-                GameManager.UI.ClosePopupUI(InvenUI);
-                _isInventory = false;
+                Inven.gameObject.SetActive(true);
+                Inven.RefreshUI();
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            if(_isStatInfo == false) 
-            {
-                StatUI = GameManager.UI.ShowPopupUI<UI_StatInfo>("UI_StatInfo");
 
-                _isStatInfo = true;
-            }
-            else
-            {
-                GameManager.UI.ClosePopupUI(StatUI);
-                _isStatInfo = false;
-            }
-        }
     }
 
 
