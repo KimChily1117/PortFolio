@@ -15,6 +15,8 @@ public class UI_Inventory : UI_PopUp
 
     public override void Init()
     {
+        base.Init();
+
         Items.Clear();
 
         GameObject grid = transform.Find("ItemGrid").gameObject;
@@ -39,7 +41,7 @@ public class UI_Inventory : UI_PopUp
             if (item.Slot < 0 || item.Slot >= 20)
                 continue;
 
-            Items[item.Slot].SetItem(item.TemplateId, item.Count);
+            Items[item.Slot].SetItem(item);
         }
     }
 }
