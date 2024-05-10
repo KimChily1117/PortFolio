@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
+using Server.Game.Object;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -78,6 +79,16 @@ namespace Server.Game.Room
             {
                 room.Update();
             }    
+        }
+
+
+        public void AllLeaveroom(Player MyPlayer)
+        {
+            foreach(GameRoom room in _rooms.Values)
+            {
+                room?.LeaveRoom(MyPlayer.Info.ObjectId);
+            }
+
         }
     }
 }
