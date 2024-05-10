@@ -111,7 +111,7 @@ class PacketHandler
         GameObjectType type = ObjectManager.GetObjectTypeId(skillPacket.PlayerId);
 
 
-        if(type == GameObjectType.Player) 
+        if (type == GameObjectType.Player)
         {
             OtherPlayer op = go.GetComponent<OtherPlayer>();
             if (op != null)
@@ -120,15 +120,15 @@ class PacketHandler
             }
         }
 
-        else if(type == GameObjectType.Enemy) 
+        else if (type == GameObjectType.Enemy)
         {
             EnemyPlayer ep = go.GetComponent<EnemyPlayer>();
-            if(ep != null) 
+            if (ep != null)
             {
-                ep.UseSkill(skillPacket.Info.SkillId);            
+                ep.UseSkill(skillPacket.Info.SkillId);
             }
-        
-        
+
+
         }
 
 
@@ -140,7 +140,8 @@ class PacketHandler
 
         Debug.Log($"SceneMove Handler!!!");
 
-        GameManager.SCENE.LoadSceneAsync(Define.Scenes.BAKAL, () => {
+        GameManager.SCENE.LoadSceneAsync(Define.Scenes.BAKAL, () =>
+        {
 
             C_EnterGame c_Enter_Game = new C_EnterGame();
             c_Enter_Game.Name = GameManager.MyName;
@@ -202,7 +203,7 @@ class PacketHandler
 
         }
     }
-    
+
 
     public static void S_CreatePlayerHandler(PacketSession session, IMessage packet)
     {
@@ -299,5 +300,30 @@ class PacketHandler
         }
 
         Debug.Log("아이템을 획득했습니다!");
+    }
+
+    public static void S_EquipItemHandler(PacketSession session, IMessage packet)
+    {
+        S_EquipItem equipItemOk = (S_EquipItem)packet;
+
+        // 메모리에 아이템 정보 적용
+        Item item = GameManager.Inven.Get(equipItemOk.ItemDbId);
+        if (item == null)
+            return;
+
+        item.Equipped = equipItemOk.Equipped;
+        Debug.Log("아이템 착용 변경!");
+
+        if (GameManager.ObjectManager.MyPlayer != null)
+        {
+            ((MyPlayer)GameManager.ObjectManager.MyPlayer).InvenUI.RefreshUI();
+            GameManager.ObjectManager.MyPlayer.RefreshAdditionalStat();
+
+        }
+    }
+
+    public static void S_ChangeStatHandler(PacketSession session, IMessage packet)
+    {
+
     }
 }
