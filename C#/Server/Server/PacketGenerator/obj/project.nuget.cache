@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZM4Lqz8cWm4OrGhOtwDj9+FoWBBNuBPUFE+jdzeqAavqj4qTL304SIg6qwWdYbp90LDXWfv5SoAddqwDaiB3EQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\yeop\\Documents\\Task\\PortFolio\\C#\\Server\\Server\\PacketGenerator\\PacketGenerator.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\yeop\\.nuget\\packages\\google.protobuf\\3.25.1\\google.protobuf.3.25.1.nupkg.sha512",
+    "C:\\Users\\yeop\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
+    "C:\\Users\\yeop\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.7.1\\system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512"
+  ],
+  "logs": []
+}
