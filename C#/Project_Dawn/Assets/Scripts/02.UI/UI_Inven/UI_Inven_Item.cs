@@ -61,7 +61,5 @@ public class UI_Inven_Item : UI_Base
         // Todo ItemInfo ±‚¿‘
 
         _frame.gameObject.SetActive(Equipped);
-
-
     }
 }

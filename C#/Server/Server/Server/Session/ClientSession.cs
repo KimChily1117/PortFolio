@@ -51,9 +51,9 @@ namespace Server
         {
             if (MyPlayer != null)
             {
-                RoomManager.Instance.AllLeaveroom(MyPlayer);
-                //RoomManager.Instance.Find(RoomType.Town).LeaveRoom(MyPlayer.Info.ObjectId);
-                //RoomManager.Instance.Find(RoomType.Bakal).LeaveRoom(MyPlayer.Info.ObjectId);
+                RoomManager.Instance.Find(RoomType.Town)?.LeaveRoom(MyPlayer.Info.ObjectId);
+                RoomManager.Instance.Find(RoomType.Bakal)?.LeaveRoom(MyPlayer.Info.ObjectId);
+
             }
             SessionManager.Instance.Remove(this);
 

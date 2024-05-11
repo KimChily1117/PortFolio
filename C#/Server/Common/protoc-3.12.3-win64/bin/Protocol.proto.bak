@@ -1,0 +1,271 @@
+syntax = "proto3";
+
+package Protocol;
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+enum MsgId {
+  S_ENTER_GAME = 0;
+  S_LEAVE_GAME = 1;
+  S_SPAWN = 2;
+  S_DESPAWN = 3;
+  C_MOVE = 4;
+  S_MOVE = 5;
+  C_SKILL = 6;
+  S_SKILL = 7;
+  C_SCENE_MOVE = 8;
+  S_SCENE_MOVE = 9;
+  C_JUMP = 10;
+  S_JUMP = 11;
+  C_COLLISION = 12;
+  S_COLLISION = 13;
+  C_LOGIN = 14;
+  S_LOGIN = 15;
+  S_CONNECTED = 16;
+  C_CREATE_PLAYER = 17;
+  S_CREATE_PLAYER = 18;
+  C_ENTER_GAME = 19;
+  C_CREATE_ROOM = 20;
+  S_CREATE_ROOM = 21;
+  C_ENTER_PARTY = 22;
+  S_ENTER_PARTY = 23;
+  S_DIE = 24;
+  S_ITEM_LIST = 25;
+  S_ADD_ITEM = 26;
+}
+
+enum PlayerState {
+  IDLE = 0;
+  MOVING = 1;
+  RUN = 2;
+  SKILL = 3;
+  ATK = 4;
+  DEAD = 5;
+  JUMP = 6;
+}
+
+enum MoveDir {
+  NONE = 0;
+  UP = 1;
+  DOWN = 2;
+  LEFT = 3;
+  RIGHT = 4;
+}
+
+enum GameObjectType{
+	PLAYER = 0;
+	ENEMY = 1;
+	PROJECTILE = 2;
+}
+
+enum RoomType
+{
+	TOWN = 0;
+	BAKAL = 1;
+	PARTY = 2;
+}
+
+enum PlayerServerState
+{
+	SERVER_STATE_LOGIN = 0;
+	SERVER_STATE_CHARECTERSELECT = 1;
+	SERVER_STATE_INGAME = 2;
+	SERVER_STATE_DUNGEON = 3;
+}
+
+
+enum ItemType {
+  ITEM_TYPE_NONE = 0;
+  ITEM_TYPE_WEAPON = 1;
+  ITEM_TYPE_ARMOR = 2;
+  ITEM_TYPE_CONSUMABLE = 3;
+}
+
+enum WeaponType {
+  WEAPON_TYPE_NONE = 0;
+  WEAPON_TYPE_SWORD = 1;
+  WEAPON_TYPE_BOW = 2;
+}
+
+enum ArmorType {
+  ARMOR_TYPE_NONE = 0;
+  ARMOR_TYPE_ARMOR = 1;
+  ARMOR_TYPE_BOOTS = 2;
+}
+
+enum ConsumableType {
+   CONSUMABLE_TYPE_NONE = 0;
+   CONSUMABLE_TYPE_POTION = 1;
+}
+
+message S_Connected
+{
+}
+
+message C_Login
+{
+	string uniqueId = 1;
+}
+
+message S_Login
+{
+	int32 loginOK = 1;	
+	repeated LobbyPlayerInfo players = 2;
+}
+
+message C_CreatePlayer
+{	
+	string name = 1;
+}
+
+
+message S_CreatePlayer
+{
+	LobbyPlayerInfo player = 1;
+}
+
+
+message LobbyPlayerInfo
+{
+	int32 playerDbId = 1;
+	string name = 2;
+	StatInfo statInfo = 3;
+}
+
+
+message S_EnterGame {
+  ObjectInfo player = 1;
+}
+
+message C_EnterGame 
+{
+	string name = 1;
+}
+
+message S_LeaveGame 
+{
+}
+
+message S_Spawn {
+  repeated ObjectInfo objects = 1;
+  repeated LobbyPlayerInfo players = 2;
+}
+
+message S_Despawn {
+  repeated int32 playerIds = 1;
+}
+
+message S_Die{
+	ObjectInfo player = 1;
+}
+
+
+message C_Move {
+  PositionInfo posInfo = 1;
+}
+
+message S_Move {
+  int32 playerId = 1;
+  PositionInfo posInfo = 2;
+}
+
+message C_Collision {
+	ObjectInfo playerinfo = 1;
+}
+
+message S_Collision {
+	int32 playerId = 1;
+	ObjectInfo playerinfo = 2;
+}
+
+message C_SceneMove {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_SceneMove {
+  ObjectInfo playerinfo = 1;
+}
+
+
+
+message C_CreateRoom {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_CreateRoom {
+  ObjectInfo playerinfo = 1;
+  int32 ResponseCode = 2;
+}
+
+message C_EnterParty {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_EnterParty {
+  ObjectInfo playerinfo = 1;
+  int32 ResponseCode = 2;
+  repeated LobbyPlayerInfo PartyMembers = 3;
+}
+message C_Jump {
+  PositionInfo posInfo = 1;
+}
+
+message S_Jump {
+  int32 playerId = 1;
+  PositionInfo posInfo = 2;
+}
+
+message C_Skill {
+  SkillInfo info = 1;
+}
+
+message S_Skill {
+  int32 playerId = 1;
+  SkillInfo info = 2;
+}
+
+message S_ItemList {
+  repeated ItemInfo items = 1;
+}
+
+message S_AddItem {
+  repeated ItemInfo items = 1;
+}
+
+message ObjectInfo {
+  int32 objectId = 1;
+  string name = 2;
+  PositionInfo posInfo = 3;
+  SkillInfo skillInfo = 4;
+  float damage = 5;  
+  bool isReady = 6;
+  bool isMaster = 7;
+  StatInfo statInfo = 8;
+}
+
+message PositionInfo {
+  PlayerState state = 1;
+  MoveDir moveDir = 2;
+  float posX = 3;
+  float posY = 4;
+}
+
+message SkillInfo {
+  int32 skillId = 1;
+}
+
+message ItemInfo {
+  int32 itemDbId = 1;
+  int32 templateId = 2;
+  int32 count = 3;
+  int32 slot = 4;
+}
+
+message StatInfo {
+  int32 level = 1;
+  int32 hp = 2;
+  int32 maxHp = 3;
+  int32 attack = 4;
+  float speed = 5;
+  int32 totalExp = 6;
+}

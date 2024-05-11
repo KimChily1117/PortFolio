@@ -48,7 +48,7 @@ public class DataManager
     Loader LoadJson<Loader, Key, Value>(string filepath) where Loader : ILoader<Key, Value>
     {
         TextAsset textAsset = GameManager.Resources.Load<TextAsset>($"Data/{filepath}");
-        return JsonUtility.FromJson<Loader>(textAsset.text);
+        return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(textAsset.text);
     }
 
     
