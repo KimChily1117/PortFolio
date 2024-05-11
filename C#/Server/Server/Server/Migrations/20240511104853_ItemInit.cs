@@ -2,7 +2,7 @@
 
 namespace Server.Migrations
 {
-    public partial class init : Migration 
+    public partial class ItemInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,7 +26,13 @@ namespace Server.Migrations
                     PlayerDbId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PlayerName = table.Column<string>(nullable: true),
-                    AccountDbId = table.Column<int>(nullable: false)
+                    AccountDbId = table.Column<int>(nullable: false),
+                    Level = table.Column<int>(nullable: false),
+                    Hp = table.Column<int>(nullable: false),
+                    MaxHp = table.Column<int>(nullable: false),
+                    Attack = table.Column<int>(nullable: false),
+                    Speed = table.Column<float>(nullable: false),
+                    TotalExp = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,12 +45,40 @@ namespace Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Item",
+                columns: table => new
+                {
+                    ItemDbId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TemplateId = table.Column<int>(nullable: false),
+                    Count = table.Column<int>(nullable: false),
+                    Slot = table.Column<int>(nullable: false),
+                    Equipped = table.Column<bool>(nullable: false),
+                    OwnerDbId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Item", x => x.ItemDbId);
+                    table.ForeignKey(
+                        name: "FK_Item_Player_OwnerDbId",
+                        column: x => x.OwnerDbId,
+                        principalTable: "Player",
+                        principalColumn: "PlayerDbId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Account_AccountName",
                 table: "Account",
                 column: "AccountName",
                 unique: true,
                 filter: "[AccountName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Item_OwnerDbId",
+                table: "Item",
+                column: "OwnerDbId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Player_AccountDbId",
@@ -61,6 +95,9 @@ namespace Server.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Item");
+
             migrationBuilder.DropTable(
                 name: "Player");
 

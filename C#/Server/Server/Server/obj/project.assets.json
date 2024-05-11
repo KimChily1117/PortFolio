@@ -5833,19 +5833,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\yeop\\.nuget\\packages\\": {}
+    "C:\\Users\\yeop_sun\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\yeop\\Documents\\Task\\PortFolio\\C#\\Server\\Server\\Server\\Server.csproj",
+      "projectUniqueName": "E:\\task\\Server\\Server\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "C:\\Users\\yeop\\Documents\\Task\\PortFolio\\C#\\Server\\Server\\Server\\Server.csproj",
-      "packagesPath": "C:\\Users\\yeop\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\yeop\\Documents\\Task\\PortFolio\\C#\\Server\\Server\\Server\\obj\\",
+      "projectPath": "E:\\task\\Server\\Server\\Server\\Server.csproj",
+      "packagesPath": "C:\\Users\\yeop_sun\\.nuget\\packages\\",
+      "outputPath": "E:\\task\\Server\\Server\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\yeop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\yeop_sun\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5859,8 +5859,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\yeop\\Documents\\Task\\PortFolio\\C#\\Server\\Server\\ServerCore\\ServerCore.csproj": {
-              "projectPath": "C:\\Users\\yeop\\Documents\\Task\\PortFolio\\C#\\Server\\Server\\ServerCore\\ServerCore.csproj"
+            "E:\\task\\Server\\Server\\ServerCore\\ServerCore.csproj": {
+              "projectPath": "E:\\task\\Server\\Server\\ServerCore\\ServerCore.csproj"
             }
           }
         }
@@ -5924,7 +5924,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

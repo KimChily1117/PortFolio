@@ -7,3 +7,12 @@ C:\Users\yeop\Documents\Task\PortFolio\C#\Server\Server\ServerCore\obj\Debug\net
 C:\Users\yeop\Documents\Task\PortFolio\C#\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
 C:\Users\yeop\Documents\Task\PortFolio\C#\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
 C:\Users\yeop\Documents\Task\PortFolio\C#\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
+E:\task\Server\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+E:\task\Server\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+E:\task\Server\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+E:\task\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+E:\task\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+E:\task\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+E:\task\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+E:\task\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+E:\task\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb

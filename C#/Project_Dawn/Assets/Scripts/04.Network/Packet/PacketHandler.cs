@@ -317,6 +317,8 @@ class PacketHandler
         if (GameManager.ObjectManager.MyPlayer != null)
         {
             ((MyPlayer)GameManager.ObjectManager.MyPlayer).InvenUI.RefreshUI();
+            ((MyPlayer)GameManager.ObjectManager.MyPlayer).StatUI.RefreshUI();
+
             GameManager.ObjectManager.MyPlayer.RefreshAdditionalStat();
 
         }
@@ -324,6 +326,6 @@ class PacketHandler
 
     public static void S_ChangeStatHandler(PacketSession session, IMessage packet)
     {
-
+        S_ChangeStat itemList = (S_ChangeStat)packet;
     }
 }

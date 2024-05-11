@@ -18,7 +18,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="C:\Users\yeop\Documents\Task\PortFolio\C#\Server\Server\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.json" target="lib\netcoreapp3.1\Server.runtimeconfig.json" />
-    <file src="C:\Users\yeop\Documents\Task\PortFolio\C#\Server\Server\Server\bin\Debug\netcoreapp3.1\Server.dll" target="lib\netcoreapp3.1\Server.dll" />
+    <file src="E:\task\Server\Server\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.json" target="lib\netcoreapp3.1\Server.runtimeconfig.json" />
+    <file src="E:\task\Server\Server\Server\bin\Debug\netcoreapp3.1\Server.dll" target="lib\netcoreapp3.1\Server.dll" />
   </files>
 </package>

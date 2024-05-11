@@ -101,8 +101,8 @@ public class MyPlayer : BaseCharacter
             }
             else
             {
-                GameManager.UI.ClosePopupUI(InvenUI);
                 _isInventory = false;
+                InvenUI.gameObject.SetActive(_isInventory);
             }
         }
 
@@ -111,13 +111,12 @@ public class MyPlayer : BaseCharacter
             if(_isStatInfo == false) 
             {
                 StatUI = GameManager.UI.ShowPopupUI<UI_StatInfo>("UI_StatInfo");
-
                 _isStatInfo = true;
             }
             else
             {
-                GameManager.UI.ClosePopupUI(StatUI);
                 _isStatInfo = false;
+                StatUI.gameObject.SetActive(_isStatInfo);
             }
         }
     }

@@ -52,7 +52,6 @@ public class UI_BakalSceneUI : UI_Scene
     {
         DecreaseHpBar();
         AfterDecreaseHpBar();
-    
     }
     
     private void DecreaseHpBar()

@@ -20,7 +20,7 @@ namespace Server.Game.Room
         Dictionary<int, Enemy> _enemys = new Dictionary<int, Enemy>();
         Dictionary<int, Projectile> _Projectiles = new Dictionary<int, Projectile>();
 
-        List<LobbyPlayerInfo> _playerList = new List<LobbyPlayerInfo>();
+        Dictionary<int,LobbyPlayerInfo> _PartyplayerList = new Dictionary<int,LobbyPlayerInfo>();
 
 
         public void InitEnemy()
@@ -75,7 +75,7 @@ namespace Server.Game.Room
                         Name = player.Info.Name
                     };
 
-                    _playerList.Add(playerInfo);
+                    //_PartyplayerList.Add(playerInfo);
 
 
                     // 본인한테 정보 전송
@@ -146,10 +146,10 @@ namespace Server.Game.Room
             GameObjectType type = ObjectManager.GetObjectTypebyId(objectId);
 
             lock (_lock)
-            {
-
+            {                
                 if (type == GameObjectType.Player)
                 {
+                    _PartyplayerList.Remove(objectId);
                     Player player = null;
                     if (_players.TryGetValue(objectId, out player) == false)
                     {
@@ -226,7 +226,7 @@ namespace Server.Game.Room
                     };
 
 
-                    _playerList.Add(playerInfo);
+                    _PartyplayerList.Add(gameObject.Id,playerInfo);
 
 
                     // 본인한테 정보 전송
@@ -234,7 +234,7 @@ namespace Server.Game.Room
                         S_EnterParty enterPacket = new S_EnterParty();
                         enterPacket.Playerinfo = player.Info;
                         enterPacket.ResponseCode = player.Info.IsMaster == true ? 1 : 2;
-                        foreach (LobbyPlayerInfo Lp in _playerList)
+                        foreach (LobbyPlayerInfo Lp in _PartyplayerList.Values)
                         {
                             enterPacket.PartyMembers.Add(Lp);
                         }
