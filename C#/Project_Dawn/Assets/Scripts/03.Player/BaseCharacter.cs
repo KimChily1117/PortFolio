@@ -59,23 +59,23 @@ namespace Character
         {
             get
             {
-                return new Vector2(PositionInfo.PosX, PositionInfo.PosY);
+                return new Vector2(_positionInfo.PosX, _positionInfo.PosY);
             }
 
             set
             {
-                if (PositionInfo.PosX == value.x && PositionInfo.PosY == value.y)
+                if (_positionInfo.PosX == value.x && _positionInfo.PosY == value.y)
                     return;
 
-                PositionInfo.PosX = value.x;
-                PositionInfo.PosY = value.y;
+                _positionInfo.PosX = value.x;
+                _positionInfo.PosY = value.y;
                 _updated = true;
                 CheckUpdatedFlag();
             }
         }
         // 현재 위치 좌표
 
-        PositionInfo _positionInfo = new PositionInfo();
+        protected PositionInfo _positionInfo = new PositionInfo();
         public PositionInfo PositionInfo
         {
             get { return _positionInfo; }
@@ -103,22 +103,28 @@ namespace Character
             get { return PositionInfo.State; }
             set
             {
-                if (PositionInfo.State == value)
+                bool _updated = _positionInfo.State != value;
+
+
+                if (_positionInfo.State == value)
                     return;
-                PositionInfo.State = value;
+                _positionInfo.State = value;
                 _updated = true;
+
+                if(_updated)
+                    CheckUpdatedFlag();
             }
         }
         public MoveDir Dir
         {
-            get { return PositionInfo.MoveDir; }
+            get { return _positionInfo.MoveDir; }
             set
             {
 
-                if (PositionInfo.MoveDir == value)
+                if (_positionInfo.MoveDir == value)
                     return;
 
-                PositionInfo.MoveDir = value;
+                _positionInfo.MoveDir = value;
                 if (value != MoveDir.None)
                     _lastDir = value;
 
@@ -205,6 +211,8 @@ namespace Character
 
         protected virtual void Update()
         {
+            Debug.Log($"Current State?? : {_state}");
+
 
             if (_combatSystem != null) _combatSystem.OnUpdate();
 
@@ -301,7 +309,7 @@ namespace Character
         }
 
 
-        public virtual void ProcJumpPlayer()
+        public virtual void ProcJumpPlayer(bool isMoving = false)
         {
 
             initialPosition = CellPos;
@@ -329,7 +337,7 @@ namespace Character
                 _shadowObject.transform.position = _Sprite.transform.position;
 
                 _animator.SetBool("isJump", false);
-                PositionInfo.State = PlayerState.Idle;
+                _positionInfo.State = PlayerState.Idle;
             }
         }
 

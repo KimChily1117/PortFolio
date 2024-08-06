@@ -3,6 +3,7 @@ using Google.Protobuf.Protocol;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MyPlayer : BaseCharacter
 {
@@ -58,26 +59,64 @@ public class MyPlayer : BaseCharacter
 
         GameManager.Input.Clear();
 
+        switch (GameManager.PlayerPlatformType)
+        {
+            case Enums.PlatformType.NONE:
+                break;
+            case Enums.PlatformType.MOBILE:
+                GameManager.Input.TouchAction -= OnJoystickMoveAction;
+                GameManager.Input.TouchAction += OnJoystickMoveAction;
 
-        GameManager.Input.KeyDownAction -= OnKeyDownMoveAction;
-        GameManager.Input.KeyDownAction += OnKeyDownMoveAction;
+                GameManager.Input.EndDragAction -= OnJoystickEndDragAction;
+                GameManager.Input.EndDragAction += OnJoystickEndDragAction;
+
+                GameManager.Input.TouchAttackAction -= OnClickAtkBtn;
+                GameManager.Input.TouchAttackAction += OnClickAtkBtn;
+
+                GameManager.Input.TouchJumpAction -= OnClickJumpBtn;
+                GameManager.Input.TouchJumpAction += OnClickJumpBtn;
 
 
-        GameManager.Input.KeyDownAction -= OnKeyAction;
-        GameManager.Input.KeyDownAction += OnKeyAction;
+
+                break;
+            case Enums.PlatformType.DESKTOP:
+
+                //Test Code
+
+                GameManager.Input.TouchAction -= OnJoystickMoveAction;
+                GameManager.Input.TouchAction += OnJoystickMoveAction;
+                GameManager.Input.EndDragAction -= OnJoystickEndDragAction;
+                GameManager.Input.EndDragAction += OnJoystickEndDragAction;
+                GameManager.Input.TouchAttackAction -= OnClickAtkBtn;
+                GameManager.Input.TouchAttackAction += OnClickAtkBtn;
+                GameManager.Input.TouchJumpAction -= OnClickJumpBtn;
+                GameManager.Input.TouchJumpAction += OnClickJumpBtn;
+
+                //Test Code
 
 
-        GameManager.Input.KeyUpAction -= OnKeyUpAction;
-        GameManager.Input.KeyUpAction += OnKeyUpAction;
+                GameManager.Input.KeyDownAction -= OnKeyDownMoveAction;
+                GameManager.Input.KeyDownAction += OnKeyDownMoveAction;
 
 
-        GameManager.Input.KeyDownAction -= OnKeyUIAction;
-        GameManager.Input.KeyDownAction += OnKeyUIAction;
+                GameManager.Input.KeyDownAction -= OnKeyAction;
+                GameManager.Input.KeyDownAction += OnKeyAction;
 
 
-        GameManager.Input.DoubleKeyAction -= DoubleKeyAction;
-        GameManager.Input.DoubleKeyAction += DoubleKeyAction;
+                GameManager.Input.KeyUpAction -= OnKeyUpAction;
+                GameManager.Input.KeyUpAction += OnKeyUpAction;
 
+
+                GameManager.Input.KeyDownAction -= OnKeyUIAction;
+                GameManager.Input.KeyDownAction += OnKeyUIAction;
+
+
+                GameManager.Input.DoubleKeyAction -= DoubleKeyAction;
+                GameManager.Input.DoubleKeyAction += DoubleKeyAction;
+                break;
+            default:
+                break;
+        }
         _BakalSceneUI = GameManager.UI._scene as UI_BakalSceneUI;
 
         if (_BakalSceneUI)
@@ -141,7 +180,7 @@ public class MyPlayer : BaseCharacter
                 return;
             }
 
-            PositionInfo.State = PlayerState.Moving;
+            _state = PlayerState.Moving;
             _moveDir = Vector2.up;
 
             Dir = GetDirFromVec(_moveDir);
@@ -160,7 +199,7 @@ public class MyPlayer : BaseCharacter
                 _shadowObject.transform.position = CellPos;
                 return;
             }
-            PositionInfo.State = PlayerState.Moving;
+            _state = PlayerState.Moving;
 
 
             Debug.Log($"down");
@@ -180,7 +219,7 @@ public class MyPlayer : BaseCharacter
                 return;
             }
 
-            PositionInfo.State = PlayerState.Moving;
+            _state = PlayerState.Moving;
             _moveDir = Vector2.left;
             Dir = GetDirFromVec(_moveDir);
 
@@ -197,7 +236,7 @@ public class MyPlayer : BaseCharacter
                 _shadowObject.transform.position = CellPos;     
                 return;
             }
-            PositionInfo.State = PlayerState.Moving;
+            _state = PlayerState.Moving;
             _moveDir = Vector2.right;
             Dir = GetDirFromVec(_moveDir);
 
@@ -211,46 +250,264 @@ public class MyPlayer : BaseCharacter
 
     }
 
-
-    protected override void MoveToNextPos()
+    public void OnJoystickEndDragAction(PointerEventData evt)
     {
-        if (Dir == MoveDir.None) // 키 입력이 없을 때.
+        if (PositionInfo.State == PlayerState.Run)
         {
-            PositionInfo.State = PlayerState.Idle;
+            Debug.Log($"Vector2 is Zero : Drag end");
+            _state = PositionInfo.State = PlayerState.Idle;
+            _updated = true;
             CheckUpdatedFlag();
-            return;
         }
+    }
 
-        Vector2 destPos = CellPos;
+    public void OnJoystickMoveAction(float h, float v)
+    {
+        //Debug.Log($"OnJoystickMoveAction : {h}, {v}");
 
-        switch (Dir)
-        {
-            case MoveDir.Up:
-                destPos += Vector2.up;
-                break;
-            case MoveDir.Down:
-                destPos += Vector2.down;
-                break;
-            case MoveDir.Left:
-                destPos += Vector2.left;
-                break;
-            case MoveDir.Right:
-                destPos += Vector2.right;
-                break;
-        }
+        Vector2 controllerDir = new Vector2(h, v);
 
-        //if (Managers.Map.CanGo(destPos))
+        //if (controllerDir.magnitude <= 0.00001f)
         //{
-        //    if (Managers.Object.Find(destPos) == null)
+        //    if (PositionInfo.State == PlayerState.Run)
         //    {
-        //        CellPos = destPos;
+        //        Debug.Log($"Vector2 is zero {controllerDir.magnitude}");
+        //        _state = PositionInfo.State = PlayerState.Idle;
+        //        _updated = true;
+        //        CheckUpdatedFlag();
+        //        return;
         //    }
         //}
 
-        CheckUpdatedFlag();
+        if (h < 0)
+        {
+            _state = PlayerState.Run;
+            _moveDir = controllerDir;
+
+            Dir = GetDirFromVec(_moveDir);
+            _positionInfo.MoveDir = Dir;
+        }
+        else if(h > 0) 
+        {
+            _state = PlayerState.Run;
+            _moveDir = controllerDir;
+
+
+            Dir = GetDirFromVec(_moveDir);
+            _positionInfo.MoveDir = Dir;
+
+        }
+
+        else if(v > 0)
+        {
+            _state = PlayerState.Run;
+            _moveDir = controllerDir;
+
+            Dir = GetDirFromVec(_moveDir);
+            _positionInfo.MoveDir = Dir;
+
+        }
+
+        else if (v < 0)
+        {
+            _state = PlayerState.Run;
+            _moveDir = controllerDir;
+            Dir = GetDirFromVec(_moveDir);
+            _positionInfo.MoveDir = Dir;
+
+        }
     }
 
-    private void OnKeyAction()
+    protected override void MoveToNextPos()
+    {
+        //if (Dir == MoveDir.None) // 키 입력이 없을 때.
+        //{
+        //    PositionInfo.State = PlayerState.Idle;
+        //    CheckUpdatedFlag();
+        //    return;
+        //}
+
+        //Vector2 destPos = CellPos;
+
+        //switch (Dir)
+        //{
+        //    case MoveDir.Up:
+        //        destPos += Vector2.up;
+        //        break;
+        //    case MoveDir.Down:
+        //        destPos += Vector2.down;
+        //        break;
+        //    case MoveDir.Left:
+        //        destPos += Vector2.left;
+        //        break;
+        //    case MoveDir.Right:
+        //        destPos += Vector2.right;
+        //        break;
+        //}
+
+        ////if (Managers.Map.CanGo(destPos))
+        ////{
+        ////    if (Managers.Object.Find(destPos) == null)
+        ////    {
+        ////        CellPos = destPos;
+        ////    }
+        ////}
+
+        //CheckUpdatedFlag();
+    }
+
+
+#region touchAction
+
+    public void OnClickAtkBtn()
+    {
+        if (currentAtkCount == 3)
+            return;
+        isActiveComboDetect = true;
+        lastComboTime = comboTimeWindow;
+        _state = PlayerState.Atk;
+        currentAtkCount++;
+
+        switch (currentAtkCount)
+        {
+
+            case 1:
+                {
+                    C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+
+                    skill.Info.SkillId = 2;
+                    GameManager.Network.Send(skill);
+                    _animator.SetTrigger("Attack1");
+
+                    GameManager.Sound.Play($"Effect/Swordman/sm_atk_01");
+                    GameManager.Sound.Play($"Effect/Swordman/weapon/kata_01");
+
+                    break;
+                }
+            case 2:
+                {
+                    C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+
+                    skill.Info.SkillId = 3;
+                    GameManager.Network.Send(skill);
+
+                    _animator.SetTrigger("Attack2");
+                    GameManager.Sound.Play($"Effect/Swordman/sm_atk_02");
+                    GameManager.Sound.Play($"Effect/Swordman/weapon/kata_02");
+
+
+                    break;
+                }
+            case 3:
+                {
+                    C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+
+
+                    skill.Info.SkillId = 4;
+                    GameManager.Network.Send(skill);
+
+                    _animator.SetTrigger("Attack3");
+                    GameManager.Sound.Play($"Effect/Swordman/sm_atk_03");
+                    GameManager.Sound.Play($"Effect/Swordman/weapon/kata_03");
+
+                    break;
+                }
+        }
+
+        //if (Time.time - lastComboTime > comboTimeWindow)
+        //{
+        //    PosInfo.State = PlayerState.Atk;
+        //    lastComboTime = Time.time;
+        //    if (currentAtkCount == 0)
+        //    {
+        //        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+        //        skill.Info.SkillId = 2;
+        //        GameManager.Network.Send(skill);
+
+
+
+        //        // 첫 번째 공격
+        //        _animator.SetTrigger("Attack1");
+        //        //_HitBox.gameObject.SetActive(true);
+
+        //        currentAtkCount = 1;
+
+
+        //        //_coSkillCoolTime = StartCoroutine("CoInputCooltime", 0.2f);
+
+
+
+        //    }
+        //    else if (currentAtkCount == 1)
+        //    {
+
+        //        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+        //        skill.Info.SkillId = 3;
+        //        GameManager.Network.Send(skill);
+
+
+        //        //PosInfo.State = PlayerState.Atk;
+
+        //        //_HitBox.gameObject.SetActive(true);
+
+        //        _animator.SetTrigger("Attack2");
+        //        // 두 번째 공격
+        //        currentAtkCount = 2;
+        //    }
+        //    else if (currentAtkCount == 2)
+        //    {
+
+        //        C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+        //        skill.Info.SkillId = 4;
+        //        GameManager.Network.Send(skill);
+
+
+        //        // 세 번째 공격 (3단 근접 공격)
+        //        PosInfo.State = PlayerState.Idle;
+
+        //        //_HitBox.gameObject.SetActive(true);
+
+        //        _animator.SetTrigger("Attack3");
+        //        currentAtkCount = 0;
+
+        //    }
+        //}
+        //// 최초 Idle에서 평타키를 눌렀을 때 or 평타 대기 상태에서 평타키를 눌렀을 떄.
+        //// Atk 1타 상타로 진입함.
+
+        //if (PosInfo.State == PlayerState.Jump)
+        //    // To-do : 점프 상태에서 점프 평타 모션 넣어야함
+        //    return;
+        //if (PosInfo.State == PlayerState.Run)
+        //    // To-do : 대쉬 상태에서 대쉬 평타 모션 넣어야함
+        //    return;
+    }
+
+    public void OnClickJumpBtn()
+    {
+        if (_state == PlayerState.Jump)
+            return;
+
+        initialPosition = _Sprite.transform.position;
+        CellPos = _Sprite.transform.position;
+        _state = PlayerState.Jump;
+
+        //C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+        //skill.Info.SkillId = 1;
+        //GameManager.Network.Send(skill);
+
+        C_Jump c_Jump = new C_Jump();
+        c_Jump.PosInfo = PositionInfo;
+        GameManager.Network.Send(c_Jump);
+
+        GameManager.Sound.Play($"Effect/Swordman/sm_jump");
+    }
+
+
+    #endregion
+
+
+    private void OnKeyAction() 
     {
         // TODO : 평타 로직 다시 만들어야함
         if (Input.GetKeyDown(KeyCode.X))
@@ -411,14 +668,14 @@ public class MyPlayer : BaseCharacter
 
     public void OnKeyUpAction()
     {
-        if (PositionInfo.State != PlayerState.Jump)
+        if (_state != PlayerState.Jump)
         {
-            if (PositionInfo.State == PlayerState.Atk)
+            if (_state == PlayerState.Atk)
             {
                 return;
             }
-            PositionInfo.State = PlayerState.Idle;
-            PositionInfo.MoveDir = MoveDir.None;
+            _state = PlayerState.Idle;
+            _positionInfo.MoveDir = MoveDir.None;
             _updated = true;
 
             CheckUpdatedFlag();
@@ -434,7 +691,7 @@ public class MyPlayer : BaseCharacter
             _shadowObject.transform.position = CellPos;
             return;
         }
-        PositionInfo.State = PlayerState.Run;
+        _state = PlayerState.Run;
 
         //CheckUpdatedFlag();
     }
@@ -483,6 +740,12 @@ public class MyPlayer : BaseCharacter
         _animator.SetBool("isAtkIdle", true);
     }
 
+
+    public override void ProcJumpPlayer(bool isMoving = false)
+    {
+        base.ProcJumpPlayer(isMoving);
+    }
+
     #endregion
 
 
@@ -502,17 +765,15 @@ public class MyPlayer : BaseCharacter
         {
             C_Move movePacket = new C_Move();
 
-
-
             movePacket.PosInfo = new PositionInfo();
 
-            movePacket.PosInfo.PosX = PositionInfo.PosX;
-            movePacket.PosInfo.PosY = PositionInfo.PosY;
-            movePacket.PosInfo.MoveDir = PositionInfo.MoveDir;
-            movePacket.PosInfo.State = PositionInfo.State;
+            movePacket.PosInfo.PosX = _positionInfo.PosX;
+            movePacket.PosInfo.PosY = _positionInfo.PosY;
+            movePacket.PosInfo.MoveDir = _positionInfo.MoveDir;
+            movePacket.PosInfo.State = _positionInfo.State;
 
 
-            //Debug.Log($"Current Pos? : {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY} , {movePacket.PosInfo.State} , {movePacket.PosInfo.MoveDir}");
+            Debug.Log($"Current Pos? : {movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY} , {movePacket.PosInfo.State} , {movePacket.PosInfo.MoveDir}");
             GameManager.Network.Send(movePacket);
             _updated = false;
         }

@@ -45,12 +45,10 @@ namespace Server
             // DNS (Domain Name System)
             string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
-			IPAddress ipAddr = ipHost.AddressList[0];
-
-			//ipAddr = IPAddress.Parse("172.31.10.77");
-			
+			IPAddress ipAddr = ipHost.AddressList[1];
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
 
+            Console.WriteLine($"ipadd : {ipAddr.ToString()}");
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
 			Console.WriteLine("Listening...");
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7650995373369514868}
   - component: {fileID: 1702001311507220811}
   - component: {fileID: 3993885060102328876}
-  m_Layer: 30
+  m_Layer: 31
   m_Name: other_male_ghostnight
   m_TagString: OtherPlayer
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1338623129075143099}
   - component: {fileID: 3817384200271148160}
   - component: {fileID: 414498133000431872}
-  m_Layer: 30
+  m_Layer: 31
   m_Name: Base/Shadow
   m_TagString: OtherPlayer
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 6043326572826671321}
   - component: {fileID: 7062591052256803592}
   - component: {fileID: 901789342745451270}
-  m_Layer: 30
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: OtherPlayer
   m_Icon: {fileID: 0}
