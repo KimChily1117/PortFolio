@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 48652576538397415}
   - component: {fileID: 6341779227470008650}
   m_Layer: 5
-  m_Name: Dynamic Joystick
+  m_Name: Dynamic_Joystick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
