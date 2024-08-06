@@ -44,6 +44,11 @@ public class TownScene : BaseScene
         GameManager.Sound.SetAudioVolume(0.55f);
         //GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
 
+        if(GameManager.PlayerPlatformType == Enums.PlatformType.MOBILE)
+        {
+            GameManager.UI.ShowSceneUI<UI_MobileController>("Dynamic_Joystick");
+        }
+
         if (_seriaTriggerEvent == null)
         {
             _seriaTriggerEvent = GameObject.Find("SeriaPortal").GetComponent<TriggerEvent>();
