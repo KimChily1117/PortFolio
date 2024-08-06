@@ -20,6 +20,29 @@ public class MultiplayerTestBuild
     {
         PerformWin64Build(4);
     }
+
+
+
+    [MenuItem("KIMCHILY_TOOL/Build AOS")]
+
+    static void BuildFromAos()
+    {
+        EditorUserBuildSettings.SwitchActiveBuildTarget(
+           BuildTargetGroup.Android, BuildTarget.Android);
+
+        BuildPipeline.BuildPlayer(GetScenePaths(), "Builds/Android/" + "/" + GetProjectName() + ".apk", BuildTarget.Android, BuildOptions.None);
+
+
+    }
+
+
+
+
+
+
+
+
+
     static void PerformWin64Build(int playerCount)
     {
         EditorUserBuildSettings.SwitchActiveBuildTarget(

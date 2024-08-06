@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class InputManager
@@ -12,9 +13,15 @@ public class InputManager
     public Action KeyUpAction = null;
     // Key를 뗬을 때 동작을 Invoke 시키기 위해 선언 
     
-    public Action<Define.MouseEvent> MouseAction = null; 
+    public Action<Define.MouseEvent> MouseAction = null;
 
-    
+    public Action<float, float> TouchAction = null;
+    public Action TouchAttackAction = null;
+    public Action TouchJumpAction = null;
+
+    public Action<PointerEventData> EndDragAction = null;
+
+
     // Double Input 
     public float lastInputElapsed = 0f;
     
@@ -30,12 +37,14 @@ public class InputManager
     public Action DoubleKeyAction = null;
     // Key를 뗬을 때 동작을 Invoke 시키기 위해 선언 
 
-    // Double Input
-
-
+    
     public Action<Define.InputType> inputTypeAction = null;
 
- 
+
+    private float _horizontal;
+    private float _vertical;
+
+
     bool _pressed = false;
     public bool _keypressed = false;
     public void OnUpdate()
@@ -104,11 +113,7 @@ public class InputManager
                 }
             }
         }
-        
-        
-        
-        
-        
+
         if (MouseAction != null)
         {
             if(Input.GetMouseButton(0))
@@ -126,13 +131,27 @@ public class InputManager
                 }
             }
         }
-    }
 
+        if(TouchAction != null)
+        {
+            TouchAction.Invoke(_horizontal, _vertical);
+        }
+    }
     public void Clear()
     {
         MouseAction = null;
         KeyDownAction = null;
         KeyUpAction = null;
+
+        TouchAction = null;
+    }
+
+
+
+    public void JoyStickActionReciver(float h, float v)
+    {
+        _horizontal = h;
+        _vertical = v;
     }
 
 
@@ -140,8 +159,6 @@ public class InputManager
     {
         _inputKeycode = code;
     }
-
-
     private bool CheckAtkButton(KeyCode code)
     {
         return code == KeyCode.X;

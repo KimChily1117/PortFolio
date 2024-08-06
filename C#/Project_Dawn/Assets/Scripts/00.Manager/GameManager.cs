@@ -63,8 +63,39 @@ public class GameManager : MonoBehaviour
     #endregion Core
 
 
+
+    /*
+     
+     
+     decisionPlatform
+     
+     
+     
+     
+     */
+
+    private static Enums.PlatformType _playerplatformType = Enums.PlatformType.NONE;
+    public static Enums.PlatformType PlayerPlatformType { get { return _playerplatformType; } } 
+
+    public static void AssignPlatform()
+    {
+        if(Application.isMobilePlatform) 
+        {
+            _playerplatformType = Enums.PlatformType.MOBILE;
+        }
+        else
+        {
+            _playerplatformType = Enums.PlatformType.DESKTOP;
+        }
+    }
+
+
+
+
+
     static void Init()
     {
+        AssignPlatform();
         if (!s_instance)
         {
             GameObject obj = GameObject.Find("@Managers");
@@ -92,11 +123,16 @@ public class GameManager : MonoBehaviour
             evt = Resources.Instantiate("UI/EventSystem");
         }
         Application.runInBackground = true;
+        Application.targetFrameRate = 300;
+
+        Screen.SetResolution(1920, 1080, true);
+
         DontDestroyOnLoad(evt);
     }
 
     void OnEnable()
     {
+
         Init();
         //StartCoroutine(InitializeNetwork());
 

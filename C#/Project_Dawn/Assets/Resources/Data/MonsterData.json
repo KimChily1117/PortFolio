@@ -5,7 +5,7 @@
       "name": "폭룡왕 바칼",
       "stat": {
         "level": "1",
-        "maxHp": "20",
+        "maxHp": "100",
         "attack": "5",
         "speed": "5.0",
         "totalExp": "10"

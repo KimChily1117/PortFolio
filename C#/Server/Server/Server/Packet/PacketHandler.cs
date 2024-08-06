@@ -30,7 +30,7 @@ class PacketHandler
         if (room == null)
             return;
 
-        room.PushAfter(250, room.HandleMove, player, movePacket);
+        room.Push(room.HandleMove, player, movePacket);
 
     }
 

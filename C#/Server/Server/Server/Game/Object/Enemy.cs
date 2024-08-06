@@ -15,7 +15,7 @@ namespace Server.Game.Object
 
         long _currentTime = 0;
         long _elapsedTime = 0;
-        long _lastUsedTime = Environment.TickCount64;// 10초
+        long _lastUsedTime = Environment.TickCount64;
 
         public Enemy()
         {

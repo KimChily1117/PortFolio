@@ -13,15 +13,15 @@ public class OtherPlayer : BaseCharacter
     {
         get { return PositionInfo.State; }
         set 
-        {          
+        {
 
             Debug.Log($"Posinfo ?? : {value}");
-            if (PositionInfo.State == PlayerState.Moving || PositionInfo.State == PlayerState.Run)
+            if (_positionInfo.State == PlayerState.Moving || _positionInfo.State == PlayerState.Run)
             {
                 if (value == PlayerState.Jump)
                 {
-                    PositionInfo.State = value;
-                    ProcJumpPlayer();
+                    _positionInfo.State = value;
+                    ProcJumpPlayer(true);
                     return;
                 }
             }
@@ -89,11 +89,21 @@ public class OtherPlayer : BaseCharacter
         _animator.SetBool("isAtkIdle", true);
     }
 
-    public override void ProcJumpPlayer()
+    public override void ProcJumpPlayer(bool isMoving = false)
     {
         //base.ProcJumpPlayer();
 
-        CellPos += GetVecFromDir(PositionInfo.MoveDir) * _speed * Time.deltaTime;
+
+        if(isMoving)
+        {
+            CellPos += GetVecFromDir(_positionInfo.MoveDir) * _speed * Time.deltaTime;
+        }
+        else
+        {
+            CellPos += GetVecFromDir(MoveDir.None) * _speed * Time.deltaTime;
+        }
+
+
         _shadowObject.transform.position = CellPos;
         initialPosition = CellPos;
 
@@ -173,7 +183,7 @@ public class OtherPlayer : BaseCharacter
     {
         base.Update();
 
-        transform.position = new Vector2(PositionInfo.PosX,PositionInfo.PosY);
+        transform.position = new Vector2(_positionInfo.PosX, _positionInfo.PosY);
     }
 
 

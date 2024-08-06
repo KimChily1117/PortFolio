@@ -16,5 +16,10 @@ public class Enums
         ATK3
     }
 
-
+    public enum PlatformType
+    {
+        NONE,
+        MOBILE,
+        DESKTOP
+    }
 }

@@ -23,7 +23,19 @@ namespace Server.Game.Room
             // 다른 플레이어한테도 알려준다
             S_Move resMovePacket = new S_Move();
             resMovePacket.PlayerId = player.Info.ObjectId;
-            resMovePacket.PosInfo = movePacket.PosInfo;
+
+            resMovePacket.PosInfo = new PositionInfo();
+
+            //Console.WriteLine($"Player : {player.Info.ObjectId} POS X : {movePacket.PosInfo.PosX} ");
+            //Console.WriteLine($"Player : {player.Info.ObjectId} POS Y : {movePacket.PosInfo.PosY} ");
+            //Console.WriteLine($"Player : {player.Info.ObjectId} POS STATE : {movePacket.PosInfo.State} ");
+            //Console.WriteLine($"Player : {player.Info.ObjectId} POS MOVEDIR : {movePacket.PosInfo.MoveDir} ");
+
+
+            resMovePacket.PosInfo.PosX = movePacket.PosInfo.PosX;
+            resMovePacket.PosInfo.PosY = movePacket.PosInfo.PosY;
+            resMovePacket.PosInfo.State = movePacket.PosInfo.State;
+            resMovePacket.PosInfo.MoveDir = movePacket.PosInfo.MoveDir;
 
             Broadcast(resMovePacket);
 

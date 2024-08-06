@@ -25,8 +25,11 @@ public class NetworkManager
         string host = Dns.GetHostName();
         IPHostEntry ipHost = Dns.GetHostEntry(host);
         IPAddress ipAddr = ipHost.AddressList[0];
-        //ipAddr = IPAddress.Parse("3.24.16.107");
-        IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080);
+        //IPEndPoint endPoint = new IPEndPoint(ipAddr, 8080); //기존 테스트 (offline)        
+        //ipAddr = IPAddress.Parse("3.24.16.107"); //aws 
+        ipAddr = IPAddress.Parse("192.168.0.3"); //aws 
+
+        IPEndPoint endPoint = new IPEndPoint(ipAddr,8080); //포트포워딩 
 
 
         connector.Connect(endPoint, () =>
