@@ -253,13 +253,38 @@ class PacketHandler
     {
         S_Die s_Die = (S_Die)message;
 
-        Debug.Log($"Who Dead ? {s_Die.Player.ObjectId},{s_Die.Player.Name}");
 
         GameObject go = GameManager.ObjectManager.FindById(s_Die.Player.ObjectId);
 
         BaseCharacter baseCharacter = go.GetComponent<BaseCharacter>();
 
-        baseCharacter.OnDead();
+        GameObjectType type = ObjectManager.GetObjectTypeId(s_Die.Player.ObjectId);
+
+        Debug.Log($"Who Dead ? {s_Die.Player.ObjectId},{s_Die.Player.Name} , {type.ToString()}");
+        switch (type)
+        {
+            case GameObjectType.Player:
+
+                MyPlayer mp = baseCharacter.GetComponent<MyPlayer>();
+                
+                if(mp)
+                    mp.OnDead();
+                
+                else
+                
+                {
+                    OtherPlayer op = baseCharacter.GetComponent<OtherPlayer>();
+                    op.OnDead();
+                }
+
+                break;
+            case GameObjectType.Enemy:
+                EnemyPlayer ep = baseCharacter.GetComponent<EnemyPlayer>();
+
+                ep.OnDead();
+                break;
+        }
+
     }
 
     public static void S_ItemListHandler(PacketSession session, IMessage packet)

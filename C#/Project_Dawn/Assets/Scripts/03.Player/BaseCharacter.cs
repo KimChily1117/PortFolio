@@ -389,10 +389,10 @@ namespace Character
 
         public virtual void OnDead()
         {
-            Invoke("AfterDeadDestroy", 5f);
+            Invoke("AfterDeadDestroy", 8f);
         }
 
-        private void AfterDeadDestroy()
+        public void AfterDeadDestroy()
         {
             GameManager.ObjectManager.Remove(Id);
         }

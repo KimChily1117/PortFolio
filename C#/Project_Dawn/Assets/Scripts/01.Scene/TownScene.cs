@@ -42,7 +42,6 @@ public class TownScene : BaseScene
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/seria_gate", Define.SoundType.BGM);
         GameManager.Sound.SetAudioVolume(0.55f);
-        //GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
 
         if(GameManager.PlayerPlatformType == Enums.PlatformType.MOBILE)
         {
@@ -66,6 +65,7 @@ public class TownScene : BaseScene
 
 
         _cameraController.SetCameraLimit(CurrentMapState);
+        GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
 
     }
 

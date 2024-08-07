@@ -83,7 +83,7 @@ namespace Server.Game.Room
 
         /// <summary>
         /// </summary>
-        /// <param name="player"> 시전자의 정보 </param>
+        /// <param name="player"> 시전자의 정보 -> ?? </param>
         /// <param name="collisionPacket"> 피폭자의 정보를 넣을려고 </param>
         public void HandleCollision(Player player, C_Collision collisionPacket)
         {
@@ -110,9 +110,13 @@ namespace Server.Game.Room
             if (e != null)
             {
                 s_Collision.Playerinfo = collisionPacket.Playerinfo;
-                s_Collision.Playerinfo.Damage = player.TotalDamage;
+
+                s_Collision.Playerinfo.Damage = player.TotalDamage; // 플레이어의 무기 스텟 영향을 주기 위해서
+                
                 s_Collision.PlayerId = collisionPacket.Playerinfo.ObjectId;
-                e.OnDamaged(player.TotalDamage, player);
+
+
+                e.OnDamaged(player.TotalDamage, player); // 플레이어의 무기 스텟 영향을 주기 위해서
             }
 
             else

@@ -12,14 +12,22 @@ public class UI_HUD : UI_Scene
     [SerializeField]
     private Image HpBar;
 
+    public Button _invenBtn;
+    public Button _StatBtn;
+
+
     public override void Init()
     {
-        //base.Init();
+        base.Init();
     }
 
     protected override void Start()
     {
+        base.Start();
+        Init();
         HpBar = this.gameObject.FindChild<Image>("Hp", true);
+        _invenBtn = this.gameObject.FindChild<Button>("BtnInventory", true);
+        _StatBtn = this.gameObject.FindChild<Button>("BtnStat", true);
     }
 
     private void Update()
