@@ -39,7 +39,7 @@ public class EnemyPlayer : BaseCharacter
         {
             t.gameObject.SetActive(false);
         }
-        
+
     }
 
     protected override void Update()
@@ -55,12 +55,19 @@ public class EnemyPlayer : BaseCharacter
         base.TakeDamage(Damage);
         Invoke("triggerOn", 0.2f);
 
-        if (HP <= 0)
-        {
-            _animator.SetTrigger("DeadTrigger");
-            GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_skill_20_2");
-        }
+
     }
+
+
+    public override void OnDead()
+    {
+        _animator.SetTrigger("DeadTrigger");
+        GameManager.Sound.Play($"Sounds/mon/bakal/bakal_dragon_skill_20_2");
+
+        base.OnDead();
+
+    }
+
 
 
     private void triggerOn()
@@ -77,10 +84,10 @@ public class EnemyPlayer : BaseCharacter
             StartCoroutine(MeteorPattern());
         }
 
-        else
-        {
+        //else if
+        //{
 
-        }
+        //}
     }
 
 
@@ -101,7 +108,7 @@ public class EnemyPlayer : BaseCharacter
         StartCoroutine(CameraShake.Instance.Shake(0.3f, 0.4f));
         MeteorAreas[0].gameObject.SetActive(true);
         MeteorAreas[5].gameObject.SetActive(true);
-      
+
 
         //foreach (Transform t in MeteorAreas)
         //{

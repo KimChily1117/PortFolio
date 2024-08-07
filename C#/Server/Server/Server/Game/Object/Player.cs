@@ -35,8 +35,8 @@ namespace Server.Game.Object
             s_Die.Player = Info;
             Room.Broadcast(s_Die);
 
-            GameRoom room = Room;
-            room.LeaveRoom(Id);
+            //GameRoom room = Room;
+            //room.LeaveRoom(Id);
         }
 
 

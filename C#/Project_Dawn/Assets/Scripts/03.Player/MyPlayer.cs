@@ -117,11 +117,32 @@ public class MyPlayer : BaseCharacter
             default:
                 break;
         }
-        _BakalSceneUI = GameManager.UI._scene as UI_BakalSceneUI;
 
-        if (_BakalSceneUI)
+        if (GameManager.SCENE.CurrentScene == Define.Scenes.BAKAL)
         {
-            _BakalSceneUI.HUD.targetChar = this;
+            _BakalSceneUI = GameManager.UI._scene as UI_BakalSceneUI;
+
+            if (_BakalSceneUI)
+            {
+                _BakalSceneUI.HUD.targetChar = this;
+                _BakalSceneUI.HUD._invenBtn.onClick.RemoveAllListeners();
+                _BakalSceneUI.HUD._StatBtn.onClick.RemoveAllListeners();
+
+
+                _BakalSceneUI.HUD._invenBtn.onClick.AddListener(OnClickInvenUIButton);
+                _BakalSceneUI.HUD._StatBtn.onClick.AddListener(OnClickStatUIButton);
+            }
+        }
+
+        else if (GameManager.SCENE.CurrentScene == Define.Scenes.TOWN)
+        {
+            GameManager.UI._scene.GetComponent<UI_HUD>().targetChar = this;
+            GameManager.UI._scene.GetComponent<UI_HUD>()._invenBtn.onClick.RemoveAllListeners();
+            GameManager.UI._scene.GetComponent<UI_HUD>()._StatBtn.onClick.RemoveAllListeners();
+
+            GameManager.UI._scene.GetComponent<UI_HUD>()._invenBtn.onClick.AddListener(OnClickInvenUIButton);
+            GameManager.UI._scene.GetComponent<UI_HUD>()._StatBtn.onClick.AddListener(OnClickStatUIButton);
+
         }
     }
 
@@ -133,10 +154,11 @@ public class MyPlayer : BaseCharacter
         {
             if (_isInventory == false)
             {
-                InvenUI = GameManager.UI.ShowPopupUI<UI_Inventory>("UI_Inventory");
-
+                if(!InvenUI)
+                    InvenUI = GameManager.UI.ShowPopupUI<UI_Inventory>("UI_Inventory");
                 InvenUI.RefreshUI();
                 _isInventory = true;
+                InvenUI.gameObject.SetActive(_isInventory);
             }
             else
             {
@@ -149,8 +171,11 @@ public class MyPlayer : BaseCharacter
         {
             if(_isStatInfo == false) 
             {
-                StatUI = GameManager.UI.ShowPopupUI<UI_StatInfo>("UI_StatInfo");
+                if (!StatUI)
+                    StatUI = GameManager.UI.ShowPopupUI<UI_StatInfo>("UI_StatInfo");
                 _isStatInfo = true;
+                StatUI.gameObject.SetActive(_isStatInfo);
+
             }
             else
             {
@@ -161,8 +186,39 @@ public class MyPlayer : BaseCharacter
     }
 
 
+    public void OnClickInvenUIButton()
+    {
+        if (_isInventory == false)
+        {
+            if (!InvenUI)
+                InvenUI = GameManager.UI.ShowPopupUI<UI_Inventory>("UI_Inventory");
+            InvenUI.RefreshUI();
+            _isInventory = true;
+            InvenUI.gameObject.SetActive(_isInventory);
+        }
+        else
+        {
+            _isInventory = false;
+            InvenUI.gameObject.SetActive(_isInventory);
+        }
+    }
 
+    public void OnClickStatUIButton()
+    {
+        if (_isStatInfo == false)
+        {
+            if (!StatUI)
+                StatUI = GameManager.UI.ShowPopupUI<UI_StatInfo>("UI_StatInfo");
+            _isStatInfo = true;
+            StatUI.gameObject.SetActive(_isStatInfo);
 
+        }
+        else
+        {
+            _isStatInfo = false;
+            StatUI.gameObject.SetActive(_isStatInfo);
+        }
+    }
 
 
     public void OnKeyDownMoveAction()
@@ -801,12 +857,20 @@ public class MyPlayer : BaseCharacter
     {
         base.TakeDamage(Damage);
 
-        if(HP <= 0)
-        {
-            _animator.SetTrigger("Die");
-            _shadowObject.SetActive(false);
-            GameManager.Sound.Play("Effect/Swordman/sm_die");
-        }
+        //if (HP <= 0)
+        //{
+        //    _animator.SetTrigger("Die");
+        //    _shadowObject.SetActive(false);
+        //    GameManager.Sound.Play("Effect/Swordman/sm_die");
+        //}
+    }
+
+    public override void OnDead()
+    {
+        _animator.SetTrigger("Die");
+        _shadowObject.SetActive(false);
+        GameManager.Sound.Play("Effect/Swordman/sm_die");
+        base.OnDead();
     }
 
 

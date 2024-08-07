@@ -32,6 +32,9 @@ enum MsgId {
   S_DIE = 24;
   S_ITEM_LIST = 25;
   S_ADD_ITEM = 26;
+  S_EQUIP_ITEM = 27;
+  C_EQUIP_ITEM = 28;
+  S_CHANGE_STAT = 29;
 }
 
 enum PlayerState {
@@ -55,7 +58,8 @@ enum MoveDir {
 enum GameObjectType{
 	PLAYER = 0;
 	ENEMY = 1;
-	PROJECTILE = 2;
+	OTHERPLAYER = 2;
+	PROJECTILE = 3;
 }
 
 enum RoomType
@@ -89,8 +93,9 @@ enum WeaponType {
 
 enum ArmorType {
   ARMOR_TYPE_NONE = 0;
-  ARMOR_TYPE_ARMOR = 1;
-  ARMOR_TYPE_BOOTS = 2;
+  ARMOR_TYPE_HELMET = 1;
+  ARMOR_TYPE_ARMOR = 2;
+  ARMOR_TYPE_BOOTS = 3;
 }
 
 enum ConsumableType {
@@ -159,7 +164,6 @@ message S_Die{
 	ObjectInfo player = 1;
 }
 
-
 message C_Move {
   PositionInfo posInfo = 1;
 }
@@ -186,6 +190,19 @@ message S_SceneMove {
   ObjectInfo playerinfo = 1;
 }
 
+message C_EquipItem {
+  int32 itemDbId = 1;
+  bool equipped = 2;
+}
+
+message S_EquipItem {
+  int32 itemDbId = 1;
+  bool equipped = 2;
+}
+
+message S_ChangeStat {
+  StatInfo statInfo = 1;
+}
 
 
 message C_CreateRoom {
@@ -258,7 +275,8 @@ message ItemInfo {
   int32 itemDbId = 1;
   int32 templateId = 2;
   int32 count = 3;
-  int32 slot = 4;
+  int32 slot = 4;  
+  bool equipped = 5;
 }
 
 message StatInfo {

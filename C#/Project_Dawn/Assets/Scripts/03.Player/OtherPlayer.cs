@@ -171,13 +171,23 @@ public class OtherPlayer : BaseCharacter
     {
         base.TakeDamage(Damage);
 
-        if (HP <= 0)
-        {
-            _animator.SetTrigger("Die");
-            _shadowObject.SetActive(false);
-            GameManager.Sound.Play("Effect/Swordman/sm_die");
-        }
+        //if (HP <= 0)
+        //{
+        //    _animator.SetTrigger("Die");
+        //    _shadowObject.SetActive(false);
+        //    GameManager.Sound.Play("Effect/Swordman/sm_die");
+        //}
     }
+
+    public override void OnDead()
+    {
+        _animator.SetTrigger("Die");
+        _shadowObject.SetActive(false);
+        GameManager.Sound.Play("Effect/Swordman/sm_die");
+        base.OnDead();
+    }
+
+
 
     protected override void Update()
     {
