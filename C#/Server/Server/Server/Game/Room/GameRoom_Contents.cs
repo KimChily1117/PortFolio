@@ -124,7 +124,9 @@ namespace Server.Game.Room
                 s_Collision.PlayerId = collisionPacket.Playerinfo.ObjectId;
                 s_Collision.Playerinfo = collisionPacket.Playerinfo;
 
-                player.OnDamaged(collisionPacket.Playerinfo.Damage, player);
+                int Damage = (int)collisionPacket.Playerinfo.Damage - player.TotalDefence;
+                s_Collision.Playerinfo.Damage = Damage;
+                player.OnDamaged(Damage, player);
             }
 
             Broadcast(s_Collision);
