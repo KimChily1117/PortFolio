@@ -47,6 +47,9 @@
     <ClInclude Include="Game.h">
       <Filter>소스 파일\00.MainGame</Filter>
     </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>소스 파일\01.Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCodingWINAPI.rc">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>소스 파일\00.MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>소스 파일\01.Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
