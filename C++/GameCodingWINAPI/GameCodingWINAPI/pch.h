@@ -9,5 +9,9 @@
 #include <string>
 #include <algorithm>
 
+#include "Define.h"
+#include "Enums.h"
+#include "Types.h"
+
 using namespace std;
 
