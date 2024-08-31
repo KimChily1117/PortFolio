@@ -50,6 +50,9 @@
     <ClInclude Include="TimeManager.h">
       <Filter>소스 파일\01.Managers</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>소스 파일\01.Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCodingWINAPI.rc">
@@ -75,6 +78,9 @@
       <Filter>소스 파일\00.MainGame</Filter>
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
+      <Filter>소스 파일\01.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
       <Filter>소스 파일\01.Managers</Filter>
     </ClCompile>
   </ItemGroup>
