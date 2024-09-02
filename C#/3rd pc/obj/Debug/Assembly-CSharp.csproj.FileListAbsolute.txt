@@ -556,3 +556,7 @@ D:\GIt\Winapi_Lec\3rd(2) pc\obj\Debug\Assembly-CSharp.csprojAssemblyReference.ca
 D:\GIt\Winapi_Lec\3rd(2) pc\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
 D:\GIt\Winapi_Lec\3rd(2) pc\obj\Debug\Assembly-CSharp.dll
 D:\GIt\Winapi_Lec\3rd(2) pc\obj\Debug\Assembly-CSharp.pdb
+E:\GItHub\PortFolio\C#\3rd pc\obj\Debug\Assembly-CSharp.csproj.AssemblyReference.cache
+E:\GItHub\PortFolio\C#\3rd pc\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+E:\GItHub\PortFolio\C#\3rd pc\obj\Debug\Assembly-CSharp.dll
+E:\GItHub\PortFolio\C#\3rd pc\obj\Debug\Assembly-CSharp.pdb

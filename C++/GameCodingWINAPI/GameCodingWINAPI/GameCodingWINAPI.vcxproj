@@ -131,25 +131,37 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Define.h" />
+    <ClInclude Include="DevScene.h" />
+    <ClInclude Include="EditScene.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCodingWINAPI.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DevScene.cpp" />
+    <ClCompile Include="EditScene.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCodingWINAPI.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCodingWINAPI.rc" />

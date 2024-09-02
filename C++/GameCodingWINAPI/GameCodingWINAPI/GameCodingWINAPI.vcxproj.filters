@@ -18,19 +18,19 @@
     <Filter Include="소스 파일\01.Managers">
       <UniqueIdentifier>{802dc4b0-97f9-4763-b145-8ddf1fc78051}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\02.Scenes">
+      <UniqueIdentifier>{745009dc-bfa1-4f2f-b7b0-dfd043a5b073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scenes\Game">
+      <UniqueIdentifier>{70245bf4-b768-4702-b228-4ba30c707318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\99.Headers\etc">
+      <UniqueIdentifier>{afd541b3-a0dd-4bc6-a52c-b65687714b88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCodingWINAPI.h">
       <Filter>소스 파일\00.MainGame</Filter>
-    </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>소스 파일\99.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>소스 파일\99.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>소스 파일\99.Headers</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>소스 파일\99.Headers</Filter>
@@ -53,6 +53,33 @@
     <ClInclude Include="InputManager.h">
       <Filter>소스 파일\01.Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>소스 파일\99.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>소스 파일\02.Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>소스 파일\01.Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="DevScene.h">
+      <Filter>소스 파일\02.Scenes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>소스 파일\02.Scenes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="EditScene.h">
+      <Filter>소스 파일\02.Scenes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>소스 파일\99.Headers\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>소스 파일\99.Headers\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일\99.Headers\etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCodingWINAPI.rc">
@@ -71,9 +98,6 @@
     <ClCompile Include="GameCodingWINAPI.cpp">
       <Filter>소스 파일\00.MainGame</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>소스 파일\00.MainGame</Filter>
     </ClCompile>
@@ -82,6 +106,27 @@
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>소스 파일\01.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일\99.Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>소스 파일\99.Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\02.Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\01.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="DevScene.cpp">
+      <Filter>소스 파일\02.Scenes\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>소스 파일\02.Scenes\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="EditScene.cpp">
+      <Filter>소스 파일\02.Scenes\Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
