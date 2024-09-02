@@ -9,9 +9,14 @@ public:
 	void Render(HDC hdc);
 
 
+	void Clear();
+
+public:
+	void ChangeScene(SceneType sceneType);
+
 private:
 	class Scene* _scene;
-	SceneType currentType = SceneType::NONE;
+	SceneType _currentSceneType = SceneType::NONE;
 
 
 };
