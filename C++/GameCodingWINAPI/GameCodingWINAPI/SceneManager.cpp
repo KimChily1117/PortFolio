@@ -44,7 +44,7 @@ void SceneManager::ChangeScene(SceneType sceneType)
 			newScene = new DevScene();
 			break;
 		case SceneType::GameScene:
-			//newScene = new GameScene();
+			newScene = new GameScene();
 			break;
 	}
 
