@@ -6,3 +6,14 @@ enum class SceneType
 	DevScene,
 	GameScene
 };
+
+enum class ObjectType
+{
+	None,
+	Player,
+	Monster,
+	Projectile
+};
+
+
+

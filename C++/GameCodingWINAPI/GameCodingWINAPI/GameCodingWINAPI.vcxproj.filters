@@ -27,6 +27,9 @@
     <Filter Include="소스 파일\99.Headers\etc">
       <UniqueIdentifier>{afd541b3-a0dd-4bc6-a52c-b65687714b88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\03.GameObjects">
+      <UniqueIdentifier>{791365dd-0236-4183-8ab6-83f29d5bdc88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCodingWINAPI.h">
@@ -80,6 +83,12 @@
     <ClInclude Include="targetver.h">
       <Filter>소스 파일\99.Headers\etc</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>소스 파일\03.GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\03.GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCodingWINAPI.rc">
@@ -127,6 +136,12 @@
     </ClCompile>
     <ClCompile Include="EditScene.cpp">
       <Filter>소스 파일\02.Scenes\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\03.GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\03.GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
