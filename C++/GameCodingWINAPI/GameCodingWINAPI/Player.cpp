@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Player.h"
+#include "Missile.h"
 #include "InputManager.h"
 #include "TimeManager.h"
+#include "ObjectManager.h"
 
 Player::Player() : Object(ObjectType::Player)
 {
@@ -46,13 +48,44 @@ void Player::Update()
 		_pos.y += _stat.speed * deltaTime;
 	}
 
+	if (GET_SINGLE(InputManager)->GetButton(KeyType::Q))
+	{
+		_barrelAngle += 10 * deltaTime;
+	}
+
+
+	if (GET_SINGLE(InputManager)->GetButton(KeyType::E))
+	{
+		_barrelAngle -= 10 * deltaTime;
+
+	}
+
 	if (GET_SINGLE(InputManager)->GetButtonDown(KeyType::SpaceBar))
 	{
 		// TODO 원거리 공격
+
+		Missile* missile = GET_SINGLE(ObjectManager)->CreateObject<Missile>();
+
+		missile->SetPos(GetFirePos());
+		missile->SetAngle(_barrelAngle);
+
+		GET_SINGLE(ObjectManager)->Add(missile);
+
 	}
 }
 
 void Player::Render(HDC hdc)
 {
 	Utils::DrawCircle(hdc, _pos, 50);
+	Utils::DrawLine(hdc, _pos, GetFirePos());
+	
+}
+
+Pos Player::GetFirePos()
+{
+	Pos firepos = _pos;
+
+	firepos.x += _barrelLength * ::cos(_barrelAngle);
+	firepos.y -= _barrelLength * ::sin(_barrelAngle);
+	return firepos;
 }
