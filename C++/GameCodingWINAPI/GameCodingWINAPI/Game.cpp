@@ -55,16 +55,11 @@ void Game::Render()
 		TextOut(_hdcback, 20, 10, str.c_str(), static_cast<int32>(str.size()));
 	}
 
-
-
 	wstring str = format(L"FPS({0}) , DT({1})ms", fps, static_cast<int32>(deltaTime));
 	TextOut(_hdcback, 650, 10, str.c_str(), static_cast<int32>(str.size()));
-	::Rectangle(_hdcback, 200, 200, 400, 400);
-
 
 	GET_SINGLE(SceneManager)->Render(_hdcback);
 
 	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcback, 0, 0, SRCCOPY);
 	::PatBlt(_hdcback, 0, 0, _rect.right, _rect.bottom, WHITENESS);
-
 }

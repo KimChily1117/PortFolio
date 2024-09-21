@@ -140,6 +140,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Missile.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="pch.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Missile.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="pch.cpp">

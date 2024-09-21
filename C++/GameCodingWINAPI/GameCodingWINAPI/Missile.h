@@ -15,5 +15,9 @@ public:
 private:
 	float _angle = 0.f;
 
+protected:
+	// 추적 기능
+	float _sumTime = 0.f;
+	Object* _target = nullptr; // WARNING
 
 };
