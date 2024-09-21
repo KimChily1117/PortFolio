@@ -8,13 +8,14 @@ public:
 
 
 public:
-	void Init() override;
+	virtual void Init() override;
 
 
-	void Update() override;
+	virtual void Update() override;
 
 
-	void Render(HDC hdc) override;
+	virtual void Render(HDC hdc) override;
 
 };
+
 
