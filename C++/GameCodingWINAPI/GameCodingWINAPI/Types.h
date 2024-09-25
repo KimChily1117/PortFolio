@@ -14,6 +14,7 @@ struct Vector
 {
 	Vector() {}
 	Vector(float x, float y) : x(x), y(y) {}
+	Vector(POINT pt) : x((float)pt.x), y((float)pt.y) { }
 
 	Vector operator+(const Vector& other)
 	{
@@ -77,11 +78,97 @@ struct Vector
 		y /= length;
 	}
 
+	float Dot(Vector other)
+	{
+		return x * other.x + y * other.y;
+	}
+
+	float Cross(Vector other)
+	{
+		return x * other.y - y * other.x;
+	}
+
+
 	float x = 0;
 	float y = 0;
 };
 
 using Pos = Vector;
+
+
+struct VectorInt
+{
+	VectorInt() {}
+	VectorInt(int32 x, int32 y) : x(x), y(y) {}
+	VectorInt(POINT pt) : x(pt.x), y(pt.y) { }
+
+
+	VectorInt operator+(const VectorInt& other)
+	{
+		VectorInt ret;
+		ret.x = x + other.x;
+		ret.y = y + other.y;
+		return ret;
+	}
+
+	VectorInt operator-(const VectorInt& other)
+	{
+		VectorInt ret;
+		ret.x = x - other.x;
+		ret.y = y - other.y;
+		return ret;
+	}
+
+	VectorInt operator*(int32 value)
+	{
+		VectorInt ret;
+		ret.x = x * value;
+		ret.y = y * value;
+		return ret;
+	}
+
+	void operator+=(const VectorInt& other)
+	{
+		x += other.x;
+		y += other.y;
+	}
+
+	void operator-=(const VectorInt& other)
+	{
+		x -= other.x;
+		y -= other.y;
+	}
+
+	int32 LengthSquared()
+	{
+		return x * x + y * y;
+	}
+
+	float Length()
+	{
+		return (float)::sqrt(LengthSquared());
+	}
+
+	int32 Dot(VectorInt other)
+	{
+		return x * other.x + y * other.y;
+	}
+
+	int32 Cross(VectorInt other)
+	{
+		return x * other.y - y * other.x;
+	}
+
+	int32 x = 0;
+	int32 y = 0;
+
+};
+
+
+
+using Pos = Vector;
+using Vec2 = Vector;
+using Vec2Int = VectorInt;
 
 struct Stat
 {

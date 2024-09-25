@@ -3,6 +3,7 @@
 #include "TimeManager.h"
 #include "InputManager.h"
 #include "SceneManager.h"
+#include "ResourceManager.h"
 
 Game::Game()
 {
@@ -31,8 +32,10 @@ void Game::Init(HWND hwnd)
 	GET_SINGLE(TimeManager)->Init();
 	GET_SINGLE(InputManager)->Init(hwnd);
 	GET_SINGLE(SceneManager)->Init();
-	GET_SINGLE(SceneManager)->ChangeScene(SceneType::GameScene);
+	GET_SINGLE(ResourceManager)->Init(hwnd, fs::path(L"../Resources"));
+	GET_SINGLE(SceneManager)->ChangeScene(SceneType::DevScene);
 
+	
 }
 
 void Game::Update()
@@ -57,9 +60,13 @@ void Game::Render()
 
 	wstring str = format(L"FPS({0}) , DT({1})ms", fps, static_cast<int32>(deltaTime));
 	TextOut(_hdcback, 650, 10, str.c_str(), static_cast<int32>(str.size()));
-
 	GET_SINGLE(SceneManager)->Render(_hdcback);
 
 	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcback, 0, 0, SRCCOPY);
 	::PatBlt(_hdcback, 0, 0, _rect.right, _rect.bottom, WHITENESS);
+
+
+
+
+
 }
