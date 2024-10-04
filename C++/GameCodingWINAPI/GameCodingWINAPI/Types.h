@@ -93,9 +93,6 @@ struct Vector
 	float y = 0;
 };
 
-using Pos = Vector;
-
-
 struct VectorInt
 {
 	VectorInt() {}

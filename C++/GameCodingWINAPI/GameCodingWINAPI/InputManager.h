@@ -59,7 +59,7 @@ public:
 	bool GetButtonUp(KeyType key) { return GetState(key) == KeyState::Up; }
 
 
-	POINT GetMousePoint() { return _mousePos; }
+	POINT GetMousePos() { return _mousePos; }
 
 
 private:

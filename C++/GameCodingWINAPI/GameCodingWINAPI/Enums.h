@@ -6,14 +6,34 @@ enum class SceneType
 	DevScene,
 	GameScene
 };
-
 enum class ObjectType
 {
 	None,
 	Player,
-	Monster,
-	Projectile
+	Projectile,
+};
+
+enum class MoveDir
+{
+	Left,
+	Right,
 };
 
 
 
+
+enum LAYER_TYPE
+{
+	LAYER_BACKGROUND,
+	LAYER_OBJECT,
+	// ...
+	LAYER_UI,
+
+	LAYER_MAXCOUNT
+};
+
+enum class ColliderType
+{
+	Box,
+	Sphere,
+};

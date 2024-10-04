@@ -6,9 +6,12 @@
 #include <unordered_map>
 #include <string>
 #include <algorithm>
+#include <unordered_set>
 
 #include <format>
 #include <filesystem>
+#include <functional>
+#include <assert.h>
 
 namespace fs = std::filesystem;
 
@@ -20,4 +23,5 @@ namespace fs = std::filesystem;
 
 using namespace std;
 
+#pragma comment (lib,"Msimg32.lib")
 
