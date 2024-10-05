@@ -3,6 +3,7 @@
 
 class Actor;
 class SpriteActor;
+class TilemapActor;
 
 class DevScene : public Scene
 {
@@ -27,6 +28,8 @@ public:
 
 	Pos _playerPos = { 300,300 };
 	float _speed = 600;
+
+	class TilemapActor* _tilemapActor = nullptr;
 };
 
 

@@ -18,7 +18,6 @@ public:
 	uint32 GetTransparent() { return _transparent; }
 
 	HDC _hdc = {};
-
 private:
 	HBITMAP _bitmap = {};
 	VectorInt _size = {};

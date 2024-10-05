@@ -15,6 +15,10 @@
 #include "UI.h"
 #include "Button.h"
 #include "TestPanel.h"
+#include "TilemapActor.h"
+#include "Tilemap.h"
+#include "SoundManager.h"
+#include "Sound.h"
 
 
 
@@ -30,6 +34,7 @@ DevScene::~DevScene()
 void DevScene::Init()
 {
 	GET_SINGLE(ResourceManager)->LoadTexture(L"Stage01", L"Sprite\\Map\\Stage01.bmp");
+	GET_SINGLE(ResourceManager)->LoadTexture(L"Tile", L"Sprite\\Map\\Tile.bmp", RGB(128, 128, 128));
 	GET_SINGLE(ResourceManager)->LoadTexture(L"Potion", L"Sprite\\UI\\Mp.bmp");
 	GET_SINGLE(ResourceManager)->LoadTexture(L"PlayerDown", L"Sprite\\Player\\PlayerDown.bmp", RGB(128, 128, 128));
 	GET_SINGLE(ResourceManager)->LoadTexture(L"PlayerUp", L"Sprite\\Player\\PlayerUp.bmp", RGB(128, 128, 128));
@@ -41,6 +46,11 @@ void DevScene::Init()
 
 
 	GET_SINGLE(ResourceManager)->CreateSprite(L"Stage01", GET_SINGLE(ResourceManager)->GetTexture(L"Stage01"));
+
+	GET_SINGLE(ResourceManager)->CreateSprite(L"TileO", GET_SINGLE(ResourceManager)->GetTexture(L"Tile"), 0, 0, 48, 48);
+	GET_SINGLE(ResourceManager)->CreateSprite(L"TileX", GET_SINGLE(ResourceManager)->GetTexture(L"Tile"), 48, 0, 48, 48);
+
+
 	GET_SINGLE(ResourceManager)->CreateSprite(L"Start_Off", GET_SINGLE(ResourceManager)->GetTexture(L"Start"), 0, 0, 150, 150);
 	GET_SINGLE(ResourceManager)->CreateSprite(L"Start_On", GET_SINGLE(ResourceManager)->GetTexture(L"Start"), 150, 0, 150, 150);
 	GET_SINGLE(ResourceManager)->CreateSprite(L"Edit_Off", GET_SINGLE(ResourceManager)->GetTexture(L"Edit"), 0, 0, 150, 150);
@@ -106,10 +116,36 @@ void DevScene::Init()
 		}
 		AddActors(player);
 	}
+
+
+
+	//{
+	//	TestPanel* ui = new TestPanel();
+	//	_uis.push_back(ui);
+	//}
+
 	{
-		TestPanel* ui = new TestPanel();
-		_uis.push_back(ui);
+		TilemapActor* actor = new TilemapActor();
+		AddActors(actor);
+
+		_tilemapActor = actor;
+		{
+
+			auto* tm = GET_SINGLE(ResourceManager)->CreateTilemap(L"Tilemap_01");
+			tm->SetTileSize(48);
+			tm->SetMapSize({ 64,43 });
+
+			_tilemapActor->SetTilemap(tm);
+			_tilemapActor->SetShowDebug(true);
+		}
+
 	}
+	GET_SINGLE(ResourceManager)->LoadSound(L"BGM", L"Sound\\BGM.wav");
+	{
+		Sound* sound = GET_SINGLE(ResourceManager)->GetSound(L"BGM");
+		sound->Play(true);
+	}
+
 
 	for (auto actors : _actors)
 	{
@@ -124,12 +160,27 @@ void DevScene::Update()
 {	
 	GET_SINGLE(CollisionManager)->Update();
 
+	if (GET_SINGLE(InputManager)->GetButton(KeyType::Q))
+	{
+		GET_SINGLE(ResourceManager)->SaveTilemap(L"Tilemap_01", L"Tilemap\\Tilemap_01.txt");
+	}
+	else if (GET_SINGLE(InputManager)->GetButton(KeyType::E))
+	{
+		GET_SINGLE(ResourceManager)->LoadTilemap(L"Tilemap_01", L"Tilemap\\Tilemap_01.txt");
+	}
+	else if (GET_SINGLE(InputManager)->GetButton(KeyType::R))
+	{
+		_tilemapActor->SetShowDebug(false);
+	}
+
 	for (auto actors : _actors)
 	{
 		actors->Tick();
 	}
 	for (UI* ui : _uis)
 		ui->Tick();
+
+
 }
 
 void DevScene::Render(HDC hdc)
