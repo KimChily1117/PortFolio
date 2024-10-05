@@ -177,6 +177,12 @@
     <ClInclude Include="TilemapActor.h">
       <Filter>소스 파일\03.Object</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>소스 파일\01.Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>소스 파일\04.Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCodingWINAPI.rc">
@@ -293,6 +299,12 @@
     </ClCompile>
     <ClCompile Include="TilemapActor.cpp">
       <Filter>소스 파일\03.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일\01.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>소스 파일\04.Resources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,54 +11,6 @@ Tilemap::~Tilemap()
 {
 }
 
-void Tilemap::SaveFile(const wstring& path)
-{
-	// C 스타일
-	if (false)
-	{
-		FILE* file = nullptr;
-		_wfopen_s(&file, path.c_str(), L"wb");
-		assert(file != nullptr);
-
-		::fwrite(&_mapSize.x, sizeof(_mapSize.x), 1, file);
-		::fwrite(&_mapSize.y, sizeof(_mapSize.y), 1, file);
-
-		for (int32 y = 0; y < _mapSize.y; y++)
-		{
-			for (int32 x = 0; x < _mapSize.x; x++)
-			{
-				int32 value = _tiles[y][x].value;
-				::fwrite(&value, sizeof(value), 1, file);
-			}
-		}
-
-		::fclose(file);
-		return;
-	}
-
-	// C++ 스타일
-	{
-		wofstream ofs;
-
-		ofs.open(path);
-
-		ofs << _mapSize.x << endl;
-		ofs << _mapSize.y << endl;
-
-		for (int32 y = 0; y < _mapSize.y; y++)
-		{
-			for (int32 x = 0; x < _mapSize.x; x++)
-			{
-				ofs << _tiles[y][x].value;
-			}
-
-			ofs << endl;
-		}
-
-		ofs.close();
-	}
-}
-
 void Tilemap::LoadFile(const wstring& path)
 {
 	// C 스타일
@@ -108,6 +60,55 @@ void Tilemap::LoadFile(const wstring& path)
 		}
 
 		ifs.close();
+	}
+
+}
+
+void Tilemap::SaveFile(const wstring& path)
+{
+	// C 스타일
+	if (false)
+	{
+		FILE* file = nullptr;
+		_wfopen_s(&file, path.c_str(), L"wb");
+		assert(file != nullptr);
+
+		::fwrite(&_mapSize.x, sizeof(_mapSize.x), 1, file);
+		::fwrite(&_mapSize.y, sizeof(_mapSize.y), 1, file);
+
+		for (int32 y = 0; y < _mapSize.y; y++)
+		{
+			for (int32 x = 0; x < _mapSize.x; x++)
+			{
+				int32 value = _tiles[y][x].value;
+				::fwrite(&value, sizeof(value), 1, file);
+			}
+		}
+
+		::fclose(file);
+		return;
+	}
+
+	// C++ 스타일
+	{
+		wofstream ofs;
+
+		ofs.open(path);
+
+		ofs << _mapSize.x << endl;
+		ofs << _mapSize.y << endl;
+
+		for (int32 y = 0; y < _mapSize.y; y++)
+		{
+			for (int32 x = 0; x < _mapSize.x; x++)
+			{
+				ofs << _tiles[y][x].value;
+			}
+
+			ofs << endl;
+		}
+
+		ofs.close();
 	}
 }
 

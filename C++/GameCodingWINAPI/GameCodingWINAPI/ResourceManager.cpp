@@ -3,6 +3,8 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Flipbook.h"
+#include "Tilemap.h"
+#include "Sound.h"
 
 ResourceManager::~ResourceManager()
 {
@@ -26,6 +28,16 @@ void ResourceManager::Clear()
 		SAFE_DELETE(item.second);
 
 	_sprites.clear();
+
+	for (auto& item : _flipbooks)
+		SAFE_DELETE(item.second);
+
+	_flipbooks.clear();
+
+	for (auto& item : _tilemaps)
+		SAFE_DELETE(item.second);
+
+	_tilemaps.clear();
 }
 
 Texture* ResourceManager::LoadTexture(const wstring& key, const wstring& path, uint32 transparent)
@@ -33,7 +45,7 @@ Texture* ResourceManager::LoadTexture(const wstring& key, const wstring& path, u
 	if (_textures.find(key) != _textures.end())
 		return _textures[key];
 
-	fs::path fullPath = _resourcePath / path;
+	fs::path fullPath  = _resourcePath / path;
 
 	Texture* texture = new Texture();
 	texture->LoadBmp(_hwnd, fullPath.c_str());
@@ -42,7 +54,6 @@ Texture* ResourceManager::LoadTexture(const wstring& key, const wstring& path, u
 
 	return texture;
 }
-
 Sprite* ResourceManager::CreateSprite(const wstring& key, Texture* texture, int32 x, int32 y, int32 cx, int32 cy)
 {
 	if (_sprites.find(key) != _sprites.end())
@@ -73,11 +84,50 @@ Flipbook* ResourceManager::CreateFlipbook(const wstring& key)
 
 Tilemap* ResourceManager::CreateTilemap(const wstring& key)
 {
-	리소스매니저에서 만들고
+	if (_tilemaps.find(key) != _tilemaps.end())
+		return _tilemaps[key];
 
-		구조체로 파싱한다음
+	Tilemap* tm = new Tilemap();
+	_tilemaps[key] = tm;
 
-		만들어서 타일맵 출력하기
-
-
+	return tm;
 }
+
+
+void ResourceManager::SaveTilemap(const wstring& key, const wstring& path)
+{
+	Tilemap* tilemap = GetTilemap(key);
+
+	fs::path fullPath = _resourcePath / path;
+	tilemap->SaveFile(fullPath);
+}
+
+Tilemap* ResourceManager::LoadTilemap(const wstring& key, const wstring& path)
+{
+	Tilemap* tilemap = nullptr;
+
+	if (_tilemaps.find(key) == _tilemaps.end())
+		_tilemaps[key] = new Tilemap();
+
+	tilemap = _tilemaps[key];
+
+	fs::path fullPath = _resourcePath / path;
+	tilemap->LoadFile(fullPath);
+
+	return tilemap;
+}
+
+Sound* ResourceManager::LoadSound(const wstring& key, const wstring& path)
+{
+	if (_sounds.find(key) != _sounds.end())
+		return _sounds[key];
+
+	fs::path fullPath = _resourcePath / path;
+
+	Sound* sound = new Sound();
+	sound->LoadWave(fullPath);
+	_sounds[key] = sound;
+
+	return sound;
+}
+
