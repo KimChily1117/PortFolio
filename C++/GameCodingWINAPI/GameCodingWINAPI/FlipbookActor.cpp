@@ -88,3 +88,15 @@ void FlipbookActor::Reset()
 	_sumTime = 0.f;
 	_idx = 0;
 }
+
+bool FlipbookActor::IsAnimationEnded()
+{
+	if (_flipbook == nullptr)
+		return true;
+
+	const FlipbookInfo& info = _flipbook->GetInfo();
+	if (info.loop == false && _idx == info.end)
+		return true;
+
+	return false;
+}

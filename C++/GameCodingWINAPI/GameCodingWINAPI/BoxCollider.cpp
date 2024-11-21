@@ -2,6 +2,7 @@
 #include "BoxCollider.h"
 #include "SceneManager.h"
 #include "Actor.h"
+#include "SphereCollider.h"
 
 
 BoxCollider::BoxCollider() : Collider(ColliderType::Box)
@@ -45,14 +46,34 @@ void BoxCollider::Render(HDC hdc)
 
 bool BoxCollider::CheckCollision(Collider* other)
 {
+	if (Super::CheckCollision(other) == false)
+		return false;
+
+
 	switch (other->GetColliderType())
 	{
 		case ColliderType::Box:
-			return false;
-			break;
-		case ColliderType::Sphere:
-			return false;
+			return CheckCollisionBox2Box(this, static_cast<BoxCollider*>(other));
 
 			break;
+		case ColliderType::Sphere:
+			return CheckCollisionSphere2Box(static_cast<SphereCollider*>(other), this);
+			break;
 	}
+}
+
+RECT BoxCollider::GetRect()
+{
+	Vec2 pos = GetOwner()->GetPos();
+	Vec2 size = GetSize();
+
+	RECT rect =
+	{
+		(int32)(pos.x - (size.x / 2)),
+		(int32)(pos.y - (size.y / 2)),
+		(int32)(pos.x + (size.x / 2)),
+		(int32)(pos.y + (size.y / 2))
+	};
+
+	return rect;
 }

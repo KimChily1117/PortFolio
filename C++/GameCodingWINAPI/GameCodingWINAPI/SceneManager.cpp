@@ -38,14 +38,14 @@ void SceneManager::ChangeScene(SceneType sceneType)
 
 	switch (sceneType)
 	{
-		case SceneType::NONE:
-			break;
-		case SceneType::DevScene:
-			newScene = new DevScene();
-			break;
-		case SceneType::GameScene:
-			newScene = new GameScene();
-			break;
+	case SceneType::None:
+		break;
+	case SceneType::DevScene:
+		newScene = new DevScene();
+		break;
+	case SceneType::GameScene:
+		newScene = new GameScene();
+		break;
 	}
 
 	SAFE_DELETE(_scene);

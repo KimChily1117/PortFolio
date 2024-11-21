@@ -1,4 +1,6 @@
 #pragma once
+#include <cmath>
+#include <windows.h>
 
 using int8 = __int8;
 using int16 = __int16;
@@ -9,6 +11,14 @@ using uint16 = unsigned __int16;
 using uint32 = unsigned __int32;
 using uint64 = unsigned __int64;
 
+struct Stat
+{
+	int32 hp = 100;
+	int32 maxHp = 100;
+	int32 attack = 10;
+	int32 defence = 0;
+	float speed = 0;
+};
 
 struct Vector
 {
@@ -124,6 +134,27 @@ struct VectorInt
 		return ret;
 	}
 
+	bool operator<(const VectorInt& other) const
+	{
+		if (x != other.x)
+			return x < other.x;
+
+		return y < other.y;
+	}
+
+	bool operator>(const VectorInt& other) const
+	{
+		if (x != other.x)
+			return x > other.x;
+
+		return y > other.y;
+	}
+
+	bool operator==(const VectorInt& other) const
+	{
+		return x == other.x && y == other.y;
+	}
+
 	void operator+=(const VectorInt& other)
 	{
 		x += other.x;
@@ -135,6 +166,8 @@ struct VectorInt
 		x -= other.x;
 		y -= other.y;
 	}
+
+
 
 	int32 LengthSquared()
 	{
@@ -160,17 +193,6 @@ struct VectorInt
 	int32 y = 0;
 
 };
-
-
-
 using Pos = Vector;
 using Vec2 = Vector;
 using Vec2Int = VectorInt;
-
-struct Stat
-{
-	int32 hp = 0;
-	int32 maxHp = 0;
-	int32 atk = 0;
-	int32 speed = 0;
-};

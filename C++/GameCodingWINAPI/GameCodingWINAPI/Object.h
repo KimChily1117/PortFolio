@@ -18,6 +18,5 @@ public:
 protected:
 	ObjectType _objType = ObjectType::None;
 	Pos _pos = {};
-	Stat _stat = {};
 };
 
