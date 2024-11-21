@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Actor.h"
 #include "Component.h"
+#include "BoxCollider.h"
 
 Actor::Actor()
 {
@@ -54,11 +55,66 @@ void Actor::RemoveComponent(Component* component)
 	_components.erase(findIt);
 }
 
+Component* Actor::GetCollider()
+{
+	return nullptr;
+}
+
 void Actor::OnComponentBeginOverlap(Collider* collider, Collider* other)
 {
-	int a = 3;
+	BoxCollider* b1 = dynamic_cast<BoxCollider*>(collider);
+	BoxCollider* b2 = dynamic_cast<BoxCollider*>(other);
+	//AdjustCollisionPos(b1, b2);
+
+	
 }
 
 void Actor::OnComponentEndOverlap(Collider* collider, Collider* other)
 {
 }
+
+
+
+//void Actor::AdjustCollisionPos(BoxCollider* b1, BoxCollider* b2)
+//{
+//	RECT r1 = b1->GetRect();
+//	RECT r2 = b2->GetRect();
+//
+//	RECT intersect = {};
+//
+//	Vec2 pos = GetPos();
+//
+//	if (::IntersectRect(&intersect, &r1, &r2))
+//	{
+//		int32 w = intersect.right - intersect.left;
+//		int32 h = intersect.bottom - intersect.top;
+//
+//		if (w > h)
+//		{
+//			if (intersect.top == r2.top)
+//			{
+//				pos.y -= h;
+//			}
+//			else
+//			{
+//				pos.y += h;
+//			}
+//		}
+//
+//		else
+//		{
+//			if (intersect.left == r2.left)
+//			{
+//				pos.x -= w;
+//			}
+//
+//			else
+//			{
+//				pos.x += w;
+//			}
+//		}
+//
+//	}
+//
+//	SetPos(pos);
+//}

@@ -1,22 +1,25 @@
 #pragma once
+
+class Scene;
+
 class SceneManager
 {
-	DECLARE_SINGLE(SceneManager);
+	DECLARE_SINGLE(SceneManager)
 
 public:
 	void Init();
 	void Update();
 	void Render(HDC hdc);
 
-
 	void Clear();
 
 public:
 	void ChangeScene(SceneType sceneType);
+	Scene* GetCurrentScene() { return _scene; }
 
 private:
-	class Scene* _scene;
-	SceneType _currentSceneType = SceneType::NONE;
+	Scene* _scene;
+	SceneType _currentSceneType = SceneType::None;
 
 public:
 	Vec2 GetCameraPos() { return _cameraPos; }

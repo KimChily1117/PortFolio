@@ -1,32 +1,43 @@
 #pragma once
-#include <windows.h>
-#include <vector>
-#include <map>
-#include <list>
-#include <unordered_map>
-#include <string>
-#include <algorithm>
-#include <unordered_set>
 
-#include <format>
-#include <filesystem>
-#include <functional>
-#include <assert.h>
-
-namespace fs = std::filesystem;
-
+#include "Types.h"
+#include "Values.h"
 #include "Define.h"
 #include "Enums.h"
-#include "Types.h"
 #include "Utils.h"
-#include "Values.h"
 
+#include <windows.h>
+#include <vector>
+#include <list>
+#include <map>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
+#include <string>
+#include <algorithm>
+#include <functional>
+#include <queue>
 using namespace std;
 
-#pragma comment (lib,"Msimg32.lib")
+#include <assert.h>
 
-#include <mmsystem.h>
+// C++20
+#include <format>
+#include <filesystem>
+namespace fs = std::filesystem;
+
+#define _CRTDEBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
+#pragma comment(lib, "msimg32.lib")
+
+// »ç¿îµå
+#include <MMSystem.h>
 #include <dsound.h>
-#pragma comment(lib,"winmm.lib");
-#pragma comment(lib,"dsound.lib");
-
+#pragma comment (lib, "winmm.lib")
+#pragma comment (lib, "dsound.lib")

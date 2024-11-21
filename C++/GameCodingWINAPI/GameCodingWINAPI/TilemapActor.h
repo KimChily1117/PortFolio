@@ -23,8 +23,6 @@ public:
 	TilemapActor();
 	virtual ~TilemapActor();
 
-
-
 	void BeginPlay() override;
 	void Tick() override;
 	void Render(HDC hdc) override;
@@ -38,6 +36,6 @@ public:
 
 protected:
 	Tilemap* _tilemap = nullptr;
-	bool _showDebug = false;
+	bool _showDebug = true;
 };
 

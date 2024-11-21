@@ -14,7 +14,11 @@ public:
 	virtual void TickComponent() override;
 	virtual void Render(HDC hdc) override;
 
+	
 	virtual bool CheckCollision(Collider* other) override;
+
+	RECT GetRect();
+
 
 	Vec2 GetSize() { return _size; }
 	void SetSize(Vec2 size) { _size = size; }
