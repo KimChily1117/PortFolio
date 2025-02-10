@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials>
+    <Material>
+        <Name>__ntxr000mat</Name>
+        <DiffuseFile>ntxr076.png</DiffuseFile>
+        <SpecularFile>ntxr076.png</SpecularFile>
+        <NormalFile>ntxr076.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr003mat</Name>
+        <DiffuseFile>ntxr003.png</DiffuseFile>
+        <SpecularFile>ntxr003.png</SpecularFile>
+        <NormalFile>ntxr003.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr007mat</Name>
+        <DiffuseFile>ntxr007.png</DiffuseFile>
+        <SpecularFile>ntxr007.png</SpecularFile>
+        <NormalFile>ntxr007.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr010mat</Name>
+        <DiffuseFile>ntxr010.png</DiffuseFile>
+        <SpecularFile>ntxr010.png</SpecularFile>
+        <NormalFile>ntxr010.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr013mat</Name>
+        <DiffuseFile>ntxr013.png</DiffuseFile>
+        <SpecularFile>ntxr013.png</SpecularFile>
+        <NormalFile>ntxr013.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr016mat</Name>
+        <DiffuseFile>ntxr016.png</DiffuseFile>
+        <SpecularFile>ntxr016.png</SpecularFile>
+        <NormalFile>ntxr016.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr018mat</Name>
+        <DiffuseFile>ntxr018.png</DiffuseFile>
+        <SpecularFile>ntxr018.png</SpecularFile>
+        <NormalFile>ntxr018.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr021mat</Name>
+        <DiffuseFile>ntxr021.png</DiffuseFile>
+        <SpecularFile>ntxr021.png</SpecularFile>
+        <NormalFile>ntxr021.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr024mat</Name>
+        <DiffuseFile>ntxr024.png</DiffuseFile>
+        <SpecularFile>ntxr024.png</SpecularFile>
+        <NormalFile>ntxr024.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr027mat</Name>
+        <DiffuseFile>ntxr027.png</DiffuseFile>
+        <SpecularFile>ntxr027.png</SpecularFile>
+        <NormalFile>ntxr027.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr030mat</Name>
+        <DiffuseFile>ntxr030.png</DiffuseFile>
+        <SpecularFile>ntxr030.png</SpecularFile>
+        <NormalFile>ntxr030.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr034mat</Name>
+        <DiffuseFile>ntxr034.png</DiffuseFile>
+        <SpecularFile>ntxr034.png</SpecularFile>
+        <NormalFile>ntxr034.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr036mat</Name>
+        <DiffuseFile>ntxr036.png</DiffuseFile>
+        <SpecularFile>ntxr036.png</SpecularFile>
+        <NormalFile>ntxr036.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr039mat</Name>
+        <DiffuseFile>ntxr039.png</DiffuseFile>
+        <SpecularFile>ntxr039.png</SpecularFile>
+        <NormalFile>ntxr039.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr042mat</Name>
+        <DiffuseFile>ntxr042.png</DiffuseFile>
+        <SpecularFile>ntxr042.png</SpecularFile>
+        <NormalFile>ntxr042.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr045mat</Name>
+        <DiffuseFile>ntxr045.png</DiffuseFile>
+        <SpecularFile>ntxr045.png</SpecularFile>
+        <NormalFile>ntxr045.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr048mat</Name>
+        <DiffuseFile>ntxr048.png</DiffuseFile>
+        <SpecularFile>ntxr048.png</SpecularFile>
+        <NormalFile>ntxr048.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr051mat</Name>
+        <DiffuseFile>ntxr051.png</DiffuseFile>
+        <SpecularFile>ntxr051.png</SpecularFile>
+        <NormalFile>ntxr051.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr054mat</Name>
+        <DiffuseFile>ntxr054.png</DiffuseFile>
+        <SpecularFile>ntxr054.png</SpecularFile>
+        <NormalFile>ntxr054.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr057mat</Name>
+        <DiffuseFile>ntxr057.png</DiffuseFile>
+        <SpecularFile>ntxr057.png</SpecularFile>
+        <NormalFile>ntxr057.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr060mat</Name>
+        <DiffuseFile>ntxr060.png</DiffuseFile>
+        <SpecularFile>ntxr060.png</SpecularFile>
+        <NormalFile>ntxr060.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr074mat</Name>
+        <DiffuseFile>ntxr074.png</DiffuseFile>
+        <SpecularFile>ntxr074.png</SpecularFile>
+        <NormalFile>ntxr074.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr072mat</Name>
+        <DiffuseFile>ntxr072.png</DiffuseFile>
+        <SpecularFile>ntxr072.png</SpecularFile>
+        <NormalFile>ntxr072.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr066mat</Name>
+        <DiffuseFile>ntxr066.png</DiffuseFile>
+        <SpecularFile>ntxr066.png</SpecularFile>
+        <NormalFile>ntxr066.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr069mat</Name>
+        <DiffuseFile>ntxr069.png</DiffuseFile>
+        <SpecularFile>ntxr069.png</SpecularFile>
+        <NormalFile>ntxr069.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>__ntxr063mat</Name>
+        <DiffuseFile>ntxr063.png</DiffuseFile>
+        <SpecularFile>ntxr063.png</SpecularFile>
+        <NormalFile>ntxr063.png</NormalFile>
+        <Ambient R="0.588" G="0.588" B="0.588" A="1"/>
+        <Diffuse R="0.588" G="0.588" B="0.588" A="1"/>
+        <Specular R="0" G="0" B="0" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>

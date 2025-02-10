@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials>
+    <Material>
+        <Name>Mat_DarkKnight2_Sword_Skin1</Name>
+        <DiffuseFile>T_Skin1_DeathKnight_Sword_Albedo.tga</DiffuseFile>
+        <SpecularFile>T_Skin1_DeathKnight_Sword_Albedo.tga</SpecularFile>
+        <NormalFile>T_Skin1_DeathKnight_Sword_Normal.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Armor_Skin1</Name>
+        <DiffuseFile>T_Skin1_DeathKnight_Armor_Albedo.tga</DiffuseFile>
+        <SpecularFile>T_Skin1_DeathKnight_Armor_Albedo.tga</SpecularFile>
+        <NormalFile>T_Skin1_DeathKnight_Armor_Normal.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Armor_cloth_Skin1</Name>
+        <DiffuseFile>T_Skin1_DeathKnight_Armor_Albedo.tga</DiffuseFile>
+        <SpecularFile>T_Skin1_DeathKnight_Armor_Albedo.tga</SpecularFile>
+        <NormalFile>T_Skin1_DeathKnight_Armor_Normal.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Helm_Skin1</Name>
+        <DiffuseFile>T_Skin1_DeathKnight_Helm_Albedo.tga</DiffuseFile>
+        <SpecularFile>T_Skin1_DeathKnight_Helm_Albedo.tga</SpecularFile>
+        <NormalFile>T_Skin1_DeathKnight_Helm_Normal.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Body_Skin1</Name>
+        <DiffuseFile>T_Skin1_DeathKnight_Body_Albedo.tga</DiffuseFile>
+        <SpecularFile>T_Skin1_DeathKnight_Body_Albedo.tga</SpecularFile>
+        <NormalFile>T_Skin1_DeathKnight_Body_Normal.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Head__Variant2</Name>
+        <DiffuseFile>T_DeathKnigh_2_Mat_DarkKnight2_Head_Albedo.tga</DiffuseFile>
+        <SpecularFile>T_DeathKnigh_2_Mat_DarkKnight2_Head_Albedo.tga</SpecularFile>
+        <NormalFile>11_Mat_DarkKnight2_Head_Normal.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="1" G="1" B="1" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Armor</Name>
+        <DiffuseFile></DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.36363637" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Armor_cloth</Name>
+        <DiffuseFile></DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.094117656" G="0" B="1" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Helm</Name>
+        <DiffuseFile></DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Body</Name>
+        <DiffuseFile></DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Head</Name>
+        <DiffuseFile></DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Mat_DarkKnight2_Sword</Name>
+        <DiffuseFile></DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>

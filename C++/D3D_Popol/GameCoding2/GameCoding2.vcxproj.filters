@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{661cda53-2e28-4826-8b36-3a488c4a0b1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Header">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Game\Shader">
+      <UniqueIdentifier>{22201ef0-1cd8-4380-a7b6-b7e4c037613f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\Global">
+      <UniqueIdentifier>{1a0c63e5-c0f9-4666-9f0c-3325f8aa345f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes">
+      <UniqueIdentifier>{bfafa46b-1239-4eec-b07a-b2d859819dd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripts">
+      <UniqueIdentifier>{e2f1007d-7c0d-4f14-8bcd-0857e4198f8d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Main\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneExcuter.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraScript.h">
+      <Filter>Game\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Game\Scripts</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Main\Header</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneExcuter.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraScript.cpp">
+      <Filter>Game\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Game\Scripts</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Shaders\04. Texture.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\05. Sampler.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\06. Terrain.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\07. Normal.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\08. GlobalTest.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\09. Lighting_Ambient.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\10. Lighting_Diffuse.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\11. Lighting_Specular.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\12. Lighting_Emissive.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\13. Lighting.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\14. NormalMapping.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\15. ModelDemo.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\01. Triangle.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\02. Quad.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\03. ConstBuffer.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\17. TweenDemo.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\18. SkyDemo.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\16. AnimationDemo.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\00. Light.fx">
+      <Filter>Game\Shader\Global</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\00. Global.fx">
+      <Filter>Game\Shader\Global</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\00. Render.fx">
+      <Filter>Game\Shader\Global</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\23. RenderDemo.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
