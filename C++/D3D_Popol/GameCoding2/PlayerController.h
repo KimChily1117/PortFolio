@@ -3,7 +3,6 @@
 
 enum class PlayerState
 {
-	NONE,
 	IDLE,
 	RUN,
 	//.....
@@ -24,11 +23,11 @@ public:
 	void LateUpdate() override;
 	void FixedUpdate() override;
 
-
+	
 	void MoveTo();
 
 private:
-	float _speed = 10.f;
+	float _speed = 2.f;
 	Vec3 _dest;
 
 	PlayerState _currentState = PlayerState::IDLE;
