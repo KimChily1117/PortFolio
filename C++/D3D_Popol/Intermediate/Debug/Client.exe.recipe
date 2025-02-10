@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\Client.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\00. Global.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\00. Light.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\00. Render.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\01. Triangle.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\02. Quad.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\03. ConstBuffer.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\04. Texture.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\05. Sampler.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\06. Terrain.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\07. Normal.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\08. GlobalTest.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\09. Lighting_Ambient.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\10. Lighting_Diffuse.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\11. Lighting_Specular.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\12. Lighting_Emissive.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\13. Lighting.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\14. NormalMapping.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\15. ModelDemo.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\16. AnimationDemo.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\17. TweenDemo.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\18. SkyDemo.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>E:\task\C++\D3D_Popol\Binaries\23. RenderDemo.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

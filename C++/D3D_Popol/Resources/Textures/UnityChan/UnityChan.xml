@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials>
+    <Material>
+        <Name>Material</Name>
+        <DiffuseFile></DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="25"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>body</Name>
+        <DiffuseFile>body_01.tga</DiffuseFile>
+        <SpecularFile>body_01.tga</SpecularFile>
+        <NormalFile>body_01.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>mat_cheek</Name>
+        <DiffuseFile>cheek_00.tga</DiffuseFile>
+        <SpecularFile>cheek_00.tga</SpecularFile>
+        <NormalFile>cheek_00.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>hair</Name>
+        <DiffuseFile>hair_01.tga</DiffuseFile>
+        <SpecularFile>hair_01.tga</SpecularFile>
+        <NormalFile>hair_01.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>skin1</Name>
+        <DiffuseFile>skin_01.tga</DiffuseFile>
+        <SpecularFile>skin_01.tga</SpecularFile>
+        <NormalFile>skin_01.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>eyeline</Name>
+        <DiffuseFile>eyeline_00.tga</DiffuseFile>
+        <SpecularFile>eyeline_00.tga</SpecularFile>
+        <NormalFile>eyeline_00.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>face</Name>
+        <DiffuseFile>face_00.tga</DiffuseFile>
+        <SpecularFile>face_00.tga</SpecularFile>
+        <NormalFile>face_00.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>eye_L1</Name>
+        <DiffuseFile>eye_iris_L_00.tga</DiffuseFile>
+        <SpecularFile>eye_iris_L_00.tga</SpecularFile>
+        <NormalFile>eye_iris_L_00.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>eye_R1</Name>
+        <DiffuseFile>eye_iris_R_00.tga</DiffuseFile>
+        <SpecularFile>eye_iris_R_00.tga</SpecularFile>
+        <NormalFile>eye_iris_R_00.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>eyebase</Name>
+        <DiffuseFile>eyeline_00.tga</DiffuseFile>
+        <SpecularFile>eyeline_00.tga</SpecularFile>
+        <NormalFile>eyeline_00.tga</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="20"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>

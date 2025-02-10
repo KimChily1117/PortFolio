@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{01a591f5-8d59-4c94-9d7c-31b998983275}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{0ed292ed-c902-4980-a173-349245f7ab6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{c16db24e-c891-429b-b2ba-687d4dd209fa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Main.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpTool.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="AsType.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshDemo.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraScript.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Converter.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="TweenDemo.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="AssimpTool.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="AsType.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshDemo.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraScript.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Converter.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="TweenDemo.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

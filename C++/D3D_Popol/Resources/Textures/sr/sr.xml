@@ -1,0 +1,2763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials>
+    <Material>
+        <Name>polySurfaceMapGeoMesh1SG</Name>
+        <DiffuseFile>grnd_terrain_d.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_d.dds</SpecularFile>
+        <NormalFile>grnd_terrain_d.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh2SG</Name>
+        <DiffuseFile>grnd_terrain_n.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_n.dds</SpecularFile>
+        <NormalFile>grnd_terrain_n.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh3SG</Name>
+        <DiffuseFile>grnd_terrain_e.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_e.dds</SpecularFile>
+        <NormalFile>grnd_terrain_e.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh4SG</Name>
+        <DiffuseFile>grnd_terrain_p.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_p.dds</SpecularFile>
+        <NormalFile>grnd_terrain_p.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh5SG</Name>
+        <DiffuseFile>grnd_terrain_o.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_o.dds</SpecularFile>
+        <NormalFile>grnd_terrain_o.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh6SG</Name>
+        <DiffuseFile>grnd_terrain_a.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_a.dds</SpecularFile>
+        <NormalFile>grnd_terrain_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh7SG</Name>
+        <DiffuseFile>grnd_terrain_q.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_q.dds</SpecularFile>
+        <NormalFile>grnd_terrain_q.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh8SG</Name>
+        <DiffuseFile>grnd_terrain_l.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_l.dds</SpecularFile>
+        <NormalFile>grnd_terrain_l.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh9SG</Name>
+        <DiffuseFile>grnd_terrain_t.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_t.dds</SpecularFile>
+        <NormalFile>grnd_terrain_t.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh10SG</Name>
+        <DiffuseFile>grnd_terrain_k.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_k.dds</SpecularFile>
+        <NormalFile>grnd_terrain_k.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh11SG</Name>
+        <DiffuseFile>grnd_terrain_b.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_b.dds</SpecularFile>
+        <NormalFile>grnd_terrain_b.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh12SG</Name>
+        <DiffuseFile>grnd_terrain_u.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_u.dds</SpecularFile>
+        <NormalFile>grnd_terrain_u.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh13SG</Name>
+        <DiffuseFile>grnd_terrain_j.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_j.dds</SpecularFile>
+        <NormalFile>grnd_terrain_j.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh14SG</Name>
+        <DiffuseFile>grnd_terrain_v.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_v.dds</SpecularFile>
+        <NormalFile>grnd_terrain_v.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh15SG</Name>
+        <DiffuseFile>FtC_POI_Diff_A.SR_Worlds_MapsMountainConversion.dds</DiffuseFile>
+        <SpecularFile>FtC_POI_Diff_A.SR_Worlds_MapsMountainConversion.dds</SpecularFile>
+        <NormalFile>FtC_POI_Diff_A.SR_Worlds_MapsMountainConversion.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh16SG</Name>
+        <DiffuseFile>grnd_terrain_g.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_g.dds</SpecularFile>
+        <NormalFile>grnd_terrain_g.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh17SG</Name>
+        <DiffuseFile>grnd_terrain_f.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_f.dds</SpecularFile>
+        <NormalFile>grnd_terrain_f.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh18SG</Name>
+        <DiffuseFile>grnd_terrain_h.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_h.dds</SpecularFile>
+        <NormalFile>grnd_terrain_h.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh19SG</Name>
+        <DiffuseFile>grnd_terrain_y.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_y.dds</SpecularFile>
+        <NormalFile>grnd_terrain_y.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh20SG</Name>
+        <DiffuseFile>grnd_terrain_s.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_s.dds</SpecularFile>
+        <NormalFile>grnd_terrain_s.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh21SG</Name>
+        <DiffuseFile>grnd_terrain_x.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_x.dds</SpecularFile>
+        <NormalFile>grnd_terrain_x.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh22SG</Name>
+        <DiffuseFile>bk_distant_horizon_a.dds</DiffuseFile>
+        <SpecularFile>bk_distant_horizon_a.dds</SpecularFile>
+        <NormalFile>bk_distant_horizon_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh23SG</Name>
+        <DiffuseFile>bk_distant_horizon_a.dds</DiffuseFile>
+        <SpecularFile>bk_distant_horizon_a.dds</SpecularFile>
+        <NormalFile>bk_distant_horizon_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh24SG</Name>
+        <DiffuseFile>bk_distant_horizon_a.dds</DiffuseFile>
+        <SpecularFile>bk_distant_horizon_a.dds</SpecularFile>
+        <NormalFile>bk_distant_horizon_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh25SG</Name>
+        <DiffuseFile>grnd_terrain_r.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_r.dds</SpecularFile>
+        <NormalFile>grnd_terrain_r.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh26SG</Name>
+        <DiffuseFile>grnd_terrain_c.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_c.dds</SpecularFile>
+        <NormalFile>grnd_terrain_c.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh27SG</Name>
+        <DiffuseFile>grnd_terrain_i.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_i.dds</SpecularFile>
+        <NormalFile>grnd_terrain_i.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh28SG</Name>
+        <DiffuseFile>grnd_terrain_m.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_m.dds</SpecularFile>
+        <NormalFile>grnd_terrain_m.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh29_1SG</Name>
+        <DiffuseFile>Worlds_Trophy_TX_CM.SR_Worlds_MapsMountainConversion.dds</DiffuseFile>
+        <SpecularFile>Worlds_Trophy_TX_CM.SR_Worlds_MapsMountainConversion.dds</SpecularFile>
+        <NormalFile>Worlds_Trophy_TX_CM.SR_Worlds_MapsMountainConversion.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh29_2SG</Name>
+        <DiffuseFile>FtC_POI_Diff_A.SR_Worlds_MapsMountainConversion.dds</DiffuseFile>
+        <SpecularFile>FtC_POI_Diff_A.SR_Worlds_MapsMountainConversion.dds</SpecularFile>
+        <NormalFile>FtC_POI_Diff_A.SR_Worlds_MapsMountainConversion.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh30_1SG</Name>
+        <DiffuseFile>grnd_terrain_w.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_w.dds</SpecularFile>
+        <NormalFile>grnd_terrain_w.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh30_2SG</Name>
+        <DiffuseFile>grnd_terrain_w.dds</DiffuseFile>
+        <SpecularFile>grnd_terrain_w.dds</SpecularFile>
+        <NormalFile>grnd_terrain_w.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh31SG</Name>
+        <DiffuseFile>periph_north_m.dds</DiffuseFile>
+        <SpecularFile>periph_north_m.dds</SpecularFile>
+        <NormalFile>periph_north_m.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh32SG</Name>
+        <DiffuseFile>periph_north_base_b.dds</DiffuseFile>
+        <SpecularFile>periph_north_base_b.dds</SpecularFile>
+        <NormalFile>periph_north_base_b.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh33SG</Name>
+        <DiffuseFile>periph_north_k.dds</DiffuseFile>
+        <SpecularFile>periph_north_k.dds</SpecularFile>
+        <NormalFile>periph_north_k.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh34SG</Name>
+        <DiffuseFile>periph_east_g.dds</DiffuseFile>
+        <SpecularFile>periph_east_g.dds</SpecularFile>
+        <NormalFile>periph_east_g.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh35SG</Name>
+        <DiffuseFile>periph_north_d.dds</DiffuseFile>
+        <SpecularFile>periph_north_d.dds</SpecularFile>
+        <NormalFile>periph_north_d.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh36SG</Name>
+        <DiffuseFile>periph_north_j1.dds</DiffuseFile>
+        <SpecularFile>periph_north_j1.dds</SpecularFile>
+        <NormalFile>periph_north_j1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh37SG</Name>
+        <DiffuseFile>periph_north_j1.dds</DiffuseFile>
+        <SpecularFile>periph_north_j1.dds</SpecularFile>
+        <NormalFile>periph_north_j1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh38_1SG</Name>
+        <DiffuseFile>base_north_arches_periph.dds</DiffuseFile>
+        <SpecularFile>base_north_arches_periph.dds</SpecularFile>
+        <NormalFile>base_north_arches_periph.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh38_2SG</Name>
+        <DiffuseFile>base_north_arches_periph.dds</DiffuseFile>
+        <SpecularFile>base_north_arches_periph.dds</SpecularFile>
+        <NormalFile>base_north_arches_periph.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh39SG</Name>
+        <DiffuseFile>periph_north_g.dds</DiffuseFile>
+        <SpecularFile>periph_north_g.dds</SpecularFile>
+        <NormalFile>periph_north_g.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh40SG</Name>
+        <DiffuseFile>base_north_arches_periph.dds</DiffuseFile>
+        <SpecularFile>base_north_arches_periph.dds</SpecularFile>
+        <NormalFile>base_north_arches_periph.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh41SG</Name>
+        <DiffuseFile>periph_east_g.dds</DiffuseFile>
+        <SpecularFile>periph_east_g.dds</SpecularFile>
+        <NormalFile>periph_east_g.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh42SG</Name>
+        <DiffuseFile>periph_north_l.dds</DiffuseFile>
+        <SpecularFile>periph_north_l.dds</SpecularFile>
+        <NormalFile>periph_north_l.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh43SG</Name>
+        <DiffuseFile>_chunk_base_north_platform_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_platform_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_platform_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh44SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh45SG</Name>
+        <DiffuseFile>periph_north_a.dds</DiffuseFile>
+        <SpecularFile>periph_north_a.dds</SpecularFile>
+        <NormalFile>periph_north_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh46SG</Name>
+        <DiffuseFile>periph_north_a.dds</DiffuseFile>
+        <SpecularFile>periph_north_a.dds</SpecularFile>
+        <NormalFile>periph_north_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh47SG</Name>
+        <DiffuseFile>periph_north_g.dds</DiffuseFile>
+        <SpecularFile>periph_north_g.dds</SpecularFile>
+        <NormalFile>periph_north_g.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh48SG</Name>
+        <DiffuseFile>_chunk_base_north_platform_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_platform_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_platform_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh49SG</Name>
+        <DiffuseFile>periph_north_a.dds</DiffuseFile>
+        <SpecularFile>periph_north_a.dds</SpecularFile>
+        <NormalFile>periph_north_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh50SG</Name>
+        <DiffuseFile>mage_spawn_pad_b.dds</DiffuseFile>
+        <SpecularFile>mage_spawn_pad_b.dds</SpecularFile>
+        <NormalFile>mage_spawn_pad_b.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh51SG</Name>
+        <DiffuseFile>periph_north_d.dds</DiffuseFile>
+        <SpecularFile>periph_north_d.dds</SpecularFile>
+        <NormalFile>periph_north_d.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh52SG</Name>
+        <DiffuseFile>periph_north_a.dds</DiffuseFile>
+        <SpecularFile>periph_north_a.dds</SpecularFile>
+        <NormalFile>periph_north_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh53SG</Name>
+        <DiffuseFile>periph_north_d.dds</DiffuseFile>
+        <SpecularFile>periph_north_d.dds</SpecularFile>
+        <NormalFile>periph_north_d.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh54SG</Name>
+        <DiffuseFile>_chunk_base_north_shop_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_shop_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_shop_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh55SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh56SG</Name>
+        <DiffuseFile>periph_north_k.dds</DiffuseFile>
+        <SpecularFile>periph_north_k.dds</SpecularFile>
+        <NormalFile>periph_north_k.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh57SG</Name>
+        <DiffuseFile>periph_north_l.dds</DiffuseFile>
+        <SpecularFile>periph_north_l.dds</SpecularFile>
+        <NormalFile>periph_north_l.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh58SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh59SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh60SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh61SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh62SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh63SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh64SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh65SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh66SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh67SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh68SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh69SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh70SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh71SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh72SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh73SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh74SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh75SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh76SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh77SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh78SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh79SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh80SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh81SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh82SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh83SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_h_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_h_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_h_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh84SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh85SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh86SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh87SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh88SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh89SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh90SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh91SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh92SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh93SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh94SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_h_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_h_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_h_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh95SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh96SG</Name>
+        <DiffuseFile>periph_west_e.dds</DiffuseFile>
+        <SpecularFile>periph_west_e.dds</SpecularFile>
+        <NormalFile>periph_west_e.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh97SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_f_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh98SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh99SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh100SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh101SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh102SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh103SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh104SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh105SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh106SG</Name>
+        <DiffuseFile>periph_east_d2.dds</DiffuseFile>
+        <SpecularFile>periph_east_d2.dds</SpecularFile>
+        <NormalFile>periph_east_d2.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh107SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh108SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh109SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh110SG</Name>
+        <DiffuseFile>periph_west_c4.dds</DiffuseFile>
+        <SpecularFile>periph_west_c4.dds</SpecularFile>
+        <NormalFile>periph_west_c4.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh111SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh112SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh113SG</Name>
+        <DiffuseFile>jungle_north_island_fb.dds</DiffuseFile>
+        <SpecularFile>jungle_north_island_fb.dds</SpecularFile>
+        <NormalFile>jungle_north_island_fb.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh114SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh115SG</Name>
+        <DiffuseFile>periph_west_c4.dds</DiffuseFile>
+        <SpecularFile>periph_west_c4.dds</SpecularFile>
+        <NormalFile>periph_west_c4.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh116SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh117SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh118SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh119SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh120SG</Name>
+        <DiffuseFile>jungle_west_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_west_island_a.dds</SpecularFile>
+        <NormalFile>jungle_west_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh121SG</Name>
+        <DiffuseFile>jungle_north_island_fa.dds</DiffuseFile>
+        <SpecularFile>jungle_north_island_fa.dds</SpecularFile>
+        <NormalFile>jungle_north_island_fa.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh122SG</Name>
+        <DiffuseFile>jungle_north_island_fa.dds</DiffuseFile>
+        <SpecularFile>jungle_north_island_fa.dds</SpecularFile>
+        <NormalFile>jungle_north_island_fa.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh123SG</Name>
+        <DiffuseFile>jungle_west_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_west_island_a.dds</SpecularFile>
+        <NormalFile>jungle_west_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh124SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh125SG</Name>
+        <DiffuseFile>jungle_north_island_fb.dds</DiffuseFile>
+        <SpecularFile>jungle_north_island_fb.dds</SpecularFile>
+        <NormalFile>jungle_north_island_fb.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh126SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh127SG</Name>
+        <DiffuseFile>jungle_west_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_west_island_a.dds</SpecularFile>
+        <NormalFile>jungle_west_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh128SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh129SG</Name>
+        <DiffuseFile>jungle_west_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_west_island_a.dds</SpecularFile>
+        <NormalFile>jungle_west_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh130SG</Name>
+        <DiffuseFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_north_walls_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh131SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh132SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh133SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh134SG</Name>
+        <DiffuseFile>periph_west_d3.dds</DiffuseFile>
+        <SpecularFile>periph_west_d3.dds</SpecularFile>
+        <NormalFile>periph_west_d3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh135SG</Name>
+        <DiffuseFile>periph_west_d3.dds</DiffuseFile>
+        <SpecularFile>periph_west_d3.dds</SpecularFile>
+        <NormalFile>periph_west_d3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh136SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh137SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh138SG</Name>
+        <DiffuseFile>_chunk_jungle_north_island_a_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_north_island_a_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_north_island_a_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh139SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh140SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_f_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_f_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_f_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh141SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh142SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh143SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh144SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh145SG</Name>
+        <DiffuseFile>periph_east_c.dds</DiffuseFile>
+        <SpecularFile>periph_east_c.dds</SpecularFile>
+        <NormalFile>periph_east_c.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh146SG</Name>
+        <DiffuseFile>periph_west_d3.dds</DiffuseFile>
+        <SpecularFile>periph_west_d3.dds</SpecularFile>
+        <NormalFile>periph_west_d3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh147SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_h_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_h_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_h_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh148SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh149SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh150SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh151SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_f_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_f_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_f_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh152SG</Name>
+        <DiffuseFile>periph_west_d3.dds</DiffuseFile>
+        <SpecularFile>periph_west_d3.dds</SpecularFile>
+        <NormalFile>periph_west_d3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh153SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh154SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_h_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_h_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_h_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh155SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh156SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh157SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh158SG</Name>
+        <DiffuseFile>periph_east_c1.dds</DiffuseFile>
+        <SpecularFile>periph_east_c1.dds</SpecularFile>
+        <NormalFile>periph_east_c1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh159SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh160SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh161SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh162SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh163SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh164SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_h_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_h_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_h_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh165SG</Name>
+        <DiffuseFile>periph_base_south_west_a.dds</DiffuseFile>
+        <SpecularFile>periph_base_south_west_a.dds</SpecularFile>
+        <NormalFile>periph_base_south_west_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh166SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh167SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh168SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_a_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_a_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_a_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh169SG</Name>
+        <DiffuseFile>periph_west_a4.dds</DiffuseFile>
+        <SpecularFile>periph_west_a4.dds</SpecularFile>
+        <NormalFile>periph_west_a4.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh170SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh171SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_f_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_f_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_f_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh172SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh173SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh174SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh175SG</Name>
+        <DiffuseFile>periph_east_a1.dds</DiffuseFile>
+        <SpecularFile>periph_east_a1.dds</SpecularFile>
+        <NormalFile>periph_east_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh176SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh177SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh178SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh179SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh180SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh181SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh182SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh183SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh184SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh185SG</Name>
+        <DiffuseFile>_chunk_jungle_east_island_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_east_island_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_east_island_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh186SG</Name>
+        <DiffuseFile>periph_east_a1.dds</DiffuseFile>
+        <SpecularFile>periph_east_a1.dds</SpecularFile>
+        <NormalFile>periph_east_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh187SG</Name>
+        <DiffuseFile>periph_west_a4.dds</DiffuseFile>
+        <SpecularFile>periph_west_a4.dds</SpecularFile>
+        <NormalFile>periph_west_a4.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh188SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh189SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh190SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh191SG</Name>
+        <DiffuseFile>south_island_f_dragonpita.dds</DiffuseFile>
+        <SpecularFile>south_island_f_dragonpita.dds</SpecularFile>
+        <NormalFile>south_island_f_dragonpita.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh192SG</Name>
+        <DiffuseFile>_chunk_jungle_west_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_west_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_west_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh193SG</Name>
+        <DiffuseFile>south_island_f_dragonpitb.dds</DiffuseFile>
+        <SpecularFile>south_island_f_dragonpitb.dds</SpecularFile>
+        <NormalFile>south_island_f_dragonpitb.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh194SG</Name>
+        <DiffuseFile>periph_southeast_c3.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_c3.dds</SpecularFile>
+        <NormalFile>periph_southeast_c3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh195SG</Name>
+        <DiffuseFile>south_island_f_dragonpita.dds</DiffuseFile>
+        <SpecularFile>south_island_f_dragonpita.dds</SpecularFile>
+        <NormalFile>south_island_f_dragonpita.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh196SG</Name>
+        <DiffuseFile>jungle_east_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_east_island_a.dds</SpecularFile>
+        <NormalFile>jungle_east_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh197SG</Name>
+        <DiffuseFile>_chunk_base_south_walls_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_south_walls_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_south_walls_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh198SG</Name>
+        <DiffuseFile>jungle_east_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_east_island_a.dds</SpecularFile>
+        <NormalFile>jungle_east_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh199SG</Name>
+        <DiffuseFile>south_island_f_dragonpitb.dds</DiffuseFile>
+        <SpecularFile>south_island_f_dragonpitb.dds</SpecularFile>
+        <NormalFile>south_island_f_dragonpitb.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh200SG</Name>
+        <DiffuseFile>south_island_f_dragonpitb.dds</DiffuseFile>
+        <SpecularFile>south_island_f_dragonpitb.dds</SpecularFile>
+        <NormalFile>south_island_f_dragonpitb.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh201SG</Name>
+        <DiffuseFile>jungle_east_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_east_island_a.dds</SpecularFile>
+        <NormalFile>jungle_east_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh202SG</Name>
+        <DiffuseFile>_chunk_base_south_walls_b_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_south_walls_b_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_south_walls_b_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh203SG</Name>
+        <DiffuseFile>jungle_east_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_east_island_a.dds</SpecularFile>
+        <NormalFile>jungle_east_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh204SG</Name>
+        <DiffuseFile>jungle_east_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_east_island_a.dds</SpecularFile>
+        <NormalFile>jungle_east_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh205SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh206SG</Name>
+        <DiffuseFile>periph_south_walls_f.dds</DiffuseFile>
+        <SpecularFile>periph_south_walls_f.dds</SpecularFile>
+        <NormalFile>periph_south_walls_f.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh207SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh208SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh209SG</Name>
+        <DiffuseFile>periph_southeast_d2.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_d2.dds</SpecularFile>
+        <NormalFile>periph_southeast_d2.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh210SG</Name>
+        <DiffuseFile>jungle_east_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_east_island_a.dds</SpecularFile>
+        <NormalFile>jungle_east_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh211SG</Name>
+        <DiffuseFile>south_island_f_dragonpita.dds</DiffuseFile>
+        <SpecularFile>south_island_f_dragonpita.dds</SpecularFile>
+        <NormalFile>south_island_f_dragonpita.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh212SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh213SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh214SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh215SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh216SG</Name>
+        <DiffuseFile>periph_southeast_c3.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_c3.dds</SpecularFile>
+        <NormalFile>periph_southeast_c3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh217SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_e_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh218SG</Name>
+        <DiffuseFile>jungle_east_island_a.dds</DiffuseFile>
+        <SpecularFile>jungle_east_island_a.dds</SpecularFile>
+        <NormalFile>jungle_east_island_a.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh219SG</Name>
+        <DiffuseFile>periph_east_b1.dds</DiffuseFile>
+        <SpecularFile>periph_east_b1.dds</SpecularFile>
+        <NormalFile>periph_east_b1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh220SG</Name>
+        <DiffuseFile>south_island_f_dragonpita.dds</DiffuseFile>
+        <SpecularFile>south_island_f_dragonpita.dds</SpecularFile>
+        <NormalFile>south_island_f_dragonpita.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh221SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh222SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh223SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_d_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh224SG</Name>
+        <DiffuseFile>periph_southeast_a1.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_a1.dds</SpecularFile>
+        <NormalFile>periph_southeast_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh225SG</Name>
+        <DiffuseFile>periph_southeast_c3.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_c3.dds</SpecularFile>
+        <NormalFile>periph_southeast_c3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh226SG</Name>
+        <DiffuseFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh227SG</Name>
+        <DiffuseFile>periph_southeast_a1.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_a1.dds</SpecularFile>
+        <NormalFile>periph_southeast_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh228SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh229SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_h_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_h_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_h_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh230SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_h_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_h_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_h_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh231SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh232SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh233SG</Name>
+        <DiffuseFile>periph_southeast_eb.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_eb.dds</SpecularFile>
+        <NormalFile>periph_southeast_eb.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh234SG</Name>
+        <DiffuseFile>periph_southeast_c3.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_c3.dds</SpecularFile>
+        <NormalFile>periph_southeast_c3.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh235SG</Name>
+        <DiffuseFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh236SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh237SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh238SG</Name>
+        <DiffuseFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_base_south_walls_c_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh239SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh240SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh241SG</Name>
+        <DiffuseFile>south_platform_periph_coll.dds</DiffuseFile>
+        <SpecularFile>south_platform_periph_coll.dds</SpecularFile>
+        <NormalFile>south_platform_periph_coll.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh242SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_i_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh243SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh244SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh245SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh246SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_g_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh247SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh248SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh249SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh250SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_l_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh251SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh252SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh253SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_j_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh254SG</Name>
+        <DiffuseFile>paly_south_base_edge_wall_right_a1.dds</DiffuseFile>
+        <SpecularFile>paly_south_base_edge_wall_right_a1.dds</SpecularFile>
+        <NormalFile>paly_south_base_edge_wall_right_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh255SG</Name>
+        <DiffuseFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</DiffuseFile>
+        <SpecularFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</SpecularFile>
+        <NormalFile>_chunk_jungle_south_island_k_alpha_3dcuv_atlas_color.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh256SG</Name>
+        <DiffuseFile>periph_southeast_a1.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_a1.dds</SpecularFile>
+        <NormalFile>periph_southeast_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh257SG</Name>
+        <DiffuseFile>pally_platform.dds</DiffuseFile>
+        <SpecularFile>pally_platform.dds</SpecularFile>
+        <NormalFile>pally_platform.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh258SG</Name>
+        <DiffuseFile>periph_southeast_a1.dds</DiffuseFile>
+        <SpecularFile>periph_southeast_a1.dds</SpecularFile>
+        <NormalFile>periph_southeast_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh259SG</Name>
+        <DiffuseFile>pally_platform.dds</DiffuseFile>
+        <SpecularFile>pally_platform.dds</SpecularFile>
+        <NormalFile>pally_platform.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh260SG</Name>
+        <DiffuseFile>periph_south_f1.dds</DiffuseFile>
+        <SpecularFile>periph_south_f1.dds</SpecularFile>
+        <NormalFile>periph_south_f1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh261SG</Name>
+        <DiffuseFile>pally_platform.dds</DiffuseFile>
+        <SpecularFile>pally_platform.dds</SpecularFile>
+        <NormalFile>pally_platform.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh262SG</Name>
+        <DiffuseFile>pally_platform.dds</DiffuseFile>
+        <SpecularFile>pally_platform.dds</SpecularFile>
+        <NormalFile>pally_platform.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh263SG</Name>
+        <DiffuseFile>pally_base_side_walls_bot1.dds</DiffuseFile>
+        <SpecularFile>pally_base_side_walls_bot1.dds</SpecularFile>
+        <NormalFile>pally_base_side_walls_bot1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh264SG</Name>
+        <DiffuseFile>periph_south_g_combined2.dds</DiffuseFile>
+        <SpecularFile>periph_south_g_combined2.dds</SpecularFile>
+        <NormalFile>periph_south_g_combined2.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh265SG</Name>
+        <DiffuseFile>pally_base_side_walls_bot1.dds</DiffuseFile>
+        <SpecularFile>pally_base_side_walls_bot1.dds</SpecularFile>
+        <NormalFile>pally_base_side_walls_bot1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh266SG</Name>
+        <DiffuseFile>periph_south_e1.dds</DiffuseFile>
+        <SpecularFile>periph_south_e1.dds</SpecularFile>
+        <NormalFile>periph_south_e1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh267SG</Name>
+        <DiffuseFile>periph_south_e1.dds</DiffuseFile>
+        <SpecularFile>periph_south_e1.dds</SpecularFile>
+        <NormalFile>periph_south_e1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh268SG</Name>
+        <DiffuseFile>paly_south_base_edge_wall_right_a1.dds</DiffuseFile>
+        <SpecularFile>paly_south_base_edge_wall_right_a1.dds</SpecularFile>
+        <NormalFile>paly_south_base_edge_wall_right_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh269SG</Name>
+        <DiffuseFile>south_platform_periph_coll.dds</DiffuseFile>
+        <SpecularFile>south_platform_periph_coll.dds</SpecularFile>
+        <NormalFile>south_platform_periph_coll.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh270SG</Name>
+        <DiffuseFile>base_south_foliage.dds</DiffuseFile>
+        <SpecularFile>base_south_foliage.dds</SpecularFile>
+        <NormalFile>base_south_foliage.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh271SG</Name>
+        <DiffuseFile>periph_south_e1.dds</DiffuseFile>
+        <SpecularFile>periph_south_e1.dds</SpecularFile>
+        <NormalFile>periph_south_e1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh272SG</Name>
+        <DiffuseFile>south_platform_periph_coll.dds</DiffuseFile>
+        <SpecularFile>south_platform_periph_coll.dds</SpecularFile>
+        <NormalFile>south_platform_periph_coll.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>polySurfaceMapGeoMesh273SG</Name>
+        <DiffuseFile>paly_south_base_edge_wall_right_a1.dds</DiffuseFile>
+        <SpecularFile>paly_south_base_edge_wall_right_a1.dds</SpecularFile>
+        <NormalFile>paly_south_base_edge_wall_right_a1.dds</NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0" G="0" B="0" A="1"/>
+        <Specular R="0" G="0" B="0" A="100"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>
