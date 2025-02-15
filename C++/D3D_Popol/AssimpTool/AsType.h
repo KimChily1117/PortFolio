@@ -6,7 +6,7 @@ using VertexType = VertexTextureNormalTangentBlendData;
 struct SubMesh {
 	vector<VertexType> vertices;
 	vector<uint32> indices;
-	string materialName;  // 서브메쉬별 머티리얼 이름
+	string materialName;  
 };
 
 struct asBone
@@ -25,7 +25,8 @@ struct asMesh
 	vector<uint32> indices;
 	int32 boneIndex;
 	string materialName;
-	vector<SubMesh> subMeshes;  // 여러 서브메쉬 지원
+	vector<SubMesh> subMeshes;  // 
+	Matrix transformMatrix = Matrix::Identity;  // Transform 
 };
 
 struct asMaterial
@@ -61,7 +62,7 @@ struct asBlendWeight
 	Vec4 weights = Vec4(0, 0, 0, 0);
 };
 
-// 정점마다 -> (관절번호, 가중치)
+
 struct asBoneWeights
 {
 	void AddWeights(uint32 boneIndex, float weight)

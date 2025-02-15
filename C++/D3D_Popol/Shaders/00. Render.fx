@@ -7,7 +7,17 @@
 #define MAX_MODEL_KEYFRAMES 750
 #define MAX_MODEL_INSTANCE 500
 
+// ************** Constant Buffers **************
 
+cbuffer BoneBuffer
+{
+    matrix BoneTransforms[MAX_MODEL_TRANSFORMS];
+};
+
+cbuffer MeshTransformBuffer
+{
+    matrix MeshTransformMatrix; //추가된 Mesh 변환 행렬
+};
 
 // ************** MeshRender ****************
 
@@ -17,7 +27,6 @@ struct VertexMesh
     float2 uv : TEXCOORD;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
-	// INSTANCING;
     uint instanceID : SV_INSTANCEID;
     matrix world : INST;
 };
@@ -25,16 +34,13 @@ struct VertexMesh
 MeshOutput VS_Mesh(VertexMesh input)
 {
     MeshOutput output;
-
     output.position = mul(input.position, input.world); // W
     output.worldPosition = output.position;
     output.position = mul(output.position, VP);
     output.uv = input.uv;
     output.normal = input.normal;
-
     return output;
 }
-
 
 // ************** ModelRender ****************
 
@@ -46,14 +52,8 @@ struct VertexModel
     float3 tangent : TANGENT;
     float4 blendIndices : BLEND_INDICES;
     float4 blendWeights : BLEND_WEIGHTS;
-	// INSTANCING;
     uint instanceID : SV_INSTANCEID;
     matrix world : INST;
-};
-
-cbuffer BoneBuffer
-{
-    matrix BoneTransforms[MAX_MODEL_TRANSFORMS];
 };
 
 uint BoneIndex;
@@ -61,20 +61,14 @@ uint BoneIndex;
 MeshOutput VS_Model(VertexModel input)
 {
     MeshOutput output;
-
     output.position = mul(input.position, BoneTransforms[BoneIndex]); // Model Global
     output.position = mul(output.position, input.world); // W
     output.worldPosition = output.position;
     output.position = mul(output.position, VP);
     output.uv = input.uv;
     output.normal = input.normal;
-
     return output;
 }
-
-
-
-
 
 // ************** AnimRender ****************
 
@@ -148,7 +142,6 @@ matrix GetAnimationMatrix(VertexModel input)
 
         matrix result = lerp(curr, next, ratio[0]);
 
-		// 다음 애니메이션
         if (animIndex[1] >= 0)
         {
             c0 = TransformMap.Load(int4(indices[i] * 4 + 0, currFrame[1], animIndex[1], 0));
@@ -177,20 +170,20 @@ MeshOutput VS_Animation(VertexModel input)
 {
     MeshOutput output;
 
-	//output.position = mul(input.position, BoneTransforms[BoneIndex]); // Model Global
+    matrix animMatrix = GetAnimationMatrix(input);
 
-    matrix m = GetAnimationMatrix(input);
+    // Bone Animation 후 MeshTransformMatrix 적용
+    matrix finalMatrix = mul(animMatrix, MeshTransformMatrix);
 
-    output.position = mul(input.position, m);
+    output.position = mul(input.position, finalMatrix);
     output.position = mul(output.position, input.world); // W
     output.worldPosition = output.position;
     output.position = mul(output.position, VP);
     output.uv = input.uv;
-    output.normal = mul(input.normal, (float3x3) input.world);
-    output.tangent = mul(input.tangent, (float3x3) input.world);
+    output.normal = mul(input.normal, (float3x3) finalMatrix);
+    output.tangent = mul(input.tangent, (float3x3) finalMatrix);
 
     return output;
 }
 
 #endif
-

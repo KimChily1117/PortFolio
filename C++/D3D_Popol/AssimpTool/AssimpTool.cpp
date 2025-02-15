@@ -43,13 +43,7 @@ void AssimpTool::Init()
 	
 	
 	
-	//  Annie
-	{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Annie/Goth_Annie.fbx");
-		converter->ExportMaterialData(L"Annie/Goth_Annie");
-		converter->ExportModelData(L"Annie/Goth_Annie");		
-	}
+	
 	
 	// Annie motions(idle, run )
 	/*{
@@ -62,12 +56,29 @@ void AssimpTool::Init()
 		converter->ReadAssetFile(L"Annie/Goth_Annie_Run.fbx");
 		converter->ExportAnimationData(L"Annie/Goth_Annie_Run");
 	}*/
+
+
+
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Annie/Mesh.fbx");
+		converter->ExportMaterialData(L"Annie/Annie");
+		converter->ExportModelData(L"Annie/Annie");
+	}
+
+
+
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Annie/Idle.fbx");
 		converter->ExportAnimationData(L"Annie/Idle");
 	}
 
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Annie/Run.fbx");
+		converter->ExportAnimationData(L"Annie/Run");
+	}
 
 	 
 	 

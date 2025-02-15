@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Model.h"
 #include "Utils.h"
 #include "FileUtils.h"
@@ -168,7 +168,7 @@ void Model::ReadModel(wstring filename)
 
 			// Material
 			mesh->materialName = Utils::ToWString(file->Read<string>());
-
+			mesh->transformMatrix = file->Read<Matrix>();
 			// VertexData
 			{
 				const uint32 count = file->Read<uint32>();
@@ -284,7 +284,7 @@ std::shared_ptr<ModelAnimation> Model::GetAnimationByName(wstring name)
 
 void Model::BindCacheInfo()
 {
-	// Mesh¿¡ Material Ä³½Ì
+	// MeshÂ¿Â¡ Material Ã„Â³Â½ÃŒ
 	for (const auto& mesh : _meshes)
 	{
 		if (mesh->material != nullptr)
@@ -293,7 +293,7 @@ void Model::BindCacheInfo()
 		mesh->material = GetMaterialByName(mesh->materialName);
 	}
 
-	// Mesh¿¡ Bone Ä³½Ì
+	// MeshÂ¿Â¡ Bone Ã„Â³Â½ÃŒ
 	for (const auto& mesh : _meshes)
 	{
 		if (mesh->bone != nullptr)
@@ -302,7 +302,7 @@ void Model::BindCacheInfo()
 		mesh->bone = GetBoneByIndex(mesh->boneIndex);
 	}
 
-	// Bone °èÃş Á¤º¸ Ã¤¿ì±â
+	// Bone Â°Ã¨ÃƒÃ¾ ÃÂ¤ÂºÂ¸ ÃƒÂ¤Â¿Ã¬Â±Ã¢
 	if (_root == nullptr && !_bones.empty())
 	{
 		_root = _bones[0];

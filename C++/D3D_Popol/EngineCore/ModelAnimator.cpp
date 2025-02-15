@@ -12,7 +12,7 @@ ModelAnimator::ModelAnimator(shared_ptr<Shader> shader)
 	: Super(ComponentType::ModelAnimator), _shader(shader)
 {
 	//// TEST
-	//_tweenDesc.next.animIndex = rand() % 3;
+	_tweenDesc.curr.animIndex = 1;
 	//_tweenDesc.tweenSumTime += rand() % 100;
 }
 
@@ -111,15 +111,17 @@ void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 	_shader->GetSRV("TransformMap")->SetResource(_srv.Get());
 
 	// Bones
-	BoneDesc boneDesc;
+	shared_ptr<BoneDesc> boneDesc = make_shared<BoneDesc>();
+
+	//BoneDesc boneDesc;
 
 	const uint32 boneCount = _model->GetBoneCount();
 	for (uint32 i = 0; i < boneCount; i++)
 	{
 		shared_ptr<ModelBone> bone = _model->GetBoneByIndex(i);
-		boneDesc.transforms[i] = bone->transform;
+		boneDesc->transforms[i] = bone->transform;
 	}
-	_shader->PushBoneData(boneDesc);
+	_shader->PushBoneData(*boneDesc);
 
 	const auto& meshes = _model->GetMeshes();
 	for (auto& mesh : meshes)
@@ -129,6 +131,10 @@ void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 
 		// BoneIndex
 		_shader->GetScalar("BoneIndex")->SetInt(mesh->boneIndex);
+
+		_shader->GetMatrix("MeshTransformMatrix")->SetMatrix(reinterpret_cast<const float*>(&mesh->transformMatrix));
+
+
 
 		mesh->vertexBuffer->PushData();
 		mesh->indexBuffer->PushData();
