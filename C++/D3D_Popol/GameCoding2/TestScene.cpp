@@ -184,82 +184,86 @@ void TestScene::InitializeObject()
 	}*/
 
 
-	//
+	////
+	//{
+	//	// Çù°î
+	//	shared_ptr<class Model> m2 = make_shared<Model>();
+	//	m2->ReadModel(L"sr/sr");
+	//	m2->ReadMaterial(L"sr/sr");
+
+	//	auto obj = make_shared<GameObject>("Rift");
+	//	//obj->GetOrAddTransform()->SetPosition(Vec3(0,0,0));
+	//	obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
+	//	obj->GetOrAddTransform()->SetRotation(Vec3(0.f,90.f,0.f));
+
+	//	obj->AddComponent(make_shared<ModelRenderer>(_shader));
+	//	obj->GetModelRenderer()->SetModel(m2);
+	//	obj->GetModelRenderer()->SetPass(1);
+
+
+	//	Add(obj);
+	//}
+
+	//// Terrain
+	//{	
+	//	auto obj = make_shared<GameObject>("Terrain");
+	//	obj->AddComponent(make_shared<Terrain>());
+	//	obj->GetOrAddTransform()->SetLocalPosition(Vec3(0.f, 2.f, 0.f));
+	//	obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
+
+	//	obj->GetTerrain()->Create(300, 550, RESOURCES->Get<Material>(L"Veigar"));
+	//	obj->GetMeshRenderer()->SetPass(3);
+	//	CUR_SCENE->Add(obj);
+	//}
 	{
-		// Çù°î
-		shared_ptr<class Model> m2 = make_shared<Model>();
-		m2->ReadModel(L"sr/sr");
-		m2->ReadMaterial(L"sr/sr");
-
-		auto obj = make_shared<GameObject>("Rift");
-		//obj->GetOrAddTransform()->SetPosition(Vec3(0,0,0));
-		obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(0.f,90.f,0.f));
-
-		obj->AddComponent(make_shared<ModelRenderer>(_shader));
-		obj->GetModelRenderer()->SetModel(m2);
-		obj->GetModelRenderer()->SetPass(1);
-
-
-		Add(obj);
-	}
-
-	// Terrain
-	{	
-		auto obj = make_shared<GameObject>("Terrain");
-		obj->AddComponent(make_shared<Terrain>());
-		obj->GetOrAddTransform()->SetLocalPosition(Vec3(0.f, 2.f, 0.f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
-
-		obj->GetTerrain()->Create(300, 550, RESOURCES->Get<Material>(L"Veigar"));
-		obj->GetMeshRenderer()->SetPass(3);
-		CUR_SCENE->Add(obj);
-	}
-	/*{
 		shared_ptr<class Model> m1 = make_shared<Model>();
-		m1->ReadModel(L"Annie/Goth_Annie");
-		m1->ReadMaterial(L"Annie/Goth_Annie");
+		m1->ReadModel(L"Annie/Annie");
+		m1->ReadMaterial(L"Annie/Annie");
 		m1->ReadAnimation(L"Annie/Idle");
+		m1->ReadAnimation(L"Annie/Run");
+		
 
 		auto obj = make_shared<GameObject>("Annie");
-		obj->GetOrAddTransform()->SetPosition(Vec3(2,5,0));
-		obj->GetOrAddTransform()->SetScale(Vec3(0.01f));
-		obj->AddComponent(make_shared<ModelAnimator>(_shader));
-		{
-			obj->GetModelAnimator()->SetModel(m1);
-			obj->GetModelAnimator()->SetPass(2);
-		}
-		Add(obj);
-
-	}*/
-
-	{
-		// Animation
-		shared_ptr<class Model> m1 = make_shared<Model>();
-		m1->ReadModel(L"Kachujin/Kachujin");
-		m1->ReadMaterial(L"Kachujin/Kachujin");
-		m1->ReadAnimation(L"Kachujin/Idle");
-		m1->ReadAnimation(L"Kachujin/Run");
-		m1->ReadAnimation(L"Kachujin/Slash");
-
-
-		auto obj = make_shared<GameObject>("Katsu");
-		//obj->GetOrAddTransform()->SetLocalPosition(Vec3(6.f,2.f,0.f));
-		//obj->GetOrAddTransform()->SetRotation(Vec3(0.f,-90.f,0.f));
-
-		obj->GetOrAddTransform()->SetLocalPosition(Vec3(6.f, 2.f, 1.0f));
+		obj->GetOrAddTransform()->SetPosition(Vec3(0,0,-2.f));
+		obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
 		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
 
-
-		obj->GetOrAddTransform()->SetScale(Vec3(0.005f));
 		obj->AddComponent(make_shared<ModelAnimator>(_shader));
-		obj->AddComponent(make_shared<PlayerController>());
 		{
 			obj->GetModelAnimator()->SetModel(m1);
 			obj->GetModelAnimator()->SetPass(2);
 		}
 		Add(obj);
+
 	}
+
+	//{
+	//	// Animation
+	//	shared_ptr<class Model> m1 = make_shared<Model>();
+	//	m1->ReadModel(L"Kachujin/Kachujin");
+	//	m1->ReadMaterial(L"Kachujin/Kachujin");
+	//	m1->ReadAnimation(L"Kachujin/Idle");
+	//	m1->ReadAnimation(L"Kachujin/Run");
+	//	m1->ReadAnimation(L"Kachujin/Slash");
+
+
+	//	auto obj = make_shared<GameObject>("Katsu");
+	//	//obj->GetOrAddTransform()->SetLocalPosition(Vec3(6.f,2.f,0.f));
+	//	//obj->GetOrAddTransform()->SetRotation(Vec3(0.f,-90.f,0.f));
+
+	//	obj->GetOrAddTransform()->SetLocalPosition(Vec3(6.f, 2.f, 1.0f));
+	//	obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
+
+
+	//	obj->GetOrAddTransform()->SetScale(Vec3(0.005f));
+	//	obj->AddComponent(make_shared<ModelAnimator>(_shader));
+	//	obj->AddComponent(make_shared<PlayerController>());
+	//	{
+	//		obj->GetModelAnimator()->SetModel(m1);
+	//		obj->GetModelAnimator()->SetPass(2);
+	//	}
+	//	Add(obj);
+	//}
 
 
 

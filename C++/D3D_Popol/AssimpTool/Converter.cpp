@@ -131,6 +131,17 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 	mesh->name = node->mName.C_Str();
 	mesh->boneIndex = bone;
 
+
+	// Mesh의 Transform 읽기
+	Matrix transform(node->mTransformation[0]);
+	transform = transform.Transpose();  // Assimp는 Transpose 필요
+
+	// X축 반전 (DirectX용 변환)
+	Matrix flipX = Matrix::CreateScale(-1.0f, 1.0f, 1.0f);
+	mesh->transformMatrix = transform * flipX;  // 변환 적용
+
+
+
 	for (uint32 i = 0; i < node->mNumMeshes; i++)
 	{
 		uint32 index = node->mMeshes[i];
@@ -277,50 +288,15 @@ void Converter::ReadSkinData()
 
 void Converter::WriteModelFile(wstring finalPath)
 {
-	//auto path = filesystem::path(finalPath);
-
-	//// 폴더가 없으면 만든다.
-	//filesystem::create_directory(path.parent_path());
-
-	//shared_ptr<FileUtils> file = make_shared<FileUtils>();
-	//file->Open(finalPath, FileMode::Write);
-
-	//// Bone Data
-	//file->Write<uint32>(_bones.size());
-	//for (shared_ptr<asBone>& bone : _bones)
-	//{
-	//	file->Write<int32>(bone->index);
-	//	file->Write<string>(bone->name);
-	//	file->Write<int32>(bone->parent);
-	//	file->Write<Matrix>(bone->transform);
-	//}
-
-	//// Mesh Data
-	//file->Write<uint32>(_meshes.size());
-	//for (shared_ptr<asMesh>& meshData : _meshes)
-	//{
-	//	file->Write<string>(meshData->name);
-	//	file->Write<int32>(meshData->boneIndex);
-	//	file->Write<string>(meshData->materialName);
-
-	//	// Vertex Data
-	//	file->Write<uint32>(meshData->vertices.size());
-	//	file->Write(&meshData->vertices[0], sizeof(VertexType) * meshData->vertices.size());
-
-	//	// Index Data
-	//	file->Write<uint32>(meshData->indices.size());
-	//	file->Write(&meshData->indices[0], sizeof(uint32) * meshData->indices.size());
-	//}
-
 	auto path = filesystem::path(finalPath);
 
-	// 폴더 생성
+	// 폴더가 없으면 만든다.
 	filesystem::create_directory(path.parent_path());
 
 	shared_ptr<FileUtils> file = make_shared<FileUtils>();
 	file->Open(finalPath, FileMode::Write);
 
-	// Bone 데이터 저장
+	// Bone Data
 	file->Write<uint32>(_bones.size());
 	for (shared_ptr<asBone>& bone : _bones)
 	{
@@ -330,27 +306,63 @@ void Converter::WriteModelFile(wstring finalPath)
 		file->Write<Matrix>(bone->transform);
 	}
 
-	// Mesh(SubMesh) 데이터 저장
+	// Mesh Data
 	file->Write<uint32>(_meshes.size());
-	for (shared_ptr<asMesh>& subMesh : _meshes)
+	for (shared_ptr<asMesh>& meshData : _meshes)
 	{
-		// SubMesh 이름과 본 인덱스
-		file->Write<string>(subMesh->name);
-		file->Write<int32>(subMesh->boneIndex);
-		file->Write<string>(subMesh->materialName);
+		file->Write<string>(meshData->name);
+		file->Write<int32>(meshData->boneIndex);
+		file->Write<string>(meshData->materialName);
+		file->Write<Matrix>(meshData->transformMatrix);
+		// Vertex Data
+		file->Write<uint32>(meshData->vertices.size());
+		file->Write(&meshData->vertices[0], sizeof(VertexType) * meshData->vertices.size());
 
-		// Vertex 데이터
-		uint32 vertexCount = static_cast<uint32>(subMesh->vertices.size());
-		file->Write<uint32>(vertexCount);
-		if (vertexCount > 0)
-			file->Write(&subMesh->vertices[0], sizeof(VertexType) * vertexCount);
-
-		// Index 데이터
-		uint32 indexCount = static_cast<uint32>(subMesh->indices.size());
-		file->Write<uint32>(indexCount);
-		if (indexCount > 0)
-			file->Write(&subMesh->indices[0], sizeof(uint32) * indexCount);
+		// Index Data
+		file->Write<uint32>(meshData->indices.size());
+		file->Write(&meshData->indices[0], sizeof(uint32) * meshData->indices.size());
 	}
+
+
+	//// 폴더 생성
+	//auto path = filesystem::path(finalPath);
+	//filesystem::create_directory(path.parent_path());
+
+	//shared_ptr<FileUtils> file = make_shared<FileUtils>();
+	//file->Open(finalPath, FileMode::Write);
+
+	//// Bone 데이터 저장
+	//file->Write<uint32>(_bones.size());
+	//for (shared_ptr<asBone>& bone : _bones)
+	//{
+	//	file->Write<int32>(bone->index);
+	//	file->Write<string>(bone->name);
+	//	file->Write<int32>(bone->parent);
+	//	file->Write<Matrix>(bone->transform);
+	//}
+
+	//// Mesh(SubMesh) 데이터 저장
+	//file->Write<uint32>(_meshes.size());
+	//for (shared_ptr<asMesh>& subMesh : _meshes)
+	//{
+	//	// SubMesh 이름과 본 인덱스
+	//	file->Write<string>(subMesh->name);
+	//	file->Write<int32>(subMesh->boneIndex);
+	//	file->Write<string>(subMesh->materialName);
+	//	file->Write<Matrix>(meshData->transformMatrix);
+
+	//	// Vertex 데이터
+	//	uint32 vertexCount = static_cast<uint32>(subMesh->vertices.size());
+	//	file->Write<uint32>(vertexCount);
+	//	if (vertexCount > 0)
+	//		file->Write(&subMesh->vertices[0], sizeof(VertexType) * vertexCount);
+
+	//	// Index 데이터
+	//	uint32 indexCount = static_cast<uint32>(subMesh->indices.size());
+	//	file->Write<uint32>(indexCount);
+	//	if (indexCount > 0)
+	//		file->Write(&subMesh->indices[0], sizeof(uint32) * indexCount);
+	//}
 }
 
 void Converter::WriteMeshFile(wstring finalPath)

@@ -29,5 +29,8 @@ struct ModelMesh
 	// Bones
 	int32 boneIndex;
 	shared_ptr<ModelBone> bone; // Cache;
+
+	// Added by yeop
+	Matrix transformMatrix;
 };
 
