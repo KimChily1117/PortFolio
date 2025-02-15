@@ -12,7 +12,7 @@ ModelAnimator::ModelAnimator(shared_ptr<Shader> shader)
 	: Super(ComponentType::ModelAnimator), _shader(shader)
 {
 	//// TEST
-	_tweenDesc.curr.animIndex = 1;
+	//_tweenDesc.curr.animIndex = 1;
 	//_tweenDesc.tweenSumTime += rand() % 100;
 }
 
