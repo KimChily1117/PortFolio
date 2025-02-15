@@ -127,111 +127,122 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 	if (node->mNumMeshes < 1)
 		return;
 
-	shared_ptr<asMesh> mesh = make_shared<asMesh>();
-	mesh->name = node->mName.C_Str();
-	mesh->boneIndex = bone;
-
-
-	// Mesh의 Transform 읽기
-	Matrix transform(node->mTransformation[0]);
-	transform = transform.Transpose();  // Assimp는 Transpose 필요
-
-	// X축 반전 (DirectX용 변환)
-	Matrix flipX = Matrix::CreateScale(-1.0f, 1.0f, 1.0f);
-	mesh->transformMatrix = transform * flipX;  // 변환 적용
-
-
+	//모든 머티리얼을 검사하여, 한 개의 asMesh로 합칠지 개별적으로 저장할지 결정
+	bool hasMultipleMaterials = false;
+	unordered_set<std::string> uniqueMaterials;  // 머티리얼 중복 확인을 위한 Set
 
 	for (uint32 i = 0; i < node->mNumMeshes; i++)
 	{
 		uint32 index = node->mMeshes[i];
 		const aiMesh* srcMesh = _scene->mMeshes[index];
 
-		// Material Name
 		const aiMaterial* material = _scene->mMaterials[srcMesh->mMaterialIndex];
-		mesh->materialName = material->GetName().C_Str();
+		std::string materialName = material->GetName().C_Str();
 
-		const uint32 startVertex = mesh->vertices.size();
+		if (uniqueMaterials.find(materialName) == uniqueMaterials.end())
+			uniqueMaterials.insert(materialName);
 
-		for (uint32 v = 0; v < srcMesh->mNumVertices; v++)
+		if (uniqueMaterials.size() > 1) // 다른 머티리얼이 발견되면 개별 저장으로 변경
 		{
-			// Vertex
-			VertexType vertex;
-			::memcpy(&vertex.position, &srcMesh->mVertices[v], sizeof(Vec3));
-
-			// UV
-			if (srcMesh->HasTextureCoords(0))
-				::memcpy(&vertex.uv, &srcMesh->mTextureCoords[0][v], sizeof(Vec2));
-
-			// Normal
-			if (srcMesh->HasNormals())
-				::memcpy(&vertex.normal, &srcMesh->mNormals[v], sizeof(Vec3));
-
-			mesh->vertices.push_back(vertex);
-		}
-
-		// Index
-		for (uint32 f = 0; f < srcMesh->mNumFaces; f++)
-		{
-			aiFace& face = srcMesh->mFaces[f];
-
-			for (uint32 k = 0; k < face.mNumIndices; k++)
-				mesh->indices.push_back(face.mIndices[k] + startVertex);
+			hasMultipleMaterials = true;
+			break;
 		}
 	}
 
-	_meshes.push_back(mesh);
+	// 1. 하나의 `asMesh`에 모든 `aiMesh`를 합칠 경우
+	if (!hasMultipleMaterials)
+	{
+		shared_ptr<asMesh> mesh = make_shared<asMesh>();
+		mesh->name = node->mName.C_Str();
+		mesh->boneIndex = bone;
 
+		// X축 반전 (DirectX 변환)
+		Matrix transform(node->mTransformation[0]);
+		transform = transform.Transpose();
+		Matrix flipX = Matrix::CreateScale(-1.0f, 1.0f, 1.0f);
+		mesh->transformMatrix = transform * flipX;
 
-	//if (node->mNumMeshes < 1)
-	//	return;
+		const uint32 startVertex = mesh->vertices.size();
 
-	//for (uint32 meshIdx = 0; meshIdx < node->mNumMeshes; meshIdx++)
-	//{
-	//	// 현재 aiMesh를 가져오기
-	//	uint32 aiMeshIndex = node->mMeshes[meshIdx];
-	//	const aiMesh* srcMesh = _scene->mMeshes[aiMeshIndex];
+		for (uint32 i = 0; i < node->mNumMeshes; i++)
+		{
+			uint32 index = node->mMeshes[i];
+			const aiMesh* srcMesh = _scene->mMeshes[index];
 
-	//	// 새로운 SubMesh 생성
-	//	shared_ptr<asMesh> subMesh = make_shared<asMesh>();
-	//	subMesh->name = node->mName.C_Str();
-	//	subMesh->boneIndex = bone;
+			// 머티리얼 적용
+			const aiMaterial* material = _scene->mMaterials[srcMesh->mMaterialIndex];
+			mesh->materialName = material->GetName().C_Str();
 
-	//	// 머티리얼 처리
-	//	const aiMaterial* material = _scene->mMaterials[srcMesh->mMaterialIndex];
-	//	subMesh->materialName = material->GetName().C_Str();
+			for (uint32 v = 0; v < srcMesh->mNumVertices; v++)
+			{
+				VertexType vertex;
+				::memcpy(&vertex.position, &srcMesh->mVertices[v], sizeof(Vec3));
 
-	//	const uint32 startVertex = subMesh->vertices.size();
+				if (srcMesh->HasTextureCoords(0))
+					::memcpy(&vertex.uv, &srcMesh->mTextureCoords[0][v], sizeof(Vec2));
 
-	//	// 버텍스 데이터 처리
-	//	for (uint32 v = 0; v < srcMesh->mNumVertices; v++)
-	//	{
-	//		VertexType vertex;
-	//		::memcpy(&vertex.position, &srcMesh->mVertices[v], sizeof(Vec3));
+				if (srcMesh->HasNormals())
+					::memcpy(&vertex.normal, &srcMesh->mNormals[v], sizeof(Vec3));
 
-	//		if (srcMesh->HasTextureCoords(0))
-	//			::memcpy(&vertex.uv, &srcMesh->mTextureCoords[0][v], sizeof(Vec2));
+				mesh->vertices.push_back(vertex);
+			}
 
-	//		if (srcMesh->HasNormals())
-	//			::memcpy(&vertex.normal, &srcMesh->mNormals[v], sizeof(Vec3));
+			// 인덱스 처리 (startVertex 고려)
+			for (uint32 f = 0; f < srcMesh->mNumFaces; f++)
+			{
+				aiFace& face = srcMesh->mFaces[f];
+				for (uint32 k = 0; k < face.mNumIndices; k++)
+				{
+					mesh->indices.push_back(face.mIndices[k] + startVertex);
+				}
+			}
+		}
+		_meshes.push_back(mesh);
+	}
+	else
+	{
+		//2. 각 `aiMesh`를 개별 `asMesh`로 저장
+		for (uint32 meshIdx = 0; meshIdx < node->mNumMeshes; meshIdx++)
+		{
+			uint32 aiMeshIndex = node->mMeshes[meshIdx];
+			const aiMesh* srcMesh = _scene->mMeshes[aiMeshIndex];
 
-	//		subMesh->vertices.push_back(vertex);
-	//	}
+			shared_ptr<asMesh> subMesh = make_shared<asMesh>();
+			subMesh->name = node->mName.C_Str();
+			subMesh->boneIndex = bone;
 
-	//	// 인덱스 데이터 처리
-	//	for (uint32 f = 0; f < srcMesh->mNumFaces; f++)
-	//	{
-	//		const aiFace& face = srcMesh->mFaces[f];
-	//		for (uint32 k = 0; k < face.mNumIndices; k++)
-	//		{
-	//			subMesh->indices.push_back(face.mIndices[k] + startVertex);
-	//		}
-	//	}
+			// 머티리얼 처리
+			const aiMaterial* material = _scene->mMaterials[srcMesh->mMaterialIndex];
+			subMesh->materialName = material->GetName().C_Str();
 
-	//	// SubMesh를 메인 메쉬 목록에 추가
-	//	_meshes.push_back(subMesh);
-	//}
+			for (uint32 v = 0; v < srcMesh->mNumVertices; v++)
+			{
+				VertexType vertex;
+				::memcpy(&vertex.position, &srcMesh->mVertices[v], sizeof(Vec3));
+
+				if (srcMesh->HasTextureCoords(0))
+					::memcpy(&vertex.uv, &srcMesh->mTextureCoords[0][v], sizeof(Vec2));
+
+				if (srcMesh->HasNormals())
+					::memcpy(&vertex.normal, &srcMesh->mNormals[v], sizeof(Vec3));
+
+				subMesh->vertices.push_back(vertex);
+			}
+
+			for (uint32 f = 0; f < srcMesh->mNumFaces; f++)
+			{
+				aiFace& face = srcMesh->mFaces[f];
+				for (uint32 k = 0; k < face.mNumIndices; k++)
+				{
+					subMesh->indices.push_back(face.mIndices[k]);
+				}
+			}
+
+			_meshes.push_back(subMesh);
+		}
+	}
 }
+
 
 void Converter::ReadSkinData()
 {

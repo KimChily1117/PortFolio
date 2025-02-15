@@ -184,37 +184,37 @@ void TestScene::InitializeObject()
 	}*/
 
 
-	////
-	//{
-	//	// Çù°î
-	//	shared_ptr<class Model> m2 = make_shared<Model>();
-	//	m2->ReadModel(L"sr/sr");
-	//	m2->ReadMaterial(L"sr/sr");
+	//
+	{
+		// Çù°î
+		shared_ptr<class Model> m2 = make_shared<Model>();
+		m2->ReadModel(L"sr/sr");
+		m2->ReadMaterial(L"sr/sr");
 
-	//	auto obj = make_shared<GameObject>("Rift");
-	//	//obj->GetOrAddTransform()->SetPosition(Vec3(0,0,0));
-	//	obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
-	//	obj->GetOrAddTransform()->SetRotation(Vec3(0.f,90.f,0.f));
+		auto obj = make_shared<GameObject>("Rift");
+		//obj->GetOrAddTransform()->SetPosition(Vec3(0,0,0));
+		obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(0.f,90.f,0.f));
 
-	//	obj->AddComponent(make_shared<ModelRenderer>(_shader));
-	//	obj->GetModelRenderer()->SetModel(m2);
-	//	obj->GetModelRenderer()->SetPass(1);
+		obj->AddComponent(make_shared<ModelRenderer>(_shader));
+		obj->GetModelRenderer()->SetModel(m2);
+		obj->GetModelRenderer()->SetPass(1);
 
 
-	//	Add(obj);
-	//}
+		Add(obj);
+	}
 
-	//// Terrain
-	//{	
-	//	auto obj = make_shared<GameObject>("Terrain");
-	//	obj->AddComponent(make_shared<Terrain>());
-	//	obj->GetOrAddTransform()->SetLocalPosition(Vec3(0.f, 2.f, 0.f));
-	//	obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
+	// Terrain
+	{	
+		auto obj = make_shared<GameObject>("Terrain");
+		obj->AddComponent(make_shared<Terrain>());
+		obj->GetOrAddTransform()->SetLocalPosition(Vec3(0.f, 2.f, 0.f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
 
-	//	obj->GetTerrain()->Create(300, 550, RESOURCES->Get<Material>(L"Veigar"));
-	//	obj->GetMeshRenderer()->SetPass(3);
-	//	CUR_SCENE->Add(obj);
-	//}
+		obj->GetTerrain()->Create(300, 550, RESOURCES->Get<Material>(L"Veigar"));
+		obj->GetMeshRenderer()->SetPass(3);
+		CUR_SCENE->Add(obj);
+	}
 	{
 		shared_ptr<class Model> m1 = make_shared<Model>();
 		m1->ReadModel(L"Annie/Annie");
@@ -224,10 +224,10 @@ void TestScene::InitializeObject()
 		
 
 		auto obj = make_shared<GameObject>("Annie");
-		obj->GetOrAddTransform()->SetPosition(Vec3(0,0,-2.f));
-		obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
-
+		obj->GetOrAddTransform()->SetPosition(Vec3(6.f,2.f,0.f));
+		obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(90.f, 0.f, 0.f));
+		obj->AddComponent(make_shared<PlayerController>());
 		obj->AddComponent(make_shared<ModelAnimator>(_shader));
 		{
 			obj->GetModelAnimator()->SetModel(m1);
