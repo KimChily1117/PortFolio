@@ -22,6 +22,7 @@ using namespace std;
 #include <windows.h>
 #include <assert.h>
 #include <optional>
+#include <sstream>
 
 // DX
 #include <d3d11.h>

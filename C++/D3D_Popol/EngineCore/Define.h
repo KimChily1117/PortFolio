@@ -15,11 +15,10 @@ public:										\
 
 
 
-#ifdef _DEBUG
-#define DEBUG_LOG(x) OutputDebugStringA(x)
-#else
-#define DEBUG_LOG(x)
-#endif
+#define DEBUG_LOG(x)		\
+    { std::ostringstream oss; \
+      oss << x << "\n"; \
+      OutputDebugStringA(oss.str().c_str()); }
 
 
 #define CHECK(p)	assert(SUCCEEDED(p))

@@ -23,6 +23,8 @@ public:
 	void LateUpdate();
 	void FixedUpdate();
 
+	void GUIRender();
+
 	shared_ptr<Component> GetFixedComponent(ComponentType type);
 	shared_ptr<Transform> GetTransform();
 	shared_ptr<Camera> GetCamera();
@@ -36,8 +38,9 @@ public:
 	shared_ptr<Transform> GetOrAddTransform();
 	void AddComponent(shared_ptr<Component> component);
 
-	std::string _name;
-
+	std::string _name; // objectName;
+	bool _enableGUI = false; // GUI on off;
+	
 
 protected:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> _components;

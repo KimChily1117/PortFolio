@@ -29,34 +29,8 @@ void TestScene::LateUpdate()
 }
 void TestScene::Update()
 {
-	Super::Update();
-
-	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
-	{
-		int32 mouseX = INPUT->GetMousePos().x;
-		int32 mouseY = INPUT->GetMousePos().y;
-
-		Vec3 a;
-		// Picking
-		auto pickObj = CUR_SCENE->PickMesh(mouseX, mouseY , a);
-		if (pickObj)
-		{
-			//CUR_SCENE->Remove(pickObj);
-		}
-	}
-	//static float width = 800.f;
-	//static float height = 600.f;
-	//static float x = 0.f;
-	//static float y = 0.f;
-
-	//ImGui::InputFloat("Width", &width, 10.f);
-	//ImGui::InputFloat("Height", &height, 10.f);
-	//ImGui::InputFloat("X", &x, 10.f);
-	//ImGui::InputFloat("Y", &y, 10.f);
-	//GRAPHICS->SetViewport(width, height, x, y);
+	Super::Update();	
 }
-
-
 
 void TestScene::InitializeObject()
 {
@@ -184,7 +158,7 @@ void TestScene::InitializeObject()
 	}*/
 
 
-	//
+	
 	{
 		// Çù°î
 		shared_ptr<class Model> m2 = make_shared<Model>();
@@ -209,24 +183,25 @@ void TestScene::InitializeObject()
 		auto obj = make_shared<GameObject>("Terrain");
 		obj->AddComponent(make_shared<Terrain>());
 		obj->GetOrAddTransform()->SetLocalPosition(Vec3(0.f, 2.f, 0.f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(0.f,0.f,0.f));
 
-		obj->GetTerrain()->Create(300, 550, RESOURCES->Get<Material>(L"Veigar"));
-		obj->GetMeshRenderer()->SetPass(3);
+		obj->GetTerrain()->Create(145,145, RESOURCES->Get<Material>(L"Veigar"));
+		obj->GetMeshRenderer()->SetPass(1);
 		CUR_SCENE->Add(obj);
-	}
+	}	
+	
 	{
 		shared_ptr<class Model> m1 = make_shared<Model>();
 		m1->ReadModel(L"Annie/Annie");
 		m1->ReadMaterial(L"Annie/Annie");
 		m1->ReadAnimation(L"Annie/Idle");
 		m1->ReadAnimation(L"Annie/Run");
-		
+
 
 		auto obj = make_shared<GameObject>("Annie");
-		obj->GetOrAddTransform()->SetPosition(Vec3(6.f,2.f,0.f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
 		obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(90.f, 0.f, 0.f));
+		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.f, 0.f));
 		obj->AddComponent(make_shared<PlayerController>());
 		obj->AddComponent(make_shared<ModelAnimator>(_shader));
 		{
@@ -234,7 +209,6 @@ void TestScene::InitializeObject()
 			obj->GetModelAnimator()->SetPass(2);
 		}
 		Add(obj);
-
 	}
 
 	//{

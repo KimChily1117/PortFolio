@@ -14,11 +14,11 @@ public:
 	void UpdateTransform();
 
 	// Local
-	Vec3 GetLocalScale() { return _localScale; }
+	Vec3& GetLocalScale() { return _localScale; }
 	void SetLocalScale(const Vec3& localScale) { _localScale = localScale; UpdateTransform(); }
-	Vec3 GetLocalRotation() { return _localRotation; }
-	void SetLocalRotation(const Vec3& localRotation) { _localRotation = localRotation; UpdateTransform(); }
-	Vec3 GetLocalPosition() { return _localPosition; }
+	Vec3& GetLocalRotation() { return _localRotation; }
+	void SetLocalRotation(const Vec3& localRotation) {_localRotation = localRotation;UpdateTransform(); }
+	Vec3& GetLocalPosition() { return _localPosition; }
 	void SetLocalPosition(const Vec3& localPosition) { _localPosition = localPosition; UpdateTransform(); }
 
 	// World
@@ -44,13 +44,9 @@ public:
 	const vector<shared_ptr<Transform>>& GetChildren() { return _children; }
 	void AddChild(shared_ptr<Transform> child) { _children.push_back(child); }
 
+	Vec3 ToEulerAngles(Quaternion q);
 
-
-
-	void RenderInspector();
-	
-
-private:
+public:
 	Vec3 _localScale = { 1.f, 1.f, 1.f }; 
 	Vec3 _localRotation = { 0.f, 0.f, 0.f };
 	Vec3 _localPosition = { 0.f, 0.f, 0.f };

@@ -9,6 +9,9 @@ class SceneManager
 
 public:
 	void Update();
+	void GUIRender();
+
+
 
 	template<typename T>
 	void ChangeScene(shared_ptr<T> scene)
