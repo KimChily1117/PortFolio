@@ -29,6 +29,12 @@ void ImGuiManager::Update()
 
 void ImGuiManager::Render()
 {
+	static int renderCallCount = 0;
+	renderCallCount++;
+	std::cout << "GUI Render Called: " << renderCallCount << std::endl;  // 디버깅 로그 추가
+
+
+	SCENE->GUIRender();
 	// Rendering
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

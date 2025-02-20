@@ -21,27 +21,44 @@ void Transform::Update()
 	//RenderInspector();
 }
 
-Vec3 ToEulerAngles(Quaternion q)
+Vec3 Transform::ToEulerAngles(Quaternion q)
 {
 	Vec3 angles;
 
-	// roll (x-axis rotation)
+	// Roll (X축 회전)
 	double sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
 	double cosr_cosp = 1 - 2 * (q.x * q.x + q.y * q.y);
-	angles.x = std::atan2(sinr_cosp, cosr_cosp);
+	angles.x = XMConvertToDegrees(std::atan2(sinr_cosp, cosr_cosp));
 
-	// pitch (y-axis rotation)
-	double sinp = std::sqrt(1 + 2 * (q.w * q.y - q.x * q.z));
-	double cosp = std::sqrt(1 - 2 * (q.w * q.y - q.x * q.z));
-	angles.y = 2 * std::atan2(sinp, cosp) - 3.14159f / 2;
+	// Pitch (Y축 회전)
+	double sinp = 2 * (q.w * q.y - q.z * q.x);
+	if (std::abs(sinp) >= 1)
+		angles.y = XMConvertToDegrees(std::copysign(XM_PIDIV2, sinp));
+	else
+		angles.y = XMConvertToDegrees(std::asin(sinp));
 
-	// yaw (z-axis rotation)
+	// Yaw (Z축 회전)
 	double siny_cosp = 2 * (q.w * q.z + q.x * q.y);
 	double cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z);
-	angles.z = std::atan2(siny_cosp, cosy_cosp);
+	angles.z = XMConvertToDegrees(std::atan2(siny_cosp, cosy_cosp));
+
+	if (angles.x > 90.0f)
+	{
+		angles.x = 180.0f - angles.x;
+	}
+	else if (angles.x < -90.0f)
+	{
+		angles.x = -180.0f - angles.x;
+	}
+
+
+	DEBUG_LOG( GetGameObject()->_name << " : ToEulerAngles (Fixed): X=" << angles.x
+		<< ", Y=" << angles.y
+		<< ", Z=" << angles.z);
 
 	return angles;
 }
+
 
 void Transform::UpdateTransform()
 {
@@ -65,6 +82,13 @@ void Transform::UpdateTransform()
 	Quaternion quat;
 	_matWorld.Decompose(_scale, quat, _position);
 	_rotation = ToEulerAngles(quat);
+
+
+
+	DEBUG_LOG(GetGameObject()->_name << " : Decomposed Rotation : " << quat.x << " , " << quat.y << " , " << quat.z << " , " << quat.w);
+
+
+
 
 	// Children
 	for (const shared_ptr<Transform>& child : _children)
@@ -120,40 +144,3 @@ void Transform::SetPosition(const Vec3& worldPosition)
 	}
 }
 
-void Transform::RenderInspector()
-{
-	if (ImGui::Begin("Trasform Inspector")) // 창 시작
-	{
-		if (ImGui::TreeNode(GetGameObject()->_name.c_str())) // TreeNode
-		{
-			ImGui::Text(GetGameObject()->_name.c_str());
-
-			// Position
-			string temp = GetGameObject()->_name + "_Pos";
-			ImGui::DragFloat3(temp.c_str(), (float*)&_localPosition, 0.1f);
-
-			// Rotation
-			temp = GetGameObject()->_name + "_Rot";
-			XMFLOAT3 rot;
-			rot.x = XMConvertToDegrees(_localRotation.x);
-			rot.y = XMConvertToDegrees(_localRotation.y);
-			rot.z = XMConvertToDegrees(_localRotation.z);
-
-			ImGui::DragFloat3(temp.c_str(), (float*)&rot, 1.0f, -180, 180);
-
-			// Re-convert rotation back to radians
-			_localRotation.x = XMConvertToRadians(rot.x);
-			_localRotation.y = XMConvertToRadians(rot.y);
-			_localRotation.z = XMConvertToRadians(rot.z);
-
-			// Scale
-			temp = GetGameObject()->_name + "_Scale";
-			ImGui::DragFloat3(temp.c_str(), (float*)&_localScale, 0.1f);
-
-			ImGui::TreePop(); // TreeNode 닫기
-		}
-		ImGui::End(); // 창 닫기
-	}
-
-
-}

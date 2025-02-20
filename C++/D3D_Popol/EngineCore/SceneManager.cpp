@@ -9,3 +9,11 @@ void SceneManager::Update()
 	_currentScene->Update();
 	_currentScene->LateUpdate();
 }
+
+void SceneManager::GUIRender()
+{
+	if (_currentScene == nullptr)
+		return;
+
+	_currentScene->GUIRender();
+}

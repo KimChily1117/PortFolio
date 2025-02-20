@@ -195,6 +195,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClInclude Include="ModelMesh.h" />
     <ClInclude Include="ModelRenderer.h" />
     <ClInclude Include="MonoBehaviour.h" />
+    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="OBBBoxCollider.h" />
     <ClInclude Include="Pass.h" />
     <ClInclude Include="pch.h" />
@@ -268,6 +269,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClCompile Include="ModelMesh.cpp" />
     <ClCompile Include="ModelRenderer.cpp" />
     <ClCompile Include="MonoBehaviour.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OBBBoxCollider.cpp" />
     <ClCompile Include="Pass.cpp" />
     <ClCompile Include="pch.cpp">

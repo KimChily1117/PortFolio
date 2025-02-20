@@ -22,6 +22,7 @@ using namespace std;
 #include <windows.h>
 #include <assert.h>
 #include <optional>
+#include <sstream>
 
 // DX
 #include <d3d11.h>
@@ -70,6 +71,7 @@ using namespace Microsoft::WRL;
 #include "ImGuiManager.h"
 #include "SceneManager.h"
 #include "InstancingManager.h"
+#include "NetworkManager.h"
 
 // Engine
 #include "VertexData.h"

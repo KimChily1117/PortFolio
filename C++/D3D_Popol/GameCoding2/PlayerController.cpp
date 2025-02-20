@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "PlayerController.h"
 #include "ModelAnimator.h"
 
@@ -14,7 +14,7 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
-	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
+	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{
 		int32 mouseX = INPUT->GetMousePos().x;
 		int32 mouseY = INPUT->GetMousePos().y;
@@ -44,24 +44,26 @@ void PlayerController::MoveTo()
 	if (_currentState == PlayerState::IDLE)
 		return;
 
-	// ÇöÀç À§Ä¡
+	// í˜„ìž¬ ìœ„ì¹˜
 	Vec3 currentPosition = GetTransform()->GetPosition();
-	// TargetÀ¸·Î ÀÌµ¿
+	// Targetìœ¼ë¡œ ì´ë™
 
 	Vec3 direction = _dest - currentPosition;
-	direction.y = 0.0f; // yÃà Â÷ÀÌ¸¦ Á¦°Å
+	direction.y = 0.0f; // yì¶• ì°¨ì´ë¥¼ ì œê±°
 
 
 	float distance = direction.Length();
 
-	// Target¿¡ µµ´ÞÇß´ÂÁö È®ÀÎ
-	if (distance >= 0.6f) // ÀÛÀº ¿ÀÂ÷ Çã¿ë
+	// Targetì— ë„ë‹¬í–ˆëŠ”ì§€ í™•ì¸
+	if (distance >= 0.6f) // ìž‘ì€ ì˜¤ì°¨ í—ˆìš©
 	{
 		direction.Normalize();
 
-		// ¹æÇâ º¤ÅÍ¸¦ ±âÁØÀ¸·Î Yaw È¸Àü°ª °è»ê
-		float angle = atan2f(direction.x, direction.z) + XM_PI; // XM_PI´Â 180µµ(¥ð ¶óµð¾È)  XÃà°ú ZÃà ±âÁØ °¢µµ °è»ê
-		GetTransform()->SetRotation(Vec3(0.0f, angle, 0.0f)); // È¸Àü Àû¿ë (Yaw °ª¸¸ ¼³Á¤)
+		// ë°©í–¥ ë²¡í„°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ Yaw íšŒì „ê°’ ê³„ì‚°
+		float angle = atan2f(direction.x, direction.z) + XM_PI; // XM_PIëŠ” 180ë„(Ï€ ë¼ë””ì•ˆ)  Xì¶•ê³¼ Zì¶• ê¸°ì¤€ ê°ë„ ê³„ì‚°
+		GetTransform()->SetRotation(Vec3(XMConvertToRadians(90.f)
+			, angle, 
+			0.0f)); // íšŒì „ ì ìš© (Yaw ê°’ë§Œ ì„¤ì •)
 
 
 		Vec3 newPosition = currentPosition + direction * _speed * TIME->GetDeltaTime();

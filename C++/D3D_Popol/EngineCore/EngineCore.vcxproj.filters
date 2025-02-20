@@ -224,6 +224,9 @@
     <ClInclude Include="Terrain.h">
       <Filter>04.Component</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>02.Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -393,6 +396,9 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>04.Component</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>02.Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

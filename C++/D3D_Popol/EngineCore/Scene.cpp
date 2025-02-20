@@ -42,6 +42,19 @@ void Scene::LateUpdate()
 	}
 }
 
+void Scene::GUIRender()
+{
+	unordered_set<shared_ptr<GameObject>> objects = _objects;
+
+	for (shared_ptr<GameObject> object : objects)
+	{
+		if (object && object->_enableGUI == true)
+		{
+			object->GUIRender();
+		}
+	}
+}
+
 void Scene::Add(shared_ptr<GameObject> object)
 {
 	_objects.insert(object);
