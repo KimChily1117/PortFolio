@@ -230,6 +230,9 @@
     <ClInclude Include="NetworkManager.h">
       <Filter>02.Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>05.UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -402,6 +405,9 @@
     </ClCompile>
     <ClCompile Include="NetworkManager.cpp">
       <Filter>02.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>05.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

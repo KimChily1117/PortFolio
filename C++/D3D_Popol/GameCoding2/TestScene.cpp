@@ -18,7 +18,7 @@
 #include "PlayerController.h"
 #include "Terrain.h"
 #include "SphereCollider.h"
-
+#include "Button.h"
 
 void TestScene::Start()
 {
@@ -40,7 +40,7 @@ void TestScene::Update()
 		int32 mouseY = INPUT->GetMousePos().y;
 
 		Vec3 Pos;
-		// Picking
+		// Picking ( Test )
 		auto pickObj = CUR_SCENE->Pick(mouseX, mouseY);
 		if (pickObj)
 		{
@@ -55,7 +55,7 @@ void TestScene::InitializeObject()
 {
 	_shader = make_shared<Shader>(L"23. RenderDemo.fx");
 
-	// Camera
+	// Main Camera
 	{
 		auto camera = make_shared<GameObject>("Main_Camera");
 		//camera->GetOrAddTransform()->SetPosition(Vec3{13.f, 16.f, -9.5f });
@@ -64,8 +64,25 @@ void TestScene::InitializeObject()
 		camera->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
 
 		camera->AddComponent(make_shared<Camera>());
+		camera->GetCamera()->SetProjectionType(ProjectionType::Perspective);
+		camera->GetCamera()->SetCullingMaskLayerOnOff(Layer_UI, true);
 		camera->AddComponent(make_shared<CameraScript>());
 		Add(camera);
+	}
+
+	// UI_Camera
+	{
+		auto camera = make_shared<GameObject>();
+		camera->GetOrAddTransform()->SetPosition(Vec3{ 0.f, 0.f, -5.f });
+		camera->AddComponent(make_shared<Camera>());
+		camera->GetCamera()->SetProjectionType(ProjectionType::Orthographic);
+		camera->GetCamera()->SetNear(1.f);
+		camera->GetCamera()->SetFar(100.f);
+		
+
+		camera->GetCamera()->SetCullingMaskAll();
+		camera->GetCamera()->SetCullingMaskLayerOnOff(Layer_UI, false);
+		CUR_SCENE->Add(camera);
 	}
 
 	// Light
@@ -95,7 +112,17 @@ void TestScene::InitializeObject()
 		desc.specular = Vec4(1.f);
 		RESOURCES->Add(L"Veigar", material);
 	}
-	
+
+	// Mesh
+	{
+		auto obj = make_shared<GameObject>("UI Button");
+		obj->AddComponent(make_shared<Button>());
+
+		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L"Veigar"));
+		obj->GetButton()->AddOnClickedEvent([obj]() { CUR_SCENE->Remove(obj); });
+		CUR_SCENE->Add(obj);
+	}
+
 	{
 		auto obj = make_shared<GameObject>("Collision");
 		obj->GetOrAddTransform()->SetLocalPosition(Vec3(8,5,8));
@@ -115,8 +142,6 @@ void TestScene::InitializeObject()
 			collider->SetRadius(0.5f);
 			obj->AddComponent(collider);
 		}
-
-
 		CUR_SCENE->Add(obj);
 	}
 
@@ -138,8 +163,6 @@ void TestScene::InitializeObject()
 		Add(obj);
 	}*/
 
-
-	
 	{
 		// Çù°î
 		shared_ptr<class Model> m2 = make_shared<Model>();

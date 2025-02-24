@@ -9,6 +9,7 @@ class ModelAnimator;
 class Light;
 class BaseCollider;
 class Terrain;
+class Button;
 
 class GameObject : public enable_shared_from_this<GameObject>
 {
@@ -35,15 +36,23 @@ public:
 	shared_ptr<BaseCollider> GetCollider();
 	shared_ptr<Terrain> GetTerrain();
 
+	shared_ptr<Button> GetButton();
+
+
 	shared_ptr<Transform> GetOrAddTransform();
 	void AddComponent(shared_ptr<Component> component);
 
 	std::string _name; // objectName;
 	bool _enableGUI = false; // GUI on off;
 	
+	void SetLayerIndex(uint8 layer) { _layerIndex = layer; }
+	uint8 GetLayerIndex() { return _layerIndex; }
+
 
 protected:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> _components;
 	vector<shared_ptr<MonoBehaviour>> _scripts;
+
+	uint8 _layerIndex = 0;
 };
 
