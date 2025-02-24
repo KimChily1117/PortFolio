@@ -36,8 +36,8 @@ void Terrain::Create(int32 sizeX, int32 sizeZ, shared_ptr<Material> material)
 bool Terrain::Pick(int32 screenX, int32 screenY, Vec3& pickPos, float& distance)
 {
 	Matrix W = GetTransform()->GetWorldMatrix();
-	Matrix V = Camera::S_MatView;
-	Matrix P = Camera::S_MatProjection;
+	Matrix V = CUR_SCENE->GetMainCamera()->GetCamera()->GetViewMatrix();
+	Matrix P = CUR_SCENE->GetMainCamera()->GetCamera()->GetProjectionMatrix();
 
 	Viewport& vp = GRAPHICS->GetViewport();
 

@@ -158,6 +158,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
   <ItemGroup>
     <ClInclude Include="AABBBoxCollider.h" />
     <ClInclude Include="BindShaderDesc.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="Component.h" />
@@ -221,6 +222,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
   <ItemGroup>
     <ClCompile Include="AABBBoxCollider.cpp" />
     <ClCompile Include="BindShaderDesc.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="Component.cpp" />

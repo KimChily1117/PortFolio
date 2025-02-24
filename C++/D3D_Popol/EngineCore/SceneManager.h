@@ -12,7 +12,6 @@ public:
 	void GUIRender();
 
 
-
 	template<typename T>
 	void ChangeScene(shared_ptr<T> scene)
 	{

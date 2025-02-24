@@ -9,10 +9,7 @@
 #include "Light.h"
 #include "BaseCollider.h"
 #include "Terrain.h"
-
-
-
-
+#include "Button.h"
 
 GameObject::GameObject()
 {
@@ -21,6 +18,8 @@ GameObject::GameObject()
 GameObject::GameObject(string name) : _name(name)
 {
 	_enableGUI = true;
+	SetLayerIndex(Layer_Default);
+
 }
 
 GameObject::~GameObject()
@@ -225,6 +224,12 @@ shared_ptr<Terrain> GameObject::GetTerrain()
 {
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Terrain);
 	return static_pointer_cast<Terrain>(component);
+}
+
+shared_ptr<Button> GameObject::GetButton()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::Button);
+	return static_pointer_cast<Button>(component);
 }
 
 //std::shared_ptr<Animator> GameObject::GetAnimator()

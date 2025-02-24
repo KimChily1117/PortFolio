@@ -8,6 +8,7 @@ void SceneManager::Update()
 
 	_currentScene->Update();
 	_currentScene->LateUpdate();
+	_currentScene->Render();
 }
 
 void SceneManager::GUIRender()
@@ -17,3 +18,4 @@ void SceneManager::GUIRender()
 
 	_currentScene->GUIRender();
 }
+
