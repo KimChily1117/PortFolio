@@ -65,7 +65,8 @@ bool Terrain::Pick(int32 screenX, int32 screenY, Vec3& pickPos, float& distance)
 			Vec3 p[4];
 			for (int32 i = 0; i < 4; i++)
 				p[i] = vertices[index[i]].position;
-
+				//p[i] = XMVector3TransformCoord(vertices[index[i]].position, W);
+				// 월드 좌표 기준으로 연산
 			//  [2]
 			//   |	\
 			//  [0] - [1]

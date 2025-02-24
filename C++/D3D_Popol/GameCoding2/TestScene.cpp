@@ -17,6 +17,8 @@
 #include "Light.h"
 #include "PlayerController.h"
 #include "Terrain.h"
+#include "SphereCollider.h"
+
 
 void TestScene::Start()
 {
@@ -30,6 +32,23 @@ void TestScene::LateUpdate()
 void TestScene::Update()
 {
 	Super::Update();	
+
+
+	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
+	{
+		int32 mouseX = INPUT->GetMousePos().x;
+		int32 mouseY = INPUT->GetMousePos().y;
+
+		Vec3 Pos;
+		// Picking
+		auto pickObj = CUR_SCENE->Pick(mouseX, mouseY);
+		if (pickObj)
+		{
+			if(pickObj->_name == "Collision")
+				CUR_SCENE->Remove(pickObj);
+		}
+	}
+
 }
 
 void TestScene::InitializeObject()
@@ -41,7 +60,7 @@ void TestScene::InitializeObject()
 		auto camera = make_shared<GameObject>("Main_Camera");
 		//camera->GetOrAddTransform()->SetPosition(Vec3{13.f, 16.f, -9.5f });
 		//camera->GetOrAddTransform()->SetRotation(Vec3(25.f, 33.f, 0.f));
-		camera->GetOrAddTransform()->SetPosition(Vec3{0.f, 0.f, -5.f });
+		camera->GetOrAddTransform()->SetPosition(Vec3{ 0.f, 0.f, -5.f });
 		camera->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
 
 		camera->AddComponent(make_shared<Camera>());
@@ -60,54 +79,7 @@ void TestScene::InitializeObject()
 		lightDesc.direction = Vec3(1.f, 0.f, 1.f);
 		light->GetLight()->SetLightDesc(lightDesc);
 		Add(light);
-
 	}
-
-	//// Animation
-	//shared_ptr<class Model> m1 = make_shared<Model>();
-	//m1->ReadModel(L"Kachujin/Kachujin");
-	//m1->ReadMaterial(L"Kachujin/Kachujin");
-	//m1->ReadAnimation(L"Kachujin/Idle");
-	//m1->ReadAnimation(L"Kachujin/Run");
-	//m1->ReadAnimation(L"Kachujin/Slash");
-
-	//for (int32 i = 0; i < 500; i++)
-	//{
-	//	auto obj = make_shared<GameObject>("");
-	//	obj->GetOrAddTransform()->SetPosition(Vec3(rand() % 100, 0, rand() % 100));
-	//	obj->GetOrAddTransform()->SetScale(Vec3(0.01f));
-	//	obj->AddComponent(make_shared<ModelAnimator>(_shader));
-	//	{
-	//		obj->GetModelAnimator()->SetModel(m1);
-	//		obj->GetModelAnimator()->SetPass(2);
-	//	}
-	//	Add(obj);
-
-	//}
-	//{
-	//	// Model
-	//	shared_ptr<class Model> m2 = make_shared<Model>();
-	//	m2->ReadModel(L"Tower/Tower");
-	//	m2->ReadMaterial(L"Tower/Tower");
-
-	//	for (int32 i = 0; i < 100; i++)
-	//	{
-	//		auto obj = make_shared<GameObject>("");
-	//		obj->GetOrAddTransform()->SetPosition(Vec3(rand() % 100, 0, rand() % 100));
-	//		obj->GetOrAddTransform()->SetScale(Vec3(0.01f));
-
-	//		obj->AddComponent(make_shared<ModelRenderer>(_shader));
-	//		{
-	//			obj->GetModelRenderer()->SetModel(m2);
-	//			obj->GetModelRenderer()->SetPass(1);
-	//		}
-
-	//		Add(obj);
-	//	}
-	//}
-
-
-
 
 
 	// Mesh
@@ -123,23 +95,32 @@ void TestScene::InitializeObject()
 		desc.specular = Vec4(1.f);
 		RESOURCES->Add(L"Veigar", material);
 	}
-
-	/*auto obj = make_shared<GameObject>("");
-	obj->GetOrAddTransform()->SetLocalPosition(Vec3(0,0,0));
-	obj->AddComponent(make_shared<MeshRenderer>());
+	
 	{
-		obj->GetMeshRenderer()->SetMaterial(RESOURCES->Get<Material>(L"Veigar"));
+		auto obj = make_shared<GameObject>("Collision");
+		obj->GetOrAddTransform()->SetLocalPosition(Vec3(8,5,8));
+		obj->AddComponent(make_shared<MeshRenderer>());
+		{
+			obj->GetMeshRenderer()->SetMaterial(RESOURCES->Get<Material>(L"Veigar"));
+		}
+
+		{
+			auto mesh = RESOURCES->Get<Mesh>(L"Sphere");
+			obj->GetMeshRenderer()->SetMesh(mesh);
+			obj->GetMeshRenderer()->SetPass(0);
+		}
+
+		{
+			auto collider = make_shared<SphereCollider>();
+			collider->SetRadius(0.5f);
+			obj->AddComponent(collider);
+		}
+
+
+		CUR_SCENE->Add(obj);
 	}
 
-	{
-		auto mesh = RESOURCES->Get<Mesh>(L"Sphere");
-		obj->GetMeshRenderer()->SetMesh(mesh);
-		obj->GetMeshRenderer()->SetPass(0);
-	}
-
-	Add(obj);
-
-	for (int32 i = 0; i < 100; i++)
+	/*for (int32 i = 0; i < 100; i++)
 	{
 		auto obj = make_shared<GameObject>("");
 		obj->GetOrAddTransform()->SetLocalPosition(Vec3(rand() % 100, 0, rand() % 100));
@@ -168,7 +149,7 @@ void TestScene::InitializeObject()
 		auto obj = make_shared<GameObject>("Rift");
 		//obj->GetOrAddTransform()->SetPosition(Vec3(0,0,0));
 		obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(0.f,90.f,0.f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, XMConvertToRadians(90.f),0.f));
 
 		obj->AddComponent(make_shared<ModelRenderer>(_shader));
 		obj->GetModelRenderer()->SetModel(m2);
@@ -186,7 +167,7 @@ void TestScene::InitializeObject()
 		obj->GetOrAddTransform()->SetRotation(Vec3(0.f,0.f,0.f));
 
 		obj->GetTerrain()->Create(145,145, RESOURCES->Get<Material>(L"Veigar"));
-		obj->GetMeshRenderer()->SetPass(1);
+		obj->GetMeshRenderer()->SetPass(3);
 		CUR_SCENE->Add(obj);
 	}	
 	
@@ -201,7 +182,7 @@ void TestScene::InitializeObject()
 		auto obj = make_shared<GameObject>("Annie");
 		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
 		obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
-		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.f, 0.f));
+		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 1.76f, 3.f));
 		obj->AddComponent(make_shared<PlayerController>());
 		obj->AddComponent(make_shared<ModelAnimator>(_shader));
 		{
@@ -210,7 +191,7 @@ void TestScene::InitializeObject()
 		}
 		Add(obj);
 	}
-
+#pragma region LegacyCode(Katsujin)
 	//{
 	//	// Animation
 	//	shared_ptr<class Model> m1 = make_shared<Model>();
@@ -239,6 +220,7 @@ void TestScene::InitializeObject()
 	//	Add(obj);
 	//}
 
+#pragma endregion
 
 
 }

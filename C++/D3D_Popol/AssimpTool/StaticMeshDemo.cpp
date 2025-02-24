@@ -57,8 +57,6 @@ void StaticMeshDemo::Update()
 
 void StaticMeshDemo::Render()
 {
-	_camera->GetTransform()->RenderInspector();
-	_obj->GetTransform()->RenderInspector();
 }
 
 void StaticMeshDemo::CreateTower()

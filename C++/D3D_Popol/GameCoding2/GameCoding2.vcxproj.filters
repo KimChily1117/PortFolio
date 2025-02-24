@@ -24,6 +24,12 @@
     <Filter Include="Game\Scripts">
       <UniqueIdentifier>{e2f1007d-7c0d-4f14-8bcd-0857e4198f8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{c5fcb06a-15a6-414d-bbef-dae7011f2d1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Protocol">
+      <UniqueIdentifier>{c2bfd20e-2c8c-4319-849b-f4e7eb13d9c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -44,6 +50,15 @@
     <ClInclude Include="PlayerController.h">
       <Filter>Game\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Protocol.pb.h">
+      <Filter>Network\Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientPacketHandler.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerSession.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -63,6 +78,15 @@
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Game\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol.pb.cc">
+      <Filter>Network\Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerSession.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientPacketHandler.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -132,5 +156,10 @@
     <FxCompile Include="..\Shaders\23. RenderDemo.fx">
       <Filter>Game\Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat">
+      <Filter>Network\Protocol</Filter>
+    </None>
   </ItemGroup>
 </Project>

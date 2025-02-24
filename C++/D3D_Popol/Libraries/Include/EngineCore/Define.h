@@ -34,3 +34,4 @@ public:										\
 #define GUI			GET_SINGLE(ImGuiManager)
 #define SCENE		GET_SINGLE(SceneManager)
 #define CUR_SCENE	SCENE->GetCurrentScene()
+#define NETWORK		GET_SINGLE(NetworkManager)

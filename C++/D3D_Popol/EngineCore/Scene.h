@@ -22,7 +22,7 @@ public:
 
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY , Vec3& pickPos);
-	shared_ptr<class GameObject> PickMesh(int32 screenX, int32 screenY , Vec3& pickPos);
+	//shared_ptr<class GameObject> PickMesh(int32 screenX, int32 screenY , Vec3& pickPos);
 
 
 private:

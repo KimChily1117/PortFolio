@@ -86,7 +86,6 @@ void InstancingManager::RenderModelRenderer(vector<shared_ptr<GameObject>>& game
 				const shared_ptr<GameObject>& gameObject = vec[i];
 				InstancingData data;
 				data.world = gameObject->GetTransform()->GetWorldMatrix();
-
 				AddData(instanceId, data);
 			}
 

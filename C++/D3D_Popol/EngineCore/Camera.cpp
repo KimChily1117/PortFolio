@@ -18,8 +18,8 @@ Camera::~Camera()
 void Camera::Update()
 {
 	UpdateMatrix();
-	//RENDER->PushGlobalData(Camera::S_MatView, Camera::S_MatProjection);
 
+	//RENDER->PushGlobalData(Camera::S_MatView, Camera::S_MatProjection);
 }
 
 void Camera::UpdateMatrix()
@@ -27,9 +27,7 @@ void Camera::UpdateMatrix()
 	Vec3 eyePosition = GetTransform()->GetPosition();
 	Vec3 focusPosition = eyePosition + GetTransform()->GetLook();
 	Vec3 upDirection = GetTransform()->GetUp();
-	S_MatView = ::XMMatrixLookAtLH(eyePosition, focusPosition, upDirection);
 
-	//S_MatView = GetTransform()->GetWorldMatrix().Invert();
-
-	S_MatProjection = ::XMMatrixPerspectiveFovLH(_fov, _width / _height, _near, _far);
+	_matView = S_MatView = ::XMMatrixLookAtLH(eyePosition, focusPosition, upDirection);
+	_matProjection = S_MatProjection = ::XMMatrixPerspectiveFovLH(_fov, _width / _height, _near, _far);
 }
