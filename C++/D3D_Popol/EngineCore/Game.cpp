@@ -21,6 +21,7 @@ WPARAM Game::Run(GameDesc& desc)
 	INPUT->Init(_desc.hWnd);
 	GUI->Init();
 	RESOURCES->Init();
+	NETWORK->Init();
 
 	_desc.app->Init();
 
@@ -104,6 +105,8 @@ void Game::Update()
 {
 	TIME->Update();
 	INPUT->Update();
+	NETWORK->Update();
+
 	ShowFps();
 
 	GRAPHICS->RenderBegin();

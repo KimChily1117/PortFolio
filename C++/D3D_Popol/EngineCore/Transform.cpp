@@ -17,8 +17,6 @@ void Transform::Awake()
 
 void Transform::Update()
 {
-	UpdateTransform();
-	//RenderInspector();
 }
 
 Vec3 Transform::ToEulerAngles(Quaternion q)
@@ -52,9 +50,9 @@ Vec3 Transform::ToEulerAngles(Quaternion q)
 	}
 
 
-	DEBUG_LOG( GetGameObject()->_name << " : ToEulerAngles (Fixed): X=" << angles.x
+	/*DEBUG_LOG( GetGameObject()->_name << " : ToEulerAngles (Fixed): X=" << angles.x
 		<< ", Y=" << angles.y
-		<< ", Z=" << angles.z);
+		<< ", Z=" << angles.z);*/
 
 	return angles;
 }
@@ -69,7 +67,7 @@ void Transform::UpdateTransform()
 	Matrix matTranslation = Matrix::CreateTranslation(_localPosition);
 
 	_matLocal = matScale * matRotation * matTranslation;
-
+	
 	if (HasParent())
 	{
 		_matWorld = _matLocal * _parent->GetWorldMatrix();
@@ -85,7 +83,7 @@ void Transform::UpdateTransform()
 
 
 
-	DEBUG_LOG(GetGameObject()->_name << " : Decomposed Rotation : " << quat.x << " , " << quat.y << " , " << quat.z << " , " << quat.w);
+	//DEBUG_LOG(GetGameObject()->_name << " : Decomposed Rotation : " << quat.x << " , " << quat.y << " , " << quat.z << " , " << quat.w);
 
 
 

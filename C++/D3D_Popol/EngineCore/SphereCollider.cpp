@@ -1,13 +1,13 @@
-#include "pch.h"
-#include "AABBBoxCollider.h"
+癤�#include "pch.h"
 #include "SphereCollider.h"
+#include "AABBBoxCollider.h"
 #include "OBBBoxCollider.h"
 
-SphereCollider::SphereCollider() : BaseCollider(ColliderType::Sphere)
+SphereCollider::SphereCollider()
+	: BaseCollider(ColliderType::Sphere)
 {
 
 }
-
 
 SphereCollider::~SphereCollider()
 {
@@ -17,15 +17,14 @@ SphereCollider::~SphereCollider()
 void SphereCollider::Update()
 {
 	_boundingSphere.Center = GetGameObject()->GetTransform()->GetPosition();
-	Vec3 scale = GetGameObject()->GetTransform()->GetScale();
-	// 콜라이더의 크기와 스케일정보 결정
 
+	Vec3 scale = GetGameObject()->GetTransform()->GetScale();
+	_boundingSphere.Radius = _radius * max(max(scale.x, scale.y), scale.z);
 }
 
 bool SphereCollider::Intersects(Ray& ray, OUT float& distance)
 {
 	return _boundingSphere.Intersects(ray.position, ray.direction, OUT distance);
-
 }
 
 bool SphereCollider::Intersects(shared_ptr<BaseCollider>& other)
@@ -34,12 +33,12 @@ bool SphereCollider::Intersects(shared_ptr<BaseCollider>& other)
 
 	switch (type)
 	{
-	case ColliderType::Sphere:
-		return _boundingSphere.Intersects(dynamic_pointer_cast<SphereCollider>(other)->GetBoundingSphere());
-	case ColliderType::AABB:
-		return _boundingSphere.Intersects(dynamic_pointer_cast<AABBBoxCollider>(other)->GetBoundingBox());
-	case ColliderType::OBB:
-		return _boundingSphere.Intersects(dynamic_pointer_cast<OBBBoxCollider>(other)->GetBoundingBox());
+		case ColliderType::Sphere:
+			return _boundingSphere.Intersects(dynamic_pointer_cast<SphereCollider>(other)->GetBoundingSphere());
+		case ColliderType::AABB:
+			return _boundingSphere.Intersects(dynamic_pointer_cast<AABBBoxCollider>(other)->GetBoundingBox());
+		case ColliderType::OBB:
+			return _boundingSphere.Intersects(dynamic_pointer_cast<OBBBoxCollider>(other)->GetBoundingBox());
 	}
 
 	return false;

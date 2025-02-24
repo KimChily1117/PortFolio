@@ -249,6 +249,7 @@ void GameObject::AddComponent(shared_ptr<Component> component)
 	component->SetGameObject(shared_from_this());
 
 	uint8 index = static_cast<uint8>(component->GetType());
+
 	if (index < FIXED_COMPONENT_COUNT)
 	{
 		_components[index] = component;

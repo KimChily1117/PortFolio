@@ -1,0 +1,22 @@
+syntax = "proto3";
+package Protocol;
+
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+enum MsgId
+{
+	C_TEST_MSG = 0;
+	S_TEST_MSG = 1;
+}
+
+
+message C_TESTMSG
+{
+	string message = 1;
+}
+
+message S_TESTMSG
+{
+	string message = 1;
+}
+

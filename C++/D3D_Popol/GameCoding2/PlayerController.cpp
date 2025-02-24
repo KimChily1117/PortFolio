@@ -27,6 +27,17 @@ void PlayerController::Update()
 			GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
 		}
 	}
+
+	else if (INPUT->GetButtonDown(KEY_TYPE::ENTER))
+	{	
+		DEBUG_LOG("ENTER!!!");	
+		Protocol::C_TESTMsg pkt;
+
+		*pkt.mutable_testmessage() = " From Client : Press Enter KEY ";
+		auto a = ClientPacketHandler::MakeSendBuffer(pkt, C_TEST_MSG);
+		NETWORK->SendPacket(a);
+	}
+	
 	MoveTo();
 }
 
@@ -48,6 +59,12 @@ void PlayerController::MoveTo()
 	Vec3 currentPosition = GetTransform()->GetPosition();
 	// Target으로 이동
 
+	/*DEBUG_LOG("Current Position Before Move: " << currentPosition.x << " " << currentPosition.z);
+	DEBUG_LOG("Destination Position: " << _dest.x << " "  << _dest.z);*/
+
+
+
+
 	Vec3 direction = _dest - currentPosition;
 	direction.y = 0.0f; // y축 차이를 제거
 
@@ -67,7 +84,7 @@ void PlayerController::MoveTo()
 
 
 		Vec3 newPosition = currentPosition + direction * _speed * TIME->GetDeltaTime();
-		newPosition.y = 2.3f;
+		newPosition.y = 1.6f;
 		GetTransform()->SetPosition(newPosition);
 	}
 	else
@@ -76,3 +93,4 @@ void PlayerController::MoveTo()
 		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
 	}
 }
+

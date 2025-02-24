@@ -42,6 +42,9 @@
     <Filter Include="04.Component\Collision">
       <UniqueIdentifier>{9bdab10f-2702-4794-84bc-d8654d200975}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.UI">
+      <UniqueIdentifier>{8fb8c6e0-54e4-4b5b-a2dd-d03702f82fbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnginePch.h">
