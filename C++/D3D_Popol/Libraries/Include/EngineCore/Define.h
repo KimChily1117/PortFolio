@@ -35,3 +35,9 @@ public:										\
 #define SCENE		GET_SINGLE(SceneManager)
 #define CUR_SCENE	SCENE->GetCurrentScene()
 #define NETWORK		GET_SINGLE(NetworkManager)
+
+enum LayerMask
+{
+	Layer_Default = 0,
+	Layer_UI,
+};

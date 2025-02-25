@@ -81,6 +81,16 @@ void Scene::Add(shared_ptr<GameObject> object)
 
 void Scene::Remove(shared_ptr<GameObject> object)
 {
+	if (!object) return;
+
+	// 부모가 제거될 때 자식도 함께 제거
+	auto children = object->GetTransform()->GetChildren();
+	for (auto& child : children)
+	{
+		Remove(child->GetGameObject());
+	}
+
+	// 리스트에서 제거
 	_objects.erase(object);
 	_cameras.erase(object);
 	_lights.erase(object);

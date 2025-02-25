@@ -115,12 +115,20 @@ void TestScene::InitializeObject()
 
 	// Mesh
 	{
+		// UI
 		auto obj = make_shared<GameObject>("UI Button");
 		obj->AddComponent(make_shared<Button>());
 
 		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L"Veigar"));
 		obj->GetButton()->AddOnClickedEvent([obj]() { CUR_SCENE->Remove(obj); });
 		CUR_SCENE->Add(obj);
+
+		auto obj2 = make_shared<GameObject>("UI Button1");
+		obj2->AddComponent(make_shared<Button>());
+
+		obj2->GetButton()->Create(Vec2(200, 200), Vec2(100, 100), RESOURCES->Get<Material>(L"Veigar"));		
+		obj2->GetTransform()->SetParent(obj->GetOrAddTransform());		
+		CUR_SCENE->Add(obj2);
 	}
 
 	{

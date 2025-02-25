@@ -39,7 +39,7 @@ public:
 	bool HasParent() { return _parent != nullptr; }
 	
 	shared_ptr<Transform> GetParent() { return _parent; }
-	void SetParent(shared_ptr<Transform> parent) { _parent = parent; }
+	void SetParent(shared_ptr<Transform> parent) { _parent = parent; _parent->AddChild(this->GetTransform()); }
 
 	const vector<shared_ptr<Transform>>& GetChildren() { return _children; }
 	void AddChild(shared_ptr<Transform> child) { _children.push_back(child); }
