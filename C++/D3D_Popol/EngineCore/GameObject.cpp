@@ -118,14 +118,26 @@ void GameObject::GUIRender()
 		if (ImGui::TreeNode(_name.c_str())) // TreeNode
 		{
 			ImGui::Text(_name.c_str());
+			auto transform = GetOrAddTransform();
+
+			Vec3 pos = transform->GetLocalPosition();
+			Vec3 scale = transform->GetLocalScale();
+
+			// 회전 값을 라디안에서 도 단위로 변환
+			XMFLOAT3 currentRot;
+			currentRot.x = XMConvertToDegrees(transform->GetLocalRotation().x);
+			currentRot.y = XMConvertToDegrees(transform->GetLocalRotation().y);
+			currentRot.z = XMConvertToDegrees(transform->GetLocalRotation().z);
 
 			// Position
 			string temp = _name + "_Pos";
-			ImGui::DragFloat3(temp.c_str(), (float*)&GetTransform()->GetLocalPosition(), 0.1f);
+			if (ImGui::DragFloat3(temp.c_str(), (float*)&pos, 0.1f, -1000.0f, 1000.0f))
+			{
+				transform->SetLocalPosition(pos);
+			}
 
 			//  Rotation (라디안 → 도 단위 변환)
 			temp = _name + "_Rot";
-			XMFLOAT3 currentRot;
 			currentRot.x = XMConvertToDegrees(GetTransform()->GetLocalRotation().x);
 			currentRot.y = XMConvertToDegrees(GetTransform()->GetLocalRotation().y);
 			currentRot.z = XMConvertToDegrees(GetTransform()->GetLocalRotation().z);
@@ -153,8 +165,10 @@ void GameObject::GUIRender()
 
 			//  Scale
 			temp = _name + "_Scale";
-			ImGui::DragFloat3(temp.c_str(), (float*)&GetTransform()->GetLocalScale(), 0.1f);
-
+			if (ImGui::DragFloat3(temp.c_str(), (float*)&scale, 0.1f, 0.1f, 10.0f))
+			{
+				transform->SetLocalScale(scale);
+			}
 
 			// Todo : Save Btn 만들어서
 			// Scene 진입시에 Parse하도록 구조 변경
@@ -163,8 +177,8 @@ void GameObject::GUIRender()
 
 			ImGui::TreePop();
 		}
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 

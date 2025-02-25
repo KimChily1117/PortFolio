@@ -138,14 +138,18 @@ void TestScene::InitializeObject()
 		obj->GetButton()->AddOnClickedEvent([obj]() { CUR_SCENE->Remove(obj); });
 		CUR_SCENE->Add(obj);
 
+
 		auto obj2 = make_shared<GameObject>("UI Button1");
 		obj2->AddComponent(make_shared<Button>());
 
-		obj2->GetButton()->Create(Vec2(0,0), Vec2(1,1), RESOURCES->Get<Material>(L"PlayerHUD"));		
-		obj2->GetTransform()->SetParent(obj->GetOrAddTransform());		
+		obj2->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"PlayerHUD"));
+		obj2->GetTransform()->SetParent(obj->GetOrAddTransform());
 		CUR_SCENE->Add(obj2);
+	
+	
+		obj->GetTransform()->SetPosition(Vec3{ 0,0,0 });
+		obj2->GetTransform()->SetPosition(Vec3{ 0,0,0 });
 	}
-
 	{
 		auto obj = make_shared<GameObject>("Collision");
 		obj->GetOrAddTransform()->SetLocalPosition(Vec3(8,5,8));
