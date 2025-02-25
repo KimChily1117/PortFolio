@@ -15,7 +15,7 @@ public:
 	void InvokeOnClicked();
 
 
-	virtual void GUIRender() override;
+	void GUIRender();
 
 
 private:

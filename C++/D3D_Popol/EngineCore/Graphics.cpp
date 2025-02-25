@@ -8,6 +8,10 @@ void Graphics::Init(HWND hwnd)
 	CreateDeviceAndSwapChain();
 	CreateRenderTargetView();
 	CreateDepthStencilView();
+	CreateAlphaBlending();
+
+
+
 	SetViewport(GAME->GetGameDesc().width, GAME->GetGameDesc().height);
 
 }
@@ -107,7 +111,24 @@ void Graphics::CreateDepthStencilView()
 		HRESULT hr = DEVICE->CreateDepthStencilView(_depthStencilTexture.Get(), &desc, _depthStencilView.GetAddressOf());
 		CHECK(hr);
 	}
+}
 
+void Graphics::CreateAlphaBlending()
+{
+
+	D3D11_BLEND_DESC blendDesc = {};
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	ID3D11BlendState* blendState;
+	_device->CreateBlendState(&blendDesc, &blendState);
+	_deviceContext->OMSetBlendState(blendState, nullptr, 0xffffffff);
 }
 
 void Graphics::SetViewport(float width, float height, float x /*= 0*/, float y /*= 0*/, float minDepth /*= 0*/, float maxDepth /*= 1*/)
