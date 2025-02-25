@@ -102,31 +102,46 @@ void TestScene::InitializeObject()
 	// Mesh
 	// Material
 	{
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(_shader);
-		auto texture = RESOURCES->Load<Texture>(L"Veigar", L"..\\Resources\\Textures\\veigar.jpg");
-		material->SetDiffuseMap(texture);
-		MaterialDesc& desc = material->GetMaterialDesc();
-		desc.ambient = Vec4(1.f);
-		desc.diffuse = Vec4(1.f);
-		desc.specular = Vec4(1.f);
-		RESOURCES->Add(L"Veigar", material);
-	}
+		{
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(_shader);
+			auto texture = RESOURCES->Load<Texture>(L"Veigar", L"..\\Resources\\Textures\\veigar.jpg");
+			material->SetDiffuseMap(texture);
+			MaterialDesc& desc = material->GetMaterialDesc();
+			desc.ambient = Vec4(1.f);
+			desc.diffuse = Vec4(1.f);
+			desc.specular = Vec4(1.f);
+			RESOURCES->Add(L"Veigar", material);
+		}
 
+		// Material
+		{
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(_shader);
+			auto texture = RESOURCES->Load<Texture>(L"PlayerHUD", L"..\\Resources\\Textures\\UI\\HUD\\PlayerHUD.png");
+			material->SetDiffuseMap(texture);
+			MaterialDesc& desc = material->GetMaterialDesc();
+			desc.ambient = Vec4(1.f);
+			desc.diffuse = Vec4(1.f);
+			desc.specular = Vec4(1.f);
+			RESOURCES->Add(L"PlayerHUD", material);
+		}
+
+	}
 	// Mesh
 	{
 		// UI
-		auto obj = make_shared<GameObject>("UI Button");
+		auto obj = make_shared<GameObject>("UICanvas");
 		obj->AddComponent(make_shared<Button>());
 
-		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L"Veigar"));
+		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L""));
 		obj->GetButton()->AddOnClickedEvent([obj]() { CUR_SCENE->Remove(obj); });
 		CUR_SCENE->Add(obj);
 
 		auto obj2 = make_shared<GameObject>("UI Button1");
 		obj2->AddComponent(make_shared<Button>());
 
-		obj2->GetButton()->Create(Vec2(200, 200), Vec2(100, 100), RESOURCES->Get<Material>(L"Veigar"));		
+		obj2->GetButton()->Create(Vec2(0,0), Vec2(1,1), RESOURCES->Get<Material>(L"PlayerHUD"));		
 		obj2->GetTransform()->SetParent(obj->GetOrAddTransform());		
 		CUR_SCENE->Add(obj2);
 	}

@@ -10,6 +10,7 @@ float4 PS(MeshOutput input) : SV_TARGET
 
     float4 color = DiffuseMap.Sample(LinearSampler, input.uv);
 
+    clip(color.a - 0.1f); // 알파 값이 낮으면 픽셀을 버림 (완전 투명 처리)
     return color;
 }
 

@@ -62,6 +62,14 @@ void Scene::GUIRender()
 		{
 			object->GUIRender();
 		}
+
+
+		// UI Transform
+		auto btnComponent = object->GetButton();
+		if (btnComponent) // Get되면 바로 실행
+		{
+			btnComponent->GUIRender();
+		}
 	}
 }
 

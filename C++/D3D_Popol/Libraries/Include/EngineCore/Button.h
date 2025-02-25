@@ -14,6 +14,10 @@ public:
 	void AddOnClickedEvent(std::function<void(void)> func);
 	void InvokeOnClicked();
 
+
+	void GUIRender();
+
+
 private:
 	std::function<void(void)> _onClicked;
 	RECT _rect;

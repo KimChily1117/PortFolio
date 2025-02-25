@@ -36,7 +36,12 @@ using namespace std;
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
+// FX관련
 #include <FX11/d3dx11effect.h>
+
+
+// Json Library (NlohmannJson)
+#include "Nlohmann/json.hpp"
 
 // Assimp
 #include <Assimp/Importer.hpp>
@@ -56,11 +61,13 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "DirectXTex/DirectXTex_debug.lib")
 #pragma comment(lib, "FX11/Effects11d.lib")
 #pragma comment(lib, "Assimp/assimp-vc143-mtd.lib")
+#pragma comment(lib, "Fmod/fmod_vc.lib")
 #pragma comment(lib, "ServerCore/ServerCore.lib")
 #else
 #pragma comment(lib, "DirectXTex/DirectXTex.lib")
 #pragma comment(lib, "FX11/Effects11.lib")
 #pragma comment(lib, "Assimp/assimp-vc143-mt.lib")
+#pragma comment(lib, "Fmod/fmod_vc.lib")
 #pragma comment(lib, "ServerCore/ServerCore.lib")
 #endif
 

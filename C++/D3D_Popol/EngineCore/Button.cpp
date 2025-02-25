@@ -60,3 +60,66 @@ void Button::InvokeOnClicked()
 	if (_onClicked)
 		_onClicked();
 }
+
+void Button::GUIRender()
+{
+	if (!_gameObject.expired())
+	{
+		auto go = _gameObject.lock();
+		auto transform = go->GetOrAddTransform();
+
+		Vec3 pos = transform->GetLocalPosition();
+		Vec3 scale = transform->GetLocalScale();
+
+		// 회전 값을 라디안에서 도 단위로 변환
+		XMFLOAT3 currentRot;
+		currentRot.x = XMConvertToDegrees(transform->GetLocalRotation().x);
+		currentRot.y = XMConvertToDegrees(transform->GetLocalRotation().y);
+		currentRot.z = XMConvertToDegrees(transform->GetLocalRotation().z);
+
+		ImGui::Begin("UI Transform Editor");
+
+		// UI 이름 표시
+		ImGui::Text(go->_name.c_str());
+
+		// Position 조절
+		std::string temp = go->_name + "_Position";
+		if (ImGui::DragFloat3(temp.c_str(), (float*)&pos, 0.1f, -1000.0f, 1000.0f))
+		{
+			transform->SetLocalPosition(pos);
+		}
+
+		// Rotation 조절 (라디안 -> 도 변환 후 DragFloat3 사용)
+		temp = go->_name + "_Rotation";
+		XMFLOAT3 newRot = currentRot;
+		if (ImGui::DragFloat3(temp.c_str(), (float*)&newRot, 1.0f, -180, 180))
+		{
+			newRot.x = fmod(newRot.x, 360.0f);
+			newRot.y = fmod(newRot.y, 360.0f);
+			newRot.z = fmod(newRot.z, 360.0f);
+
+			transform->SetLocalRotation(Vec3(
+				XMConvertToRadians(newRot.x),
+				XMConvertToRadians(newRot.y),
+				XMConvertToRadians(newRot.z)
+			));
+		}
+
+		// Scale 조절
+		temp = go->_name + "_Scale";
+		if (ImGui::DragFloat3(temp.c_str(), (float*)&scale, 0.1f, 0.1f, 10.0f))
+		{
+			transform->SetLocalScale(scale);
+		}
+
+		//// Transform 데이터 저장 버튼
+		//if (ImGui::Button("Save Transform Data"))
+		//{
+		//	//Save(); // 저장 기능 호출 (사용자 함수)
+		//}
+
+		ImGui::End();
+	}
+}
+
+

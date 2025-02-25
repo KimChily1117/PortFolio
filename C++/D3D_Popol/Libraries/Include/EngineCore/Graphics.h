@@ -20,6 +20,9 @@ private:
 	void CreateDepthStencilView();
 
 
+	void CreateAlphaBlending();
+
+
 public:
 	void SetViewport(float width, float height, float x = 0, float y = 0, float minDepth = 0, float maxDepth = 1);
 	Viewport& GetViewport() { return _vp; }
