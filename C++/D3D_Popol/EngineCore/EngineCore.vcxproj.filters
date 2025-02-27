@@ -233,6 +233,15 @@
     <ClInclude Include="Button.h">
       <Filter>05.UI</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>02.Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>02.Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>02.Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -408,6 +417,15 @@
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>05.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>02.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>02.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>02.Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

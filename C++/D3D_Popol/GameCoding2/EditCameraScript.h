@@ -1,7 +1,7 @@
 #pragma once
 #include "MonoBehaviour.h"
 
-class CameraScript : public MonoBehaviour
+class EditCameraScript : public MonoBehaviour
 
 {
 public:

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "Button.h"
 
 Matrix Camera::S_MatView = Matrix::Identity;
 Matrix Camera::S_MatProjection = Matrix::Identity;
@@ -11,18 +12,34 @@ void Camera::SortGameObject()
 	unordered_set<shared_ptr<GameObject>>& gameObjects = scene->GetObjects();
 	
 	_vecForward.clear();
+	_vecUI.clear();
+
 	for (auto& gameObject : gameObjects)
 	{
 		if (IsCulled(gameObject->GetLayerIndex()))
 			continue;
 
-		if (gameObject->GetMeshRenderer() == nullptr
-			&& gameObject->GetModelRenderer() == nullptr
-			&& gameObject->GetModelAnimator() == nullptr)
-			continue;
+		if (gameObject->GetButton() != nullptr)
+		{
+			_vecUI.push_back(gameObject);
+			continue; // UI는 일반 3D 오브젝트 리스트에는 추가하지 않음
+		}
 
-		_vecForward.push_back(gameObject);
+
+		if (gameObject->GetMeshRenderer() != nullptr
+			|| gameObject->GetModelRenderer() != nullptr
+			|| gameObject->GetModelAnimator() != nullptr)
+		{			
+			_vecForward.push_back(gameObject);
+		}
 	}
+
+	// UI 렌더링 순서 정렬 (Order 낮은 UI가 먼저 렌더링됨)
+	std::sort(_vecUI.begin(), _vecUI.end(), [](const shared_ptr<GameObject>& a, const shared_ptr<GameObject>& b)
+		{
+			return a->GetButton()->GetOrder() < b->GetButton()->GetOrder();
+		});
+
 }
 
 void Camera::Render_Forward()
@@ -31,6 +48,10 @@ void Camera::Render_Forward()
 	S_MatProjection = _matProjection;
 
 	GET_SINGLE(InstancingManager)->Render(_vecForward);
+	GET_SINGLE(InstancingManager)->Render(_vecUI);
+
+
+
 }
 
 Camera::Camera() : Super(ComponentType::Camera)

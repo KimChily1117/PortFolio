@@ -24,6 +24,9 @@ public:
 	void LateUpdate();
 	void FixedUpdate();
 
+	void SaveTrasnformData();
+	void LoadTrasnformData();
+
 	void GUIRender();
 
 	shared_ptr<Component> GetFixedComponent(ComponentType type);

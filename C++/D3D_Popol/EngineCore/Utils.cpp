@@ -56,3 +56,12 @@ std::string Utils::ToString(wstring value)
 {
 	return string(value.begin(), value.end());
 }
+
+int Utils::GetRandomNumber(int min, int max)
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd()); // Mersenne Twister 엔진 사용
+	std::uniform_int_distribution<int> dist(min, max);
+
+	return dist(gen);
+}

@@ -6,6 +6,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 WPARAM Game::Run(GameDesc& desc)
 {
+
+
 	_desc = desc;
 	assert(_desc.app != nullptr);
 
@@ -22,6 +24,7 @@ WPARAM Game::Run(GameDesc& desc)
 	GUI->Init();
 	RESOURCES->Init();
 	NETWORK->Init();
+	SOUND->Init();
 
 	_desc.app->Init();
 
@@ -106,6 +109,7 @@ void Game::Update()
 	TIME->Update();
 	INPUT->Update();
 	NETWORK->Update();
+	SOUND->Update();
 
 	ShowFps();
 
@@ -115,8 +119,6 @@ void Game::Update()
 	_desc.app->Update();
 	_desc.app->Render();
 	GUI->Render();
-
-	//SCENE->GUIRender();
 
 	GRAPHICS->RenderEnd();
 }

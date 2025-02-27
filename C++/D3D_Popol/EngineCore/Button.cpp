@@ -61,6 +61,11 @@ void Button::InvokeOnClicked()
 		_onClicked();
 }
 
+void Button::ChangeImageMatrial(shared_ptr<Material> material)
+{
+	_gameObject.lock()->GetMeshRenderer()->SetMaterial(material);
+}
+
 void Button::GUIRender()
 {
 	if (!_gameObject.expired())

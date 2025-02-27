@@ -9,9 +9,6 @@ enum class PlayerState
 
 };
 
-
-
-
 class PlayerController : public MonoBehaviour
 {
 	

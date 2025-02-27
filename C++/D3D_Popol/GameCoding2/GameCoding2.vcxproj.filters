@@ -44,7 +44,7 @@
     <ClInclude Include="SceneExcuter.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="CameraScript.h">
+    <ClInclude Include="EditCameraScript.h">
       <Filter>Game\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
@@ -58,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="ServerSession.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerHUD.h">
+      <Filter>Game\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h">
+      <Filter>Game\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +79,7 @@
     <ClCompile Include="SceneExcuter.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="CameraScript.cpp">
+    <ClCompile Include="EditCameraScript.cpp">
       <Filter>Game\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
@@ -87,6 +93,12 @@
     </ClCompile>
     <ClCompile Include="ClientPacketHandler.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHUD.cpp">
+      <Filter>Game\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>Game\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

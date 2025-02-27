@@ -14,11 +14,17 @@ public:
 	void AddOnClickedEvent(std::function<void(void)> func);
 	void InvokeOnClicked();
 
+	// Order Ãß°¡
+	void SetOrder(int order) { _order = order; }
+	int GetOrder() const { return _order; }
 
+	void ChangeImageMatrial(shared_ptr<class Material> material);
 	void GUIRender();
-
 
 private:
 	std::function<void(void)> _onClicked;
 	RECT _rect;
+
+public:
+	int32 _order;
 };

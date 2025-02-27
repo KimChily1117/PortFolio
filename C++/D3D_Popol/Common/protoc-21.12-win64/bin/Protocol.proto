@@ -1,6 +1,10 @@
 syntax = "proto3";
 package Protocol;
 
+import "Enum.proto";
+import "Struct.proto";
+
+
 enum MsgId
 {
 	C_TEST_MSG = 0;

@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "CameraScript.h"
+#include "EditCameraScript.h"
 
-void CameraScript::Awake()
+void EditCameraScript::Awake()
 {
 }
 
-void CameraScript::Update()
+void EditCameraScript::Update()
 {
 	float dt = TIME->GetDeltaTime();
 

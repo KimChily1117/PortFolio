@@ -73,4 +73,5 @@ public:
 private:
 	uint32 _cullingMask = 0;
 	vector<shared_ptr<GameObject>>	_vecForward;
+	vector<shared_ptr<GameObject>>	_vecUI;
 };

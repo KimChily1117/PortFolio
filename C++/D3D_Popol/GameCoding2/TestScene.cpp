@@ -3,7 +3,7 @@
 #include "GeometryHelper.h"
 #include "Camera.h"
 #include "GameObject.h"
-#include "CameraScript.h"
+#include "EditCameraScript.h"
 #include "MeshRenderer.h"
 #include "Mesh.h"
 #include "Material.h"
@@ -19,6 +19,7 @@
 #include "Terrain.h"
 #include "SphereCollider.h"
 #include "Button.h"
+#include "CameraController.h"
 
 void TestScene::Start()
 {
@@ -31,7 +32,7 @@ void TestScene::LateUpdate()
 }
 void TestScene::Update()
 {
-	Super::Update();	
+	Super::Update();
 
 
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
@@ -44,7 +45,7 @@ void TestScene::Update()
 		auto pickObj = CUR_SCENE->Pick(mouseX, mouseY);
 		if (pickObj)
 		{
-			if(pickObj->_name == "Collision")
+			if (pickObj->_name == "Collision")
 				CUR_SCENE->Remove(pickObj);
 		}
 	}
@@ -54,6 +55,16 @@ void TestScene::Update()
 void TestScene::InitializeObject()
 {
 	_shader = make_shared<Shader>(L"23. RenderDemo.fx");
+
+	// Music (Test)
+	{
+		SOUND->LoadSound("BGM", "..\\Resources\\Musics\\Sr_BGM.mp3", true);
+		SOUND->LoadSound("A_walk1", "..\\Resources\\Musics\\Annie\\walk1.mp3", false);
+		SOUND->LoadSound("A_walk2", "..\\Resources\\Musics\\Annie\\walk2.mp3", false);
+		SOUND->LoadSound("A_walk3", "..\\Resources\\Musics\\Annie\\walk3.mp3", false);
+
+		SOUND->PlaySound("BGM");
+	}
 
 	// Main Camera
 	{
@@ -66,19 +77,22 @@ void TestScene::InitializeObject()
 		camera->AddComponent(make_shared<Camera>());
 		camera->GetCamera()->SetProjectionType(ProjectionType::Perspective);
 		camera->GetCamera()->SetCullingMaskLayerOnOff(Layer_UI, true);
-		camera->AddComponent(make_shared<CameraScript>());
-		Add(camera);
+		//camera->AddComponent(make_shared<EditCameraScript>());
+		camera->AddComponent(make_shared<CameraController>());
+		CUR_SCENE->Add(camera);
+
+		camera->LoadTrasnformData();
 	}
 
 	// UI_Camera
 	{
-		auto camera = make_shared<GameObject>();
+		auto camera = make_shared<GameObject>("UI_Camera");
 		camera->GetOrAddTransform()->SetPosition(Vec3{ 0.f, 0.f, -5.f });
 		camera->AddComponent(make_shared<Camera>());
 		camera->GetCamera()->SetProjectionType(ProjectionType::Orthographic);
 		camera->GetCamera()->SetNear(1.f);
 		camera->GetCamera()->SetFar(100.f);
-		
+
 
 		camera->GetCamera()->SetCullingMaskAll();
 		camera->GetCamera()->SetCullingMaskLayerOnOff(Layer_UI, false);
@@ -127,16 +141,46 @@ void TestScene::InitializeObject()
 			RESOURCES->Add(L"PlayerHUD", material);
 		}
 
+		// Material
+		{
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(_shader);
+			auto texture = RESOURCES->Load<Texture>(L"empty_circle", L"..\\Resources\\Textures\\UI\\HUD\\ChampMark\\empty_circle.png");
+			material->SetDiffuseMap(texture);
+			MaterialDesc& desc = material->GetMaterialDesc();
+			desc.ambient = Vec4(1.f);
+			desc.diffuse = Vec4(1.f);
+			desc.specular = Vec4(1.f);
+			RESOURCES->Add(L"empty_circle", material);
+		}
+
+		// Material
+		{
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(_shader);
+			auto texture = RESOURCES->Load<Texture>(L"annie_circle", L"..\\Resources\\Textures\\UI\\HUD\\ChampMark\\annie_circle.png");
+			material->SetDiffuseMap(texture);
+			MaterialDesc& desc = material->GetMaterialDesc();
+			desc.ambient = Vec4(1.f);
+			desc.diffuse = Vec4(1.f);
+			desc.specular = Vec4(1.f);
+			RESOURCES->Add(L"annie_circle", material);
+		}
+
+
 	}
 	// Mesh
 	{
 		// UI
 		auto obj = make_shared<GameObject>("UICanvas");
 		obj->AddComponent(make_shared<Button>());
-
 		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L""));
-		obj->GetButton()->AddOnClickedEvent([obj]() { CUR_SCENE->Remove(obj); });
+
+		obj->GetButton()->SetOrder(3);
+		obj->GetTransform()->SetPosition(Vec3{ 0,0,0 });
+
 		CUR_SCENE->Add(obj);
+
 
 
 		auto obj2 = make_shared<GameObject>("UI Button1");
@@ -144,15 +188,29 @@ void TestScene::InitializeObject()
 
 		obj2->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"PlayerHUD"));
 		obj2->GetTransform()->SetParent(obj->GetOrAddTransform());
+
+		obj2->GetButton()->SetOrder(1);
+		obj2->LoadTrasnformData();
 		CUR_SCENE->Add(obj2);
-	
-	
-		obj->GetTransform()->SetPosition(Vec3{ 0,0,0 });
-		obj2->GetTransform()->SetPosition(Vec3{ 0,0,0 });
+
+
+
+		auto obj3 = make_shared<GameObject>("UI Panel");
+		obj3->AddComponent(make_shared<Button>());
+
+		obj3->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"annie_circle"));
+
+		obj3->GetButton()->SetOrder(2);
+		obj3->GetTransform()->SetParent(obj2->GetOrAddTransform());
+		obj3->LoadTrasnformData();
+
+		CUR_SCENE->Add(obj3);
 	}
+
+
 	{
 		auto obj = make_shared<GameObject>("Collision");
-		obj->GetOrAddTransform()->SetLocalPosition(Vec3(8,5,8));
+		obj->GetOrAddTransform()->SetLocalPosition(Vec3(8, 5, 8));
 		obj->AddComponent(make_shared<MeshRenderer>());
 		{
 			obj->GetMeshRenderer()->SetMaterial(RESOURCES->Get<Material>(L"Veigar"));
@@ -199,36 +257,33 @@ void TestScene::InitializeObject()
 		auto obj = make_shared<GameObject>("Rift");
 		//obj->GetOrAddTransform()->SetPosition(Vec3(0,0,0));
 		obj->GetOrAddTransform()->SetScale(Vec3(0.001f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, XMConvertToRadians(90.f),0.f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, XMConvertToRadians(90.f), 0.f));
 
 		obj->AddComponent(make_shared<ModelRenderer>(_shader));
 		obj->GetModelRenderer()->SetModel(m2);
 		obj->GetModelRenderer()->SetPass(1);
 
-
 		Add(obj);
 	}
 
 	// Terrain
-	{	
+	{
 		auto obj = make_shared<GameObject>("Terrain");
 		obj->AddComponent(make_shared<Terrain>());
 		obj->GetOrAddTransform()->SetLocalPosition(Vec3(0.f, 2.f, 0.f));
-		obj->GetOrAddTransform()->SetRotation(Vec3(0.f,0.f,0.f));
+		obj->GetOrAddTransform()->SetRotation(Vec3(0.f, 0.f, 0.f));
 
-		obj->GetTerrain()->Create(145,145, RESOURCES->Get<Material>(L"Veigar"));
+		obj->GetTerrain()->Create(145, 145, RESOURCES->Get<Material>(L"Veigar"));
 		obj->GetMeshRenderer()->SetPass(3);
 		CUR_SCENE->Add(obj);
-	}	
-	
+	}
+
 	{
 		shared_ptr<class Model> m1 = make_shared<Model>();
 		m1->ReadModel(L"Annie/Annie");
 		m1->ReadMaterial(L"Annie/Annie");
 		m1->ReadAnimation(L"Annie/Idle");
 		m1->ReadAnimation(L"Annie/Run");
-
-
 		auto obj = make_shared<GameObject>("Annie");
 		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
 		obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
@@ -239,8 +294,13 @@ void TestScene::InitializeObject()
 			obj->GetModelAnimator()->SetModel(m1);
 			obj->GetModelAnimator()->SetPass(2);
 		}
-		Add(obj);
+		CUR_SCENE->Add(obj);
+		GAMEMANAGER->_myPlayer = obj;
 	}
+
+
+
+
 #pragma region LegacyCode(Katsujin)
 	//{
 	//	// Animation
