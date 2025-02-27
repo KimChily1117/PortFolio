@@ -35,6 +35,10 @@ public:										\
 #define SCENE		GET_SINGLE(SceneManager)
 #define CUR_SCENE	SCENE->GetCurrentScene()
 #define NETWORK		GET_SINGLE(NetworkManager)
+#define GAMEMANAGER	GET_SINGLE(GameManager)
+#define UI			GET_SINGLE(UIManager)
+#define SOUND		GET_SINGLE(SoundManager)
+
 
 enum LayerMask
 {

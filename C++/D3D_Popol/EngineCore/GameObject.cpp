@@ -18,8 +18,7 @@ GameObject::GameObject()
 GameObject::GameObject(string name) : _name(name)
 {
 	_enableGUI = true;
-	SetLayerIndex(Layer_Default);
-
+	SetLayerIndex(Layer_Default);	
 }
 
 GameObject::~GameObject()
@@ -98,15 +97,80 @@ void GameObject::FixedUpdate()
 }
 
 
-void Save()
-{
-	// Json?으로 저장 해야할지
-	// XML로 저장해야할지
-	// Binary로 저장해야할지
-	// CSV같은 SpreadSheet로 저장해야할지 고민이다... Hmmm..
+void GameObject::SaveTrasnformData()
+{	
+	auto transform = GetOrAddTransform();
 
-	return;
+	json jsonData;
+	jsonData["name"] = _name;
+	jsonData["position"] = { transform->GetLocalPosition().x, transform->GetLocalPosition().y, transform->GetLocalPosition().z };
+	jsonData["rotation"] = { transform->GetLocalRotation().x, transform->GetLocalRotation().y, transform->GetLocalRotation().z };
+	jsonData["scale"] = { transform->GetLocalScale().x, transform->GetLocalScale().y, transform->GetLocalScale().z };
+	
+	
+	// 저장할 경로 설정
+	std::string savePath = "../Resources/TrasformDatas/SavePath/";
+
+	// 경로가 없으면 생성
+	if (!fs::exists(savePath))
+		fs::create_directories(savePath);
+
+	// 오브젝트 이름을 포함한 파일 이름 생성
+	std::string fileName = savePath + "TransformData_" + _name + ".json";
+
+	std::ofstream file(fileName);
+	if (file.is_open())
+	{
+		file << jsonData.dump(4); // 4는 들여쓰기 (Pretty Print)
+		file.close();
+		DEBUG_LOG("Transform Data Saved Successfully: " << fileName);
+	}
 }
+void GameObject::LoadTrasnformData()
+{
+	auto transform = GetOrAddTransform();
+
+	// 저장된 파일 경로 지정
+	std::string savePath = "../Resources/TrasformDatas/SavePath/";
+	std::string fileName = savePath + "TransformData_" + _name + ".json";
+
+	std::ifstream file(fileName);
+	if (!file.is_open()) {
+		DEBUG_LOG("Failed to load Transform Data: " << fileName);
+		return;
+	}
+
+	json jsonData;
+	file >> jsonData;
+	file.close();
+
+	// JSON 데이터 적용
+	Vec3 position(
+		jsonData["position"][0],
+		jsonData["position"][1],
+		jsonData["position"][2]
+	);
+
+	Vec3 rotation(
+		jsonData["rotation"][0],
+		jsonData["rotation"][1],
+		jsonData["rotation"][2]
+	);
+
+	Vec3 scale(
+		jsonData["scale"][0],
+		jsonData["scale"][1],
+		jsonData["scale"][2]
+	);
+
+	transform->SetLocalPosition(position);
+	transform->SetLocalRotation(rotation);
+	transform->SetLocalScale(scale);
+
+	DEBUG_LOG("Transform Data Loaded Successfully: " << fileName);
+}
+
+
 
 void GameObject::GUIRender()
 {
@@ -173,17 +237,13 @@ void GameObject::GUIRender()
 			// Todo : Save Btn 만들어서
 			// Scene 진입시에 Parse하도록 구조 변경
 			if (ImGui::Button("Save TransformData")) // 버튼 함수 (클릭시 true 반환 실행)
-				Save();     // 버튼 함수의 인수는 버튼 위에 적히는 이름
+				SaveTrasnformData();     // 버튼 함수의 인수는 버튼 위에 적히는 이름
 
 			ImGui::TreePop();
 		}
 	}
 	ImGui::End();
 }
-
-
-
-
 
 std::shared_ptr<Component> GameObject::GetFixedComponent(ComponentType type)
 {

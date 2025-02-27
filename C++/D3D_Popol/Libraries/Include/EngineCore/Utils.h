@@ -1,5 +1,5 @@
 #pragma once
-
+#include <random>
 class Utils
 {
 public:
@@ -11,5 +11,7 @@ public:
 
 	static wstring ToWString(string value);
 	static string ToString(wstring value);
+
+	static int GetRandomNumber(int min, int max);
 };
 

@@ -23,6 +23,10 @@ using namespace std;
 #include <assert.h>
 #include <optional>
 #include <sstream>
+#include <fstream>
+#include <filesystem>
+namespace fs = std::filesystem; 
+
 
 // DX
 #include <d3d11.h>
@@ -42,6 +46,8 @@ using namespace Microsoft::WRL;
 
 // Json Library (NlohmannJson)
 #include "Nlohmann/json.hpp"
+using json = nlohmann::json;
+
 
 // Assimp
 #include <Assimp/Importer.hpp>
@@ -81,6 +87,11 @@ using namespace Microsoft::WRL;
 #include "SceneManager.h"
 #include "InstancingManager.h"
 #include "NetworkManager.h"
+#include "GameManager.h"
+#include "UIManager.h"
+#include "SoundManager.h"
+
+
 
 // Engine
 #include "VertexData.h"

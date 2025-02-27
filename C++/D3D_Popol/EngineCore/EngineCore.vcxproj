@@ -168,6 +168,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="GeometryHelper.h" />
@@ -206,6 +207,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="Technique.h" />
     <ClInclude Include="Terrain.h" />
@@ -214,6 +216,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="UIManager.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexData.h" />
@@ -230,6 +233,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="GeometryHelper.cpp" />
@@ -286,6 +290,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Technique.cpp" />
     <ClCompile Include="Terrain.cpp" />
@@ -295,6 +300,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexData.cpp" />

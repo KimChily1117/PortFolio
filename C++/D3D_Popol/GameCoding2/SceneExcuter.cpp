@@ -5,7 +5,7 @@
 #include "GeometryHelper.h"
 #include "Camera.h"
 #include "GameObject.h"
-#include "CameraScript.h"
+#include "EditCameraScript.h"
 #include "MeshRenderer.h"
 #include "Mesh.h"
 #include "Material.h"
