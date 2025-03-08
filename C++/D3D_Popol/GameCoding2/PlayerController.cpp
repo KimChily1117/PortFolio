@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "PlayerController.h"
 #include "ModelAnimator.h"
+#include "Terrain.h"
 
 
 void PlayerController::Awake()
@@ -34,6 +35,22 @@ void PlayerController::Update()
 
 			_currentState = PlayerState::RUN;
 			GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
+			
+			Vec3 correctPosition = pickObj->GetTerrain()->GetTileCorrectedPosition(_dest);
+
+			// ✅ 서버로 이동 패킷 전송
+			Protocol::C_Move movePacket;
+			movePacket.set_objectid(GAMEMANAGER->_myPlayerInfo.objectid());
+			movePacket.mutable_targetpos()->set_x(_dest.x);
+			movePacket.mutable_targetpos()->set_y(_dest.y);
+			movePacket.mutable_targetpos()->set_z(_dest.z);
+
+			// Tile 정보 패킷에 넣어주기
+			movePacket.mutable_cellpos()->set_x(correctPosition.x);
+			movePacket.mutable_cellpos()->set_z(correctPosition.z);
+
+			auto sendBuffer = ClientPacketHandler::MakeSendBuffer(movePacket, C_MOVE);
+			NETWORK->SendPacket(sendBuffer);		
 		}
 	}
 
@@ -42,7 +59,7 @@ void PlayerController::Update()
 		DEBUG_LOG("ENTER!!!");
 		Protocol::C_TESTMsg pkt;
 
-		*pkt.mutable_testmessage() = " From Client : Press Enter KEY ";
+		*pkt.mutable_message() = " From Client : Press Enter KEY ";
 		auto a = ClientPacketHandler::MakeSendBuffer(pkt, C_TEST_MSG);
 		NETWORK->SendPacket(a);
 	}
@@ -97,7 +114,7 @@ void PlayerController::MoveTo()
 	else
 	{
 		_currentState = PlayerState::IDLE;
-		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
+		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)2;
 	}
 }
 

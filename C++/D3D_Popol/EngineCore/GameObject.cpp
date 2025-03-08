@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "GameObject.h"
 #include "MonoBehaviour.h"
 #include "Transform.h"
@@ -108,20 +108,20 @@ void GameObject::SaveTrasnformData()
 	jsonData["scale"] = { transform->GetLocalScale().x, transform->GetLocalScale().y, transform->GetLocalScale().z };
 	
 	
-	// ÀúÀåÇÒ °æ·Î ¼³Á¤
+	// ì €ì¥í•  ê²½ë¡œ ì„¤ì •
 	std::string savePath = "../Resources/TrasformDatas/SavePath/";
 
-	// °æ·Î°¡ ¾øÀ¸¸é »ı¼º
+	// ê²½ë¡œê°€ ì—†ìœ¼ë©´ ìƒì„±
 	if (!fs::exists(savePath))
 		fs::create_directories(savePath);
 
-	// ¿ÀºêÁ§Æ® ÀÌ¸§À» Æ÷ÇÔÇÑ ÆÄÀÏ ÀÌ¸§ »ı¼º
+	// ì˜¤ë¸Œì íŠ¸ ì´ë¦„ì„ í¬í•¨í•œ íŒŒì¼ ì´ë¦„ ìƒì„±
 	std::string fileName = savePath + "TransformData_" + _name + ".json";
 
 	std::ofstream file(fileName);
 	if (file.is_open())
 	{
-		file << jsonData.dump(4); // 4´Â µé¿©¾²±â (Pretty Print)
+		file << jsonData.dump(4); // 4ëŠ” ë“¤ì—¬ì“°ê¸° (Pretty Print)
 		file.close();
 		DEBUG_LOG("Transform Data Saved Successfully: " << fileName);
 	}
@@ -130,7 +130,7 @@ void GameObject::LoadTrasnformData()
 {
 	auto transform = GetOrAddTransform();
 
-	// ÀúÀåµÈ ÆÄÀÏ °æ·Î ÁöÁ¤
+	// ì €ì¥ëœ íŒŒì¼ ê²½ë¡œ ì§€ì •
 	std::string savePath = "../Resources/TrasformDatas/SavePath/";
 	std::string fileName = savePath + "TransformData_" + _name + ".json";
 
@@ -144,7 +144,7 @@ void GameObject::LoadTrasnformData()
 	file >> jsonData;
 	file.close();
 
-	// JSON µ¥ÀÌÅÍ Àû¿ë
+	// JSON ë°ì´í„° ì ìš©
 	Vec3 position(
 		jsonData["position"][0],
 		jsonData["position"][1],
@@ -177,8 +177,19 @@ void GameObject::GUIRender()
 	if (!_enableGUI || GetTransform() == nullptr)
 		return;
 
-	if (ImGui::Begin("Inspector")) // Ã¢ ½ÃÀÛ
+	static unordered_set<string> printedNames; // âœ… ì™¸ë¶€ì—ì„œ ìœ ì§€ë˜ëŠ” ë³€ìˆ˜ (ë§¤ í”„ë ˆì„ ì´ˆê¸°í™” ë°©ì§€)
+	printedNames.clear(); // âœ… ë§¤ í”„ë ˆì„ ìƒˆë¡œìš´ ì˜¤ë¸Œì íŠ¸ë“¤ì„ ì¶”ê°€í•  ìˆ˜ ìˆë„ë¡ ì´ˆê¸°í™”
+
+	if (ImGui::Begin("Inspector")) // ì°½ ì‹œì‘
 	{
+		if (printedNames.find(_name) != printedNames.end())
+		{
+			ImGui::End();
+			return; // âœ… ì´ë¯¸ ì¶œë ¥ëœ ì˜¤ë¸Œì íŠ¸ë©´ ì¶”ê°€í•˜ì§€ ì•ŠìŒ
+		}
+
+		printedNames.insert(_name); // âœ… í˜„ì¬ ì˜¤ë¸Œì íŠ¸ ì¶”ê°€
+
 		if (ImGui::TreeNode(_name.c_str())) // TreeNode
 		{
 			ImGui::Text(_name.c_str());
@@ -187,7 +198,7 @@ void GameObject::GUIRender()
 			Vec3 pos = transform->GetLocalPosition();
 			Vec3 scale = transform->GetLocalScale();
 
-			// È¸Àü °ªÀ» ¶óµğ¾È¿¡¼­ µµ ´ÜÀ§·Î º¯È¯
+			// íšŒì „ ê°’ì„ ë¼ë””ì•ˆì—ì„œ ë„ ë‹¨ìœ„ë¡œ ë³€í™˜
 			XMFLOAT3 currentRot;
 			currentRot.x = XMConvertToDegrees(transform->GetLocalRotation().x);
 			currentRot.y = XMConvertToDegrees(transform->GetLocalRotation().y);
@@ -200,50 +211,38 @@ void GameObject::GUIRender()
 				transform->SetLocalPosition(pos);
 			}
 
-			//  Rotation (¶óµğ¾È ¡æ µµ ´ÜÀ§ º¯È¯)
+			// Rotation (ë¼ë””ì•ˆ â†’ ë„ ë‹¨ìœ„ ë³€í™˜)
 			temp = _name + "_Rot";
-			currentRot.x = XMConvertToDegrees(GetTransform()->GetLocalRotation().x);
-			currentRot.y = XMConvertToDegrees(GetTransform()->GetLocalRotation().y);
-			currentRot.z = XMConvertToDegrees(GetTransform()->GetLocalRotation().z);
-
-			//  IMGUI¿¡¼­ È¸Àü°ªÀ» Á¤»óÀûÀ¸·Î º¸ÀÌµµ·Ï ÇÏ±â À§ÇØ º¯È¯
 			XMFLOAT3 newRot = currentRot;
 			if (ImGui::DragFloat3(temp.c_str(), (float*)&newRot, 1.0f, -180, 180))
 			{
-				//  XÃàÀÌ ºñÁ¤»óÀûÀ¸·Î Ä¿ÁöÁö ¾Êµµ·Ï º¸Á¤
 				newRot.x = fmod(newRot.x, 360.0f);
 				newRot.y = fmod(newRot.y, 360.0f);
 				newRot.z = fmod(newRot.z, 360.0f);
 
-				//  º¯°æµÈ °ªÀ» ´Ù½Ã ¶óµğ¾ÈÀ¸·Î º¯È¯ÇÏ¿© Àû¿ë
 				GetTransform()->SetLocalRotation(Vec3(
 					XMConvertToRadians(newRot.x),
 					XMConvertToRadians(newRot.y),
 					XMConvertToRadians(newRot.z)
 				));
-
-				DEBUG_LOG("IMGUI Rotation (After Update): X=" << newRot.x
-					<< ", Y=" << newRot.y
-					<< ", Z=" << newRot.z);
 			}
-
-			//  Scale
+			
+			// Scale
 			temp = _name + "_Scale";
 			if (ImGui::DragFloat3(temp.c_str(), (float*)&scale, 0.1f, 0.1f, 10.0f))
 			{
 				transform->SetLocalScale(scale);
 			}
 
-			// Todo : Save Btn ¸¸µé¾î¼­
-			// Scene ÁøÀÔ½Ã¿¡ ParseÇÏµµ·Ï ±¸Á¶ º¯°æ
-			if (ImGui::Button("Save TransformData")) // ¹öÆ° ÇÔ¼ö (Å¬¸¯½Ã true ¹İÈ¯ ½ÇÇà)
-				SaveTrasnformData();     // ¹öÆ° ÇÔ¼öÀÇ ÀÎ¼ö´Â ¹öÆ° À§¿¡ ÀûÈ÷´Â ÀÌ¸§
+			if (ImGui::Button("Save TransformData"))
+				SaveTrasnformData();
 
 			ImGui::TreePop();
 		}
 	}
 	ImGui::End();
 }
+
 
 std::shared_ptr<Component> GameObject::GetFixedComponent(ComponentType type)
 {
@@ -305,12 +304,6 @@ shared_ptr<Button> GameObject::GetButton()
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Button);
 	return static_pointer_cast<Button>(component);
 }
-
-//std::shared_ptr<Animator> GameObject::GetAnimator()
-//{
-//	shared_ptr<Component> component = GetFixedComponent(ComponentType::Animator);
-//	return static_pointer_cast<Animator>(component);
-//}
 
 std::shared_ptr<Transform> GameObject::GetOrAddTransform()
 {

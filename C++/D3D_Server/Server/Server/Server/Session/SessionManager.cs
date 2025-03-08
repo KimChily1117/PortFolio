@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerCore;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,6 +24,7 @@ namespace Server
 				session.SessionId = sessionId;
 				_sessions.Add(sessionId, session);
 
+				// 1
 				Console.WriteLine($"Connected : {sessionId}");
 
 				return session;
@@ -43,7 +45,8 @@ namespace Server
 		{
 			lock (_lock)
 			{
-				_sessions.Remove(session.SessionId);
+                Console.WriteLine($"DisConnected : {session.SessionId}");
+                _sessions.Remove(session.SessionId);
 			}
 		}
 	}

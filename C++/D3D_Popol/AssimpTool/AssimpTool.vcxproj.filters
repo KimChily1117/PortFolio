@@ -34,6 +34,9 @@
     <ClInclude Include="TweenDemo.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="ClientPacketHandler.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -56,6 +59,9 @@
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="TweenDemo.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientPacketHandler.cpp">
       <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>

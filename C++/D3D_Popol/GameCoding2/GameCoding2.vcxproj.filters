@@ -30,6 +30,24 @@
     <Filter Include="Network\Protocol">
       <UniqueIdentifier>{c2bfd20e-2c8c-4319-849b-f4e7eb13d9c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scripts\Cameras">
+      <UniqueIdentifier>{c907d672-18be-430c-9639-a772e34b47a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripts\Player">
+      <UniqueIdentifier>{86c36e3d-e922-4300-afda-b2cb481aee29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripts\UI">
+      <UniqueIdentifier>{1ac44ebb-f72f-4c37-aa42-13552a6a5761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripts\Player\Champ">
+      <UniqueIdentifier>{1a026f9d-b22d-4e10-affd-68ceb4f37964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripts\Player\Champ\Annie">
+      <UniqueIdentifier>{7ad75b54-ca48-45e1-baaf-d71fcb04008e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripts\Player\Champ\Garen">
+      <UniqueIdentifier>{ab94e11c-872b-412d-ab00-124deed4990f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -44,12 +62,6 @@
     <ClInclude Include="SceneExcuter.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="EditCameraScript.h">
-      <Filter>Game\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerController.h">
-      <Filter>Game\Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Protocol.pb.h">
       <Filter>Network\Protocol</Filter>
     </ClInclude>
@@ -59,11 +71,44 @@
     <ClInclude Include="ServerSession.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerHUD.h">
-      <Filter>Game\Scripts</Filter>
+    <ClInclude Include="Struct.pb.h">
+      <Filter>Network\Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.pb.h">
+      <Filter>Network\Protocol</Filter>
     </ClInclude>
     <ClInclude Include="CameraController.h">
-      <Filter>Game\Scripts</Filter>
+      <Filter>Game\Scripts\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="EditCameraScript.h">
+      <Filter>Game\Scripts\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="OtherPlayerController.h">
+      <Filter>Game\Scripts\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Game\Scripts\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CursorController.h">
+      <Filter>Game\Scripts\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HUDController.h">
+      <Filter>Game\Scripts\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillIndicatorController.h">
+      <Filter>Game\Scripts\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="AnniePlayerController.h">
+      <Filter>Game\Scripts\Player\Champ\Annie</Filter>
+    </ClInclude>
+    <ClInclude Include="GarenOtherPlayerController.h">
+      <Filter>Game\Scripts\Player\Champ\Garen</Filter>
+    </ClInclude>
+    <ClInclude Include="GarenPlayerController.h">
+      <Filter>Game\Scripts\Player\Champ\Garen</Filter>
+    </ClInclude>
+    <ClInclude Include="AnnieOtherPlayerController.h">
+      <Filter>Game\Scripts\Player\Champ\Annie</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -79,12 +124,6 @@
     <ClCompile Include="SceneExcuter.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="EditCameraScript.cpp">
-      <Filter>Game\Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>Game\Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Protocol.pb.cc">
       <Filter>Network\Protocol</Filter>
     </ClCompile>
@@ -94,11 +133,44 @@
     <ClCompile Include="ClientPacketHandler.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerHUD.cpp">
-      <Filter>Game\Scripts</Filter>
+    <ClCompile Include="Struct.pb.cc">
+      <Filter>Network\Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="Enum.pb.cc">
+      <Filter>Network\Protocol</Filter>
     </ClCompile>
     <ClCompile Include="CameraController.cpp">
-      <Filter>Game\Scripts</Filter>
+      <Filter>Game\Scripts\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="EditCameraScript.cpp">
+      <Filter>Game\Scripts\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="OtherPlayerController.cpp">
+      <Filter>Game\Scripts\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Game\Scripts\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorController.cpp">
+      <Filter>Game\Scripts\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HUDController.cpp">
+      <Filter>Game\Scripts\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillIndicatorController.cpp">
+      <Filter>Game\Scripts\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="AnniePlayerController.cpp">
+      <Filter>Game\Scripts\Player\Champ\Annie</Filter>
+    </ClCompile>
+    <ClCompile Include="AnnieOtherPlayerController.cpp">
+      <Filter>Game\Scripts\Player\Champ\Annie</Filter>
+    </ClCompile>
+    <ClCompile Include="GarenOtherPlayerController.cpp">
+      <Filter>Game\Scripts\Player\Champ\Garen</Filter>
+    </ClCompile>
+    <ClCompile Include="GarenPlayerController.cpp">
+      <Filter>Game\Scripts\Player\Champ\Garen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +240,21 @@
     <FxCompile Include="..\Shaders\23. RenderDemo.fx">
       <Filter>Game\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="..\Shaders\24. ImageFillMount.fx">
+      <Filter>Game\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\protoc-21.12-win64\bin\GenPackets.bat">
+      <Filter>Network\Protocol</Filter>
+    </None>
+    <None Include="..\Common\protoc-21.12-win64\bin\Enum.proto">
+      <Filter>Network\Protocol</Filter>
+    </None>
+    <None Include="..\Common\protoc-21.12-win64\bin\Protocol.proto">
+      <Filter>Network\Protocol</Filter>
+    </None>
+    <None Include="..\Common\protoc-21.12-win64\bin\Struct.proto">
       <Filter>Network\Protocol</Filter>
     </None>
   </ItemGroup>

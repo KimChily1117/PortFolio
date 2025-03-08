@@ -24,7 +24,25 @@ class PacketManager
 	public void Register()
 	{		
 		_onRecv.Add((ushort)MsgId.STestMsg, MakePacket<S_TestMsg>);
-		_handler.Add((ushort)MsgId.STestMsg, PacketHandler.S_TestMsgHandler);
+		_handler.Add((ushort)MsgId.STestMsg, PacketHandler.S_TestMsgHandler);		
+		_onRecv.Add((ushort)MsgId.SObjectUpdate, MakePacket<S_ObjectUpdate>);
+		_handler.Add((ushort)MsgId.SObjectUpdate, PacketHandler.S_ObjectUpdateHandler);		
+		_onRecv.Add((ushort)MsgId.SSkillResult, MakePacket<S_SkillResult>);
+		_handler.Add((ushort)MsgId.SSkillResult, PacketHandler.S_SkillResultHandler);		
+		_onRecv.Add((ushort)MsgId.SUpdateMap, MakePacket<S_UpdateMap>);
+		_handler.Add((ushort)MsgId.SUpdateMap, PacketHandler.S_UpdateMapHandler);		
+		_onRecv.Add((ushort)MsgId.SChatMessage, MakePacket<S_ChatMessage>);
+		_handler.Add((ushort)MsgId.SChatMessage, PacketHandler.S_ChatMessageHandler);		
+		_onRecv.Add((ushort)MsgId.SEnterGame, MakePacket<S_EnterGame>);
+		_handler.Add((ushort)MsgId.SEnterGame, PacketHandler.S_EnterGameHandler);		
+		_onRecv.Add((ushort)MsgId.SMyPlayer, MakePacket<S_MyPlayer>);
+		_handler.Add((ushort)MsgId.SMyPlayer, PacketHandler.S_MyPlayerHandler);		
+		_onRecv.Add((ushort)MsgId.SAddObject, MakePacket<S_AddObject>);
+		_handler.Add((ushort)MsgId.SAddObject, PacketHandler.S_AddObjectHandler);		
+		_onRecv.Add((ushort)MsgId.SRemoveObject, MakePacket<S_RemoveObject>);
+		_handler.Add((ushort)MsgId.SRemoveObject, PacketHandler.S_RemoveObjectHandler);		
+		_onRecv.Add((ushort)MsgId.SMove, MakePacket<S_Move>);
+		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

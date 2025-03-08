@@ -14,7 +14,7 @@ Converter::Converter()
 Converter::~Converter()
 {
 
-}
+}	 
 
 void Converter::ReadAssetFile(wstring file)
 {

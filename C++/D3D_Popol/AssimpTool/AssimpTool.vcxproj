@@ -22,6 +22,7 @@
     <ClInclude Include="AssimpTool.h" />
     <ClInclude Include="AsType.h" />
     <ClInclude Include="CameraScript.h" />
+    <ClInclude Include="ClientPacketHandler.h" />
     <ClInclude Include="Converter.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
@@ -32,6 +33,7 @@
     <ClCompile Include="AssimpTool.cpp" />
     <ClCompile Include="AsType.cpp" />
     <ClCompile Include="CameraScript.cpp" />
+    <ClCompile Include="ClientPacketHandler.cpp" />
     <ClCompile Include="Converter.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">

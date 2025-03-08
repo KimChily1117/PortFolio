@@ -41,6 +41,31 @@ public:
 
 	shared_ptr<Button> GetButton();
 
+	template <typename T>
+	std::shared_ptr<T> GetScript()
+	{
+		for (auto& script : _scripts)
+		{
+			// T 타입으로 캐스팅 가능한 경우 반환
+			std::shared_ptr<T> castedScript = std::dynamic_pointer_cast<T>(script);
+			if (castedScript)
+				return castedScript;
+		}
+		return nullptr;
+	}
+
+	template <typename T>
+	std::shared_ptr<T> GetOrAddScript()
+	{
+		std::shared_ptr<T> script = GetScript<T>();
+		if (script == nullptr)
+		{
+			script = std::make_shared<T>();
+			AddComponent(script);
+		}
+		return script;
+	}
+
 
 	shared_ptr<Transform> GetOrAddTransform();
 	void AddComponent(shared_ptr<Component> component);

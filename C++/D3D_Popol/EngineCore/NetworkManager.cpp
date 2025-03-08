@@ -2,6 +2,7 @@
 #include "NetworkManager.h"
 #include "ServerCore/Service.h"
 #include "ServerCore/ThreadManager.h"
+#include "../GameCoding2/ServerSession.h"
 
 
 void NetworkManager::Init()
@@ -9,7 +10,7 @@ void NetworkManager::Init()
 	SocketUtils::Init();
 
 	_service = make_shared<ClientService>(
-		NetAddress(L"192.168.0.3", 8080),
+		NetAddress(L"127.0.0.1", 8080),
 		make_shared<IocpCore>(),
 		[=]() { return CreateSession(); }, // TODO : SessionManager µî
 		1);
