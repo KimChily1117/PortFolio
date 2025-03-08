@@ -105,11 +105,16 @@ void ClientPacketHandler::Handle_S_MyPlayer(BYTE* buffer, int32 len)
 
     // ✅ 모델 로드 및 애니메이션 추가
     shared_ptr<class Model> model = make_shared<Model>();
-    model->ReadModel(L"Annie/Annie");
+ /*   model->ReadModel(L"Annie/Annie");
     model->ReadMaterial(L"Annie/Annie");
     model->ReadAnimation(L"Annie/Idle");
     model->ReadAnimation(L"Annie/Run");
-    model->ReadAnimation(L"Annie/Atk1");
+    model->ReadAnimation(L"Annie/Atk1");*/
+
+	model->ReadModel(L"Garen/Garen");
+	model->ReadMaterial(L"Garen/Garen");
+	model->ReadAnimation(L"Garen/Idle");
+	model->ReadAnimation(L"Garen/Run");
 
     obj->AddComponent(make_shared<PlayerController>());
     obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
@@ -172,10 +177,10 @@ void ClientPacketHandler::Handle_S_AddObject(BYTE* buffer, int32 len)
 
 				// ✅ 모델 로드 및 애니메이션 추가
 				shared_ptr<class Model> model = make_shared<Model>();
-				model->ReadModel(L"Annie/Annie");
-				model->ReadMaterial(L"Annie/Annie");
-				model->ReadAnimation(L"Annie/Idle");
-				model->ReadAnimation(L"Annie/Run");
+				model->ReadModel(L"Garen/Garen");
+				model->ReadMaterial(L"Garen/Garen");
+				model->ReadAnimation(L"Garen/Idle");
+				model->ReadAnimation(L"Garen/Run");
 				obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
 
 				obj->GetModelAnimator()->SetModel(model);
