@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "TestScene.h"
 #include "GeometryHelper.h"
 #include "Camera.h"
@@ -20,6 +20,12 @@
 #include "SphereCollider.h"
 #include "Button.h"
 #include "CameraController.h"
+#include "HUDController.h"
+#include "SkillIndicatorController.h"
+#include "CursorController.h"
+
+
+
 
 void TestScene::Start()
 {
@@ -50,6 +56,26 @@ void TestScene::Update()
 		}
 	}
 
+	// Cursor 여기서 정의
+	::ShowCursor(FALSE); // Ingame에서 마우스 커서 없애고 자체 MouseCursor Class 정의해서 만듬
+
+	float width = GRAPHICS->GetViewport().GetWidth();
+	float height = GRAPHICS->GetViewport().GetHeight();
+
+	// 1️⃣ 마우스 좌표 가져오기 (스크린 기준)
+	auto p = INPUT->GetMousePos();
+
+	// 2️⃣ 마우스 좌표를 화면 정규화 좌표(NDC)로 변환
+	float ndcX = (p.x / width) * 2.0f - 1.0f; // NDC 기준 -1 ~ 1
+	float ndcY = 1.0f - (p.y / height) * 2.0f; // Y축 반전 필요
+
+	// 3️⃣ 화면상의 NDC 좌표를 월드 좌표로 변환 (뷰포트 보정)
+	Vec3 cursorPos = Vec3(ndcX * (width / 2), ndcY * (height / 2), 0);
+
+
+	// ✅ 최종 커서 위치 적용
+	_cursor->GetOrAddTransform()->SetPosition(cursorPos);
+
 }
 
 void TestScene::InitializeObject()
@@ -62,7 +88,6 @@ void TestScene::InitializeObject()
 		SOUND->LoadSound("A_walk1", "..\\Resources\\Musics\\Annie\\walk1.mp3", false);
 		SOUND->LoadSound("A_walk2", "..\\Resources\\Musics\\Annie\\walk2.mp3", false);
 		SOUND->LoadSound("A_walk3", "..\\Resources\\Musics\\Annie\\walk3.mp3", false);
-
 		SOUND->PlaySound("BGM");
 	}
 
@@ -80,7 +105,6 @@ void TestScene::InitializeObject()
 		//camera->AddComponent(make_shared<EditCameraScript>());
 		camera->AddComponent(make_shared<CameraController>());
 		CUR_SCENE->Add(camera);
-
 		camera->LoadTrasnformData();
 	}
 
@@ -113,7 +137,6 @@ void TestScene::InitializeObject()
 	}
 
 
-	// Mesh
 	// Material
 	{
 		{
@@ -127,47 +150,6 @@ void TestScene::InitializeObject()
 			desc.specular = Vec4(1.f);
 			RESOURCES->Add(L"Veigar", material);
 		}
-
-		// Material
-		{
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(_shader);
-			auto texture = RESOURCES->Load<Texture>(L"PlayerHUD", L"..\\Resources\\Textures\\UI\\HUD\\PlayerHUD.png");
-			material->SetDiffuseMap(texture);
-			MaterialDesc& desc = material->GetMaterialDesc();
-			desc.ambient = Vec4(1.f);
-			desc.diffuse = Vec4(1.f);
-			desc.specular = Vec4(1.f);
-			RESOURCES->Add(L"PlayerHUD", material);
-		}
-
-		// Material
-		{
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(_shader);
-			auto texture = RESOURCES->Load<Texture>(L"empty_circle", L"..\\Resources\\Textures\\UI\\HUD\\ChampMark\\empty_circle.png");
-			material->SetDiffuseMap(texture);
-			MaterialDesc& desc = material->GetMaterialDesc();
-			desc.ambient = Vec4(1.f);
-			desc.diffuse = Vec4(1.f);
-			desc.specular = Vec4(1.f);
-			RESOURCES->Add(L"empty_circle", material);
-		}
-
-		// Material
-		{
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(_shader);
-			auto texture = RESOURCES->Load<Texture>(L"annie_circle", L"..\\Resources\\Textures\\UI\\HUD\\ChampMark\\annie_circle.png");
-			material->SetDiffuseMap(texture);
-			MaterialDesc& desc = material->GetMaterialDesc();
-			desc.ambient = Vec4(1.f);
-			desc.diffuse = Vec4(1.f);
-			desc.specular = Vec4(1.f);
-			RESOURCES->Add(L"annie_circle", material);
-		}
-
-
 	}
 	// Mesh
 	{
@@ -176,14 +158,14 @@ void TestScene::InitializeObject()
 		obj->AddComponent(make_shared<Button>());
 		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L""));
 
-		obj->GetButton()->SetOrder(3);
+		obj->GetButton()->SetOrder(0);
 		obj->GetTransform()->SetPosition(Vec3{ 0,0,0 });
 
 		CUR_SCENE->Add(obj);
 
 
 
-		auto obj2 = make_shared<GameObject>("UI Button1");
+		auto obj2 = make_shared<GameObject>("UI_HUD");
 		obj2->AddComponent(make_shared<Button>());
 
 		obj2->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"PlayerHUD"));
@@ -191,6 +173,7 @@ void TestScene::InitializeObject()
 
 		obj2->GetButton()->SetOrder(1);
 		obj2->LoadTrasnformData();
+
 		CUR_SCENE->Add(obj2);
 
 
@@ -198,15 +181,30 @@ void TestScene::InitializeObject()
 		auto obj3 = make_shared<GameObject>("UI Panel");
 		obj3->AddComponent(make_shared<Button>());
 
-		obj3->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"annie_circle"));
+		obj3->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"empty_circle"));
 
 		obj3->GetButton()->SetOrder(2);
 		obj3->GetTransform()->SetParent(obj2->GetOrAddTransform());
+		obj3->GetOrAddScript<HUDController>()->ChampMark = obj3;		
 		obj3->LoadTrasnformData();
 
+		UI->SetHUDControllerGameObject(obj3);
 		CUR_SCENE->Add(obj3);
 	}
 
+
+
+	{
+		_cursor = make_shared<GameObject>("Cursor");
+		_cursor->AddComponent(make_shared<Button>());
+		_cursor->GetButton()->Create(Vec2(0, 0), Vec2(75, 75), RESOURCES->Get<Material>(L"hover_precise"));
+		_cursor->GetButton()->SetOrder(10);
+		_cursor->GetOrAddScript<CursorController>();
+
+		UI->SetCursorControllerGameObject(_cursor);
+
+		CUR_SCENE->Add(_cursor);
+	}
 
 	{
 		auto obj = make_shared<GameObject>("Collision");
@@ -227,6 +225,8 @@ void TestScene::InitializeObject()
 			collider->SetRadius(0.5f);
 			obj->AddComponent(collider);
 		}
+
+
 		CUR_SCENE->Add(obj);
 	}
 
@@ -249,7 +249,7 @@ void TestScene::InitializeObject()
 	}*/
 
 	{
-		// ����
+		// 협곡
 		shared_ptr<class Model> m2 = make_shared<Model>();
 		m2->ReadModel(L"sr/sr");
 		m2->ReadMaterial(L"sr/sr");
@@ -278,7 +278,7 @@ void TestScene::InitializeObject()
 		CUR_SCENE->Add(obj);
 	}
 
-	{
+	/*{
 		shared_ptr<class Model> m1 = make_shared<Model>();
 		m1->ReadModel(L"Annie/Annie");
 		m1->ReadMaterial(L"Annie/Annie");
@@ -296,7 +296,7 @@ void TestScene::InitializeObject()
 		}
 		CUR_SCENE->Add(obj);
 		GAMEMANAGER->_myPlayer = obj;
-	}
+	}*/
 
 
 

@@ -19,6 +19,14 @@ cbuffer MeshTransformBuffer
     matrix MeshTransformMatrix; //추가된 Mesh 변환 행렬
 };
 
+
+cbuffer UIFillMount // UI를 위해서 선언
+{
+    float ratio;
+};
+
+
+
 // ************** MeshRender ****************
 
 struct VertexMesh

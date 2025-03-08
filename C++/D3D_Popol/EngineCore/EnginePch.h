@@ -105,6 +105,7 @@ using json = nlohmann::json;
 #include "Transform.h"
 #include "Texture.h"
 #include "Mesh.h"
+#include "Button.h"
 
 // ServerCore
 #include "ServerCore/Types.h"
@@ -120,7 +121,6 @@ using json = nlohmann::json;
 #include "ServerCore/SendBuffer.h"
 #include "ServerCore/Session.h"
 
-#include "../GameCoding2/ServerSession.h"
-#include "../GameCoding2/ClientPacketHandler.h"
+
 
 #pragma comment(lib, "ws2_32.lib")

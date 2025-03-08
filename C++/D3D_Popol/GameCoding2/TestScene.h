@@ -9,7 +9,8 @@ public:
 
 	void InitializeObject();
 
-public:
-	shared_ptr<Shader> _shader;
+	shared_ptr<Shader> GetShader() { return _shader; }
+
+	shared_ptr<GameObject> _cursor;
 };
 

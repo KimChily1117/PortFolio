@@ -8,6 +8,16 @@
 #include "Button.h"
 
 
+void Scene::Awake()
+{
+	unordered_set<shared_ptr<GameObject>> objects = _objects;
+
+	for (shared_ptr<GameObject> object : objects)
+	{
+		object->Awake();
+	}
+}
+ 
 // Scene에 배치 되어있는 object들
 void Scene::Start()
 {
@@ -75,17 +85,26 @@ void Scene::GUIRender()
 
 void Scene::Add(shared_ptr<GameObject> object)
 {
+	if (_objects.find(object) != _objects.end()) // ✅ 중복 체크
+		return; // 이미 존재하는 객체라면 추가하지 않음
+
 	_objects.insert(object);
+
 	if (object->GetCamera() != nullptr)
 	{
 		_cameras.insert(object);
+
 	}
 
 	if (object->GetLight() != nullptr)
 	{
 		_lights.insert(object);
 	}
+
+	object->Awake();
+	object->Start();
 }
+
 
 void Scene::Remove(shared_ptr<GameObject> object)
 {

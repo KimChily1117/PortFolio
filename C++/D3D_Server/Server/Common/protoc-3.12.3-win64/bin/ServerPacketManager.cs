@@ -24,7 +24,15 @@ class PacketManager
 	public void Register()
 	{		
 		_onRecv.Add((ushort)MsgId.CTestMsg, MakePacket<C_TestMsg>);
-		_handler.Add((ushort)MsgId.CTestMsg, PacketHandler.C_TestMsgHandler);
+		_handler.Add((ushort)MsgId.CTestMsg, PacketHandler.C_TestMsgHandler);		
+		_onRecv.Add((ushort)MsgId.CMove, MakePacket<C_Move>);
+		_handler.Add((ushort)MsgId.CMove, PacketHandler.C_MoveHandler);		
+		_onRecv.Add((ushort)MsgId.CSkillCast, MakePacket<C_SkillCast>);
+		_handler.Add((ushort)MsgId.CSkillCast, PacketHandler.C_SkillCastHandler);		
+		_onRecv.Add((ushort)MsgId.CRequestMap, MakePacket<C_RequestMap>);
+		_handler.Add((ushort)MsgId.CRequestMap, PacketHandler.C_RequestMapHandler);		
+		_onRecv.Add((ushort)MsgId.CChatMessage, MakePacket<C_ChatMessage>);
+		_handler.Add((ushort)MsgId.CChatMessage, PacketHandler.C_ChatMessageHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

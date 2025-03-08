@@ -88,3 +88,9 @@ struct InstancedTweenDesc
 {
 	TweenDesc tweens[MAX_MODEL_INSTANCE];
 };
+
+
+struct UIFillMountDesc
+{
+	float ratio = 0.f; // 0 ~ 1 사이의 값을 보간해서 사용
+};

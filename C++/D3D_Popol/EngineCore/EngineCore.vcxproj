@@ -212,6 +212,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClInclude Include="Technique.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Tilemap.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="Transform.h" />
@@ -295,6 +296,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClCompile Include="Technique.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Tilemap.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="tinyxml2.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -307,6 +309,7 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClCompile Include="Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\D3D_Server\Server\Common\protoc-3.12.3-win64\bin\Struct.proto" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

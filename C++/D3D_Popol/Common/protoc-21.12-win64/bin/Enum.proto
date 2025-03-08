@@ -1,7 +1,8 @@
 syntax = "proto3";
 package Protocol;
 
-enum PlayerChampType
+
+enum PLAYER_CHAMPION_TYPE
 {
 	PLAYER_TYPE_NONE = 0;
 	PLAYER_TYPE_ANNIE = 1;
@@ -10,10 +11,12 @@ enum PlayerChampType
 
 enum OBJECT_TYPE
 {
-	OBJECT_TYPE_NONE = 0;
-	OBJECT_TYPE_PLAYER = 1;
-	OBJECT_TYPE_OTHERPLAYER = 2;
-	OBJECT_TYPE_MINION = 3;
+    UNKNOWN = 0;
+    PLAYER = 1;       // 본인 캐릭터
+    ALLYPLAYER = 2;   // 아군 플레이어
+    ENEMYPLAYER = 3;  // 적군 플레이어
+    MINION = 4;       // 미니언 (추후 확장 가능)
+    TOWER = 5;        // 타워 (추후 확장 가능)
 }
 
 enum OBJECT_STATE_TYPE

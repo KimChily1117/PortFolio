@@ -45,6 +45,9 @@
     <Filter Include="05.UI">
       <UniqueIdentifier>{8fb8c6e0-54e4-4b5b-a2dd-d03702f82fbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Engine\Resource\Tilemap">
+      <UniqueIdentifier>{cb9bfc3a-8dc2-441a-8a9b-2b8facc68b4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnginePch.h">
@@ -242,6 +245,9 @@
     <ClInclude Include="GameManager.h">
       <Filter>02.Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Tilemap.h">
+      <Filter>00.Engine\Resource\Tilemap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -427,10 +433,16 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>02.Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Tilemap.cpp">
+      <Filter>00.Engine\Resource\Tilemap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>98.Utils</Filter>
+    </None>
+    <None Include="..\..\D3D_Server\Server\Common\protoc-3.12.3-win64\bin\Struct.proto">
+      <Filter>02.Managers</Filter>
     </None>
   </ItemGroup>
 </Project>

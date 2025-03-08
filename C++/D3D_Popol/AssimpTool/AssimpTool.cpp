@@ -59,15 +59,14 @@ void AssimpTool::Init()
 
 
 
-	/*{
+	/*
+	
+	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Annie/Mesh.fbx");
 		converter->ExportMaterialData(L"Annie/Annie");
 		converter->ExportModelData(L"Annie/Annie");
 	}
-
-
-
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Annie/Idle.fbx");
@@ -80,7 +79,11 @@ void AssimpTool::Init()
 		converter->ExportAnimationData(L"Annie/Run");
 	}*/
 
-	 
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Annie/Atk1.fbx");
+		converter->ExportAnimationData(L"Annie/Atk1");
+	}
 	 
 	 
 	 
@@ -95,12 +98,12 @@ void AssimpTool::Init()
 	 
 	 
 	//  SummonersRift
-	{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"sr/sr.fbx");
-		converter->ExportMaterialData(L"sr/sr");
-		converter->ExportModelData(L"sr/sr");
-	}
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"sr/sr.fbx");
+	//	converter->ExportMaterialData(L"sr/sr");
+	//	converter->ExportModelData(L"sr/sr");
+	//}
 
 }
 
