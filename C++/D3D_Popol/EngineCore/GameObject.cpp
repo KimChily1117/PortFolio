@@ -123,7 +123,7 @@ void GameObject::SaveTrasnformData()
 	{
 		file << jsonData.dump(4); // 4는 들여쓰기 (Pretty Print)
 		file.close();
-		DEBUG_LOG("Transform Data Saved Successfully: " << fileName);
+		DEBUG_LOG("Transform Data Saved Successfully: " << fileName.c_str());
 	}
 }
 void GameObject::LoadTrasnformData()
@@ -136,7 +136,7 @@ void GameObject::LoadTrasnformData()
 
 	std::ifstream file(fileName);
 	if (!file.is_open()) {
-		DEBUG_LOG("Failed to load Transform Data: " << fileName);
+		DEBUG_LOG("Failed to load Transform Data: " << fileName.c_str());
 		return;
 	}
 
@@ -167,7 +167,7 @@ void GameObject::LoadTrasnformData()
 	transform->SetLocalRotation(rotation);
 	transform->SetLocalScale(scale);
 
-	DEBUG_LOG("Transform Data Loaded Successfully: " << fileName);
+	DEBUG_LOG("Transform Data Loaded Successfully: " << fileName.c_str());
 }
 
 

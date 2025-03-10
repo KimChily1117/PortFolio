@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ModelAnimator.h"
 #include "Material.h"
 #include "ModelMesh.h"
@@ -7,6 +7,7 @@
 #include "InstancingBuffer.h"
 #include "Camera.h"
 #include "Light.h"
+#include <ostream>
 
 ModelAnimator::ModelAnimator(shared_ptr<Shader> shader)
 	: Super(ComponentType::ModelAnimator), _shader(shader)
@@ -42,7 +43,7 @@ void ModelAnimator::UpdateTweenData()
 	TweenDesc& desc = _tweenDesc;
 
 	desc.curr.sumTime += DT;
-	// ÇöÀç ¾Ö´Ï¸ŞÀÌ¼Ç
+	// í˜„ì¬ ì• ë‹ˆë©”ì´ì…˜
 	{
 		shared_ptr<ModelAnimation> currentAnim = _model->GetAnimationByIndex(desc.curr.animIndex);
 		if (currentAnim)
@@ -59,7 +60,7 @@ void ModelAnimator::UpdateTweenData()
 		}
 	}
 
-	// ´ÙÀ½ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¿¹¾à µÇ¾î ÀÖ´Ù¸é
+	// ë‹¤ìŒ ì• ë‹ˆë©”ì´ì…˜ì´ ì˜ˆì•½ ë˜ì–´ ìˆë‹¤ë©´
 	if (desc.next.animIndex >= 0)
 	{
 		desc.tweenSumTime += DT;
@@ -67,13 +68,13 @@ void ModelAnimator::UpdateTweenData()
 
 		if (desc.tweenRatio >= 1.f)
 		{
-			// ¾Ö´Ï¸ŞÀÌ¼Ç ±³Ã¼ ¼º°ø
+			// ì• ë‹ˆë©”ì´ì…˜ êµì²´ ì„±ê³µ
 			desc.curr = desc.next;
 			desc.ClearNextAnim();
 		}
 		else
 		{
-			// ±³Ã¼Áß
+			// êµì²´ì¤‘
 			shared_ptr<ModelAnimation> nextAnim = _model->GetAnimationByIndex(desc.next.animIndex);
 			desc.next.sumTime += DT;
 
@@ -107,7 +108,7 @@ void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 	if (lightObj)
 		_shader->PushLightData(lightObj->GetLight()->GetLightDesc());
 
-	// SRV¸¦ ÅëÇØ Á¤º¸ Àü´Ş
+	// SRVë¥¼ í†µí•´ ì •ë³´ ì „ë‹¬
 	_shader->GetSRV("TransformMap")->SetResource(_srv.Get());
 
 	// Bones
@@ -120,6 +121,7 @@ void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 	{
 		shared_ptr<ModelBone> bone = _model->GetBoneByIndex(i);
 		boneDesc->transforms[i] = bone->transform;
+
 	}
 	_shader->PushBoneData(*boneDesc);
 
@@ -167,7 +169,7 @@ void ModelAnimator::CreateTexture()
 		desc.Width = MAX_MODEL_TRANSFORMS * 4;
 		desc.Height = MAX_MODEL_KEYFRAMES;
 		desc.ArraySize = _model->GetAnimationCount();
-		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; // 16¹ÙÀÌÆ®
+		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; // 16ë°”ì´íŠ¸
 		desc.Usage = D3D11_USAGE_IMMUTABLE;
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.MipLevels = 1;
@@ -177,7 +179,7 @@ void ModelAnimator::CreateTexture()
 		const uint32 pageSize = dataSize * MAX_MODEL_KEYFRAMES;
 		void* mallocPtr = ::malloc(pageSize * _model->GetAnimationCount());
 
-		// ÆÄÆíÈ­µÈ µ¥ÀÌÅÍ¸¦ Á¶¸³ÇÑ´Ù.
+		// íŒŒí¸í™”ëœ ë°ì´í„°ë¥¼ ì¡°ë¦½í•œë‹¤.
 		for (uint32 c = 0; c < _model->GetAnimationCount(); c++)
 		{
 			uint32 startOffset = c * pageSize;
@@ -191,7 +193,7 @@ void ModelAnimator::CreateTexture()
 			}
 		}
 
-		// ¸®¼Ò½º ¸¸µé±â
+		// ë¦¬ì†ŒìŠ¤ ë§Œë“¤ê¸°
 		vector<D3D11_SUBRESOURCE_DATA> subResources(_model->GetAnimationCount());
 
 		for (uint32 c = 0; c < _model->GetAnimationCount(); c++)
@@ -241,6 +243,10 @@ void ModelAnimator::CreateAnimationTransform(uint32 index)
 			{
 				ModelKeyframeData& data = frame->transforms[f];
 
+				DEBUG_LOG("[Weapon] ì• ë‹ˆë©”ì´ì…˜ ì ìš©ë¨: Frame " << f << ", Position: ("
+					<< data.translation.x << ", " << data.translation.y << ", " << data.translation.z
+					<< ")");
+
 				Matrix S, R, T;
 				S = Matrix::CreateScale(data.scale.x, data.scale.y, data.scale.z);
 				R = Matrix::CreateFromQuaternion(data.rotation);
@@ -265,7 +271,7 @@ void ModelAnimator::CreateAnimationTransform(uint32 index)
 
 			tempAnimBoneTransforms[b] = matAnimation * matParent;
 
-			// °á·Ğ
+			// ê²°ë¡ 
 			_animTransforms[index].transforms[f][b] = invGlobal * tempAnimBoneTransforms[b];
 		}
 	}

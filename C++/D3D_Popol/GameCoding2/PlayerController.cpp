@@ -114,7 +114,7 @@ void PlayerController::MoveTo()
 	else
 	{
 		_currentState = PlayerState::IDLE;
-		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)2;
+		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
 	}
 }
 

@@ -102,8 +102,8 @@ void TestScene::InitializeObject()
 		camera->AddComponent(make_shared<Camera>());
 		camera->GetCamera()->SetProjectionType(ProjectionType::Perspective);
 		camera->GetCamera()->SetCullingMaskLayerOnOff(Layer_UI, true);
-		//camera->AddComponent(make_shared<EditCameraScript>());
-		camera->AddComponent(make_shared<CameraController>());
+		camera->AddComponent(make_shared<EditCameraScript>());
+		//camera->AddComponent(make_shared<CameraController>());
 		CUR_SCENE->Add(camera);
 		camera->LoadTrasnformData();
 	}
@@ -229,6 +229,34 @@ void TestScene::InitializeObject()
 
 		CUR_SCENE->Add(obj);
 	}
+
+	
+
+	{
+		
+		shared_ptr<class Model> m1 = make_shared<Model>();
+		m1->ReadModel(L"Garen/Garen");
+		m1->ReadMaterial(L"Garen/Garen");
+		m1->ReadAnimation(L"Garen/Idle");
+		m1->ReadAnimation(L"Garen/Run");
+		auto obj = make_shared<GameObject>("Annie");
+		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+		obj->GetOrAddTransform()->SetScale(Vec3(0.01));	
+		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 1.76f, 3.f));
+		obj->AddComponent(make_shared<PlayerController>());
+		obj->AddComponent(make_shared<ModelAnimator>(_shader));
+		{
+			obj->GetModelAnimator()->SetModel(m1);
+			obj->GetModelAnimator()->SetPass(2);
+		}
+
+		CUR_SCENE->Add(obj);
+	}
+
+
+
+
+
 
 	/*for (int32 i = 0; i < 100; i++)
 	{

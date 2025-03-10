@@ -124,7 +124,7 @@ namespace Server.Game.Room
                     Info = new ObjectInfo
                     {
                         ObjectId = (ulong)session.SessionId,
-                        ChampType = PLAYER_CHAMPION_TYPE.PlayerTypeGaren,
+                        ChampType = PLAYER_CHAMPION_TYPE.PlayerTypeAnnie,
                         State = OBJECT_STATE_TYPE.Idle,
                         ObjType = OBJECT_TYPE.Player, // 본인은 Player 타입
                         Name = $"Client_Yeop_{session.SessionId}",

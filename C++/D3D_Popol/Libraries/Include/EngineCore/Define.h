@@ -15,10 +15,19 @@ public:										\
 
 
 
-#define DEBUG_LOG(x)		\
-    { std::ostringstream oss; \
-      oss << x << "\n"; \
-      OutputDebugStringA(oss.str().c_str()); }
+//#define DEBUG_LOG(x)				\
+//    { std::ostringstream oss;		\
+//      oss << x << "\n";				\
+//      OutputDebugStringA(oss.str().c_str()); }
+
+#define DEBUG_LOG(x)                         \
+{                                            \
+    std::wostringstream woss;                \
+    woss << x << L"\n";                      \
+    std::wstring wstr = woss.str();          \
+    std::string str(wstr.begin(), wstr.end()); /* º¯È¯ */ \
+    OutputDebugStringA(str.c_str());         \
+}
 
 
 #define CHECK(p)	assert(SUCCEEDED(p))
