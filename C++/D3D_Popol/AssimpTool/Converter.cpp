@@ -160,6 +160,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 		Matrix transform(node->mTransformation[0]);
 		transform = transform.Transpose();
 		Matrix flipX = Matrix::CreateScale(-1.0f, 1.0f, 1.0f);
+		
 		mesh->transformMatrix = transform * flipX;
 
 		const uint32 startVertex = mesh->vertices.size();

@@ -3,7 +3,7 @@
 #include "Converter.h"
 
 void AssimpTool::Init()
-{	
+{
 	/*{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"DarkKnight2/DarkKnight2_skin1.fbx");
@@ -38,13 +38,13 @@ void AssimpTool::Init()
 		converter->ExportAnimationData(L"Kachujin/Slash");
 	}*/
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	// Annie motions(idle, run )
 	/*{
 		shared_ptr<Converter> converter = make_shared<Converter>();
@@ -59,8 +59,12 @@ void AssimpTool::Init()
 
 
 
+#pragma region Annie
+
+
+
 	/*
-	
+
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Annie/Mesh.fbx");
@@ -78,16 +82,99 @@ void AssimpTool::Init()
 		converter->ReadAssetFile(L"Annie/Run.fbx");
 		converter->ExportAnimationData(L"Annie/Run");
 	}*/
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Annie/Atk1.fbx");
+	//	converter->ExportAnimationData(L"Annie/Atk1");
+	//}
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Annie/annie_atk2.fbx");
+	//	converter->ExportAnimationData(L"Annie/Atk2");
+	//}
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Annie/annie_qspell.fbx");
+	//	converter->ExportAnimationData(L"Annie/Qspell");
+	//}
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Annie/annie_wspell.fbx");
+	//	converter->ExportAnimationData(L"Annie/Wspell");
+	//}
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Annie/annie_espell.fbx");
+	//	converter->ExportAnimationData(L"Annie/Espell");
+	//}
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Annie/annie_rspell.fbx");
+	//	converter->ExportAnimationData(L"Annie/Rspell");
+	//}
+#pragma endregion	 
+
+
+
+
+
+
+
+#pragma region Garen
 
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Annie/Atk1.fbx");
-		converter->ExportAnimationData(L"Annie/Atk1");
+		converter->ReadAssetFile(L"Garen/Mesh.fbx");
+		converter->ExportMaterialData(L"Garen/Garen");
+		converter->ExportModelData(L"Garen/Garen");
 	}
-	 
-	 
-	 
-	 
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/Idle.fbx");
+		converter->ExportAnimationData(L"Garen/Idle");
+	}
+
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/Run.fbx");
+		converter->ExportAnimationData(L"Garen/Run");
+	}
+	/*{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/garen_atk1.fbx");
+		converter->ExportAnimationData(L"Garen/Atk1");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/garen_atk2.fbx");
+		converter->ExportAnimationData(L"Garen/Atk2");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/garen_qspell.fbx");
+		converter->ExportAnimationData(L"Garen/Qspell");
+	}*/
+	/*{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/garen_wspell.fbx");
+		converter->ExportAnimationData(L"Garen/Wspell");
+	}*/
+	/*{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/garen_espell.fbx");
+		converter->ExportAnimationData(L"Garen/Espell");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Garen/garen_rspell.fbx");
+		converter->ExportAnimationData(L"Garen/Rspell");
+	}*/
+
+
+#pragma endregion
+
+
+
 	////  SummonersRift
 	//{
 	//	shared_ptr<Converter> converter = make_shared<Converter>();
@@ -95,8 +182,8 @@ void AssimpTool::Init()
 	//	converter->ExportMaterialData(L"SummonersRift/SummonersRift");
 	//	converter->ExportModelData(L"SummonersRift/SummonersRift");
 	//}
-	 
-	 
+
+
 	//  SummonersRift
 	//{
 	//	shared_ptr<Converter> converter = make_shared<Converter>();
@@ -109,7 +196,7 @@ void AssimpTool::Init()
 
 void AssimpTool::Update()
 {
-	
+
 }
 
 void AssimpTool::Render()

@@ -64,7 +64,7 @@ void ClientPacketHandler::Handle_S_TEST(BYTE* buffer, int32 len)
 
 	string msg = pkt.message();
 
-	DEBUG_LOG("서버에서 넘어 온 데이터 : " << msg << " ");
+	DEBUG_LOG("서버에서 넘어 온 데이터 : " << msg.c_str() << " ");
 }
 
 void ClientPacketHandler::Handle_S_EnterGame(BYTE* buffer, int32 len)
@@ -127,7 +127,6 @@ void ClientPacketHandler::Handle_S_MyPlayer(BYTE* buffer, int32 len)
 	CUR_SCENE->GetMainCamera()->GetScript<CameraController>()->_offset = CUR_SCENE->GetMainCamera()->GetTransform()->GetPosition() - 
 		obj->GetTransform()->GetPosition(); // ✅ 초기 오프셋 설정
 
-
 	UI->SetTarget(info.champtype());
 }
 
@@ -172,10 +171,10 @@ void ClientPacketHandler::Handle_S_AddObject(BYTE* buffer, int32 len)
 
 				// ✅ 모델 로드 및 애니메이션 추가
 				shared_ptr<class Model> model = make_shared<Model>();
-				model->ReadModel(L"Annie/Annie");
-				model->ReadMaterial(L"Annie/Annie");
-				model->ReadAnimation(L"Annie/Idle");
-				model->ReadAnimation(L"Annie/Run");
+				model->ReadModel(L"Garen/Garen");
+				model->ReadMaterial(L"Garen/Garen");
+				model->ReadAnimation(L"Garen/Idle");
+				model->ReadAnimation(L"Garen/Run");
 				obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
 
 				obj->GetModelAnimator()->SetModel(model);
