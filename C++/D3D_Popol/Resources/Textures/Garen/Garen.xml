@@ -3,11 +3,11 @@
     <Material>
         <Name>Garen_Base_Mat.004</Name>
         <DiffuseFile>garen_base_tx_cm.dds</DiffuseFile>
-        <SpecularFile></SpecularFile>
-        <NormalFile></NormalFile>
+        <SpecularFile>garen_base_tx_cm.dds</SpecularFile>
+        <NormalFile>garen_base_tx_cm.dds</NormalFile>
         <Ambient R="0" G="0" B="0" A="1"/>
         <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
-        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="36"/>
+        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="100"/>
         <Emissive R="0" G="0" B="0" A="1"/>
     </Material>
 </Materials>
