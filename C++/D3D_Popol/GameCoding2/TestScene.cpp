@@ -232,17 +232,16 @@ void TestScene::InitializeObject()
 
 	
 
-	{
-		
-		shared_ptr<class Model> m1 = make_shared<Model>();
+	{		
+		/*shared_ptr<class Model> m1 = make_shared<Model>();
 		m1->ReadModel(L"Garen/Garen");
 		m1->ReadMaterial(L"Garen/Garen");
-		m1->ReadAnimation(L"Garen/Idle");
+		m1->ReadAnimation(L"Garen/Rspell");
 		m1->ReadAnimation(L"Garen/Run");
 		auto obj = make_shared<GameObject>("Annie");
 		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
 		obj->GetOrAddTransform()->SetScale(Vec3(0.01));	
-		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 1.76f, 3.f));
+		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.0f, 3.f));
 		obj->AddComponent(make_shared<PlayerController>());
 		obj->AddComponent(make_shared<ModelAnimator>(_shader));
 		{
@@ -250,7 +249,27 @@ void TestScene::InitializeObject()
 			obj->GetModelAnimator()->SetPass(2);
 		}
 
-		CUR_SCENE->Add(obj);
+		CUR_SCENE->Add(obj);*/
+
+
+		/*shared_ptr<class Model> m1 = make_shared<Model>();
+		m1->ReadModel(L"Annie/Annie");
+		m1->ReadMaterial(L"Annie/Annie");
+		m1->ReadAnimation(L"Annie/Rspell");
+		m1->ReadAnimation(L"Annie/Run");
+		auto obj = make_shared<GameObject>("Annie");
+		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+		obj->GetOrAddTransform()->SetScale(Vec3(0.0001));
+		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.0f, 3.f));
+		obj->AddComponent(make_shared<PlayerController>());
+		obj->AddComponent(make_shared<ModelAnimator>(_shader));
+		{
+			obj->GetModelAnimator()->SetModel(m1);
+			obj->GetModelAnimator()->SetPass(2);
+		}
+
+		CUR_SCENE->Add(obj);*/
+
 	}
 
 

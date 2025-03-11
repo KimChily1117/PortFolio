@@ -86,32 +86,32 @@ void AssimpTool::Init()
 	//	shared_ptr<Converter> converter = make_shared<Converter>();
 	//	converter->ReadAssetFile(L"Annie/Atk1.fbx");
 	//	converter->ExportAnimationData(L"Annie/Atk1");
-	//}
+	////}
 	//{
 	//	shared_ptr<Converter> converter = make_shared<Converter>();
-	//	converter->ReadAssetFile(L"Annie/annie_atk2.fbx");
+	//	converter->ReadAssetFile(L"Annie/Atk2.fbx");
 	//	converter->ExportAnimationData(L"Annie/Atk2");
 	//}
-	//{
-	//	shared_ptr<Converter> converter = make_shared<Converter>();
-	//	converter->ReadAssetFile(L"Annie/annie_qspell.fbx");
-	//	converter->ExportAnimationData(L"Annie/Qspell");
-	//}
-	//{
-	//	shared_ptr<Converter> converter = make_shared<Converter>();
-	//	converter->ReadAssetFile(L"Annie/annie_wspell.fbx");
-	//	converter->ExportAnimationData(L"Annie/Wspell");
-	//}
-	//{
-	//	shared_ptr<Converter> converter = make_shared<Converter>();
-	//	converter->ReadAssetFile(L"Annie/annie_espell.fbx");
-	//	converter->ExportAnimationData(L"Annie/Espell");
-	//}
-	//{
-	//	shared_ptr<Converter> converter = make_shared<Converter>();
-	//	converter->ReadAssetFile(L"Annie/annie_rspell.fbx");
-	//	converter->ExportAnimationData(L"Annie/Rspell");
-	//}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Annie/Qspell.fbx");
+		converter->ExportAnimationData(L"Annie/Qspell");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Annie/Wspell.fbx");
+		converter->ExportAnimationData(L"Annie/Wspell");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Annie/Espell.fbx");
+		converter->ExportAnimationData(L"Annie/Espell");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Annie/Rspell.fbx");
+		converter->ExportAnimationData(L"Annie/Rspell");
+	}
 #pragma endregion	 
 
 
@@ -122,7 +122,7 @@ void AssimpTool::Init()
 
 #pragma region Garen
 
-	{
+	/*{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Garen/Mesh.fbx");
 		converter->ExportMaterialData(L"Garen/Garen");
@@ -138,37 +138,42 @@ void AssimpTool::Init()
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Garen/Run.fbx");
 		converter->ExportAnimationData(L"Garen/Run");
-	}
-	/*{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Garen/garen_atk1.fbx");
-		converter->ExportAnimationData(L"Garen/Atk1");
-	}
-	{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Garen/garen_atk2.fbx");
-		converter->ExportAnimationData(L"Garen/Atk2");
-	}
-	{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Garen/garen_qspell.fbx");
-		converter->ExportAnimationData(L"Garen/Qspell");
 	}*/
-	/*{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Garen/garen_wspell.fbx");
-		converter->ExportAnimationData(L"Garen/Wspell");
-	}*/
-	/*{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Garen/garen_espell.fbx");
-		converter->ExportAnimationData(L"Garen/Espell");
-	}
-	{
-		shared_ptr<Converter> converter = make_shared<Converter>();
-		converter->ReadAssetFile(L"Garen/garen_rspell.fbx");
-		converter->ExportAnimationData(L"Garen/Rspell");
-	}*/
+
+
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Garen/Atk1.fbx");
+	//	converter->ExportAnimationData(L"Garen/Atk1");
+	//}
+
+
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Garen/Atk2.fbx");
+	//	converter->ExportAnimationData(L"Garen/Atk2");
+	//}
+
+
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Garen/Qspell.fbx");
+	//	converter->ExportAnimationData(L"Garen/Qspell");
+	//}
+
+
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Garen/Espell.fbx");
+	//	converter->ExportAnimationData(L"Garen/Espell");
+	//}
+
+
+	//{
+	//	shared_ptr<Converter> converter = make_shared<Converter>();
+	//	converter->ReadAssetFile(L"Garen/Rspell.fbx");
+	//	converter->ExportAnimationData(L"Garen/Rspell");
+	//}
 
 
 #pragma endregion

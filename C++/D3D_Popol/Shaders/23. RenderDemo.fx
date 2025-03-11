@@ -24,6 +24,29 @@ float4 PS_Notexture(MeshOutput input) : SV_TARGET
 	
     return color;
 }
+float2 RotateUV(float2 uv, float angle)
+{
+    float s = sin(angle);
+    float c = cos(angle);
+
+    float2 center = float2(0.5, 0.5); // 중심 기준 회전
+
+    uv -= center;
+    uv = float2(
+        uv.x * c - uv.y * s,
+        uv.x * s + uv.y * c
+    );
+    uv += center;
+
+    return uv;
+}
+
+float4 PS_Garen(MeshOutput input) : SV_Target
+{
+    float4 color = DiffuseMap.Sample(LinearSampler, input.uv);
+    return color;
+    
+}
 
 technique11 T0
 {
@@ -31,4 +54,5 @@ technique11 T0
 	PASS_VP(P1, VS_Model, PS)
 	PASS_VP(P2, VS_Animation, PS)
 	PASS_VP(P3, VS_Mesh, PS_Notexture)
+	PASS_VP(P4, VS_Animation, PS_Garen)
 };
