@@ -8,6 +8,9 @@ public:
 	void Update() override;
 
 	void UpdatePlayerStatus();
+	void CheckSkillInput();
+	void UpdateSkillCooldowns();
+	void UpdateSkillCooldown(shared_ptr<GameObject> skillButton, int pass, float& elapsedTime, float duration, const string& elementName, bool isSkillActive);
 
 
 	shared_ptr<GameObject> QSkillSocket;

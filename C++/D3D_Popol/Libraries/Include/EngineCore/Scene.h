@@ -24,6 +24,8 @@ public:
 	shared_ptr<GameObject> GetMainCamera();
 	shared_ptr<GameObject> GetUICamera();
 	shared_ptr<GameObject> GetLight() { return _lights.empty() ? nullptr : *_lights.begin(); }
+
+	shared_ptr<GameObject> GetTerrainObj() { return _terrain; }
 	void PickUI();
 
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
@@ -59,6 +61,7 @@ public:
 
 	shared_ptr<Shader> _shader;
 
+	shared_ptr<GameObject> _terrain;
 
 private:
 	// unordered_set은 속도와 중복방지를 하기위해 선언함
@@ -69,6 +72,8 @@ private:
 	unordered_set<shared_ptr<GameObject>> _lights;
 
 
+
+public:
 	unordered_map<uint64, shared_ptr<GameObject>> _players; // ObjectId 기반 저장소
 
 private:

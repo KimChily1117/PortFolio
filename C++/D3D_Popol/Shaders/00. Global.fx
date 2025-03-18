@@ -18,6 +18,42 @@ cbuffer TransformBuffer
     matrix W;
 };
 
+
+//////////////////
+// UI FillMount // 
+//////////////////
+
+cbuffer UIFillMount_HP
+{
+    float FillAmount_Hp;
+};
+
+cbuffer UIFillMount_MP
+{
+    float FillAmount_Mp;
+};
+
+cbuffer UIFillMount_Q
+{
+    float FillAmount_Q;
+};
+
+cbuffer UIFillMount_W
+{
+    float FillAmount_W;
+};
+
+cbuffer UIFillMount_E
+{
+    float FillAmount_E;
+};
+
+cbuffer UIFillMount_R
+{
+    float FillAmount_R;
+};
+
+
 ////////////////
 // VertexData //
 ////////////////

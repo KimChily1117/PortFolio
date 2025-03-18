@@ -26,6 +26,7 @@ enum MsgId
     S_ADD_OBJECT = 12;
     S_REMOVE_OBJECT = 13;
     S_MOVE = 14;
+	C_ENTER_GAME = 15;
 }
 
 
@@ -40,12 +41,16 @@ message S_TestMsg
 	string message = 1;
 }
 
+message C_EnterGame
+{
+    int32 champId = 1;
+}
+
 message S_EnterGame
 {
     bool success = 1;
 	uint64 accountId = 2;
 }
-
 message S_MyPlayer
 {
     ObjectInfo info = 1;

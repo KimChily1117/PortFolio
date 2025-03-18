@@ -33,5 +33,10 @@ private:
 
 
 	shared_ptr<Shader> _shader;
+	// 일반적으로 보여주기 위한 Render 전용 쉐이더
+
+	shared_ptr<Shader> _InDecreaseUIShader;
+	// Hp,Mp 쿨타임 관련 UI Effect를 저장하기 위한 쉐이더
+
 };
 

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "MeshRenderer.h"
 #include "Game.h"
 #include "Mesh.h"
@@ -55,3 +55,40 @@ InstanceID MeshRenderer::GetInstanceID()
 {
 	return make_pair((uint64)_mesh.get(), (uint64)_material.get());
 }
+void MeshRenderer::RenderSingle()
+{
+	if (_mesh == nullptr || _material == nullptr)
+		return;
+
+	auto shader = _material->GetShader();
+	if (shader == nullptr)
+		return;
+
+	// ✅ UI 전용 카메라의 직교 투영 행렬 적용
+	Matrix projection = CUR_SCENE->GetUICamera()->GetCamera()->GetProjectionMatrix();
+	Matrix view = CUR_SCENE->GetUICamera()->GetCamera()->GetViewMatrix();
+
+	DEBUG_LOG("GET NAME : " << GetGameObject()->_name.c_str());
+
+
+	Matrix world = GetTransform()->GetWorldMatrix();
+
+
+
+	// ✅ 쉐이더 데이터 업데이트
+	shader->PushGlobalData(view, projection); // View 행렬은 Identity 사용
+
+	// ✅ UI Transform 업데이트
+	TransformDesc desc = {};
+	desc.W = world;
+	shader->PushTransformData(desc);
+
+	// ✅ 인덱스 및 버퍼 설정
+	_mesh->GetVertexBuffer()->PushData();
+	_mesh->GetIndexBuffer()->PushData();
+	DC->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ✅ 단일 렌더링 실행
+	shader->DrawIndexed(0, 0, _mesh->GetIndexBuffer()->GetCount(), 0,0);
+}
+

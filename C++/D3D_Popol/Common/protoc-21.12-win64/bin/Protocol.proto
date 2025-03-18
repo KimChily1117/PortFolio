@@ -9,7 +9,6 @@ enum MsgId
 {
     C_TEST_MSG = 0;
     S_TEST_MSG = 1;
-
     C_MOVE = 2;
     S_OBJECT_UPDATE = 3;
     C_SKILL_CAST = 4;
@@ -23,6 +22,8 @@ enum MsgId
     S_ADD_OBJECT = 12;
     S_REMOVE_OBJECT = 13;
     S_MOVE = 14;
+	C_ENTER_GAME = 15;
+
 }
 
 message C_TESTMsg
@@ -35,6 +36,10 @@ message S_TESTMsg
 	string message = 1;
 }
 
+message C_EnterGame
+{
+	int32 champId = 1;
+}
 
 message S_EnterGame
 {

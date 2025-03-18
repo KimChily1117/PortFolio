@@ -142,3 +142,11 @@ void Transform::SetPosition(const Vec3& worldPosition)
 	}
 }
 
+Matrix Transform::GetFinalWorldMatrix()
+{
+	if (!HasParent())
+		return _matWorld; // 부모가 없으면 현재 행렬 그대로 사용
+
+	return _matWorld * _parent->GetFinalWorldMatrix(); // 부모 포함한 행렬 반환
+
+}

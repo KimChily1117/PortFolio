@@ -11,6 +11,8 @@
 void UIManager::Init()
 {
 	_shader = make_shared<Shader>(L"23. RenderDemo.fx");
+	_InDecreaseUIShader = make_shared<Shader>(L"24. ImageFillMount.fx");
+	
 	InitCursor();
 	InitHUD();
 	InitIndicator();
@@ -245,7 +247,7 @@ void UIManager::InitHUD()
 		{
 			shared_ptr<Material> material = make_shared<Material>();
 			material->SetShader(_shader);
-			auto texture = RESOURCES->Load<Texture>(L"garen_q", L"..\\Resources\\Textures\\UI\\Spell\\Garen\\garen_r.dds");
+			auto texture = RESOURCES->Load<Texture>(L"garen_r", L"..\\Resources\\Textures\\UI\\Spell\\Garen\\garen_r.dds");
 			material->SetDiffuseMap(texture);
 			MaterialDesc& desc = material->GetMaterialDesc();
 			desc.ambient = Vec4(1.f);

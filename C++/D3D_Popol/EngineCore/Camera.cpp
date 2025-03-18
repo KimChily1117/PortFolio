@@ -1,7 +1,9 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Camera.h"
 #include "Scene.h"
 #include "Button.h"
+#include "MeshRenderer.h"
+
 
 Matrix Camera::S_MatView = Matrix::Identity;
 Matrix Camera::S_MatProjection = Matrix::Identity;
@@ -22,7 +24,7 @@ void Camera::SortGameObject()
 		if (gameObject->GetButton() != nullptr)
 		{
 			_vecUI.push_back(gameObject);
-			continue; // UI´Â ÀÏ¹İ 3D ¿ÀºêÁ§Æ® ¸®½ºÆ®¿¡´Â Ãß°¡ÇÏÁö ¾ÊÀ½
+			continue; // UIëŠ” ì¼ë°˜ 3D ì˜¤ë¸Œì íŠ¸ ë¦¬ìŠ¤íŠ¸ì—ëŠ” ì¶”ê°€í•˜ì§€ ì•ŠìŒ
 		}
 
 
@@ -34,7 +36,7 @@ void Camera::SortGameObject()
 		}
 	}
 
-	// UI ·»´õ¸µ ¼ø¼­ Á¤·Ä (Order ³·Àº UI°¡ ¸ÕÀú ·»´õ¸µµÊ)
+	// UI ë Œë”ë§ ìˆœì„œ ì •ë ¬ (Order ë‚®ì€ UIê°€ ë¨¼ì € ë Œë”ë§ë¨)
 	std::sort(_vecUI.begin(), _vecUI.end(), [](const shared_ptr<GameObject>& a, const shared_ptr<GameObject>& b)
 		{
 			return a->GetButton()->GetOrder() < b->GetButton()->GetOrder();
@@ -47,10 +49,14 @@ void Camera::Render_Forward()
 	S_MatView = _matView;
 	S_MatProjection = _matProjection;
 
+	// UI ë Œë”ë§ ì „ì— Orthographic Projection ì ìš©
+	if (!_vecUI.empty())
+	{
+		S_MatProjection = ::XMMatrixOrthographicLH(_width, _height, _near, _far);
+	}
+
 	GET_SINGLE(InstancingManager)->Render(_vecForward);
 	GET_SINGLE(InstancingManager)->Render(_vecUI);
-
-
 
 }
 

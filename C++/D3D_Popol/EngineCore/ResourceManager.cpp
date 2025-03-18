@@ -5,6 +5,14 @@
 #include "Mesh.h"
 
 
+ResourceManager::~ResourceManager()
+{
+	for (auto& resourceMap : _resources)
+	{
+		resourceMap.clear();
+	}
+}
+
 void ResourceManager::Init()
 {
 	CreateDefaultMesh();

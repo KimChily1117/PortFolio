@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="AnnieOtherPlayerController.h" />
     <ClInclude Include="AnniePlayerController.h" />
+    <ClInclude Include="BasePlayerController.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="CursorController.h" />
     <ClInclude Include="EditCameraScript.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="GarenOtherPlayerController.h" />
     <ClInclude Include="GarenPlayerController.h" />
+    <ClInclude Include="GeneralAttack.h" />
     <ClInclude Include="HUDController.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="OtherPlayerController.h" />
@@ -154,6 +156,7 @@
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="SceneExcuter.h" />
     <ClInclude Include="ServerSession.h" />
+    <ClInclude Include="ISkill.h" />
     <ClInclude Include="SkillIndicatorController.h" />
     <ClInclude Include="Struct.pb.h" />
     <ClInclude Include="TestScene.h" />
@@ -161,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="AnnieOtherPlayerController.cpp" />
     <ClCompile Include="AnniePlayerController.cpp" />
+    <ClCompile Include="BasePlayerController.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="CursorController.cpp" />
     <ClCompile Include="EditCameraScript.cpp" />
@@ -170,6 +174,7 @@
     </ClCompile>
     <ClCompile Include="GarenOtherPlayerController.cpp" />
     <ClCompile Include="GarenPlayerController.cpp" />
+    <ClCompile Include="GeneralAttack.cpp" />
     <ClCompile Include="HUDController.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OtherPlayerController.cpp" />

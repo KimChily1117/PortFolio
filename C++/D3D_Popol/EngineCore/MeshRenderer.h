@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Material.h"
 
 class Mesh;
 class Shader;
@@ -19,6 +20,9 @@ public:
 	void RenderInstancing(shared_ptr<class InstancingBuffer>& buffer);
 	InstanceID GetInstanceID();
 
+	void RenderSingle();
+	
+	shared_ptr<Shader> GetShader() { return _material->GetShader(); }
 private:
 	shared_ptr<Mesh> _mesh;
 	shared_ptr<Material> _material;

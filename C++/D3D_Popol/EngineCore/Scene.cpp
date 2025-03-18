@@ -88,6 +88,7 @@ void Scene::Add(shared_ptr<GameObject> object)
 	if (_objects.find(object) != _objects.end()) // ✅ 중복 체크
 		return; // 이미 존재하는 객체라면 추가하지 않음
 
+
 	_objects.insert(object);
 
 	if (object->GetCamera() != nullptr)
@@ -305,6 +306,22 @@ std::shared_ptr<class GameObject> Scene::Pick(int32 screenX, int32 screenY, Vec3
 			picked = gameObject;
 		}
 	}
+
+	/*for (auto& gameObject : gameObjects)
+	{
+		if (gameObject->GetModelAnimator() == nullptr)
+			continue;
+
+		float distance = 0.f;
+		if (gameObject->GetTerrain()->Pick(screenX, screenY, OUT pickPos, OUT distance) == false)
+			continue;
+
+		if (distance < minDistance)
+		{
+			minDistance = distance;
+			picked = gameObject;
+		}
+	}*/
 
 	return picked;
 }

@@ -26,6 +26,7 @@ enum MsgId
     S_ADD_OBJECT = 12;
     S_REMOVE_OBJECT = 13;
     S_MOVE = 14;
+	C_ENTER_GAME = 15;
 }
 
 
@@ -40,12 +41,16 @@ message S_TestMsg
 	string message = 1;
 }
 
+message C_EnterGame
+{
+    
+}
+
 message S_EnterGame
 {
     bool success = 1;
 	uint64 accountId = 2;
 }
-
 message S_MyPlayer
 {
     ObjectInfo info = 1;
@@ -73,6 +78,7 @@ message C_Move
 {
     uint64 objectId = 1;  // 이동하는 플레이어 ID
     Vector3 targetPos = 2; // 목표 위치
+	Vector2Int cellPos = 3;
 }
 
 // ✅ 서버에서 모든 오브젝트 상태 업데이트 (서버 → 클라이언트)

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "PlayerController.h"
 
 class AnniePlayerController : public PlayerController
@@ -11,5 +11,10 @@ public:
 	void Start() override;
 	void LateUpdate() override;
 	void FixedUpdate() override;
+	void AlignToTarget();
+
+protected:
+	virtual void ProcSkill(int32 skillId) override;
+
 };
 

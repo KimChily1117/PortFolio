@@ -146,5 +146,27 @@ namespace Server.Game
             Tile tile = GetTileAt(position);
             return tile != null && tile.IsWalkable;
         }
+
+        public List<Tile> GetAllTiles()
+        {
+            return _tiles;
+        }
+
+
+        public List<Tile> GetTilesInRange(Vec3 center, int range)
+        {
+            List<Tile> tilesInRange = new List<Tile>();
+
+            foreach (var tile in _tiles)
+            {
+                Vec3 tilePos = tile.Position;
+                int manhattanDistance = Math.Abs((int)center.X - (int)tilePos.X) + Math.Abs((int)center.Z - (int)tilePos.Z);
+
+                if (manhattanDistance <= range)
+                    tilesInRange.Add(tile);
+            }
+
+            return tilesInRange;
+        }
     }
 }

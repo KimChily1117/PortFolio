@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ConstantBuffer.h"
 
 class Shader;
@@ -46,7 +46,6 @@ struct BoneDesc
 	Matrix transforms[MAX_MODEL_TRANSFORMS];
 };
 
-// Animation
 struct KeyframeDesc
 {
 	int32 animIndex = 0;
@@ -55,8 +54,13 @@ struct KeyframeDesc
 	float ratio = 0.f;
 	float sumTime = 0.f;
 	float speed = 1.f;
-	Vec2 padding;
+	uint32 loop = 1;  // ✅ bool 대신 uint32 사용 (GPU 친화적)
+	Vec3 padding;      // ✅ 16-byte 정렬을 위해 Vec3 추가
 };
+
+
+using AnimationEvent = function<void()>;
+
 
 struct TweenDesc
 {
@@ -75,14 +79,34 @@ struct TweenDesc
 		tweenSumTime = 0;
 		tweenRatio = 0;
 	}
-	
+
+	// ✅ 애니메이션 특정 시점에 실행할 이벤트 추가
+	void AddAnimationEvent(float timeRatio, std::function<void()> callback)
+	{
+		animationEvents[timeRatio] = callback;
+	}
+
+	// ✅ 애니메이션 이벤트 실행
+	void ExecuteAnimationEvents(float ratio)
+	{
+		auto it = animationEvents.lower_bound(ratio);
+		while (it != animationEvents.end() && it->first <= ratio)
+		{
+			it->second();  // 등록된 이벤트 실행
+			it = animationEvents.erase(it);  // 실행 후 제거
+		}
+	}
+
 	float tweenDuration = 1.0f;
 	float tweenRatio = 0.f;
 	float tweenSumTime = 0.f;
 	float padding = 0.f;
 	KeyframeDesc curr;
 	KeyframeDesc next;
+
+	std::map<float, std::function<void()>> animationEvents; // ✅ 애니메이션 이벤트 저장소
 };
+
 
 struct InstancedTweenDesc
 {
@@ -92,5 +116,6 @@ struct InstancedTweenDesc
 
 struct UIFillMountDesc
 {
-	float ratio = 0.f; // 0 ~ 1 ������ ���� �����ؼ� ���
+	float ratio = 0.f; // 0 ~ 1 사이의 값을 보간해서 사용
+	float padding[3];  // 12 bytes 추가 (4 + 12 = 16 bytes)
 };

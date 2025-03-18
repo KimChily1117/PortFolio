@@ -1,9 +1,9 @@
 #pragma once
-#include "PlayerController.h"
+#include "OtherPlayerController.h"
 
-class GarenOtherPlayerController : public PlayerController
+class GarenOtherPlayerController : public OtherPlayerController
 {
-	using Super = PlayerController;
+	using Super = OtherPlayerController;
 
 public:
 	void Awake() override;
@@ -11,5 +11,9 @@ public:
 	void Start() override;
 	void LateUpdate() override;
 	void FixedUpdate() override;
+
+protected:
+	virtual void ProcSkill(int32 skillId) override;
+
 };
 
