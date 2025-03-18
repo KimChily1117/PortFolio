@@ -16,6 +16,7 @@ enum class KEY_TYPE
 	E = 'E',
 	Z = 'Z',
 	C = 'C',
+	R = 'R',
 
 	KEY_1 = '1',
 	KEY_2 = '2',
@@ -25,6 +26,8 @@ enum class KEY_TYPE
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
 	ENTER	= VK_RETURN,
+	MINUS = VK_OEM_MINUS,
+	PLUS = VK_OEM_PLUS
 };
 
 enum class KEY_STATE

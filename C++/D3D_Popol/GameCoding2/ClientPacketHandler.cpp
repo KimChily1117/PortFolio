@@ -2,10 +2,23 @@
 #include "ClientPacketHandler.h"
 #include "ServerCore/BufferReader.h"
 #include "Model.h"
+#include "Button.h"
+#include "Material.h"
+
+#include "HUDController.h"
+
 #include "PlayerController.h"
-#include "CameraController.h"
 #include "OtherPlayerController.h"
+#include "CameraController.h"
+
+#include "AnniePlayerController.h"
+#include "AnnieOtherPlayerController.h"
+
+#include "GarenPlayerController.h"
+#include "GarenOtherPlayerController.h"
+
 #include "ModelAnimator.h"
+#include "SphereCollider.h"
 
 
 void ClientPacketHandler::HandlePacket(ServerSessionRef session, BYTE* buffer, int32 len)
@@ -25,6 +38,7 @@ void ClientPacketHandler::HandlePacket(ServerSessionRef session, BYTE* buffer, i
 	case S_OBJECT_UPDATE:
 		break;
 	case S_SKILL_RESULT:
+		Handle_S_SkillResult(buffer, len);
 		break;
 	case S_UPDATE_MAP:
 		break;
@@ -84,50 +98,147 @@ void ClientPacketHandler::Handle_S_EnterGame(BYTE* buffer, int32 len)
 
 void ClientPacketHandler::Handle_S_MyPlayer(BYTE* buffer, int32 len)
 {
-    // ✅ 패킷 파싱
-    PacketHeader* header = (PacketHeader*)buffer;
-    uint16 id = header->id;
-    uint16 size = header->size;
+	// ✅ 패킷 파싱
+	PacketHeader* header = (PacketHeader*)buffer;
+	uint16 id = header->id;
+	uint16 size = header->size;
 
-    Protocol::S_MyPlayer pkt;
-    pkt.ParseFromArray(&header[1], size - sizeof(PacketHeader));
+	Protocol::S_MyPlayer pkt;
+	pkt.ParseFromArray(&header[1], size - sizeof(PacketHeader));
 
-    const Protocol::ObjectInfo& info = pkt.info();
+	const Protocol::ObjectInfo& info = pkt.info();
 
-    // ✅ 플레이어 오브젝트 생성
-    shared_ptr<GameObject> obj = make_shared<GameObject>(info.name());
+	// ✅ 플레이어 오브젝트 생성
+	shared_ptr<GameObject> obj = make_shared<GameObject>(info.name());
 
-    // ✅ Transform 설정 (회전 및 크기 조정)
-    obj->GetOrAddTransform()->SetPosition(Vec3(info.position().x(),
+	// ✅ Transform 설정 (회전 및 크기 조정)
+	obj->GetOrAddTransform()->SetPosition(Vec3(info.position().x(),
 		2, info.position().z()));
-    obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
-    obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
+	obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+	obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
 
-    // ✅ 모델 로드 및 애니메이션 추가
-    shared_ptr<class Model> model = make_shared<Model>();
-    model->ReadModel(L"Annie/Annie");
-    model->ReadMaterial(L"Annie/Annie");
-    model->ReadAnimation(L"Annie/Idle");
-    model->ReadAnimation(L"Annie/Run");
-    model->ReadAnimation(L"Annie/Atk1");
+	// ✅ 모델 로드 및 애니메이션 추가
+	shared_ptr<class Model> model = make_shared<Model>();
 
-    obj->AddComponent(make_shared<PlayerController>());
-    obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
-    
-    obj->GetModelAnimator()->SetModel(model);
-    obj->GetModelAnimator()->SetPass(2);
+	wstring champ;
 
-    // ✅ 씬에 추가
-    CUR_SCENE->Add(obj);
-    CUR_SCENE->RegisterObject(info.objectid(),obj);
-    GAMEMANAGER->_myPlayer = obj;
-    GAMEMANAGER->_myPlayerInfo = info;
+
+
+
+
+	switch (info.champtype())
+	{	
+	case Protocol::PLAYER_CHAMPION_TYPE::PLAYER_TYPE_ANNIE:		
+		champ = L"Annie";
+		obj->AddComponent(make_shared<AnniePlayerController>());
+		obj->GetScript<AnniePlayerController>()->_playerInfo = make_shared<Protocol::ObjectInfo>(pkt.info());
+		GAMEMANAGER->_myPlayer = obj->GetScript<AnniePlayerController>();
+		
+
+		model->ReadModel(champ + L"/" + champ);
+		model->ReadMaterial(champ + L"/" + champ);
+		model->ReadAnimation(champ + L"/Idle");
+		model->ReadAnimation(champ + L"/Run");
+		model->ReadAnimation(champ + L"/Atk1");
+		model->ReadAnimation(champ + L"/Atk2");
+
+		model->ReadAnimation(champ + L"/Qspell");
+		model->ReadAnimation(champ + L"/Wspell");
+		model->ReadAnimation(champ + L"/Espell");
+		model->ReadAnimation(champ + L"/Rspell");
+		
+		{
+			auto collider = make_shared<SphereCollider>();
+			collider->SetRadius(20000.f);
+			obj->AddComponent(collider);
+		}
+
+
+		break;
+	case Protocol::PLAYER_CHAMPION_TYPE::PLAYER_TYPE_GAREN:
+		champ = L"Garen";
+		obj->AddComponent(make_shared<GarenPlayerController>());
+		obj->GetScript<GarenPlayerController>()->_playerInfo = make_shared<Protocol::ObjectInfo>(pkt.info());
+		GAMEMANAGER->_myPlayer = obj->GetScript<GarenPlayerController>();
+		obj->GetTransform()->SetScale(Vec3(0.01f));
+
+		model->ReadModel(champ + L"/" + champ);
+		model->ReadMaterial(champ + L"/" + champ);
+		model->ReadAnimation(champ + L"/Idle");
+		model->ReadAnimation(champ + L"/Run");
+		model->ReadAnimation(champ + L"/Atk1");
+		model->ReadAnimation(champ + L"/Atk2");
+
+		model->ReadAnimation(champ + L"/Qspell");
+		//model->ReadAnimation(champ + L"/Wspell");
+		model->ReadAnimation(champ + L"/Espell");
+		model->ReadAnimation(champ + L"/Rspell");
+
+	}
+
+
+	obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
+
+	obj->GetModelAnimator()->SetModel(model);
+	obj->GetModelAnimator()->SetPass(2);
+		
+	// ✅ 씬에 추가
+	CUR_SCENE->Add(obj);
+	CUR_SCENE->RegisterObject(info.objectid(), obj);
 
 	CUR_SCENE->GetMainCamera()->GetScript<CameraController>()->_target = obj;
-	CUR_SCENE->GetMainCamera()->GetScript<CameraController>()->_offset = CUR_SCENE->GetMainCamera()->GetTransform()->GetPosition() - 
-		obj->GetTransform()->GetPosition(); // ✅ 초기 오프셋 설정
+	CUR_SCENE->GetMainCamera()->GetScript<CameraController>()->_offset = CUR_SCENE->GetMainCamera()->GetTransform()->GetPosition() -
+		obj->GetTransform()->GetPosition(); // 초기 오프셋 설정
+
+	// Mesh
+	{
+		// UI
+		auto obj = make_shared<GameObject>("UICanvas");
+		obj->AddComponent(make_shared<Button>());
+		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L""));
+
+		obj->GetButton()->SetOrder(0);
+		obj->GetTransform()->SetPosition(Vec3{ 0,0,0 });
+
+		CUR_SCENE->Add(obj);
+
+
+
+		auto obj2 = make_shared<GameObject>("UI_HUD");
+		obj2->AddComponent(make_shared<Button>());
+
+		obj2->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"PlayerHUD"));
+		obj2->GetTransform()->SetParent(obj->GetOrAddTransform());
+
+		obj2->GetButton()->SetOrder(1);
+		obj2->LoadTrasnformData();
+
+		CUR_SCENE->Add(obj2);
+
+
+
+		auto obj3 = make_shared<GameObject>("UI Panel");
+		obj3->AddComponent(make_shared<Button>());
+
+		obj3->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"empty_circle"));
+
+		obj3->GetButton()->SetOrder(2);
+		obj3->GetTransform()->SetParent(obj2->GetOrAddTransform());
+		obj3->GetOrAddScript<HUDController>()->ChampMark = obj3;
+		obj3->LoadTrasnformData();
+
+		UI->SetHUDControllerGameObject(obj3);
+		CUR_SCENE->Add(obj3);
+	}
+
+
 
 	UI->SetTarget(info.champtype());
+
+
+
+
+
 }
 
 void ClientPacketHandler::Handle_S_AddObject(BYTE* buffer, int32 len)
@@ -142,7 +253,7 @@ void ClientPacketHandler::Handle_S_AddObject(BYTE* buffer, int32 len)
 
 	// Objects Setting
 	{
-		uint64 myPlayerId = GAMEMANAGER->_myPlayerInfo.objectid();
+		uint64 myPlayerId = GAMEMANAGER->_myPlayer->_playerInfo->objectid();
 		const int32 size = pkt.objects_size();
 
 		for (int32 i = 0; i < size; i++)
@@ -159,30 +270,86 @@ void ClientPacketHandler::Handle_S_AddObject(BYTE* buffer, int32 len)
 			{
 				continue; // 이미 존재하는 오브젝트면 추가 생성 X
 			}
+
+			// ✅ 플레이어 오브젝트 생성
+			shared_ptr<GameObject> obj = make_shared<GameObject>(info.name());
+
+			// ✅ Transform 설정 (회전 및 크기 조정)
+			obj->GetOrAddTransform()->SetPosition(Vec3(info.position().x(),
+				info.position().y(), info.position().z()));
+			obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+			obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
+
+			// ✅ 모델 로드 및 애니메이션 추가
+			shared_ptr<class Model> model = make_shared<Model>();		 
 			
-				// ✅ 플레이어 오브젝트 생성
-				shared_ptr<GameObject> obj = make_shared<GameObject>(info.name());
+			wstring champ;
 
-				// ✅ Transform 설정 (회전 및 크기 조정)
-				obj->GetOrAddTransform()->SetPosition(Vec3(info.position().x(),
-					info.position().y(), info.position().z()));
-				obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
-				obj->GetOrAddTransform()->SetScale(Vec3(0.0001f));
+			switch (info.champtype())
+			{
+			case Protocol::PLAYER_CHAMPION_TYPE::PLAYER_TYPE_ANNIE:
+				champ = L"Annie";
+				obj->AddComponent(make_shared<AnnieOtherPlayerController>());
+				obj->GetScript<AnnieOtherPlayerController>()->_playerInfo = make_shared<Protocol::ObjectInfo>(pkt.objects(i));
+				
+				model->ReadModel(champ + L"/" + champ);
+				model->ReadMaterial(champ + L"/" + champ);
+				model->ReadAnimation(champ + L"/Idle");
+				model->ReadAnimation(champ + L"/Run");
+				model->ReadAnimation(champ + L"/Atk1");
+				model->ReadAnimation(champ + L"/Atk2");
 
-				// ✅ 모델 로드 및 애니메이션 추가
-				shared_ptr<class Model> model = make_shared<Model>();
-				model->ReadModel(L"Garen/Garen");
-				model->ReadMaterial(L"Garen/Garen");
-				model->ReadAnimation(L"Garen/Idle");
-				model->ReadAnimation(L"Garen/Run");
-				obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
+				model->ReadAnimation(champ + L"/Qspell");
+				model->ReadAnimation(champ + L"/Wspell");
+				model->ReadAnimation(champ + L"/Espell");
+				model->ReadAnimation(champ + L"/Rspell");
 
-				obj->GetModelAnimator()->SetModel(model);
-				obj->GetModelAnimator()->SetPass(2);
+				{
+					auto collider = make_shared<SphereCollider>();
+					collider->SetRadius(20000.f);
+					obj->AddComponent(collider);
+				}
 
-				// ✅ 씬에 추가
-				CUR_SCENE->Add(obj);
-				CUR_SCENE->RegisterObject(info.objectid(), obj);
+
+				break;
+			case Protocol::PLAYER_CHAMPION_TYPE::PLAYER_TYPE_GAREN:
+				champ = L"Garen";
+				obj->AddComponent(make_shared<GarenOtherPlayerController>());
+				
+				obj->GetScript<GarenOtherPlayerController>()->_playerInfo = make_shared<Protocol::ObjectInfo>(pkt.objects(i));
+				obj->GetOrAddTransform()->SetScale(Vec3(0.01f));
+
+				model->ReadModel(champ + L"/" + champ);
+				model->ReadMaterial(champ + L"/" + champ);
+				model->ReadAnimation(champ + L"/Idle");
+				model->ReadAnimation(champ + L"/Run");
+				model->ReadAnimation(champ + L"/Atk1");
+				model->ReadAnimation(champ + L"/Atk2");
+
+				model->ReadAnimation(champ + L"/Qspell");
+				//model->ReadAnimation(champ + L"/Wspell");
+				model->ReadAnimation(champ + L"/Espell");
+				model->ReadAnimation(champ + L"/Rspell");
+
+				{
+					auto collider = make_shared<SphereCollider>();
+					collider->SetRadius(120.f);
+					obj->AddComponent(collider);
+				}
+				break;
+
+			}
+
+		
+			obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
+
+			obj->GetModelAnimator()->SetModel(model);
+			obj->GetModelAnimator()->SetPass(2);
+
+
+			// ✅ 씬에 추가
+			CUR_SCENE->Add(obj);
+			CUR_SCENE->RegisterObject(info.objectid(), obj);
 
 		}
 	}
@@ -224,7 +391,7 @@ void ClientPacketHandler::Handle_S_Move(BYTE* buffer, int32 len)
 		return;
 
 	// ✅ 자기 자신이면 무시
-	if (info.objectid() == GAMEMANAGER->_myPlayerInfo.objectid())
+	if (info.objectid() == GAMEMANAGER->_myPlayer->_playerInfo->objectid())
 		return;
 
 	// ✅ MovementController를 찾아 이동 명령 실행
@@ -235,5 +402,41 @@ void ClientPacketHandler::Handle_S_Move(BYTE* buffer, int32 len)
 		movementController->SetTargetPosition(newPos);
 	}
 }
+
+void ClientPacketHandler::Handle_S_SkillResult(BYTE* buffer, int32 len)
+{
+	PacketHeader* header = (PacketHeader*)buffer;
+	uint16 id = header->id;
+	uint16 size = header->size;
+
+	Protocol::S_SkillResult pkt;
+	pkt.ParseFromArray(&header[1], size - sizeof(PacketHeader));
+
+	uint64 casterId = pkt.casterid();
+	int32 skillId = pkt.skillid();
+
+	DEBUG_LOG("[Client] ✅ Skill Result Received: Caster " << casterId << " used Skill " << skillId);
+
+	auto it = CUR_SCENE->_players.find(casterId);
+	if (it == CUR_SCENE->_players.end())
+	{
+		DEBUG_LOG("[Client] ❌ Caster Not Found in _players!");
+		return;
+	}
+
+	shared_ptr<GameObject> caster = it->second;
+	auto controller = caster->GetScript<BasePlayerController>();
+
+	if (!controller)
+	{
+		DEBUG_LOG("[Client] ❌ No Valid Controller Found for Caster " << casterId);
+		return;
+	}
+
+	controller->ProcSkill(skillId);
+}
+
+
+
 
 

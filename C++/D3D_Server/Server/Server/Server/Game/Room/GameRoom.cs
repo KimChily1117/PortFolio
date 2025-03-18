@@ -12,7 +12,7 @@ using Vec3 = System.Numerics.Vector3;
 using System.Xml.Linq;
 using System.IO;
 
-
+ 
 public static class Vector3Extensions
 {
     // ✅ System.Numerics.Vector3 → Google.Protobuf.Protocol.Vector3 변환
@@ -114,9 +114,9 @@ namespace Server.Game.Room
 
                 else if(teamId == 2)
                 { 
-                    int randX = _random.Next(140, 143);
-                    int randZ = _random.Next(138, 140);
-                    spawnPos = new Vec3(randX, 2, randZ);
+                    //int randX = _random.Next(140, 143);
+                    //int randZ = _random.Next(138, 140);
+                    spawnPos = new Vec3(24, 2, 24);
                 }
 
                 Player player = new Player

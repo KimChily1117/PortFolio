@@ -1,9 +1,23 @@
 ﻿#include "pch.h"
 #include "Utils.h"
 #include "PlayerController.h"
+#include "HUDController.h"
 #include "ModelAnimator.h"
+#include "MeshRenderer.h"
 #include "Terrain.h"
+#include "OtherPlayerController.h"
 
+static int GetSkillRange(int skillId)
+{
+	switch (skillId)
+	{
+	case 1: return 3;
+	case 2: return 4;
+	case 3: return 2;
+	case 4: return 5;
+	default: return 3;
+	}
+}
 
 void PlayerController::Awake()
 {
@@ -11,62 +25,7 @@ void PlayerController::Awake()
 
 void PlayerController::Start()
 {
-
 }
-
-
-void PlayerController::Update()
-{
-
-	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
-	{
-		int soundNum = Utils::GetRandomNumber(1, 3);
-		int32 mouseX = INPUT->GetMousePos().x;
-		int32 mouseY = INPUT->GetMousePos().y;
-
-		// Picking
-		auto pickObj = CUR_SCENE->Pick(mouseX, mouseY, _dest);
-		if (pickObj)
-		{
-			string soundParam = "A_walk" + to_string(soundNum);
-
-			//DEBUG_LOG(soundParam);
-			SOUND->PlaySound(soundParam, 0.5f);
-
-			_currentState = PlayerState::RUN;
-			GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
-			
-			Vec3 correctPosition = pickObj->GetTerrain()->GetTileCorrectedPosition(_dest);
-
-			// ✅ 서버로 이동 패킷 전송
-			Protocol::C_Move movePacket;
-			movePacket.set_objectid(GAMEMANAGER->_myPlayerInfo.objectid());
-			movePacket.mutable_targetpos()->set_x(_dest.x);
-			movePacket.mutable_targetpos()->set_y(_dest.y);
-			movePacket.mutable_targetpos()->set_z(_dest.z);
-
-			// Tile 정보 패킷에 넣어주기
-			movePacket.mutable_cellpos()->set_x(correctPosition.x);
-			movePacket.mutable_cellpos()->set_z(correctPosition.z);
-
-			auto sendBuffer = ClientPacketHandler::MakeSendBuffer(movePacket, C_MOVE);
-			NETWORK->SendPacket(sendBuffer);		
-		}
-	}
-
-	else if (INPUT->GetButtonDown(KEY_TYPE::ENTER))
-	{
-		DEBUG_LOG("ENTER!!!");
-		Protocol::C_TESTMsg pkt;
-
-		*pkt.mutable_message() = " From Client : Press Enter KEY ";
-		auto a = ClientPacketHandler::MakeSendBuffer(pkt, C_TEST_MSG);
-		NETWORK->SendPacket(a);
-	}
-
-	MoveTo();
-}
-
 
 void PlayerController::LateUpdate()
 {
@@ -76,45 +35,117 @@ void PlayerController::FixedUpdate()
 {
 }
 
+void PlayerController::Update()
+{
+	int32 mouseX = INPUT->GetMousePos().x;
+	int32 mouseY = INPUT->GetMousePos().y;
+	float currentTime = TIME->GetGameTime();
+
+	// ✅ 공격 중이면 다른 동작 불가 (애니메이션 종료 후 IDLE 전환)
+	if (_isAttackMode)
+	{
+		if (TIME->GetGameTime() >= _timeToIdle)
+		{
+			_isAttackMode = false;
+			_currentState = PlayerState::IDLE;
+			GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
+			DEBUG_LOG("[Client] 🔄 Attack Ended → IDLE");
+		}
+		return;
+	}
+
+	// ✅ 우클릭 처리 (공격 또는 이동)
+	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
+	{
+		auto pickObj = CUR_SCENE->Pick(mouseX, mouseY, _dest);
+		if (pickObj)
+		{
+			_correctPosition = CUR_SCENE->_terrain->GetTerrain()->GetTileCorrectedPosition(_dest);
+
+			if (IsEnemy(pickObj))
+			{
+				if (currentTime - _lastAttackTime < _attackCooldown)
+				{
+					DEBUG_LOG("[Client] ❌ Attack input ignored (cooldown active)");
+					return;
+				}
+
+				_lastAttackTime = currentTime;
+				DEBUG_LOG("Deteched Enemy!!! : " << pickObj->_name.c_str());
+				_target = pickObj;
+
+				// ✅ 공격 실행 (자식 클래스에서 구현)
+				ProcSkill(0);
+			}
+			else
+			{
+				// ✅ 이미 이동 중이면 애니메이션 재설정 X, 목표 지점만 변경
+				if (_currentState != PlayerState::RUN)
+				{
+					_currentState = PlayerState::RUN;
+					GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::RUN, true);
+					DEBUG_LOG("[Client] 🚶 Running Animation Started");
+				}
+				else
+				{
+					DEBUG_LOG("[Client] 🏃 Updating Target Position Only");
+				}
+
+				// ✅ 서버로 이동 패킷 전송 (목표 위치만 업데이트)
+				Protocol::C_Move movePacket;
+				movePacket.set_objectid(GAMEMANAGER->_myPlayer->_playerInfo->objectid());
+				movePacket.mutable_targetpos()->set_x(_dest.x);
+				movePacket.mutable_targetpos()->set_y(_dest.y);
+				movePacket.mutable_targetpos()->set_z(_dest.z);
+
+				movePacket.mutable_cellpos()->set_x(_correctPosition.x);
+				movePacket.mutable_cellpos()->set_z(_correctPosition.z);
+
+				auto sendBuffer = ClientPacketHandler::MakeSendBuffer(movePacket, C_MOVE);
+				NETWORK->SendPacket(sendBuffer);
+			}
+		}
+	}
+
+	MoveTo();
+}
+
+// ✅ 이동 로직
 void PlayerController::MoveTo()
 {
 	if (_currentState == PlayerState::IDLE)
 		return;
 
-	// 현재 위치
 	Vec3 currentPosition = GetTransform()->GetPosition();
-	// Target으로 이동
-
-	/*DEBUG_LOG("Current Position Before Move: " << currentPosition.x << " " << currentPosition.z);
-	DEBUG_LOG("Destination Position: " << _dest.x << " "  << _dest.z);*/
-
 	Vec3 direction = _dest - currentPosition;
-	direction.y = 0.0f; // y축 차이를 제거
-
+	direction.y = 0.0f;
 
 	float distance = direction.Length();
 
-	// Target에 도달했는지 확인
-	if (distance >= 0.05f) // 작은 오차 허용
+	if (distance >= 0.05f)
 	{
 		direction.Normalize();
-
-		// 방향 벡터를 기준으로 Yaw 회전값 계산
-		float angle = atan2f(direction.x, direction.z) + XM_PI; // XM_PI는 180도(π 라디안)  X축과 Z축 기준 각도 계산
-		GetTransform()->SetRotation(Vec3(XMConvertToRadians(90.f)
-			, angle,
-			0.0f)); // 회전 적용 (Yaw 값만 설정)
-
+		float angle = atan2f(direction.x, direction.z) + XM_PI;
+		GetTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), angle, 0.0f));
 
 		Vec3 newPosition = currentPosition + direction * _speed * TIME->GetDeltaTime();
 		newPosition.y = 1.6f;
 		GetTransform()->SetPosition(newPosition);
-		
 	}
 	else
 	{
 		_currentState = PlayerState::IDLE;
-		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
+		GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
+		DEBUG_LOG("[Client] 🔄 Stopped Moving → IDLE");
 	}
 }
 
+bool PlayerController::IsEnemy(shared_ptr<GameObject> obj)
+{
+	return obj && obj->GetScript<OtherPlayerController>();
+}
+
+void PlayerController::ProcSkill(int32 skillId)
+{
+	// ✅ 자식 클래스에서 구현
+}

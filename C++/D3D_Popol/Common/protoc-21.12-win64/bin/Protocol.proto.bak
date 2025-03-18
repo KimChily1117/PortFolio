@@ -1,0 +1,127 @@
+﻿syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+import "Struct.proto";
+
+// ✅ 패킷 타입 추가
+enum MsgId
+{
+    C_TEST_MSG = 0;
+    S_TEST_MSG = 1;
+    C_MOVE = 2;
+    S_OBJECT_UPDATE = 3;
+    C_SKILL_CAST = 4;
+    S_SKILL_RESULT = 5;
+    C_REQUEST_MAP = 6;
+    S_UPDATE_MAP = 7;
+    C_CHAT_MESSAGE = 8;
+    S_CHAT_MESSAGE = 9;
+    S_ENTER_GAME = 10;
+    S_MY_PLAYER = 11;
+    S_ADD_OBJECT = 12;
+    S_REMOVE_OBJECT = 13;
+    S_MOVE = 14;
+	C_ENTER_GAME = 15;
+
+}
+
+message C_TESTMsg
+{
+	string message = 1;
+}
+
+message S_TESTMsg
+{
+	string message = 1;
+}
+
+message C_EnterGame
+{
+	int32 champId = 1
+}
+
+message S_EnterGame
+{
+	bool success = 1;
+	uint64 accountId = 2;
+}
+
+message S_MyPlayer
+{
+    ObjectInfo info = 1;
+}
+
+
+message S_AddObject
+{
+    repeated ObjectInfo objects = 1;
+}
+
+message S_RemoveObject
+{
+    repeated uint64 ids = 1;
+}
+
+
+// ✅ 플레이어 이동 요청 (클라이언트 → 서버)
+message C_Move
+{
+    uint64 objectId = 1;  // 이동하는 플레이어 ID
+    Vector3 targetPos = 2; // 목표 위치
+	Vector2Int cellPos = 3;
+
+}
+
+message S_Move
+{
+    ObjectInfo Info = 1;
+}
+
+// ✅ 서버에서 모든 오브젝트 상태 업데이트 (서버 → 클라이언트)
+message S_ObjectUpdate
+{
+    repeated ObjectInfo objects = 1;  // 여러 개의 오브젝트 정보
+}
+
+// ✅ 스킬 사용 요청 (클라이언트 → 서버)
+message C_SkillCast
+{
+    uint64 casterId = 1;   // 스킬을 사용하는 플레이어 ID
+    int32 skillId = 2;     // 사용한 스킬 ID
+    Vector3 targetPos = 3; // 스킬 대상 위치
+}
+
+// ✅ 스킬 사용 결과 (서버 → 클라이언트)
+message S_SkillResult
+{
+    uint64 casterId = 1;   // 스킬을 사용한 플레이어 ID
+    int32 skillId = 2;     // 사용한 스킬 ID
+    repeated uint64 hitObjects = 3; // 맞은 오브젝트 ID 리스트
+}
+
+// ✅ 클라이언트가 맵 정보를 요청 (클라이언트 → 서버)
+message C_RequestMap
+{
+    uint64 requesterId = 1; // 요청한 플레이어 ID
+}
+
+// ✅ 서버에서 클라이언트로 맵 정보 전송 (서버 → 클라이언트)
+message S_UpdateMap
+{
+    repeated TileInfo tiles = 1;  // 전체 타일 데이터
+}
+
+// ✅ 채팅 메시지 전송 (클라이언트 → 서버)
+message C_ChatMessage
+{
+    uint64 senderId = 1;
+    string message = 2;
+}
+
+// ✅ 채팅 메시지 브로드캐스트 (서버 → 클라이언트)
+message S_ChatMessage
+{
+    uint64 senderId = 1;
+    string message = 2;
+}

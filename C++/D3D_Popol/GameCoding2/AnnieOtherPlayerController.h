@@ -1,8 +1,11 @@
 #pragma once
-#include "PlayerController.h"
-class AnnieOtherPlayerController : public PlayerController
+#include "OtherPlayerController.h"
+
+
+
+class AnnieOtherPlayerController : public OtherPlayerController
 {
-	using Super = PlayerController;
+	using Super = OtherPlayerController;
 
 public:
 	void Awake() override;
@@ -10,6 +13,11 @@ public:
 	void Start() override;
 	void LateUpdate() override;
 	void FixedUpdate() override;
+
+protected:
+	virtual void ProcSkill(int32 skillId) override;
+	void AlignToTarget();
+	
 };
 
 

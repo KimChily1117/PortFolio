@@ -10,6 +10,8 @@ class Material;
 class ResourceManager
 {
 	DECLARE_SINGLE(ResourceManager);
+
+	~ResourceManager();
 public:
 	void Init();
 

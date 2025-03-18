@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "InstancingManager.h"
 #include "InstancingBuffer.h"
 #include "GameObject.h"
@@ -15,6 +15,7 @@ void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
 	RenderMeshRenderer(gameObjects);
 	RenderModelRenderer(gameObjects);
 	RenderAnimRenderer(gameObjects);
+
 }
 
 void InstancingManager::RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameObjects)
@@ -33,11 +34,12 @@ void InstancingManager::RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameO
 	for (auto& pair : cache)
 	{
 		const vector<shared_ptr<GameObject>>& vec = pair.second;
-		//if (vec.size() == 1)
-		//{
-		//	vec[0]->GetMeshRenderer()->RenderSingle();
-		//}
-		//else
+		/*if (vec.size() == 1)
+		{
+			DEBUG_LOG("Render SINGLE : " << vec[0]->_name.c_str());
+			vec[0]->GetMeshRenderer()->RenderSingle();
+		}
+		else*/
 		{
 			const InstanceID instanceId = pair.first;
 
@@ -143,6 +145,7 @@ void InstancingManager::RenderAnimRenderer(vector<shared_ptr<GameObject>>& gameO
 	}
 }
 
+
 void InstancingManager::AddData(InstanceID instanceId, InstancingData& data)
 {
 	if (_buffers.find(instanceId) == _buffers.end())
@@ -150,6 +153,7 @@ void InstancingManager::AddData(InstanceID instanceId, InstancingData& data)
 
 	_buffers[instanceId]->AddData(data);
 }
+
 
 void InstancingManager::ClearData()
 {

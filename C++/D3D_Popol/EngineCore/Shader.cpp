@@ -22,6 +22,11 @@ Shader::~Shader()
 	_materialBuffer.reset();
 	_boneBuffer.reset();
 	_tweenBuffer.reset();
+	
+	for (auto& item : _uiEffectBuffers)
+	{
+		item.second.reset();
+	}
 }
 
 
@@ -385,7 +390,7 @@ void Shader::PushKeyframeData(const KeyframeDesc& desc)
 
 void Shader::PushTweenData(const InstancedTweenDesc& desc)
 {
-	if (_transformEffectBuffer == nullptr)
+	if (_tweenEffectBuffer == nullptr)
 	{
 		_tweenBuffer = make_shared<ConstantBuffer<InstancedTweenDesc>>();
 		_tweenBuffer->Create();
@@ -395,6 +400,42 @@ void Shader::PushTweenData(const InstancedTweenDesc& desc)
 	_tweenDesc = desc;
 	_tweenBuffer->CopyData(_tweenDesc);
 	_tweenEffectBuffer->SetConstantBuffer(_tweenBuffer->GetComPtr().Get());
+}
+
+void Shader::PushUiData(const UIFillMountDesc& desc, const string& elementName)
+{
+	/*if (_uiEffectBuffer == nullptr)
+	{
+		_uiBuffer = make_shared<ConstantBuffer<UIFillMountDesc>>();
+		_uiBuffer->Create();
+		_uiEffectBuffer = GetConstantBuffer("UIFillMount");
+	}
+
+	_uiDesc = desc;
+	_uiBuffer->CopyData(_uiDesc);
+	_uiEffectBuffer->SetConstantBuffer(_uiBuffer->GetComPtr().Get());*/
+
+
+	// UI별 개별적인 ConstantBuffer를 Map으로 관리
+	if (_uiEffectBuffers.find(elementName) == _uiEffectBuffers.end())
+	{
+		shared_ptr<ConstantBuffer<UIFillMountDesc>> newBuffer = make_shared<ConstantBuffer<UIFillMountDesc>>();
+		newBuffer->Create();
+		_uiEffectBuffers[elementName] = newBuffer;
+
+		// Shader에서 해당 UI 요소에 맞는 ConstantBuffer를 찾음
+		_uiEffectBufferMap[elementName] = GetConstantBuffer(elementName);
+	}
+
+	// UI별 FillAmount 값을 개별적으로 업데이트
+	_uiEffectBuffers[elementName]->CopyData(desc);
+
+	// Shader에 SetConstantBuffer 할 때도 UI별로 맞춰줌
+	if (_uiEffectBufferMap[elementName])
+	{
+		_uiEffectBufferMap[elementName]->SetConstantBuffer(_uiEffectBuffers[elementName]->GetComPtr().Get());
+	}
+
 }
 
 ComPtr<ID3DX11EffectUnorderedAccessViewVariable> Shader::GetUAV(string name)
@@ -426,13 +467,13 @@ ShaderDesc ShaderManager::GetEffect(wstring fileName)
 		ComPtr<ID3DX11Effect> effect;
 		hr = ::D3DX11CreateEffectFromMemory(blob->GetBufferPointer(), blob->GetBufferSize(), 0, DEVICE.Get(), effect.GetAddressOf());
 		CHECK(hr);
-		
-		shaders[fileName] = ShaderDesc{blob, effect};
+
+		shaders[fileName] = ShaderDesc{ blob, effect };
 	}
-	
+
 	ShaderDesc desc = shaders.at(fileName);
 	ComPtr<ID3DX11Effect> effect;
 	desc.effect->CloneEffect(D3DX11_EFFECT_CLONE_FORCE_NONSINGLE, effect.GetAddressOf());
 
-	return ShaderDesc{desc.blob, effect};
+	return ShaderDesc{ desc.blob, effect };
 }

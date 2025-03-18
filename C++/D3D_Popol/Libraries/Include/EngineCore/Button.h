@@ -21,6 +21,8 @@ public:
 	void ChangeImageMatrial(shared_ptr<class Material> material);
 	void GUIRender();
 
+	shared_ptr<MeshRenderer> GetMatrial() { return _gameObject.lock()->GetMeshRenderer(); }
+
 private:
 	std::function<void(void)> _onClicked;
 	RECT _rect;

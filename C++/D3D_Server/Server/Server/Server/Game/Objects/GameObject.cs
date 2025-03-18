@@ -15,6 +15,26 @@ namespace Server.Game.Objects
         public int TileX { get; set; }
         public int TileZ { get; set; }
 
+        private Dictionary<int, float> _skillCooldowns = new Dictionary<int, float>();
+        private float _globalCooldown = 0.5f; // 기본 글로벌 쿨타임 0.5초
+
+        public bool CanUseSkill(int skillId)
+        {
+            float currentTime = DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond / 1000f;
+            if (_skillCooldowns.TryGetValue(skillId, out float lastUsedTime))
+            {
+                if (currentTime - lastUsedTime < _globalCooldown)
+                {
+                    Console.WriteLine($"[Server] ❌ Skill {skillId} is on cooldown!");
+                    return false;
+                }
+            }
+
+            _skillCooldowns[skillId] = currentTime;
+            return true;
+        }
+
+
 
     }
 }

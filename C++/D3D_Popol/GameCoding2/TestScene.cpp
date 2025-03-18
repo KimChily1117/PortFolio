@@ -51,13 +51,15 @@ void TestScene::Update()
 		auto pickObj = CUR_SCENE->Pick(mouseX, mouseY);
 		if (pickObj)
 		{
+			DEBUG_LOG("PIck Obj : Attack Test : " << pickObj->_name.c_str());
+
 			if (pickObj->_name == "Collision")
 				CUR_SCENE->Remove(pickObj);
 		}
 	}
 
 	// Cursor 여기서 정의
-	::ShowCursor(FALSE); // Ingame에서 마우스 커서 없애고 자체 MouseCursor Class 정의해서 만듬
+	::ShowCursor(TRUE); // Ingame에서 마우스 커서 없애고 자체 MouseCursor Class 정의해서 만듬
 
 	float width = GRAPHICS->GetViewport().GetWidth();
 	float height = GRAPHICS->GetViewport().GetHeight();
@@ -102,8 +104,8 @@ void TestScene::InitializeObject()
 		camera->AddComponent(make_shared<Camera>());
 		camera->GetCamera()->SetProjectionType(ProjectionType::Perspective);
 		camera->GetCamera()->SetCullingMaskLayerOnOff(Layer_UI, true);
-		camera->AddComponent(make_shared<EditCameraScript>());
-		//camera->AddComponent(make_shared<CameraController>());
+		//camera->AddComponent(make_shared<EditCameraScript>());
+		camera->AddComponent(make_shared<CameraController>());
 		CUR_SCENE->Add(camera);
 		camera->LoadTrasnformData();
 	}
@@ -151,46 +153,46 @@ void TestScene::InitializeObject()
 			RESOURCES->Add(L"Veigar", material);
 		}
 	}
-	// Mesh
-	{
-		// UI
-		auto obj = make_shared<GameObject>("UICanvas");
-		obj->AddComponent(make_shared<Button>());
-		obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L""));
+	//// Mesh
+	//{
+	//	// UI
+	//	auto obj = make_shared<GameObject>("UICanvas");
+	//	obj->AddComponent(make_shared<Button>());
+	//	obj->GetButton()->Create(Vec2(400, 400), Vec2(100, 100), RESOURCES->Get<Material>(L""));
 
-		obj->GetButton()->SetOrder(0);
-		obj->GetTransform()->SetPosition(Vec3{ 0,0,0 });
+	//	obj->GetButton()->SetOrder(0);
+	//	obj->GetTransform()->SetPosition(Vec3{ 0,0,0 });
 
-		CUR_SCENE->Add(obj);
-
-
-
-		auto obj2 = make_shared<GameObject>("UI_HUD");
-		obj2->AddComponent(make_shared<Button>());
-
-		obj2->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"PlayerHUD"));
-		obj2->GetTransform()->SetParent(obj->GetOrAddTransform());
-
-		obj2->GetButton()->SetOrder(1);
-		obj2->LoadTrasnformData();
-
-		CUR_SCENE->Add(obj2);
+	//	CUR_SCENE->Add(obj);
 
 
 
-		auto obj3 = make_shared<GameObject>("UI Panel");
-		obj3->AddComponent(make_shared<Button>());
+	//	auto obj2 = make_shared<GameObject>("UI_HUD");
+	//	obj2->AddComponent(make_shared<Button>());
 
-		obj3->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"empty_circle"));
+	//	obj2->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"PlayerHUD"));
+	//	obj2->GetTransform()->SetParent(obj->GetOrAddTransform());
 
-		obj3->GetButton()->SetOrder(2);
-		obj3->GetTransform()->SetParent(obj2->GetOrAddTransform());
-		obj3->GetOrAddScript<HUDController>()->ChampMark = obj3;		
-		obj3->LoadTrasnformData();
+	//	obj2->GetButton()->SetOrder(1);
+	//	obj2->LoadTrasnformData();
 
-		UI->SetHUDControllerGameObject(obj3);
-		CUR_SCENE->Add(obj3);
-	}
+	//	CUR_SCENE->Add(obj2);
+
+
+
+	//	auto obj3 = make_shared<GameObject>("UI Panel");
+	//	obj3->AddComponent(make_shared<Button>());
+
+	//	obj3->GetButton()->Create(Vec2(0, 0), Vec2(1, 1), RESOURCES->Get<Material>(L"empty_circle"));
+
+	//	obj3->GetButton()->SetOrder(2);
+	//	obj3->GetTransform()->SetParent(obj2->GetOrAddTransform());
+	//	obj3->GetOrAddScript<HUDController>()->ChampMark = obj3;		
+	//	obj3->LoadTrasnformData();
+
+	//	UI->SetHUDControllerGameObject(obj3);
+	//	CUR_SCENE->Add(obj3);
+	//}
 
 
 
@@ -230,45 +232,42 @@ void TestScene::InitializeObject()
 		CUR_SCENE->Add(obj);
 	}
 
-	
-
 	{		
-		/*shared_ptr<class Model> m1 = make_shared<Model>();
-		m1->ReadModel(L"Garen/Garen");
-		m1->ReadMaterial(L"Garen/Garen");
-		m1->ReadAnimation(L"Garen/Rspell");
-		m1->ReadAnimation(L"Garen/Run");
-		auto obj = make_shared<GameObject>("Annie");
-		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
-		obj->GetOrAddTransform()->SetScale(Vec3(0.01));	
-		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.0f, 3.f));
-		obj->AddComponent(make_shared<PlayerController>());
-		obj->AddComponent(make_shared<ModelAnimator>(_shader));
-		{
-			obj->GetModelAnimator()->SetModel(m1);
-			obj->GetModelAnimator()->SetPass(2);
-		}
+		//shared_ptr<class Model> m1 = make_shared<Model>();
+		//m1->ReadModel(L"Garen/Garen");
+		//m1->ReadMaterial(L"Garen/Garen");
+		//m1->ReadAnimation(L"Garen/Espell");
+		//m1->ReadAnimation(L"Garen/Run");
+		//auto obj = make_shared<GameObject>("Annie");
+		//obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+		//obj->GetOrAddTransform()->SetScale(Vec3(0.01));	
+		//obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.0f, 3.f));
+		////obj->AddComponent(make_shared<PlayerController>());
+		//obj->AddComponent(make_shared<ModelAnimator>(_shader));
+		//{
+		//	obj->GetModelAnimator()->SetModel(m1);
+		//	obj->GetModelAnimator()->SetPass(2);
+		//}
 
-		CUR_SCENE->Add(obj);*/
+		//CUR_SCENE->Add(obj);
 
 
-		/*shared_ptr<class Model> m1 = make_shared<Model>();
-		m1->ReadModel(L"Annie/Annie");
-		m1->ReadMaterial(L"Annie/Annie");
-		m1->ReadAnimation(L"Annie/Rspell");
-		m1->ReadAnimation(L"Annie/Run");
-		auto obj = make_shared<GameObject>("Annie");
-		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
-		obj->GetOrAddTransform()->SetScale(Vec3(0.0001));
-		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.0f, 3.f));
-		obj->AddComponent(make_shared<PlayerController>());
-		obj->AddComponent(make_shared<ModelAnimator>(_shader));
-		{
-			obj->GetModelAnimator()->SetModel(m1);
-			obj->GetModelAnimator()->SetPass(2);
-		}
-
-		CUR_SCENE->Add(obj);*/
+		//shared_ptr<class Model> m1 = make_shared<Model>();
+		//m1->ReadModel(L"Annie/Annie");
+		//m1->ReadMaterial(L"Annie/Annie");
+		//m1->ReadAnimation(L"Annie/Rspell");
+		//m1->ReadAnimation(L"Annie/Run");
+		//auto obj = make_shared<GameObject>("Annie");
+		//obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+		//obj->GetOrAddTransform()->SetScale(Vec3(0.0001));
+		//obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.0f, 3.f));
+		////obj->AddComponent(make_shared<PlayerController>());
+		//obj->AddComponent(make_shared<ModelAnimator>(_shader));
+		//{
+		//	obj->GetModelAnimator()->SetModel(m1);
+		//	obj->GetModelAnimator()->SetPass(2);
+		//}
+		//CUR_SCENE->Add(obj);
 
 	}
 
@@ -322,6 +321,7 @@ void TestScene::InitializeObject()
 
 		obj->GetTerrain()->Create(145, 145, RESOURCES->Get<Material>(L"Veigar"));
 		obj->GetMeshRenderer()->SetPass(3);
+		_terrain = obj;
 		CUR_SCENE->Add(obj);
 	}
 

@@ -25,3 +25,7 @@ void GarenPlayerController::FixedUpdate()
 {
 	Super::FixedUpdate();
 }
+
+void GarenPlayerController::ProcSkill(int32 skillId)
+{
+}

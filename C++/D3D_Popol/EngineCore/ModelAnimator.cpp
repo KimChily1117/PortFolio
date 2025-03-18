@@ -35,24 +35,75 @@ void ModelAnimator::SetModel(shared_ptr<Model> model)
 
 void ModelAnimator::Update()
 {
-
+	// Not Use
 }
+void ModelAnimator::BlendToAnimation(int animIndex, float blendTime)
+{
+	if (_tweenDesc.curr.animIndex == animIndex)
+		return; // 이미 같은 애니메이션이면 변경 안 함
+
+	_tweenDesc.next.animIndex = animIndex;
+	_tweenDesc.tweenDuration = blendTime;
+	_tweenDesc.tweenSumTime = 0.0f;
+
+	DEBUG_LOG("[Animation] 🔄 Blending to Animation " << animIndex << " over " << blendTime << " seconds");
+}
+
+float ModelAnimator::GetAnimationDuration(int animIndex)
+{
+	auto animation = _model->GetAnimationByIndex(animIndex);
+	if (animation)
+		return animation->frameCount / animation->frameRate; // 프레임 수 / 초당 프레임 수
+	return 1.0f; // 기본값 (1초)
+}
+
+void ModelAnimator::SetAnimation(int32 animIndex, bool loop)
+{
+	TweenDesc& desc = _tweenDesc;
+	desc.curr.animIndex = animIndex;
+	desc.curr.currFrame = 0;
+	desc.curr.sumTime = 0;
+	desc.curr.loop = loop ? 1 : 0; // ✅ uint32로 저장 (GPU 호환)
+	DEBUG_LOG("[Animation] 🎬 즉시 애니메이션 변경: " << animIndex << " (Loop: " << loop << ")");
+}
+
+
 
 void ModelAnimator::UpdateTweenData()
 {
 	TweenDesc& desc = _tweenDesc;
-
 	desc.curr.sumTime += DT;
-	// 현재 애니메이션
+
+	// ✅ 현재 애니메이션 실행
 	{
 		shared_ptr<ModelAnimation> currentAnim = _model->GetAnimationByIndex(desc.curr.animIndex);
 		if (currentAnim)
 		{
-			float timePerFrame = 1 / (currentAnim->frameRate * desc.curr.speed);
+			float timePerFrame = 1.0f / (currentAnim->frameRate * desc.curr.speed);
 			if (desc.curr.sumTime >= timePerFrame)
 			{
 				desc.curr.sumTime = 0;
-				desc.curr.currFrame = (desc.curr.currFrame + 1) % currentAnim->frameCount;
+				int prevFrame = desc.curr.currFrame;
+				desc.curr.currFrame++;
+
+				// ✅ 애니메이션 종료 체크 (루프 여부 반영)
+				if (desc.curr.currFrame >= currentAnim->frameCount)
+				{
+					if (desc.curr.loop) // ✅ 루프 애니메이션이면 처음으로 리셋
+					{
+						desc.curr.currFrame = 0;
+					}
+					else
+					{
+						desc.curr.currFrame = currentAnim->frameCount - 1; // ✅ 마지막 프레임 유지
+						if (_animationEndCallback && desc.tweenRatio >= 1.0f)
+						{
+							_animationEndCallback(); // ✅ 콜백 실행
+							_animationEndCallback = nullptr; // ✅ 실행 후 초기화
+						}
+					}
+				}
+
 				desc.curr.nextFrame = (desc.curr.currFrame + 1) % currentAnim->frameCount;
 			}
 
@@ -60,30 +111,27 @@ void ModelAnimator::UpdateTweenData()
 		}
 	}
 
-	// 다음 애니메이션이 예약 되어 있다면
+	// ✅ 다음 애니메이션이 예약된 경우 블렌딩 처리
 	if (desc.next.animIndex >= 0)
 	{
 		desc.tweenSumTime += DT;
 		desc.tweenRatio = desc.tweenSumTime / desc.tweenDuration;
 
-		if (desc.tweenRatio >= 1.f)
+		if (desc.tweenRatio >= 1.0f)
 		{
-			// 애니메이션 교체 성공
+			// ✅ 블렌딩 완료 → 다음 애니메이션으로 변경
 			desc.curr = desc.next;
 			desc.ClearNextAnim();
 		}
 		else
 		{
-			// 교체중
 			shared_ptr<ModelAnimation> nextAnim = _model->GetAnimationByIndex(desc.next.animIndex);
 			desc.next.sumTime += DT;
 
-			float timePerFrame = 1.f / (nextAnim->frameRate * desc.next.speed);
-
-			if (desc.next.ratio >= 1.f)
+			float timePerFrame = 1.0f / (nextAnim->frameRate * desc.next.speed);
+			if (desc.next.ratio >= 1.0f)
 			{
 				desc.next.sumTime = 0;
-
 				desc.next.currFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
 				desc.next.nextFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
 			}
@@ -92,6 +140,7 @@ void ModelAnimator::UpdateTweenData()
 		}
 	}
 }
+
 
 void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 {
@@ -135,8 +184,6 @@ void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 		_shader->GetScalar("BoneIndex")->SetInt(mesh->boneIndex);
 
 		_shader->GetMatrix("MeshTransformMatrix")->SetMatrix(reinterpret_cast<const float*>(&mesh->transformMatrix));
-
-
 
 		mesh->vertexBuffer->PushData();
 		mesh->indexBuffer->PushData();
@@ -242,11 +289,7 @@ void ModelAnimator::CreateAnimationTransform(uint32 index)
 			if (frame != nullptr)
 			{
 				ModelKeyframeData& data = frame->transforms[f];
-
-				DEBUG_LOG("[Weapon] 애니메이션 적용됨: Frame " << f << ", Position: ("
-					<< data.translation.x << ", " << data.translation.y << ", " << data.translation.z
-					<< ")");
-
+		
 				Matrix S, R, T;
 				S = Matrix::CreateScale(data.scale.x, data.scale.y, data.scale.z);
 				R = Matrix::CreateFromQuaternion(data.rotation);

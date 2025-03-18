@@ -10,5 +10,9 @@ public:
 	void Start() override;
 	void LateUpdate() override;
 	void FixedUpdate() override;
+
+
+protected:
+	virtual void ProcSkill(int32 skillId) override;
 };
 

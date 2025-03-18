@@ -48,6 +48,12 @@
     <Filter Include="Game\Scripts\Player\Champ\Garen">
       <UniqueIdentifier>{ab94e11c-872b-412d-ab00-124deed4990f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scripts\Player\Champ\Annie\Skill">
+      <UniqueIdentifier>{07a47039-355c-42fc-b846-fa129024b2cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripts\Player\Champ\Garen\Skill">
+      <UniqueIdentifier>{78165ba7-717b-4986-832c-944f108ce25b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -110,6 +116,15 @@
     <ClInclude Include="AnnieOtherPlayerController.h">
       <Filter>Game\Scripts\Player\Champ\Annie</Filter>
     </ClInclude>
+    <ClInclude Include="ISkill.h">
+      <Filter>Game\Scripts\Player\Champ</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralAttack.h">
+      <Filter>Game\Scripts\Player\Champ</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePlayerController.h">
+      <Filter>Game\Scripts\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -171,6 +186,12 @@
     </ClCompile>
     <ClCompile Include="GarenPlayerController.cpp">
       <Filter>Game\Scripts\Player\Champ\Garen</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralAttack.cpp">
+      <Filter>Game\Scripts\Player\Champ</Filter>
+    </ClCompile>
+    <ClCompile Include="BasePlayerController.cpp">
+      <Filter>Game\Scripts\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

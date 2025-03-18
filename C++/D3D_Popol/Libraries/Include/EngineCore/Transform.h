@@ -34,7 +34,8 @@ public:
 	Vec3 GetLook() { return _matWorld.Backward(); }
 
 	Matrix GetWorldMatrix() { return _matWorld; }
-
+	Matrix GetFinalWorldMatrix();
+	
 	// °èÃþ °ü°è
 	bool HasParent() { return _parent != nullptr; }
 	

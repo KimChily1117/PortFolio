@@ -1,14 +1,16 @@
-#pragma once
+﻿#pragma once
 #include "Component.h"
+#include "ModelAnimation.h"
+#include "Model.h"
 
 class Model;
 class InstancingBuffer;
 
 struct AnimTransform
 {
-	// [ ][ ][ ][ ][ ][ ][ ] ... 250��
+	// [ ][ ][ ][ ][ ][ ][ ] ... 250개
 	using TransformArrayType = array<Matrix, MAX_MODEL_TRANSFORMS>;
-	// [ ][ ][ ][ ][ ][ ][ ] ... 500 ��
+	// [ ][ ][ ][ ][ ][ ][ ] ... 500 개
 	array<TransformArrayType, MAX_MODEL_KEYFRAMES> transforms;
 
 
@@ -19,7 +21,7 @@ class ModelAnimator : public Component
 {
 	using Super = Component;
 public:
-	
+
 	ModelAnimator(shared_ptr<Shader> shader);
 	~ModelAnimator();
 
@@ -36,10 +38,39 @@ public:
 
 	shared_ptr<Shader> GetShader() { return	_shader; }
 
+public:
+	void BlendToAnimation(int animIndex, float blendTime);
+	float GetAnimationDuration(int animIndex);
 
+	void SetAnimation(int32 animIndex , bool loop);
 private:
 	void CreateTexture();
 	void CreateAnimationTransform(uint32 index);
+
+
+private:
+	function<void()> _animationEndCallback;
+
+public:
+
+public:
+	void SetAnimationEndCallback(function<void()> callback)
+	{
+		_animationEndCallback = callback;
+	}
+
+
+	bool IsAnimationFinished()
+	{
+		shared_ptr<ModelAnimation> currentAnim = _model->GetAnimationByIndex(_tweenDesc.curr.animIndex);
+		if (!currentAnim)
+			return false;
+
+		// ✅ 현재 프레임이 마지막 프레임인지 확인
+		return _tweenDesc.curr.currFrame == currentAnim->frameCount - 1 && _tweenDesc.curr.sumTime >= (1.0f / (currentAnim->frameRate * _tweenDesc.curr.speed));
+	}
+
+
 
 
 private:

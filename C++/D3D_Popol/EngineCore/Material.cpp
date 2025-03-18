@@ -8,7 +8,6 @@ Material::Material() : Super(ResourceType::Material)
 
 Material::~Material()
 {
-
 }
 
 void Material::SetShader(shared_ptr<Shader> shader)

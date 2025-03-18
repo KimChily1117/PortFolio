@@ -37,6 +37,7 @@ public:
 	static void Handle_S_AddObject(BYTE* buffer, int32 len);
 	static void Handle_S_RemoveObject(BYTE* buffer, int32 len);
 	static void Handle_S_Move(BYTE* buffer, int32 len);
+	static void Handle_S_SkillResult(BYTE* buffer, int32 len);
 
 
 	template<typename T>

@@ -1,16 +1,8 @@
 ﻿#pragma once
 #include "MonoBehaviour.h"
+#include "BasePlayerController.h"
 
-
-enum class OtherPlayerState
-{
-	IDLE,
-	RUN,
-	//.....
-
-};
-
-class OtherPlayerController : public MonoBehaviour
+class OtherPlayerController : public BasePlayerController
 {
 public:
 	void Awake() override;
@@ -22,12 +14,19 @@ public:
 	// 이동 속도 설정
 	void SetSpeed(float speed) { _speed = speed; }
 
+
+protected:
+	virtual void ProcSkill(int32 skillId) override;
+	bool _hasTargetPosition = false;       // 목표 위치 존재 여부
+
+
 private:
 	Vec3 _targetPosition = Vec3(0, 0, 0);  // 목표 위치
-	bool _hasTargetPosition = false;       // 목표 위치 존재 여부
 	float _speed = 2.0f;                   // 이동 속도
 
-	OtherPlayerState _currentState = OtherPlayerState::IDLE;
+public:
 
+	shared_ptr<Protocol::ObjectInfo> _playerInfo;
+	float _timeToIdle = 0.3f;
 };
 

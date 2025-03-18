@@ -63,6 +63,10 @@ public:
 	void PushBoneData(const BoneDesc& desc);
 	void PushKeyframeData(const KeyframeDesc& desc);
 	void PushTweenData(const InstancedTweenDesc& desc);
+	
+	void PushUiData(const UIFillMountDesc& desc, const string& elementName);
+
+
 
 private:
 	GlobalDesc _globalDesc;
@@ -92,6 +96,15 @@ private:
 	InstancedTweenDesc _tweenDesc;
 	shared_ptr<ConstantBuffer<InstancedTweenDesc>> _tweenBuffer;
 	ComPtr<ID3DX11EffectConstantBuffer> _tweenEffectBuffer;
+
+
+	// UI Effect
+	//UIFillMountDesc _uiDesc;
+	//shared_ptr<ConstantBuffer<UIFillMountDesc>> _uiBuffer;
+	//ComPtr<ID3DX11EffectConstantBuffer> _uiEffectBuffer;
+
+	unordered_map<string, shared_ptr<ConstantBuffer<UIFillMountDesc>>> _uiEffectBuffers;
+	unordered_map<string, ComPtr<ID3DX11EffectConstantBuffer>> _uiEffectBufferMap;
 };
 
 class ShaderManager
