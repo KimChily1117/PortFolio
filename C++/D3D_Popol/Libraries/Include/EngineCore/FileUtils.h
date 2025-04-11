@@ -48,6 +48,7 @@ public:
 	void Read(void** data, uint32 dataSize);
 	void Read(OUT string& data);
 
+	
 private:
 	HANDLE _handle = INVALID_HANDLE_VALUE;
 };

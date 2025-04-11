@@ -3,14 +3,17 @@
 
 class HUDController : public MonoBehaviour
 {
+
 public:
+	void InitializeSkillData();
+
 	void Awake() override;
 	void Update() override;
 
 	void UpdatePlayerStatus();
-	void CheckSkillInput();
+	void TriggerSkillCoolDown(int skillId);
 	void UpdateSkillCooldowns();
-	void UpdateSkillCooldown(shared_ptr<GameObject> skillButton, int pass, float& elapsedTime, float duration, const string& elementName, bool isSkillActive);
+	void UpdateSkillCooldown(shared_ptr<GameObject> skillButton, int pass, float& elapsedTime, float duration, const string& elementName);
 
 
 	shared_ptr<GameObject> QSkillSocket;
@@ -23,4 +26,3 @@ public:
 
 	shared_ptr<GameObject> ChampMark;
 };
-

@@ -114,12 +114,17 @@ void Game::Update()
 	ShowFps();
 
 	GRAPHICS->RenderBegin();
+	
+	
 	GUI->Update();
 	UI->Update();
 	SCENE->Update();
+	PARTICLE->Update();
 	_desc.app->Update();
 	_desc.app->Render();
 	GUI->Render();
+	PARTICLE->Render();
+
 
 	GRAPHICS->RenderEnd();
 }

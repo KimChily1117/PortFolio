@@ -38,7 +38,7 @@ namespace Server
 		{
 			while (true)
 			{
-				int now = System.Environment.TickCount;
+				int now = Environment.TickCount;
 
 				JobTimerElem job;
 

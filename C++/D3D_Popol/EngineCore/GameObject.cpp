@@ -10,6 +10,7 @@
 #include "BaseCollider.h"
 #include "Terrain.h"
 #include "Button.h"
+#include "ParticleRenderer.h"
 
 GameObject::GameObject()
 {
@@ -94,6 +95,15 @@ void GameObject::FixedUpdate()
 	{
 		script->FixedUpdate();
 	}
+}
+
+void GameObject::Render()
+{
+	for (shared_ptr<Component>& component : _components)
+	{
+
+	}
+
 }
 
 
@@ -304,6 +314,15 @@ shared_ptr<Button> GameObject::GetButton()
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Button);
 	return static_pointer_cast<Button>(component);
 }
+
+shared_ptr<ParticleRenderer> GameObject::GetParticleRenderer()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::Particle);
+	return static_pointer_cast<ParticleRenderer>(component);
+}
+
+
+
 
 std::shared_ptr<Transform> GameObject::GetOrAddTransform()
 {

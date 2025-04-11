@@ -30,7 +30,8 @@ void Camera::SortGameObject()
 
 		if (gameObject->GetMeshRenderer() != nullptr
 			|| gameObject->GetModelRenderer() != nullptr
-			|| gameObject->GetModelAnimator() != nullptr)
+			|| gameObject->GetModelAnimator() != nullptr
+			|| gameObject->GetParticleRenderer() != nullptr)
 		{			
 			_vecForward.push_back(gameObject);
 		}

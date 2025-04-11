@@ -13,6 +13,12 @@ public:
 	void FixedUpdate() override;
 	void AlignToTarget();
 
+
+	Vec3 CalculateRotationFromDirection(const Vec3& dir);
+
+
+	shared_ptr<class ISkill> CreateSkillInstance(int32 skillId);
+
 protected:
 	virtual void ProcSkill(int32 skillId) override;
 

@@ -76,6 +76,9 @@ private:
 public:
 	unordered_map<uint64, shared_ptr<GameObject>> _players; // ObjectId 기반 저장소
 
+
+	unordered_map<uint64, shared_ptr<GameObject>> _projectiles; // ObjectId 기반 저장소
+
 private:
 	vector<shared_ptr<GameObject>> _newObjects; // 새로 추가된 오브젝트 목록
 	bool _isStartCalled = false;

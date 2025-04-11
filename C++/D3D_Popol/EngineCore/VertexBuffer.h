@@ -54,6 +54,18 @@ public:
 		CHECK(hr);
 	}
 
+
+	template<typename T>
+	void Update(const vector<T>& data)
+	{
+		D3D11_MAPPED_SUBRESOURCE subResource = {};
+		DC->Map(_vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
+		memcpy(subResource.pData, data.data(), sizeof(T) * data.size());
+		DC->Unmap(_vertexBuffer.Get(), 0);
+	}
+
+
+
 	void PushData()
 	{
 		DC->IASetVertexBuffers(_slot, 1, _vertexBuffer.GetAddressOf(), &_stride, &_offset);

@@ -19,7 +19,12 @@
 
 #include "ModelAnimator.h"
 #include "SphereCollider.h"
+#include "MeshRenderer.h"
+#include "ProjectileScript.h"
+#include "OtherProjectileScript.h"
+#include "ParticleRenderer.h"
 
+std::unordered_map<uint64, int32> ClientPacketHandler::g_lastPlayedSkill;
 
 void ClientPacketHandler::HandlePacket(ServerSessionRef session, BYTE* buffer, int32 len)
 {
@@ -59,6 +64,16 @@ void ClientPacketHandler::HandlePacket(ServerSessionRef session, BYTE* buffer, i
 	case S_MOVE:
 		Handle_S_Move(buffer, len);
 		break;
+	case S_PROJECTILE_SPAWN:
+		Handle_S_ProjectileSpawn(buffer, len);
+		break;
+	case S_PROJECTILE_HIT:
+		Handle_S_ProjectileHit(buffer, len);
+		break;
+	case S_DAMAGE:
+		Handle_S_Damage(buffer, len);
+		break;
+
 	default:
 		break;
 	}
@@ -153,6 +168,11 @@ void ClientPacketHandler::Handle_S_MyPlayer(BYTE* buffer, int32 len)
 			obj->AddComponent(collider);
 		}
 
+		obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
+
+		obj->GetModelAnimator()->SetModel(model);
+		obj->GetModelAnimator()->SetPass(2);
+
 
 		break;
 	case Protocol::PLAYER_CHAMPION_TYPE::PLAYER_TYPE_GAREN:
@@ -171,16 +191,18 @@ void ClientPacketHandler::Handle_S_MyPlayer(BYTE* buffer, int32 len)
 
 		model->ReadAnimation(champ + L"/Qspell");
 		//model->ReadAnimation(champ + L"/Wspell");
+		model->ReadAnimation(champ + L"/Idle");
 		model->ReadAnimation(champ + L"/Espell");
 		model->ReadAnimation(champ + L"/Rspell");
+		obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
+
+		obj->GetModelAnimator()->SetModel(model);
+		obj->GetModelAnimator()->SetPass(11);
 
 	}
 
 
-	obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
-
-	obj->GetModelAnimator()->SetModel(model);
-	obj->GetModelAnimator()->SetPass(2);
+	
 		
 	// ✅ 씬에 추가
 	CUR_SCENE->Add(obj);
@@ -309,7 +331,10 @@ void ClientPacketHandler::Handle_S_AddObject(BYTE* buffer, int32 len)
 					collider->SetRadius(20000.f);
 					obj->AddComponent(collider);
 				}
+				obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
 
+				obj->GetModelAnimator()->SetModel(model);
+				obj->GetModelAnimator()->SetPass(2);
 
 				break;
 			case Protocol::PLAYER_CHAMPION_TYPE::PLAYER_TYPE_GAREN:
@@ -326,26 +351,27 @@ void ClientPacketHandler::Handle_S_AddObject(BYTE* buffer, int32 len)
 				model->ReadAnimation(champ + L"/Atk1");
 				model->ReadAnimation(champ + L"/Atk2");
 
+
 				model->ReadAnimation(champ + L"/Qspell");
 				//model->ReadAnimation(champ + L"/Wspell");
+				model->ReadAnimation(champ + L"/Idle");
 				model->ReadAnimation(champ + L"/Espell");
 				model->ReadAnimation(champ + L"/Rspell");
 
 				{
 					auto collider = make_shared<SphereCollider>();
-					collider->SetRadius(120.f);
+					collider->SetRadius(210.f);
 					obj->AddComponent(collider);
 				}
+
+				obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
+
+				obj->GetModelAnimator()->SetModel(model);
+				obj->GetModelAnimator()->SetPass(11);
+
+
 				break;
-
 			}
-
-		
-			obj->AddComponent(make_shared<ModelAnimator>(CUR_SCENE->_shader));
-
-			obj->GetModelAnimator()->SetModel(model);
-			obj->GetModelAnimator()->SetPass(2);
-
 
 			// ✅ 씬에 추가
 			CUR_SCENE->Add(obj);
@@ -403,6 +429,7 @@ void ClientPacketHandler::Handle_S_Move(BYTE* buffer, int32 len)
 	}
 }
 
+
 void ClientPacketHandler::Handle_S_SkillResult(BYTE* buffer, int32 len)
 {
 	PacketHeader* header = (PacketHeader*)buffer;
@@ -414,9 +441,25 @@ void ClientPacketHandler::Handle_S_SkillResult(BYTE* buffer, int32 len)
 
 	uint64 casterId = pkt.casterid();
 	int32 skillId = pkt.skillid();
-
 	DEBUG_LOG("[Client] ✅ Skill Result Received: Caster " << casterId << " used Skill " << skillId);
 
+	// ✅ 내가 보낸 스킬이면 무시
+	if (casterId == GAMEMANAGER->_myPlayer->_playerInfo->objectid())
+	{
+		DEBUG_LOG("[Client] 🔄 Ignore my own SkillResult: " << skillId);
+		return;
+	}
+
+	// ✅ 중복 방지 처리
+	auto iter = g_lastPlayedSkill.find(casterId);
+	if (iter != g_lastPlayedSkill.end() && iter->second == skillId)
+	{
+		DEBUG_LOG("[Client] ⚠️ Duplicate Skill Result Ignored for Caster: " << casterId);
+		return;
+	}
+	g_lastPlayedSkill[casterId] = skillId;
+
+	// ✅ 캐스터 찾아서 스킬 실행
 	auto it = CUR_SCENE->_players.find(casterId);
 	if (it == CUR_SCENE->_players.end())
 	{
@@ -426,14 +469,182 @@ void ClientPacketHandler::Handle_S_SkillResult(BYTE* buffer, int32 len)
 
 	shared_ptr<GameObject> caster = it->second;
 	auto controller = caster->GetScript<BasePlayerController>();
-
 	if (!controller)
 	{
 		DEBUG_LOG("[Client] ❌ No Valid Controller Found for Caster " << casterId);
 		return;
 	}
 
+	// ✅ 타겟 설정
+	if (pkt.hitobjects().size() > 0)
+	{
+		uint64 targetId = pkt.hitobjects(0);
+		auto targetIt = CUR_SCENE->_players.find(targetId);
+		if (targetIt != CUR_SCENE->_players.end())
+			controller->SetTarget(targetIt->second);
+	}
+
 	controller->ProcSkill(skillId);
+}
+
+
+
+void ClientPacketHandler::Handle_S_ProjectileSpawn(BYTE* buffer, int32 len)
+{
+	PacketHeader* header = (PacketHeader*)buffer;
+	uint16 id = header->id;
+	uint16 size = header->size;
+
+	Protocol::S_ProjectileSpawn pkt;
+	pkt.ParseFromArray(&header[1], size - sizeof(PacketHeader));
+
+	uint64 casterId = pkt.casterid();
+	uint64 targetId = pkt.targetid();
+
+	auto it = CUR_SCENE->_players.find(casterId);
+	if (it == CUR_SCENE->_players.end())
+	{
+		DEBUG_LOG("[Client] ❌ Projectile Spawn Failed: Caster Not Found");
+		return;
+	}
+
+	// ✅ 투사체 GameObject 생성
+	shared_ptr<GameObject> projectileObj = make_shared<GameObject>("Projectile_" + std::to_string(pkt.projectileid()));
+
+
+
+
+
+	//// ✅ 위치 설정
+	//Vec3 startPos(pkt.startpos().x(), pkt.startpos().y() + 2.f, pkt.startpos().z());
+	//projectileObj->GetOrAddTransform()->SetPosition(startPos);
+
+	// ✅ 클라이언트에선 startpos를 무시하고, caster의 실제 위치로 보정
+	shared_ptr<GameObject> caster = nullptr;
+
+	auto it2 = CUR_SCENE->_players.find(pkt.casterid());
+	if (it2 != CUR_SCENE->_players.end())
+		caster = it->second;
+
+	Vec3 startPos;
+	if (caster)
+	{
+		startPos = caster->GetTransform()->GetPosition();
+		startPos.y += 1.1f;  // 0.8 ~ 1.2 정도가 보통 적절
+	}
+	else
+	{
+		startPos = Vec3(pkt.startpos().x(), pkt.startpos().y() + 1.1f, pkt.startpos().z()); // fallback
+		startPos.y += 2.f;
+	}
+	projectileObj->GetOrAddTransform()->SetPosition(startPos);
+
+
+	// ✅ 메시 렌더러 및 재질 설정 (Sphere Mesh + Veigar Material)
+	projectileObj->AddComponent(make_shared<MeshRenderer>());
+	{
+		auto material = RESOURCES->Get<Material>(L"Projectile");
+		auto mesh = RESOURCES->Get<Mesh>(L"Sphere");
+
+		projectileObj->GetMeshRenderer()->SetMaterial(material);
+		projectileObj->GetMeshRenderer()->SetMesh(mesh);
+		projectileObj->GetMeshRenderer()->SetPass(0); // 기본 패스
+		projectileObj->GetTransform()->SetScale(Vec3(0.5f));
+	}
+
+	// ✅ 충돌용 콜라이더 추가 (옵션)
+	{
+		auto collider = make_shared<SphereCollider>();
+		collider->SetRadius(0.5f);
+		projectileObj->AddComponent(collider);
+	}
+
+
+	if (GAMEMANAGER->_myPlayer->_playerInfo->objectid() == casterId)
+	{
+		// ✅ 추후 투사체 이동을 위한 Script 컴포넌트 추가 (ProjectileScript 등)
+		projectileObj->GetOrAddScript<ProjectileScript>();
+		projectileObj->GetScript<ProjectileScript>()->SetTarget(Vec3(pkt.endpos().x(), pkt.endpos().y() + 2.f, pkt.endpos().z()), pkt.speed());
+	}
+
+	else
+	{
+		// ✅ 추후 투사체 이동을 위한 Script 컴포넌트 추가 (ProjectileScript 등)
+		projectileObj->GetOrAddScript<OtherProjectileScript>();
+		projectileObj->GetScript<OtherProjectileScript>()->SetTarget(Vec3(pkt.endpos().x(), pkt.endpos().y() + 2.f, pkt.endpos().z()), pkt.speed());
+	}
+
+
+	// ✅ 파티클 재생 (위치 기준: 시작 지점)
+	Vec3 fxPos = projectileObj->GetTransform()->GetPosition();
+	Vec3 fxRot = projectileObj->GetTransform()->GetRotation();
+	
+	// ✅ 씬에 추가
+	CUR_SCENE->Add(projectileObj);
+	CUR_SCENE->_projectiles[pkt.projectileid()] = projectileObj;
+}
+
+
+void ClientPacketHandler::Handle_S_ProjectileHit(BYTE* buffer, int32 len)
+{
+	PacketHeader* header = (PacketHeader*)buffer;
+	uint16 id = header->id;
+	uint16 size = header->size;
+
+	Protocol::S_ProjectileHit pkt;
+	pkt.ParseFromArray(&header[1], size - sizeof(PacketHeader));
+
+	uint64 projectileId = pkt.projectileid();
+	uint64 targetId = pkt.targetid();
+
+	DEBUG_LOG("[Client] 🎯 Projectile Hit Received - ID: " << projectileId << ", Target: " << targetId);
+
+	auto it = CUR_SCENE->_projectiles.find(projectileId);
+	if (it != CUR_SCENE->_projectiles.end())
+	{
+		shared_ptr<GameObject> projObj = it->second;
+
+		// 💥 이펙트 또는 파괴 연출 시작 가능
+		// 예: 애니메이션 재생, 파티클 실행 등
+
+	// 1. projObj에서 투사체 스크립트를 얻는다
+		auto projectileScript = projObj->GetScript<ProjectileScript>();
+		if (!projectileScript)
+		{
+			auto otherProjectileScript = projObj->GetScript<OtherProjectileScript>();
+
+			auto scriptObj = otherProjectileScript->_trailObj;
+			CUR_SCENE->Remove(scriptObj);
+		}
+		else
+		{
+			auto scriptObj = projectileScript->_trailObj;
+			CUR_SCENE->Remove(scriptObj);
+		}
+	
+		// 🧹 정리
+		CUR_SCENE->Remove(projObj);
+		CUR_SCENE->_projectiles.erase(projectileId);
+	}
+}
+
+void ClientPacketHandler::Handle_S_Damage(BYTE* buffer, int32 len)
+{
+	Protocol::S_Damage pkt;
+	pkt.ParseFromArray(&buffer[sizeof(PacketHeader)], len - sizeof(PacketHeader));
+
+	uint64 targetId = pkt.targetid();
+	int32 damage = pkt.damage();
+	int32 remainHp = pkt.remainhp();
+
+	DEBUG_LOG("[Client] S_Damage Received → Target: " << targetId << ", Damage: " << damage << ", RemainHp: " << remainHp);
+
+	// ✅ 내 플레이어면 HUD 갱신
+	if (GAMEMANAGER->_myPlayer && GAMEMANAGER->_myPlayer->_playerInfo->objectid() == targetId)
+	{
+		// ✅ HP 동기화
+		GAMEMANAGER->_myPlayer->_playerInfo->set_hp(remainHp);	
+	}
 }
 
 

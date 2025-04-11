@@ -11,7 +11,6 @@
 void UIManager::Init()
 {
 	_shader = make_shared<Shader>(L"23. RenderDemo.fx");
-	_InDecreaseUIShader = make_shared<Shader>(L"24. ImageFillMount.fx");
 	
 	InitCursor();
 	InitHUD();

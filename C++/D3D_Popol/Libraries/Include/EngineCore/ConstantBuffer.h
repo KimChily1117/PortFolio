@@ -13,6 +13,8 @@ public:
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
+
+
 		desc.Usage = D3D11_USAGE_DYNAMIC; // CPU_Write + GPU_Read
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		desc.ByteWidth = sizeof(T);

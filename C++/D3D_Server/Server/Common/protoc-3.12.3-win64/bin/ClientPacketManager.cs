@@ -42,7 +42,15 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SRemoveObject, MakePacket<S_RemoveObject>);
 		_handler.Add((ushort)MsgId.SRemoveObject, PacketHandler.S_RemoveObjectHandler);		
 		_onRecv.Add((ushort)MsgId.SMove, MakePacket<S_Move>);
-		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);
+		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
+		_onRecv.Add((ushort)MsgId.SProjectileSpawn, MakePacket<S_ProjectileSpawn>);
+		_handler.Add((ushort)MsgId.SProjectileSpawn, PacketHandler.S_ProjectileSpawnHandler);		
+		_onRecv.Add((ushort)MsgId.SProjectileHit, MakePacket<S_ProjectileHit>);
+		_handler.Add((ushort)MsgId.SProjectileHit, PacketHandler.S_ProjectileHitHandler);		
+		_onRecv.Add((ushort)MsgId.SDamage, MakePacket<S_Damage>);
+		_handler.Add((ushort)MsgId.SDamage, PacketHandler.S_DamageHandler);		
+		_onRecv.Add((ushort)MsgId.SDead, MakePacket<S_Dead>);
+		_handler.Add((ushort)MsgId.SDead, PacketHandler.S_DeadHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

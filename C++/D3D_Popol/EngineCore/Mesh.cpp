@@ -19,6 +19,12 @@ void Mesh::CreateQuad()
 	CreateBuffers();
 }
 
+void Mesh::CreateParticleQuad()
+{
+	_geometry = make_shared<Geometry<VertexTextureNormalTangentData>>();
+	GeometryHelper::CreateQuadFacingZ(_geometry);
+	CreateBuffers();
+}
 void Mesh::CreateCube()
 {
 	_geometry = make_shared<Geometry<VertexTextureNormalTangentData>>();

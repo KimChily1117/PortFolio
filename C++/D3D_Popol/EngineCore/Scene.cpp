@@ -58,6 +58,12 @@ void Scene::Render()
 		camera->GetCamera()->SortGameObject();
 		camera->GetCamera()->Render_Forward();
 	}
+	unordered_set<shared_ptr<GameObject>> objects = _objects;
+
+	//for (shared_ptr<GameObject> object : objects)
+	//{
+	//	object->Render();
+	//}
 }
 
 

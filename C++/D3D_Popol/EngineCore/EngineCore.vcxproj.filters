@@ -48,6 +48,12 @@
     <Filter Include="00.Engine\Resource\Tilemap">
       <UniqueIdentifier>{cb9bfc3a-8dc2-441a-8a9b-2b8facc68b4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Graphics\State">
+      <UniqueIdentifier>{2ea354a6-48f9-4853-aa70-80b9a96f2075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Graphics\ParticleSystem">
+      <UniqueIdentifier>{54b4c49f-663a-46b2-9100-7a645951eb22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnginePch.h">
@@ -248,6 +254,27 @@
     <ClInclude Include="Tilemap.h">
       <Filter>00.Engine\Resource\Tilemap</Filter>
     </ClInclude>
+    <ClInclude Include="BinaryReader.h">
+      <Filter>98.Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilState.h">
+      <Filter>01.Graphics\State</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendState.h">
+      <Filter>01.Graphics\State</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerState.h">
+      <Filter>01.Graphics\State</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleRenderer.h">
+      <Filter>04.Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>01.Graphics\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>02.Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -430,11 +457,29 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>02.Managers</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>02.Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Tilemap.cpp">
       <Filter>00.Engine\Resource\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryReader.cpp">
+      <Filter>98.Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthStencilState.cpp">
+      <Filter>01.Graphics\State</Filter>
+    </ClCompile>
+    <ClCompile Include="BlendState.cpp">
+      <Filter>01.Graphics\State</Filter>
+    </ClCompile>
+    <ClCompile Include="SamplerState.cpp">
+      <Filter>01.Graphics\State</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleRenderer.cpp">
+      <Filter>04.Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>01.Graphics\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>02.Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

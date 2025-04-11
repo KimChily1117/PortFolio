@@ -27,3 +27,18 @@ using InstanceID = std::pair<uint64, uint64>;
 
 
 
+inline Vec2 QUAD_OFFSET[4] =
+{
+	Vec2(-0.5f, -0.5f),
+	Vec2(-0.5f, +0.5f),
+	Vec2(+0.5f, -0.5f),
+	Vec2(+0.5f, +0.5f)
+};
+
+inline Vec2 QUAD_UV[4] =
+{
+	Vec2(0, 1),
+	Vec2(0, 0),
+	Vec2(1, 1),
+	Vec2(1, 0)
+};

@@ -32,7 +32,8 @@ void Texture::Load(const wstring& path)
 	}
 	else if (extension == L"png" || extension == L"jpg" || extension == L"bmp")
 	{
-		hr = ::LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, &md, _img);
+		hr = ::LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, &md, _img); //기존 코드
+		//hr = ::LoadFromWICFile(path.c_str(), WIC_FLAGS_FORCE_RGB | WIC_FLAGS_NO_16BPP, &md, _img);
 	}
 	else if (extension == L"dds") // DDS 파일 로드 추가
 	{
