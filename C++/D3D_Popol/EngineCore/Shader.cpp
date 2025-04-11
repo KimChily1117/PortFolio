@@ -404,17 +404,6 @@ void Shader::PushTweenData(const InstancedTweenDesc& desc)
 
 void Shader::PushUiData(const UIFillMountDesc& desc, const string& elementName)
 {
-	/*if (_uiEffectBuffer == nullptr)
-	{
-		_uiBuffer = make_shared<ConstantBuffer<UIFillMountDesc>>();
-		_uiBuffer->Create();
-		_uiEffectBuffer = GetConstantBuffer("UIFillMount");
-	}
-
-	_uiDesc = desc;
-	_uiBuffer->CopyData(_uiDesc);
-	_uiEffectBuffer->SetConstantBuffer(_uiBuffer->GetComPtr().Get());*/
-
 
 	// UI별 개별적인 ConstantBuffer를 Map으로 관리
 	if (_uiEffectBuffers.find(elementName) == _uiEffectBuffers.end())
@@ -436,6 +425,20 @@ void Shader::PushUiData(const UIFillMountDesc& desc, const string& elementName)
 		_uiEffectBufferMap[elementName]->SetConstantBuffer(_uiEffectBuffers[elementName]->GetComPtr().Get());
 	}
 
+}
+
+void Shader::PushParticleData(const ParticleDesc& desc)
+{
+	if (_particleEffectBuffer == nullptr)
+	{
+		_particleBuffer = make_shared<ConstantBuffer<ParticleDesc>>();
+		_particleBuffer->Create();
+		_particleEffectBuffer = GetConstantBuffer("ParticleBuffer");
+	}
+
+	_particleDesc = desc;
+	_particleBuffer->CopyData(_particleDesc);
+	_particleEffectBuffer->SetConstantBuffer(_particleBuffer->GetComPtr().Get());
 }
 
 ComPtr<ID3DX11EffectUnorderedAccessViewVariable> Shader::GetUAV(string name)

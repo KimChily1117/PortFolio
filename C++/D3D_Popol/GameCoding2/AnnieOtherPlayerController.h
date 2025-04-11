@@ -17,6 +17,10 @@ public:
 protected:
 	virtual void ProcSkill(int32 skillId) override;
 	void AlignToTarget();
+
+	Vec3 CalculateRotationFromDirection(const Vec3& dir);
+
+
 	
 };
 

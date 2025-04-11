@@ -23,6 +23,7 @@
 #include "HUDController.h"
 #include "SkillIndicatorController.h"
 #include "CursorController.h"
+#include "ParticleRenderer.h"
 
 
 
@@ -59,7 +60,7 @@ void TestScene::Update()
 	}
 
 	// Cursor 여기서 정의
-	::ShowCursor(TRUE); // Ingame에서 마우스 커서 없애고 자체 MouseCursor Class 정의해서 만듬
+	::ShowCursor(FALSE); // Ingame에서 마우스 커서 없애고 자체 MouseCursor Class 정의해서 만듬
 
 	float width = GRAPHICS->GetViewport().GetWidth();
 	float height = GRAPHICS->GetViewport().GetHeight();
@@ -84,14 +85,55 @@ void TestScene::InitializeObject()
 {
 	_shader = make_shared<Shader>(L"23. RenderDemo.fx");
 
-	// Music (Test)
+	// SFX + BGM
 	{
 		SOUND->LoadSound("BGM", "..\\Resources\\Musics\\Sr_BGM.mp3", true);
-		SOUND->LoadSound("A_walk1", "..\\Resources\\Musics\\Annie\\walk1.mp3", false);
-		SOUND->LoadSound("A_walk2", "..\\Resources\\Musics\\Annie\\walk2.mp3", false);
-		SOUND->LoadSound("A_walk3", "..\\Resources\\Musics\\Annie\\walk3.mp3", false);
+		
+		
+		
+		// ANNIE(Voice)
+		SOUND->LoadSound("VO_Annie_walk1", "..\\Resources\\Musics\\Annie\\vo_walk1.mp3", false);
+		SOUND->LoadSound("VO_Annie_walk2", "..\\Resources\\Musics\\Annie\\vo_walk2.mp3", false);
+		SOUND->LoadSound("VO_Annie_walk3", "..\\Resources\\Musics\\Annie\\vo_walk3.mp3", false);
+		SOUND->LoadSound("VO_Annie_walk4", "..\\Resources\\Musics\\Annie\\vo_walk1.mp3", false);
+
+		// ANNIE(SFX)
+
+		SOUND->LoadSound("SFX_Annie_GenATK", "..\\Resources\\Musics\\Annie\\sfx_annie_genatk.mp3", false);
+		SOUND->LoadSound("SFX_Annie_QSpell", "..\\Resources\\Musics\\Annie\\sfx_annie_qspell.mp3", false);
+		SOUND->LoadSound("SFX_Annie_WSpell", "..\\Resources\\Musics\\Annie\\sfx_annie_wspell.mp3", false);
+		//////////////////////////////////////////////////////////////////////////////////
+
+		// GAREN(Voice)
+		
+		SOUND->LoadSound("VO_Garen_walk1", "..\\Resources\\Musics\\Garen\\vo_garen_walk1.mp3", false);
+		SOUND->LoadSound("VO_Garen_walk2", "..\\Resources\\Musics\\Garen\\vo_garen_walk2.mp3", false);
+		SOUND->LoadSound("VO_Garen_walk3", "..\\Resources\\Musics\\Garen\\vo_garen_walk3.mp3", false);
+		SOUND->LoadSound("VO_Garen_walk4", "..\\Resources\\Musics\\Garen\\vo_garen_walk4.mp3", false);
+
+		SOUND->LoadSound("VO_Garen_QSpell1", "..\\Resources\\Musics\\Garen\\vo_garen_Q1.ogg", false);
+
+		SOUND->LoadSound("VO_Garen_WSpell1", "..\\Resources\\Musics\\Garen\\vo_garen_W1.ogg", false);
+		SOUND->LoadSound("VO_Garen_WSpell2", "..\\Resources\\Musics\\Garen\\vo_garen_W2.ogg", false);
+
+		SOUND->LoadSound("VO_Garen_ESpell1", "..\\Resources\\Musics\\Garen\\vo_garen_E1.ogg", false);
+		SOUND->LoadSound("VO_Garen_ESpell2", "..\\Resources\\Musics\\Garen\\vo_garen_E2.ogg", false);
+
+		SOUND->LoadSound("VO_Garen_RSpell1", "..\\Resources\\Musics\\Garen\\vo_garen_R1.ogg", false);
+		SOUND->LoadSound("VO_Garen_RSpell2", "..\\Resources\\Musics\\Garen\\vo_garen_R2.ogg", false);
+
+
+		// GAREN(SFX)
+
+		SOUND->LoadSound("SFX_Garen_ESpell", "..\\Resources\\Musics\\Garen\\sfx_garen_E1.ogg", false);
+		SOUND->LoadSound("SFX_Garen_GenAtk", "..\\Resources\\Musics\\Garen\\sfx_garen_GenAtk.ogg", false);
+		SOUND->LoadSound("SFX_Garen_QSpell", "..\\Resources\\Musics\\Garen\\sfx_garen_Q1.ogg", false);
+		//////////////////////////////////////////////////////////////
 		SOUND->PlaySound("BGM");
 	}
+
+	// VFX
+	PARTICLE->Add(L"AnnieW", L"..\\Resources\\Particles\\annie_wspell_New.fx", 1);
 
 	// Main Camera
 	{
@@ -152,6 +194,50 @@ void TestScene::InitializeObject()
 			desc.specular = Vec4(1.f);
 			RESOURCES->Add(L"Veigar", material);
 		}
+
+
+		{
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(_shader);
+			auto texture = RESOURCES->Load<Texture>(L"Projectile", L"..\\Resources\\Textures\\Annie\\Particles\\fireball.png");
+			material->SetDiffuseMap(texture);
+			MaterialDesc& desc = material->GetMaterialDesc();
+			desc.ambient = Vec4(1.f);
+			desc.diffuse = Vec4(1.f);
+			desc.specular = Vec4(1.f);
+			RESOURCES->Add(L"Projectile", material);
+		}
+
+
+		{
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(_shader);
+			auto texture = RESOURCES->Load<Texture>(L"Trail", L"..\\Resources\\Textures\\Annie\\Particles\\annie_base_q_mis_trail.png");
+			material->SetDiffuseMap(texture);
+			MaterialDesc& desc = material->GetMaterialDesc();
+			desc.ambient = Vec4(1.f);
+			desc.diffuse = Vec4(1.f);
+			desc.specular = Vec4(1.f);
+			RESOURCES->Add(L"Trail", material);
+		}
+
+		{
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(_shader);
+			auto texture = RESOURCES->Load<Texture>(L"GarenE", L"..\\Resources\\Textures\\Garen\\Effect\\garen_base_e_spin_edge.png");
+			material->SetDiffuseMap(texture);
+			MaterialDesc& desc = material->GetMaterialDesc();
+			desc.ambient = Vec4(1.f);
+			desc.diffuse = Vec4(1.f);
+			desc.specular = Vec4(1.f);
+			RESOURCES->Add(L"GarenE", material);
+		}
+
+
+
+
+
+
 	}
 	//// Mesh
 	//{
@@ -201,7 +287,7 @@ void TestScene::InitializeObject()
 		_cursor->AddComponent(make_shared<Button>());
 		_cursor->GetButton()->Create(Vec2(0, 0), Vec2(75, 75), RESOURCES->Get<Material>(L"hover_precise"));
 		_cursor->GetButton()->SetOrder(10);
-		_cursor->GetOrAddScript<CursorController>();
+		
 
 		UI->SetCursorControllerGameObject(_cursor);
 
@@ -232,7 +318,47 @@ void TestScene::InitializeObject()
 		CUR_SCENE->Add(obj);
 	}
 
-	{		
+	{	
+		/*shared_ptr<class Model> m1 = make_shared<Model>();
+		m1->ReadModel(L"Effect/Cursor");
+		m1->ReadMaterial(L"Effect/Cursor");
+
+		auto obj = make_shared<GameObject>("ClickEffectTTTTTTTTTTTT");
+		obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+		obj->GetOrAddTransform()->SetScale(Vec3(0.01f));
+		obj->GetOrAddTransform()->SetPosition(Vec3(6.f, 2.0f, 3.f));
+		obj->AddComponent(make_shared<ModelRenderer>(_shader));
+		{
+			obj->GetModelRenderer()->SetModel(m1);
+			obj->GetModelRenderer()->SetPass(0);
+		}
+
+		CUR_SCENE->Add(obj);
+
+
+		{
+			shared_ptr<class Model> m1 = make_shared<Model>();
+			m1->ReadModel(L"Garen/Effect/ESpell");
+			m1->ReadMaterial(L"Garen/Effect/GarenESpell");
+
+			auto obj = make_shared<GameObject>("GarenEffect_test");
+			obj->GetOrAddTransform()->SetRotation(Vec3(XMConvertToRadians(90.f), 0.f, 0.f));
+			obj->GetOrAddTransform()->SetScale(Vec3(0.01f));
+			obj->GetOrAddTransform()->SetPosition(Vec3(9.f, 2.0f, 3.f));
+			obj->AddComponent(make_shared<ModelRenderer>(_shader));
+			{
+				obj->GetModelRenderer()->SetModel(m1);
+				obj->GetModelRenderer()->SetPass(0);
+			}
+
+			CUR_SCENE->Add(obj);
+		}
+*/
+
+
+
+
+
 		//shared_ptr<class Model> m1 = make_shared<Model>();
 		//m1->ReadModel(L"Garen/Garen");
 		//m1->ReadMaterial(L"Garen/Garen");
@@ -250,6 +376,8 @@ void TestScene::InitializeObject()
 		//}
 
 		//CUR_SCENE->Add(obj);
+
+
 
 
 		//shared_ptr<class Model> m1 = make_shared<Model>();
@@ -377,7 +505,10 @@ void TestScene::InitializeObject()
 	//	Add(obj);
 	//}
 
+
+
 #pragma endregion
 
 
 }
+

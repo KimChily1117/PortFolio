@@ -119,3 +119,51 @@ struct UIFillMountDesc
 	float ratio = 0.f; // 0 ~ 1 사이의 값을 보간해서 사용
 	float padding[3];  // 12 bytes 추가 (4 + 12 = 16 bytes)
 };
+
+
+
+
+struct ParticleData // 파티클 데이터 (파티클 옵션들)
+{
+	// 토글 옵션
+	bool isLoop = true;         // 반복 재생인가?
+	bool isAdditive = true;     // 화소 색채가 누적(반투명)인가?
+	bool isBillboard = true;    // 항상 정면을 향하게 할 것인가?
+
+	// 규모 옵션
+	UINT count = 100;           // 입자 개수
+	float duration = 1.0f;      // 재생 시간
+
+	// 파티클 제어 옵션 (min : 최소, max : 최대)
+	Vec3 minVelocity = { -1, -1, -1 };   // 허용 속도 (방향, 속력)
+	Vec3 maxVelocity = { +1, +1, +1 };
+	Vec3 minAccelation;                  // 가속 (움직이는 중 변동값)
+	Vec3 maxAccelation;
+	Vec3 minStartScale = { 1, 1, 1 };    // 크기 (입자 생성시)
+	Vec3 maxStartScale = { 1, 1, 1 };
+	Vec3 minEndScale = { 1, 1, 1 };      // 크기 (입자 소멸시)
+	Vec3 maxEndScale = { 1, 1, 1 };
+	float minSpeed = 1.0f;                  // 속력 (입자 이동)
+	float maxSpeed = 3.0f;
+	float minAngularVelocity = -10.0f;      // 방향 편향
+	float maxAngularVelocity = +10.0f;
+	float minStartTime = 0.0f;              // 입자별 지연시간
+	float maxStartTime = 0.0f;
+	XMFLOAT4 startColor = { 1, 1, 1, 1 };     // 입자의 색깔
+	XMFLOAT4 endColor = { 1, 1, 1, 1 };
+};
+
+struct ParticleDesc
+{
+	Color startColor;
+	Color endColor;
+
+	Vec3 velocity;
+	float drawDistance;
+
+	Vec3 extent;
+	float turbulence;
+
+	Vec3 origin;
+	float elapsedTime;
+};

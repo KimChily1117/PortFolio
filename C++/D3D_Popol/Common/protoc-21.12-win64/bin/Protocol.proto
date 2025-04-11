@@ -23,7 +23,10 @@ enum MsgId
     S_REMOVE_OBJECT = 13;
     S_MOVE = 14;
 	C_ENTER_GAME = 15;
-
+	S_PROJECTILE_SPAWN = 16;
+	S_PROJECTILE_HIT = 17;
+	S_DAMAGE = 18;
+	S_DEAD = 19;
 }
 
 message C_TESTMsg
@@ -84,21 +87,71 @@ message S_ObjectUpdate
     repeated ObjectInfo objects = 1;  // 여러 개의 오브젝트 정보
 }
 
+message S_Damage 
+{
+	uint64 targetId = 1;
+	int32 damage = 2;
+	int32 remainHp = 3;
+}
+
+message S_Dead
+{
+	uint64 targetId = 1;
+}
+
+
 // ✅ 스킬 사용 요청 (클라이언트 → 서버)
 message C_SkillCast
 {
     uint64 casterId = 1;   // 스킬을 사용하는 플레이어 ID
-    int32 skillId = 2;     // 사용한 스킬 ID
-    Vector3 targetPos = 3; // 스킬 대상 위치
+    uint64 targetId = 2;   // 스킬을 사용하는 플레이어 ID	
+    int32 skillId = 3;     // 사용한 스킬 ID (0이면 평타)
+    Vector3 targetPos = 4; // 스킬 대상 위치 (단일 타겟, 범위형 공통)
+    bool isAreaSkill = 5;  // ✅ 범위형 스킬 여부 (true: AoE, false: 단일 타겟)
+    float areaRadius = 6;  // ✅ 범위형 스킬 반경 (isAreaSkill이 true일 때 사용)
+    bool isBasicAttack = 7; // ✅ 평타 여부 (true일 경우 서버에서 일반 공격으로 처리)
 }
+
 
 // ✅ 스킬 사용 결과 (서버 → 클라이언트)
 message S_SkillResult
 {
-    uint64 casterId = 1;   // 스킬을 사용한 플레이어 ID
-    int32 skillId = 2;     // 사용한 스킬 ID
+    uint64 casterId = 1;     // 스킬을 사용한 플레이어 ID
+    int32 skillId = 2;       // 사용한 스킬 ID (0이면 평타)
     repeated uint64 hitObjects = 3; // 맞은 오브젝트 ID 리스트
+    bool isAreaSkill = 4;    // ✅ 범위형 스킬 여부 (true: AoE, false: 단일 타겟)
+    float areaRadius = 5;    // ✅ 범위형 스킬 반경 (isAreaSkill이 true일 때 사용)
+    Vector3 centerPos = 6;   // ✅ 범위형 스킬의 중심 좌표 (isAreaSkill이 true일 때 사용)
+    bool isBasicAttack = 7;  // ✅ 평타 여부 (true일 경우 클라이언트에서 기본 공격으로 처리)
 }
+
+
+
+
+// ✅ 서버에서 클라이언트로 투사체 생성 알림
+message S_ProjectileSpawn
+{
+    uint64 projectileId = 1;
+    uint64 casterId = 2;
+    uint64 targetId = 3;
+    Vector3 startPos = 4;
+    Vector3 endPos = 5;
+    float speed = 6;
+}
+
+// ✅ 서버에서 클라이언트로 투사체 충돌 및 삭제 알림
+message S_ProjectileHit
+{
+    uint64 projectileId = 1;
+    uint64 targetId = 2;
+}
+
+
+
+
+
+
+
 
 // ✅ 클라이언트가 맵 정보를 요청 (클라이언트 → 서버)
 message C_RequestMap

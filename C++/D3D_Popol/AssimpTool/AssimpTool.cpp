@@ -92,7 +92,7 @@ void AssimpTool::Init()
 	//	converter->ReadAssetFile(L"Annie/Atk2.fbx");
 	//	converter->ExportAnimationData(L"Annie/Atk2");
 	//}
-	{
+	/*{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Annie/Qspell.fbx");
 		converter->ExportAnimationData(L"Annie/Qspell");
@@ -111,7 +111,7 @@ void AssimpTool::Init()
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		converter->ReadAssetFile(L"Annie/Rspell.fbx");
 		converter->ExportAnimationData(L"Annie/Rspell");
-	}
+	}*/
 #pragma endregion	 
 
 
@@ -196,6 +196,28 @@ void AssimpTool::Init()
 	//	converter->ExportMaterialData(L"sr/sr");
 	//	converter->ExportModelData(L"sr/sr");
 	//}
+
+
+#pragma region Effect
+
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Effect/Garen_ESpell.fbx");
+		converter->ExportMaterialData(L"Garen/Effect/GarenESpell");
+		converter->ExportModelData(L"Garen/Effect/ESpell");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
+		converter->ReadAssetFile(L"Effect/SM_CursorMesh.FBX");
+		converter->ExportMaterialData(L"Effect/Cursor");
+		converter->ExportModelData(L"Effect/Cursor");
+	}
+#pragma endregion
+
+
+
+
+
 
 }
 

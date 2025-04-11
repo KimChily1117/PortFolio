@@ -10,6 +10,8 @@ class Light;
 class BaseCollider;
 class Terrain;
 class Button;
+class ParticleRenderer;
+
 
 class GameObject : public enable_shared_from_this<GameObject>
 {
@@ -23,6 +25,8 @@ public:
 	void Update();
 	void LateUpdate();
 	void FixedUpdate();
+
+	void Render();
 
 	void SaveTrasnformData();
 	void LoadTrasnformData();
@@ -40,6 +44,8 @@ public:
 	shared_ptr<Terrain> GetTerrain();
 
 	shared_ptr<Button> GetButton();
+	shared_ptr<ParticleRenderer> GetParticleRenderer();
+	
 
 	template <typename T>
 	std::shared_ptr<T> GetScript()

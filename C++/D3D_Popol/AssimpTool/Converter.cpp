@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Converter.h"
 #include <filesystem>
 #include "Utils.h"
@@ -117,7 +117,7 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent)
 	// Mesh
 	ReadMeshData(node, index);
 
-	// Àç±Í ÇÔ¼ö
+	// ì¬ê·€ í•¨ìˆ˜
 	for (uint32 i = 0; i < node->mNumChildren; i++)
 		ReadModelData(node->mChildren[i], _bones.size(), index);
 }
@@ -127,9 +127,9 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 	if (node->mNumMeshes < 1)
 		return;
 
-	//¸ğµç ¸ÓÆ¼¸®¾óÀ» °Ë»çÇÏ¿©, ÇÑ °³ÀÇ asMesh·Î ÇÕÄ¥Áö °³º°ÀûÀ¸·Î ÀúÀåÇÒÁö °áÁ¤
+	//ëª¨ë“  ë¨¸í‹°ë¦¬ì–¼ì„ ê²€ì‚¬í•˜ì—¬, í•œ ê°œì˜ asMeshë¡œ í•©ì¹ ì§€ ê°œë³„ì ìœ¼ë¡œ ì €ì¥í• ì§€ ê²°ì •
 	bool hasMultipleMaterials = false;
-	unordered_set<std::string> uniqueMaterials;  // ¸ÓÆ¼¸®¾ó Áßº¹ È®ÀÎÀ» À§ÇÑ Set
+	unordered_set<std::string> uniqueMaterials;  // ë¨¸í‹°ë¦¬ì–¼ ì¤‘ë³µ í™•ì¸ì„ ìœ„í•œ Set
 
 	for (uint32 i = 0; i < node->mNumMeshes; i++)
 	{
@@ -142,21 +142,21 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 		if (uniqueMaterials.find(materialName) == uniqueMaterials.end())
 			uniqueMaterials.insert(materialName);
 
-		if (uniqueMaterials.size() > 1) // ´Ù¸¥ ¸ÓÆ¼¸®¾óÀÌ ¹ß°ßµÇ¸é °³º° ÀúÀåÀ¸·Î º¯°æ
+		if (uniqueMaterials.size() > 1) // ë‹¤ë¥¸ ë¨¸í‹°ë¦¬ì–¼ì´ ë°œê²¬ë˜ë©´ ê°œë³„ ì €ì¥ìœ¼ë¡œ ë³€ê²½
 		{
 			hasMultipleMaterials = true;
 			break;
 		}
 	}
 
-	// 1. ÇÏ³ªÀÇ `asMesh`¿¡ ¸ğµç `aiMesh`¸¦ ÇÕÄ¥ °æ¿ì
+	// 1. í•˜ë‚˜ì˜ `asMesh`ì— ëª¨ë“  `aiMesh`ë¥¼ í•©ì¹  ê²½ìš°
 	if (!hasMultipleMaterials)
 	{
 		shared_ptr<asMesh> mesh = make_shared<asMesh>();
 		mesh->name = node->mName.C_Str();
 		mesh->boneIndex = bone;
 
-		// XÃà ¹İÀü (DirectX º¯È¯)
+		// Xì¶• ë°˜ì „ (DirectX ë³€í™˜)
 		Matrix transform(node->mTransformation[0]);
 		transform = transform.Transpose();
 		Matrix flipX = Matrix::CreateScale(-1.0f, 1.0f, 1.0f);
@@ -170,7 +170,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 			uint32 index = node->mMeshes[i];
 			const aiMesh* srcMesh = _scene->mMeshes[index];
 
-			// ¸ÓÆ¼¸®¾ó Àû¿ë
+			// ë¨¸í‹°ë¦¬ì–¼ ì ìš©
 			const aiMaterial* material = _scene->mMaterials[srcMesh->mMaterialIndex];
 			mesh->materialName = material->GetName().C_Str();
 
@@ -188,7 +188,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 				mesh->vertices.push_back(vertex);
 			}
 
-			// ÀÎµ¦½º Ã³¸® (startVertex °í·Á)
+			// ì¸ë±ìŠ¤ ì²˜ë¦¬ (startVertex ê³ ë ¤)
 			for (uint32 f = 0; f < srcMesh->mNumFaces; f++)
 			{
 				aiFace& face = srcMesh->mFaces[f];
@@ -202,7 +202,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 	}
 	else
 	{
-		//2. °¢ `aiMesh`¸¦ °³º° `asMesh`·Î ÀúÀå
+		//2. ê° `aiMesh`ë¥¼ ê°œë³„ `asMesh`ë¡œ ì €ì¥
 		for (uint32 meshIdx = 0; meshIdx < node->mNumMeshes; meshIdx++)
 		{
 			uint32 aiMeshIndex = node->mMeshes[meshIdx];
@@ -212,7 +212,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 			subMesh->name = node->mName.C_Str();
 			subMesh->boneIndex = bone;
 
-			// ¸ÓÆ¼¸®¾ó Ã³¸®
+			// ë¨¸í‹°ë¦¬ì–¼ ì²˜ë¦¬
 			const aiMaterial* material = _scene->mMaterials[srcMesh->mMaterialIndex];
 			subMesh->materialName = material->GetName().C_Str();
 
@@ -256,14 +256,14 @@ void Converter::ReadSkinData()
 		{
 			std::cerr << "Invalid mesh index: " << i
 				<< " (Max: " << _meshes.size() - 1 << ")" << std::endl;
-			return; // ¶Ç´Â continue·Î ÇØ´ç ¸Ş½¬ °Ç³Ê¶Ù±â
+			return; // ë˜ëŠ” continueë¡œ í•´ë‹¹ ë©”ì‰¬ ê±´ë„ˆë›°ê¸°
 		}
 		shared_ptr<asMesh> mesh = _meshes[i];
 
 		vector<asBoneWeights> tempVertexBoneWeights;
 		tempVertexBoneWeights.resize(mesh->vertices.size());
 
-		// BoneÀ» ¼øÈ¸ÇÏ¸é¼­ ¿¬°üµÈ VertexId, Weight¸¦ ±¸ÇØ¼­ ±â·ÏÇÑ´Ù.
+		// Boneì„ ìˆœíšŒí•˜ë©´ì„œ ì—°ê´€ëœ VertexId, Weightë¥¼ êµ¬í•´ì„œ ê¸°ë¡í•œë‹¤.
 		for (uint32 b = 0; b < srcMesh->mNumBones; b++)
 		{
 			aiBone* srcMeshBone = srcMesh->mBones[b];
@@ -272,13 +272,13 @@ void Converter::ReadSkinData()
 			for (uint32 w = 0; w < srcMeshBone->mNumWeights; w++)
 			{
 				uint32 index = srcMeshBone->mWeights[w].mVertexId;
-				// index °ËÁõ
+				// index ê²€ì¦
 				if (index >= tempVertexBoneWeights.size())
 				{
 					std::cerr << "Invalid VertexId: " << index
 						<< " (Max: " << tempVertexBoneWeights.size() - 1 << ")"
 						<< " in Bone: " << srcMeshBone->mName.C_Str() << std::endl;
-					continue; // Àß¸øµÈ ÀÎµ¦½º ¹«½Ã
+					continue; // ì˜ëª»ëœ ì¸ë±ìŠ¤ ë¬´ì‹œ
 				}
 
 				float weight = srcMeshBone->mWeights[w].mWeight;
@@ -286,7 +286,7 @@ void Converter::ReadSkinData()
 			}
 		}
 
-		// ÃÖÁ¾ °á°ú °è»ê
+		// ìµœì¢… ê²°ê³¼ ê³„ì‚°
 		for (uint32 v = 0; v < tempVertexBoneWeights.size(); v++)
 		{
 			tempVertexBoneWeights[v].Normalize();
@@ -302,7 +302,7 @@ void Converter::WriteModelFile(wstring finalPath)
 {
 	auto path = filesystem::path(finalPath);
 
-	// Æú´õ°¡ ¾øÀ¸¸é ¸¸µç´Ù.
+	// í´ë”ê°€ ì—†ìœ¼ë©´ ë§Œë“ ë‹¤.
 	filesystem::create_directory(path.parent_path());
 
 	shared_ptr<FileUtils> file = make_shared<FileUtils>();
@@ -336,14 +336,14 @@ void Converter::WriteModelFile(wstring finalPath)
 	}
 
 
-	//// Æú´õ »ı¼º
+	//// í´ë” ìƒì„±
 	//auto path = filesystem::path(finalPath);
 	//filesystem::create_directory(path.parent_path());
 
 	//shared_ptr<FileUtils> file = make_shared<FileUtils>();
 	//file->Open(finalPath, FileMode::Write);
 
-	//// Bone µ¥ÀÌÅÍ ÀúÀå
+	//// Bone ë°ì´í„° ì €ì¥
 	//file->Write<uint32>(_bones.size());
 	//for (shared_ptr<asBone>& bone : _bones)
 	//{
@@ -353,23 +353,23 @@ void Converter::WriteModelFile(wstring finalPath)
 	//	file->Write<Matrix>(bone->transform);
 	//}
 
-	//// Mesh(SubMesh) µ¥ÀÌÅÍ ÀúÀå
+	//// Mesh(SubMesh) ë°ì´í„° ì €ì¥
 	//file->Write<uint32>(_meshes.size());
 	//for (shared_ptr<asMesh>& subMesh : _meshes)
 	//{
-	//	// SubMesh ÀÌ¸§°ú º» ÀÎµ¦½º
+	//	// SubMesh ì´ë¦„ê³¼ ë³¸ ì¸ë±ìŠ¤
 	//	file->Write<string>(subMesh->name);
 	//	file->Write<int32>(subMesh->boneIndex);
 	//	file->Write<string>(subMesh->materialName);
 	//	file->Write<Matrix>(meshData->transformMatrix);
 
-	//	// Vertex µ¥ÀÌÅÍ
+	//	// Vertex ë°ì´í„°
 	//	uint32 vertexCount = static_cast<uint32>(subMesh->vertices.size());
 	//	file->Write<uint32>(vertexCount);
 	//	if (vertexCount > 0)
 	//		file->Write(&subMesh->vertices[0], sizeof(VertexType) * vertexCount);
 
-	//	// Index µ¥ÀÌÅÍ
+	//	// Index ë°ì´í„°
 	//	uint32 indexCount = static_cast<uint32>(subMesh->indices.size());
 	//	file->Write<uint32>(indexCount);
 	//	if (indexCount > 0)
@@ -431,7 +431,7 @@ void Converter::WriteMaterialData(wstring finalPath)
 {
 	auto path = filesystem::path(finalPath);
 
-	// Æú´õ°¡ ¾øÀ¸¸é ¸¸µç´Ù.
+	// í´ë”ê°€ ì—†ìœ¼ë©´ ë§Œë“ ë‹¤.
 	filesystem::create_directory(path.parent_path());
 
 	string folder = path.parent_path().string();
@@ -570,10 +570,10 @@ std::shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* srcAnimat
 	{
 		aiNodeAnim* srcNode = srcAnimation->mChannels[i];
 
-		// ¾Ö´Ï¸ŞÀÌ¼Ç ³ëµå µ¥ÀÌÅÍ ÆÄ½Ì
+		// ì• ë‹ˆë©”ì´ì…˜ ë…¸ë“œ ë°ì´í„° íŒŒì‹±
 		shared_ptr<asAnimationNode> node = ParseAnimationNode(animation, srcNode);
 
-		// ÇöÀç Ã£Àº ³ëµå Áß¿¡ Á¦ÀÏ ±ä ½Ã°£À¸·Î ¾Ö´Ï¸ŞÀÌ¼Ç ½Ã°£ °»½Å
+		// í˜„ì¬ ì°¾ì€ ë…¸ë“œ ì¤‘ì— ì œì¼ ê¸´ ì‹œê°„ìœ¼ë¡œ ì• ë‹ˆë©”ì´ì…˜ ì‹œê°„ ê°±ì‹ 
 		animation->duration = max(animation->duration, node->keyframe.back().time);
 
 		cacheAnimNodes[srcNode->mNodeName.C_Str()] = node;
@@ -636,7 +636,7 @@ std::shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnim
 			node->keyframe.push_back(frameData);
 	}
 
-	// Keyframe ´Ã·ÁÁÖ±â
+	// Keyframe ëŠ˜ë ¤ì£¼ê¸°
 	if (node->keyframe.size() < animation->frameCount)
 	{
 		uint32 count = animation->frameCount - node->keyframe.size();
@@ -675,7 +675,7 @@ void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcN
 		keyframe->transforms.push_back(frameData);
 	}
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç Å°ÇÁ·¹ÀÓ Ã¤¿ì±â
+	// ì• ë‹ˆë©”ì´ì…˜ í‚¤í”„ë ˆì„ ì±„ìš°ê¸°
 	animation->keyframes.push_back(keyframe);
 
 	for (uint32 i = 0; i < srcNode->mNumChildren; i++)
@@ -686,7 +686,7 @@ void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring fi
 {
 	auto path = filesystem::path(finalPath);
 
-	// Æú´õ°¡ ¾øÀ¸¸é ¸¸µç´Ù.
+	// í´ë”ê°€ ì—†ìœ¼ë©´ ë§Œë“ ë‹¤.
 	filesystem::create_directory(path.parent_path());
 
 	shared_ptr<FileUtils> file = make_shared<FileUtils>();

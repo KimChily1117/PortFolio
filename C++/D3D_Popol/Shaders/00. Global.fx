@@ -18,7 +18,6 @@ cbuffer TransformBuffer
     matrix W;
 };
 
-
 //////////////////
 // UI FillMount // 
 //////////////////
@@ -52,6 +51,13 @@ cbuffer UIFillMount_R
 {
     float FillAmount_R;
 };
+
+
+
+//////////////////////////////
+
+
+
 
 
 ////////////////

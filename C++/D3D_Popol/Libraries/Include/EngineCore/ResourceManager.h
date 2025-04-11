@@ -29,15 +29,19 @@ public:
 	template<typename T>
 	ResourceType GetResourceType();
 
+public:
+	std::shared_ptr<struct ParticleData> GetEffectParticle(const wstring& key) const;
+	void CreateParticle(const wstring key, const wstring& path);
 private:
 	void CreateDefaultMesh();
-
 private:
 	wstring _resourcePath;
-
 private:
 	using KeyObjMap = map<wstring/*key*/, shared_ptr<ResourceBase>>;
 	array<KeyObjMap, RESOURCE_TYPE_COUNT> _resources;
+
+	unordered_map<wstring, shared_ptr<ParticleData>> _effectParticles;
+
 };
 
 template<typename T>

@@ -14,10 +14,11 @@ enum class ComponentType : uint8
 	Collider,
 	Terrain,
 	Button,
+	Particle,
 	// ...
 	Script,
 
-	End,
+	End
 };
 
 enum
@@ -36,7 +37,8 @@ public:
 	virtual void Update() { }
 	virtual void LateUpdate() { }
 	virtual void FixedUpdate() { }
-		
+
+
 public:
 	ComponentType GetType() { return _type; }
 

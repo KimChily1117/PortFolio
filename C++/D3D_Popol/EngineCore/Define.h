@@ -47,7 +47,7 @@ public:										\
 #define GAMEMANAGER	GET_SINGLE(GameManager)
 #define UI			GET_SINGLE(UIManager)
 #define SOUND		GET_SINGLE(SoundManager)
-
+#define PARTICLE	GET_SINGLE(ParticleManager)
 
 enum LayerMask
 {

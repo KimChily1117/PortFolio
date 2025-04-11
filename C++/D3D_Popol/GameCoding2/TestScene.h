@@ -11,6 +11,7 @@ public:
 
 	shared_ptr<Shader> GetShader() { return _shader; }
 
-	shared_ptr<GameObject> _cursor;
+	shared_ptr<GameObject> _cursor;	
+
 };
 

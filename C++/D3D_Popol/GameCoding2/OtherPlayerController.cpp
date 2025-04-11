@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Time.h"
 #include "ModelAnimator.h"
+#include "ClientPacketHandler.h"
 
 void OtherPlayerController::Awake()
 {
@@ -15,10 +16,22 @@ void OtherPlayerController::Update()
 		return;
 
 	Vec3 currentPosition = GetTransform()->GetPosition();
-	Vec3 direction = _targetPosition - currentPosition;
+	direction = _targetPosition - currentPosition;
 	direction.y = 0.0f;
 
 	float distance = direction.Length();
+
+	uint64 objectId = _playerInfo->objectid();
+
+	bool isESkill = false;
+
+	// ✅ 현재 플레이어가 E 스킬 중이면 Run 애니메이션을 무시
+	auto it = ClientPacketHandler::g_lastPlayedSkill.find(objectId);
+	if (it != ClientPacketHandler::g_lastPlayedSkill.end())
+	{
+		if (it->second == (int)SkillType::ESpell)
+			isESkill = true;
+	}
 
 	if (distance < 0.05f)
 	{
@@ -39,8 +52,12 @@ void OtherPlayerController::Update()
 
 		GetTransform()->SetPosition(newPosition);
 
-		_currentState = PlayerState::RUN;
-		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
+		// ✅ E 스킬 중엔 애니메이션 변경 X
+		if (!isESkill)
+		{
+			_currentState = PlayerState::RUN;
+			GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
+		}
 	}
 }
 
@@ -52,4 +69,5 @@ void OtherPlayerController::SetTargetPosition(const Vec3& position)
 
 void OtherPlayerController::ProcSkill(int32 skillId)
 {
+	// 필요 시 추가 구현
 }

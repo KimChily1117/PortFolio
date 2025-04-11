@@ -117,12 +117,6 @@ void Button::GUIRender()
 			transform->SetLocalScale(scale);
 		}
 
-		//// Transform 데이터 저장 버튼
-		//if (ImGui::Button("Save Transform Data"))
-		//{
-		//	//Save(); // 저장 기능 호출 (사용자 함수)
-		//}
-
 		ImGui::End();
 	}
 }

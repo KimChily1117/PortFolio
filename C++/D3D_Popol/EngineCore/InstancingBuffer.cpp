@@ -17,11 +17,16 @@ void InstancingBuffer::ClearData()
 {
 	_data.clear();
 }
+//
+//void InstancingBuffer::AddData(InstancingData& data)
+//{
+//	_data.push_back(data);
+//
+//}
 
-void InstancingBuffer::AddData(InstancingData& data)
+void InstancingBuffer::AddData(InstancingData data)
 {
 	_data.push_back(data);
-
 }
 
 void InstancingBuffer::PushData()

@@ -4,10 +4,12 @@
 
 #include "Types.h"
 #include "Define.h"
+#include "Utils.h"
 
 // STL
 #include <memory>
 #include <iostream>
+#include <string>
 #include <array>
 #include <vector>
 #include <list>
@@ -90,6 +92,7 @@ using json = nlohmann::json;
 #include "GameManager.h"
 #include "UIManager.h"
 #include "SoundManager.h"
+#include "ParticleManager.h"
 
 
 

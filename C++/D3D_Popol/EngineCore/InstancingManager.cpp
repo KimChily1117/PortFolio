@@ -5,6 +5,7 @@
 #include "MeshRenderer.h"
 #include "ModelRenderer.h"
 #include "ModelAnimator.h"
+#include "ParticleRenderer.h"
 #include "Transform.h"
 #include "Camera.h"
 
@@ -15,7 +16,7 @@ void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
 	RenderMeshRenderer(gameObjects);
 	RenderModelRenderer(gameObjects);
 	RenderAnimRenderer(gameObjects);
-
+	RenderParticleRenderer(gameObjects);
 }
 
 void InstancingManager::RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameObjects)
@@ -143,6 +144,45 @@ void InstancingManager::RenderAnimRenderer(vector<shared_ptr<GameObject>>& gameO
 			vec[0]->GetModelAnimator()->RenderInstancing(buffer);
 		}
 	}
+}
+
+void InstancingManager::RenderParticleRenderer(vector<shared_ptr<GameObject>>& gameObjects)
+{
+	//map<InstanceID, vector<shared_ptr<GameObject>>> cache;
+
+	//for (shared_ptr<GameObject>& gameObject : gameObjects)
+	//{
+	//	if (gameObject->GetParticleRenderer() == nullptr)
+	//		continue;
+
+	//	const InstanceID instanceId = gameObject->GetParticleRenderer()->GetInstanceID();
+	//	cache[instanceId].push_back(gameObject);
+	//}
+
+	//for (auto& pair : cache)
+	//{
+	//	const vector<shared_ptr<GameObject>>& vec = pair.second;
+	//	const InstanceID instanceId = pair.first;
+
+	//	for (int32 i = 0; i < vec.size(); i++)
+	//	{
+	//		const shared_ptr<GameObject>& gameObject = vec[i];
+	//		auto renderer = gameObject->GetParticleRenderer();
+
+	//		renderer->UpdateParticles(DT);
+	//		renderer->UpdateColor();
+
+	//		for (uint32 j = 0; j < renderer->_drawCount; ++j)
+	//		{
+	//			InstancingData data;
+	//			data.world = renderer->_instances[j].world; // XMMatrix
+	//			AddData(instanceId, data);
+	//		}
+	//	}
+
+	//	shared_ptr<InstancingBuffer>& buffer = _buffers[instanceId];
+	//	vec[0]->GetParticleRenderer()->RenderInstancing(buffer);
+	//}
 }
 
 

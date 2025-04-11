@@ -11,6 +11,7 @@ public:
     virtual ~Mesh();
 
 	void CreateQuad();
+	void CreateParticleQuad();
 	void CreateCube();
 	void CreateGrid(int32 sizeX, int32 sizeZ);
 	void CreateSphere();

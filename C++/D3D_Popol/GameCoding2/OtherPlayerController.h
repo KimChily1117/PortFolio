@@ -18,15 +18,16 @@ public:
 protected:
 	virtual void ProcSkill(int32 skillId) override;
 	bool _hasTargetPosition = false;       // 목표 위치 존재 여부
+	Vec3 _lastKnownTargetPos;
 
 
-private:
+protected:
 	Vec3 _targetPosition = Vec3(0, 0, 0);  // 목표 위치
 	float _speed = 2.0f;                   // 이동 속도
 
-public:
 
-	shared_ptr<Protocol::ObjectInfo> _playerInfo;
+
+public:
 	float _timeToIdle = 0.3f;
 };
 

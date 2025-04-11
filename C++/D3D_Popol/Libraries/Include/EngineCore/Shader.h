@@ -66,7 +66,7 @@ public:
 	
 	void PushUiData(const UIFillMountDesc& desc, const string& elementName);
 
-
+	void PushParticleData (const ParticleDesc& desc);
 
 private:
 	GlobalDesc _globalDesc;
@@ -97,15 +97,15 @@ private:
 	shared_ptr<ConstantBuffer<InstancedTweenDesc>> _tweenBuffer;
 	ComPtr<ID3DX11EffectConstantBuffer> _tweenEffectBuffer;
 
-
-	// UI Effect
-	//UIFillMountDesc _uiDesc;
-	//shared_ptr<ConstantBuffer<UIFillMountDesc>> _uiBuffer;
-	//ComPtr<ID3DX11EffectConstantBuffer> _uiEffectBuffer;
-
 	unordered_map<string, shared_ptr<ConstantBuffer<UIFillMountDesc>>> _uiEffectBuffers;
 	unordered_map<string, ComPtr<ID3DX11EffectConstantBuffer>> _uiEffectBufferMap;
+
+	ParticleDesc _particleDesc;
+	shared_ptr<ConstantBuffer<ParticleDesc>> _particleBuffer;
+	ComPtr<ID3DX11EffectConstantBuffer> _particleEffectBuffer;
+
 };
+
 
 class ShaderManager
 {

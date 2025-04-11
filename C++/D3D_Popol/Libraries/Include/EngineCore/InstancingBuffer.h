@@ -18,7 +18,8 @@ public:
 private:
 	void CreateBuffer(uint32 maxCount = MAX_MESH_INSTANCE);
 public:
-	void AddData(InstancingData& data);
+	//void AddData(InstancingData& data);
+	void AddData(InstancingData data);
 	void ClearData();
 
 	void PushData();

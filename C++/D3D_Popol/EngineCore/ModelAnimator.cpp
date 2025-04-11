@@ -96,7 +96,7 @@ void ModelAnimator::UpdateTweenData()
 					else
 					{
 						desc.curr.currFrame = currentAnim->frameCount - 1; // ✅ 마지막 프레임 유지
-						if (_animationEndCallback && desc.tweenRatio >= 1.0f)
+						if (_animationEndCallback)
 						{
 							_animationEndCallback(); // ✅ 콜백 실행
 							_animationEndCallback = nullptr; // ✅ 실행 후 초기화

@@ -116,6 +116,41 @@ float4 PS_RadialFill_R(MeshOutput input) : SV_TARGET
     return color;
 }
 
+float4 PS_Particle(MeshOutput input) : SV_TARGET
+{
+    float4 color = DiffuseMap.Sample(LinearSampler, input.uv);
+
+    // MaterialDesc에서 넘어온 diffuse 색상 곱하기
+    color *= Material.diffuse;
+
+    // 알파 클리핑 적용
+    clip(color.a - 0.1f);
+
+    return color;
+}
+
+float4 PS_Trail(MeshOutput input) : SV_TARGET
+{
+ // 텍스처 샘플링
+    float4 color = DiffuseMap.Sample(LinearSampler, input.uv);
+
+    // 알파 컷 (투명도 낮으면 제거)
+    clip(color.a - 0.1f);
+
+    // 위에서 바라보는 면만 유지 (정면, 옆면 제거)
+    if (abs(input.normal.y) < 0.99f)
+        discard;
+
+    // Material에서 설정한 diffuse 값과 곱하기 (색상 조절용)
+    color *= Material.diffuse;
+
+    return color;    
+}
+
+
+
+
+
 
 
 /////////////////////////////////////
@@ -134,4 +169,8 @@ technique11 T0
 	PASS_VP(P8, VS_Mesh, PS_RadialFill_W) // W 스킬 쿨타임
 	PASS_VP(P9, VS_Mesh, PS_RadialFill_E) // E 스킬 쿨타임
 	PASS_VP(P10, VS_Mesh, PS_RadialFill_R) // R 스킬 쿨타임
+	PASS_VP(P11, VS_Animation_Static, PS) // 가렌을 위한 쉐이더
+	PASS_VP(P12, VS_Mesh, PS_Particle) // 파티클 위한 쉐이더
+	PASS_VP(P13, VS_Mesh, PS_Trail) // 트레일 위한 쉐이더
+
 }; 

@@ -6,23 +6,41 @@
 #include "MeshRenderer.h"
 
 
-//test 
+////test 
+//
+//// ✅ 스킬별 경과 시간 저장 (초기값 = 최대 쿨타임)
+//unordered_map<string, float> skillElapsedTime = {
+//	{"Q", 3.0f},  // Q 스킬 초기 쿨타임 (3초)
+//	{"W", 5.0f},  // W 스킬 초기 쿨타임 (5초)
+//	{"E", 7.0f},  // E 스킬 초기 쿨타임 (7초)
+//	{"R", 10.0f}  // R 스킬 초기 쿨타임 (10초)
+//};
+//
+//// ✅ 스킬별 최대 쿨타임 저장
+//unordered_map<string, float> skillMaxCooldown = {
+//	{"Q", 3.0f},
+//	{"W", 5.0f},
+//	{"E", 7.0f},
+//	{"R", 10.0f}
+//};
 
-// ✅ 스킬별 경과 시간 저장 (초기값 = 최대 쿨타임)
-unordered_map<string, float> skillElapsedTime = {
-	{"Q", 3.0f},  // Q 스킬 초기 쿨타임 (3초)
-	{"W", 5.0f},  // W 스킬 초기 쿨타임 (5초)
-	{"E", 7.0f},  // E 스킬 초기 쿨타임 (7초)
-	{"R", 10.0f}  // R 스킬 초기 쿨타임 (10초)
-};
 
-// ✅ 스킬별 최대 쿨타임 저장
-unordered_map<string, float> skillMaxCooldown = {
-	{"Q", 3.0f},
-	{"W", 5.0f},
-	{"E", 7.0f},
-	{"R", 10.0f}
-};
+// ✅ SkillData 기반 쿨타임 관리
+unordered_map<int, float> skillElapsedTime;
+unordered_map<int, SkillData> skillDataTable;
+
+void HUDController::InitializeSkillData()
+{
+	// ✅ 챔피언 타입을 기반으로 스킬 데이터 로드 (GAREN or ANNIE)
+	Protocol::PLAYER_CHAMPION_TYPE champType = GAMEMANAGER->_myPlayer->_playerInfo->champtype();
+	vector<SkillData> skills = GetChampionSkills(champType);
+
+	for (const SkillData& skill : skills)
+	{
+		skillElapsedTime[skill.SkillId] = skill.cooldown;  // 최대 쿨타임으로 초기화
+		skillDataTable[skill.SkillId] = skill;
+	}
+}
 
 void HUDController::Awake()
 {
@@ -98,7 +116,6 @@ void HUDController::Awake()
 void HUDController::Update()
 {
 	UpdatePlayerStatus();
-
 	UpdateSkillCooldowns();
 }
 
@@ -123,39 +140,47 @@ void HUDController::UpdatePlayerStatus()
 	}
 }
 
-
-// ✅ 키 입력 시 스킬 쿨타임 리셋 (0초부터 시작)
-void HUDController::CheckSkillInput()
+void HUDController::TriggerSkillCoolDown(int skillId)
 {
-	if (INPUT->GetButtonDown(KEY_TYPE::Q)) skillElapsedTime["Q"] = 0.f;
-	if (INPUT->GetButtonDown(KEY_TYPE::W)) skillElapsedTime["W"] = 0.f;
-	if (INPUT->GetButtonDown(KEY_TYPE::E)) skillElapsedTime["E"] = 0.f;
-	if (INPUT->GetButtonDown(KEY_TYPE::R)) skillElapsedTime["R"] = 0.f;
+	if (skillElapsedTime.find(skillId) != skillElapsedTime.end())
+	{
+		skillElapsedTime[skillId] = 0.f;  // ✅ 쿨다운 초기화
+	}
 }
 
-// ✅ 스킬 쿨타임 UI 갱신
 void HUDController::UpdateSkillCooldowns()
 {
-	CheckSkillInput();
-	bool isQActive = INPUT->GetButtonDown(KEY_TYPE::Q);
-	bool isWActive = INPUT->GetButtonDown(KEY_TYPE::W);
-	bool isEActive = INPUT->GetButtonDown(KEY_TYPE::E);
-	bool isRActive = INPUT->GetButtonDown(KEY_TYPE::R);
+	auto playerController = GAMEMANAGER->_myPlayer;
+	if (!playerController)
+		return;
 
-	// ✅ 스킬 사용 여부를 기반으로 쿨타임 갱신
-	UpdateSkillCooldown(QSkillSocket, 7, skillElapsedTime["Q"], 3.0f, "UIFillMount_Q", isQActive);
-	UpdateSkillCooldown(WSkillSocket, 8, skillElapsedTime["W"], 5.0f, "UIFillMount_W", isWActive);
-	UpdateSkillCooldown(ESkillSocket, 9, skillElapsedTime["E"], 7.0f, "UIFillMount_E", isEActive);
-	UpdateSkillCooldown(RSkillSocket, 10, skillElapsedTime["R"], 10.0f, "UIFillMount_R", isRActive);
+	auto& cooldowns = playerController->GetCooldowns();
+
+	// ✅ 스킬 데이터 테이블 초기화
+	if (skillDataTable.empty())
+	{
+		vector<SkillData> skills = GetChampionSkills(GAMEMANAGER->_myPlayer->_playerInfo->champtype());
+		for (const SkillData& skill : skills)
+			skillDataTable[skill.SkillId] = skill;
+	}
+
+	// ✅ HUD 갱신 - PlayerController에서 직접 쿨다운 값 참조
+	UpdateSkillCooldown(QSkillSocket, 7, cooldowns[(int)SkillType::QSpell], skillDataTable[(int)SkillType::QSpell].cooldown, "UIFillMount_Q");
+	UpdateSkillCooldown(WSkillSocket, 8, cooldowns[(int)SkillType::WSpell], skillDataTable[(int)SkillType::WSpell].cooldown, "UIFillMount_W");
+	UpdateSkillCooldown(ESkillSocket, 9, cooldowns[(int)SkillType::ESpell], skillDataTable[(int)SkillType::ESpell].cooldown, "UIFillMount_E");
+	UpdateSkillCooldown(RSkillSocket, 10, cooldowns[(int)SkillType::RSpell], skillDataTable[(int)SkillType::RSpell].cooldown, "UIFillMount_R");
 }
 
-// ✅ 특정 스킬의 쿨타임 UI 갱신 함수
-void HUDController::UpdateSkillCooldown(shared_ptr<GameObject> skillButton, int pass, float& elapsedTime, float duration, const string& elementName , bool isSkillActive)
+
+// ✅ 특정 스킬의 쿨타임 UI 갱신 함수 (기존 구조 유지)
+void HUDController::UpdateSkillCooldown(shared_ptr<GameObject> skillButton, int pass, float& elapsedTime, float duration, const string& elementName)
 {
+
 	// ✅ 쿨타임이 끝났다면 ratio = 1.0 유지
 	if (elapsedTime >= duration)
 	{
 		elapsedTime = duration;  // 초과 방지
+		
 	}
 	else
 	{

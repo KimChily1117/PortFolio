@@ -19,8 +19,14 @@ enum Proto
 	S_MY_PLAYER = 11,
 	S_ADD_OBJECT = 12,
 	S_REMOVE_OBJECT = 13,
-	S_MOVE = 14
+	S_MOVE = 14,
+	C_ENTER_GAME = 15,
+	S_PROJECTILE_SPAWN = 16,
+	S_PROJECTILE_HIT = 17,
+	S_DAMAGE = 18
 };
+
+
 
 
 
@@ -38,7 +44,11 @@ public:
 	static void Handle_S_RemoveObject(BYTE* buffer, int32 len);
 	static void Handle_S_Move(BYTE* buffer, int32 len);
 	static void Handle_S_SkillResult(BYTE* buffer, int32 len);
+	static void Handle_S_ProjectileSpawn(BYTE* buffer, int32 len);
+	static void Handle_S_ProjectileHit(BYTE* buffer, int32 len);
+	static void Handle_S_Damage(BYTE* buffer, int32 len);
 
+	static std::unordered_map<uint64, int32> g_lastPlayedSkill;
 
 	template<typename T>
 	static SendBufferRef MakeSendBuffer(T& pkt, uint16 pktId)

@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Material.h"
+#include "Mesh.h"
 
 class Mesh;
 class Shader;
@@ -16,6 +17,8 @@ public:
 	void SetMesh(shared_ptr<Mesh> mesh) { _mesh = mesh; }
 	void SetMaterial(shared_ptr<Material> material) { _material = material; }
 	void SetPass(uint8 pass) { _pass = pass; }
+	shared_ptr<Material> GetMaterial() { return _material; }
+
 
 	void RenderInstancing(shared_ptr<class InstancingBuffer>& buffer);
 	InstanceID GetInstanceID();
@@ -23,6 +26,9 @@ public:
 	void RenderSingle();
 	
 	shared_ptr<Shader> GetShader() { return _material->GetShader(); }
+
+	shared_ptr<Mesh> GetMesh() { return _mesh; }
+
 private:
 	shared_ptr<Mesh> _mesh;
 	shared_ptr<Material> _material;

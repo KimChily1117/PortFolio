@@ -186,4 +186,47 @@ MeshOutput VS_Animation(VertexModel input)
     return output;
 }
 
+
+
+MeshOutput VS_Animation_Static(VertexModel input)
+{
+    MeshOutput output;
+
+    matrix animMatrix = GetAnimationMatrix(input);
+
+    output.position = mul(input.position, animMatrix);
+    output.position = mul(output.position, input.world); // W
+    output.worldPosition = output.position;
+    output.position = mul(output.position, VP);
+    output.uv = input.uv;
+    output.normal = mul(input.normal, (float3x3) animMatrix);
+    output.tangent = mul(input.tangent, (float3x3) animMatrix);
+
+    return output;
+}
+
+
+
+// ************** ParticleRender (추가됨) ****************
+
+MeshOutput VS_Billboard(VertexMesh input)
+{
+    MeshOutput output;
+
+    float4 worldPos = mul(float4(0, 0, 0, 1), W); // 중심 위치만 사용 (회전/스케일 없음)
+
+    // 카메라 방향 계산
+    float3 camRight = float3(V._11, V._21, V._31);
+    float3 camUp = float3(V._12, V._22, V._32);
+
+    // Quad 중심 기준 보정 (0.5 오프셋 기준)
+    float3 offset = (input.uv.x - 0.5f) * camRight + (0.5f - input.uv.y) * camUp;
+    float3 finalPos = worldPos.xyz + offset;
+
+    output.position = mul(float4(finalPos, 1.0f), VP);
+    output.uv = input.uv;
+
+    return output;
+}
+
 #endif

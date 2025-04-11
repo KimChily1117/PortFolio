@@ -1,0 +1,23 @@
+﻿#include "pch.h"
+#include "AnnieESpell.h"
+
+void AnnieESpell::Use(shared_ptr<GameObject> caster, shared_ptr<GameObject> target)
+{
+	
+	auto playerController = caster->GetScript<PlayerController>();
+	if (!playerController || !target) return;
+
+	// Animation 처리 부분은 부모인  Champ클래스에서 처리함
+
+	// ✅ 서버에 공격 패킷 전송
+	Protocol::C_SkillCast skillPacket;
+	skillPacket.set_casterid(GAMEMANAGER->_myPlayer->_playerInfo->objectid());
+	skillPacket.set_skillid(3); // Annie Q 공격 ID
+	skillPacket.mutable_targetpos()->set_x(target->GetTransform()->GetPosition().x);
+	skillPacket.mutable_targetpos()->set_y(target->GetTransform()->GetPosition().y);
+	skillPacket.mutable_targetpos()->set_z(target->GetTransform()->GetPosition().z);
+
+	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(skillPacket, C_SKILL_CAST);
+	NETWORK->SendPacket(sendBuffer);
+
+}

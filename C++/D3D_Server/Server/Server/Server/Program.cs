@@ -48,15 +48,15 @@ namespace Server
 
 
 			RoomManager.Instance.Add(0);
-			TickRooms(500); // 500ms 마다 만들어진 Room에 Update함수를 호출해줌 
-
 			//JobTimer.Instance.Push(FlushRoom);
+
 
 			while (true)
 			{
 				Thread.Sleep(100);
-				//DbTransaction.Instance.Flush();
-			}
+                RoomManager.Instance.UpdateRooms();
+                //DbTransaction.Instance.Flush();
+            }
 		}
 	}
 }
