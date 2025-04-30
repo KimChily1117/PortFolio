@@ -44,8 +44,8 @@ C# / Server               👉 C# 서버
 
 📁 폴더 구조:
 ```
-C++ / D3DPopol            👉 DirectX11 클라이언트
-C++ / D3DServer           👉 C# TCP 서버
+C++ / D3D_Popol            👉 DirectX11 클라이언트
+C++ / D3D_Server           👉 C# TCP 서버
 ```
 
 ---
