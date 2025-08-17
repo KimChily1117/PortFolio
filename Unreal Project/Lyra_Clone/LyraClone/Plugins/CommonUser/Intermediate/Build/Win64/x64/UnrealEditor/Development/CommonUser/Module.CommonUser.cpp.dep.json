@@ -1,0 +1,17 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commonuser\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\commonuser\\module.commonuser.cpp",
+        "ProvidedModule": "",
+        "PCH": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commonuser\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\commonuser\\definitions.commonuser.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commonuser\\intermediate\\build\\win64\\unrealeditor\\inc\\commonuser\\uht\\commonsessionsubsystem.gen.cpp",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commonuser\\source\\commonuser\\public\\commonsessionsubsystem.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commonuser\\intermediate\\build\\win64\\unrealeditor\\inc\\commonuser\\uht\\commonsessionsubsystem.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commonuser\\intermediate\\build\\win64\\unrealeditor\\inc\\commonuser\\uht\\commonuser.init.gen.cpp"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
