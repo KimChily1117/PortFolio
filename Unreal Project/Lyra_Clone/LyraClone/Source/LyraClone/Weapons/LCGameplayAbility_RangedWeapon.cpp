@@ -26,7 +26,6 @@ void ULCGameplayAbility_RangedWeapon::StartRangedWeaponTargeting()
 	check(MyAbilityComponent);
 
 	//*** 여기서 Lyra는 샷건 처리와 같은 탄착 처리를 생략하고, 권총으로 진행하였다 (아래의 로직은 간단버전이다)
-
 	// 총알의 궤적의 Hit 정보를 계산
 	TArray<FHitResult> FoundHits;
 	PerformLocalTargeting(FoundHits);
