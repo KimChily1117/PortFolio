@@ -1,17 +1,17 @@
-#include "HakGameFeaturePolicy.h"
+#include "LyraCloneGameFeaturePolicy.h"
 #include "GameFeatureAction.h"
 #include "GameFeatureAction_AddGameplayCuePath.h"
 #include "GameFeatureData.h"
 #include "GameplayCueSet.h"
-#include "HakGame/AbilitySystem/HakGameplayCueManager.h"
+#include "LyraClone/AbilitySystem/LyraCloneGameplayCueManager.h"
 
-UHakGameplayFeaturePolicy::UHakGameplayFeaturePolicy(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+ULyraCloneGameplayFeaturePolicy::ULyraCloneGameplayFeaturePolicy(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {}
 
-void UHakGameplayFeaturePolicy::InitGameFeatureManager()
+void ULyraCloneGameplayFeaturePolicy::InitGameFeatureManager()
 {
 	// GameFeature_AddGameplayCuePaths를 등록
-	Observers.Add(NewObject<UHakGameFeature_AddGameplayCuePaths>());
+	Observers.Add(NewObject<ULyraCloneGameFeature_AddGameplayCuePaths>());
 
 	// Observers를 순회하며, GameFeaturesSubsystem에 Observers를 순회하며 등록
 	UGameFeaturesSubsystem& Subsystem = UGameFeaturesSubsystem::Get();
@@ -24,7 +24,7 @@ void UHakGameplayFeaturePolicy::InitGameFeatureManager()
 	Super::InitGameFeatureManager();
 }
 
-void UHakGameplayFeaturePolicy::ShutdownGameFeatureManager()
+void ULyraCloneGameplayFeaturePolicy::ShutdownGameFeatureManager()
 {
 	Super::ShutdownGameFeatureManager();
 
@@ -36,7 +36,7 @@ void UHakGameplayFeaturePolicy::ShutdownGameFeatureManager()
 	Observers.Empty();
 }
 
-void UHakGameFeature_AddGameplayCuePaths::OnGameFeatureRegistering(const UGameFeatureData* GameFeatureData, const FString& PluginName, const FString& PluginURL)
+void ULyraCloneGameFeature_AddGameplayCuePaths::OnGameFeatureRegistering(const UGameFeatureData* GameFeatureData, const FString& PluginName, const FString& PluginURL)
 {
 	// PluginName을 활용하여, PluginRootPath를 계산
 	const FString PluginRootPath = TEXT("/") + PluginName;
@@ -51,7 +51,7 @@ void UHakGameFeature_AddGameplayCuePaths::OnGameFeatureRegistering(const UGameFe
 			const TArray<FDirectoryPath>& DirsToAdd = AddGameplayCueGFA->DirectoryPathsToAdd;
 
 			// GameplayCueManager를 가져와서, GFA에 등록된 DirsToAdd를 추가하면서 GCM의 데이터가 업데이트 되도록 진행
-			if (UHakGameplayCueManager* GCM = UHakGameplayCueManager::Get())
+			if (ULyraCloneGameplayCueManager* GCM = ULyraCloneGameplayCueManager::Get())
 			{
 				// RuntimeCueSet을 가져옴
 				UGameplayCueSet* RuntimeGameplayCueSet = GCM->GetRuntimeCueSet();
@@ -86,7 +86,7 @@ void UHakGameFeature_AddGameplayCuePaths::OnGameFeatureRegistering(const UGameFe
 	}
 }
 
-void UHakGameFeature_AddGameplayCuePaths::OnGameFeatureUnregistering(const UGameFeatureData* GameFeatureData, const FString& PluginName, const FString& PluginURL)
+void ULyraCloneGameFeature_AddGameplayCuePaths::OnGameFeatureUnregistering(const UGameFeatureData* GameFeatureData, const FString& PluginName, const FString& PluginURL)
 {
 	const FString PluginRootPath = TEXT("/") + PluginName;
 	for (const UGameFeatureAction* Action : GameFeatureData->GetActions())
@@ -94,7 +94,7 @@ void UHakGameFeature_AddGameplayCuePaths::OnGameFeatureUnregistering(const UGame
 		if (const UGameFeatureAction_AddGameplayCuePath* AddGameplayCueGFA = Cast<UGameFeatureAction_AddGameplayCuePath>(GameFeatureData))
 		{
 			const TArray<FDirectoryPath>& DirsToAdd = AddGameplayCueGFA->DirectoryPathsToAdd;
-			if (UHakGameplayCueManager* GCM = UHakGameplayCueManager::Get())
+			if (ULyraCloneGameplayCueManager* GCM = ULyraCloneGameplayCueManager::Get())
 			{
 				int32 NumRemoved = 0;
 				for (const FDirectoryPath& Directory : DirsToAdd)
