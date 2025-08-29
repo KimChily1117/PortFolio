@@ -114,3 +114,30 @@ WinAPIFrameWork filter=lfs diff=lfs merge=lfs -text
 game_module filter=lfs diff=lfs merge=lfs -text
 game_module.7z filter=lfs diff=lfs merge=lfs -text
 photon_FPS filter=lfs diff=lfs merge=lfs -text
+# --- Unreal Engine (text/mergeable) ---
+*.h                  text diff=cpp eol=lf
+*.hpp                text diff=cpp eol=lf
+*.cpp                text diff=cpp eol=lf
+*.inl                text eol=lf
+*.usf                text eol=lf   # Unreal Shader File
+*.ush                text eol=lf   # Unreal Shader Header
+*.uproject           text eol=lf
+*.uplugin            text eol=lf
+*.ini                text eol=lf
+*.Build.cs           text eol=lf
+*.Target.cs          text eol=lf
+
+# --- Unreal Engine (LFS-tracked binaries) ---
+*.uasset             filter=lfs diff=lfs merge=lfs -text linguist-generated
+*.umap               filter=lfs diff=lfs merge=lfs -text linguist-generated
+*.ubulk              filter=lfs diff=lfs merge=lfs -text
+*.uexp               filter=lfs diff=lfs merge=lfs -text
+*.udic               filter=lfs diff=lfs merge=lfs -text
+*.ucas               filter=lfs diff=lfs merge=lfs -text
+*.utoc               filter=lfs diff=lfs merge=lfs -text
+*.pak                filter=lfs diff=lfs merge=lfs -text
+*.bik                filter=lfs diff=lfs merge=lfs -text
+*.bk2                filter=lfs diff=lfs merge=lfs -text
+
+
+
