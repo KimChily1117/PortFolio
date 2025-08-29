@@ -82,14 +82,14 @@ UGameUIPolicy::~UGameUIPolicy() {}
 // End Class UGameUIPolicy
 
 // Begin Registration
-struct Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_Statics
+struct Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
 		{ Z_Construct_UClass_UGameUIPolicy, UGameUIPolicy::StaticClass, TEXT("UGameUIPolicy"), &Z_Registration_Info_UClass_UGameUIPolicy, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGameUIPolicy), 2629475379U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_2038193632(TEXT("/Script/CommonGame"),
-	Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_Statics::ClassInfo),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_2038193632(TEXT("/Script/CommonGame"),
+	Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_GameUIPolicy_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
 // End Registration

@@ -282,6 +282,7 @@
 /I "Editor\SceneDepthPickerMode\Public"
 /I "..\Intermediate\Build\Win64\UnrealEditor\Inc\AnimationEditMode\UHT"
 /I "Editor\AnimationEditMode\Public"
+/I "C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonGame\Intermediate\Build\Win64\UnrealEditor\Inc\CommonGame\UHT"
 /I "C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonGame\Source"
 /I "C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonGame\Source\CommonGame\Public"
 /I "..\Plugins\Runtime\CommonUI\Intermediate\Build\Win64\UnrealEditor\Inc\CommonUI\UHT"
