@@ -1,0 +1,14 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "CommonGameInstance.h"
+
+int32 UCommonGameInstance::AddLocalPlayer(ULocalPlayer* NewPlayer, FPlatformUserId UserId)
+{
+	return int32();
+}
+
+bool UCommonGameInstance::RemoveLocalPlayer(ULocalPlayer* ExistingPlayer)
+{
+	return false;
+}

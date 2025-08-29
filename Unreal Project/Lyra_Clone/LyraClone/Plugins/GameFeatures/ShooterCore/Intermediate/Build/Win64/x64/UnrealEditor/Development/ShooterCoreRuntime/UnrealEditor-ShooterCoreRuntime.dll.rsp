@@ -21,7 +21,7 @@
 /ALTERNATENAME:__imp___std_init_once_complete=__imp_InitOnceComplete
 /DELAYLOAD:"d3d12.dll"
 /DELAYLOAD:"DBGHELP.DLL"
-/LIBPATH:"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\lib\x64"
+/LIBPATH:"D:\Dev\Microsoft\VC\Tools\MSVC\14.38.33130\lib\x64"
 /LIBPATH:"C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\ucrt\x64"
 /LIBPATH:"C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64"
 /NODEFAULTLIB:"LIBCMT"
@@ -35,9 +35,9 @@
 /NODEFAULTLIB:"LIBCD"
 /NODEFAULTLIB:"LIBCPD"
 /FUNCTIONPADMIN:6
-"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
-"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\ShooterCoreRuntimeModule.cpp.obj"
-"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\Default.rc2.res"
+"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\ShooterCoreRuntimeModule.cpp.obj"
+"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\Default.rc2.res"
 "..\Intermediate\Build\Win64\x64\UnrealEditor\Development\CoreUObject\UnrealEditor-CoreUObject.lib"
 "..\Intermediate\Build\Win64\x64\UnrealEditor\Development\Engine\UnrealEditor-Engine.lib"
 "..\Intermediate\Build\Win64\x64\UnrealEditor\Development\Slate\UnrealEditor-Slate.lib"
@@ -68,7 +68,7 @@
 "synchronization.lib"
 "dwmapi.lib"
 "imm32.lib"
-/OUT:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Binaries\Win64\UnrealEditor-ShooterCoreRuntime.dll"
-/IMPLIB:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\UnrealEditor-ShooterCoreRuntime.sup.lib"
-/PDB:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Binaries\Win64\UnrealEditor-ShooterCoreRuntime.pdb"
+/OUT:"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Binaries\Win64\UnrealEditor-ShooterCoreRuntime.dll"
+/IMPLIB:"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\UnrealEditor-ShooterCoreRuntime.sup.lib"
+/PDB:"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Binaries\Win64\UnrealEditor-ShooterCoreRuntime.pdb"
 /ignore:4078

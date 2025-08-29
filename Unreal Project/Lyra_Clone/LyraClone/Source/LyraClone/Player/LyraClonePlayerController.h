@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "ModularPlayerController.h"
+#include "CommonPlayerController.h"
 #include "LyraClonePlayerController.generated.h"
 
 
@@ -15,7 +15,7 @@ class ALyraClonePlayerState;
  * 
  */
 UCLASS()
-class LYRACLONE_API ALyraClonePlayerController : public AModularPlayerController
+class LYRACLONE_API ALyraClonePlayerController : public ACommonPlayerController
 {
 	GENERATED_BODY()
 	
