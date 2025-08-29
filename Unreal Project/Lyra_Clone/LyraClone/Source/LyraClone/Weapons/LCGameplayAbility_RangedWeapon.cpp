@@ -3,6 +3,7 @@
 
 #include "LCGameplayAbility_RangedWeapon.h"
 #include "AbilitySystemComponent.h"
+#include "LyraClone/AbilitySystem/LyraCloneGameplayAbilityTargetData_SingleTarget.h"
 #include "LyraClone/Weapons/LyraCloneRangedWeaponInstance.h"
 
 ULCGameplayAbility_RangedWeapon::ULCGameplayAbility_RangedWeapon(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -43,10 +44,11 @@ void ULCGameplayAbility_RangedWeapon::StartRangedWeaponTargeting()
 		{
 			// AbilityTargetData에 SingeTargetHit 정보를 담는다
 			// - 참고로 TargetData.Add()의 경우, SharedPtr에 넣기 때문에 여기서 new는 크게 신경 안써도 된다
-			/*FHakGameplayAbilityTargetData_SingleTargetHit* NewTargetData = new FHakGameplayAbilityTargetData_SingleTargetHit();
+			FLyraCloneGameplayAbilityTargetData_SingleTargetHit* NewTargetData = new FLyraCloneGameplayAbilityTargetData_SingleTargetHit();
+			
 			NewTargetData->HitResult = FoundHit;
 			NewTargetData->CartridgeID = CartridgeID;
-			TargetData.Add(NewTargetData);*/
+			TargetData.Add(NewTargetData);
 		}
 	}
 

@@ -1,0 +1,21 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\source\\commongame\\private\\gameuipolicy.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\commongame\\definitions.commongame.h",
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\source\\commongame\\public\\gameuipolicy.h",
+            "d:\\gameengine\\epic games\\ue_5.4\\engine\\source\\runtime\\coreuobject\\public\\uobject\\noexporttypes.h",
+            "d:\\gameengine\\epic games\\ue_5.4\\engine\\source\\runtime\\coreuobject\\public\\uobject\\propertyaccessutil.h",
+            "d:\\gameengine\\epic games\\ue_5.4\\engine\\source\\runtime\\coreuobject\\public\\serialization\\testundeclaredscriptstructobjectreferences.h",
+            "d:\\gameengine\\epic games\\ue_5.4\\engine\\source\\runtime\\core\\public\\math\\unitconversion.h",
+            "d:\\gameengine\\epic games\\ue_5.4\\engine\\source\\runtime\\core\\public\\math\\unitconversion.inl",
+            "d:\\gameengine\\epic games\\ue_5.4\\engine\\source\\runtime\\core\\public\\internationalization\\polyglottextdata.h",
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\intermediate\\build\\win64\\unrealeditor\\inc\\commongame\\uht\\gameuipolicy.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

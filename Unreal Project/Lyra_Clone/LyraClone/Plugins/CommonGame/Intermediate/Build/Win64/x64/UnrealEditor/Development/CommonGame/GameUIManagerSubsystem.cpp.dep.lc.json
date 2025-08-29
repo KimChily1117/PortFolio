@@ -1,0 +1,15 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\source\\commongame\\private\\gameuimanagersubsystem.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\commongame\\definitions.commongame.h",
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\source\\commongame\\public\\gameuimanagersubsystem.h",
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\commongame\\intermediate\\build\\win64\\unrealeditor\\inc\\commongame\\uht\\gameuimanagersubsystem.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
