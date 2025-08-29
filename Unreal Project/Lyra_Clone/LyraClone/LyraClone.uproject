@@ -14,7 +14,8 @@
 				"CoreUObject",
 				"EnhancedInput",
 				"GameFeatures",
-				"GameplayAbilities"
+				"GameplayAbilities",
+				"CommonGame"
 			]
 		}
 	],
@@ -48,6 +49,10 @@
 		},
 		{
 			"Name": "AnimationWarping",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
 			"Enabled": true
 		}
 	]
