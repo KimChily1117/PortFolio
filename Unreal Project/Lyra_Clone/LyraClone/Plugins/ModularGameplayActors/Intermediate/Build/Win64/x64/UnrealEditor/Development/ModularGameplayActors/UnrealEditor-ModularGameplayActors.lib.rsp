@@ -6,10 +6,10 @@
 /NAME:"UnrealEditor-ModularGameplayActors.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\Module.ModularGameplayActors.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\ModularCharacter.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\ModularGameplayActors.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\ModularPlayerController.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\Default.rc2.res"
-/OUT:"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\UnrealEditor-ModularGameplayActors.lib"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\Module.ModularGameplayActors.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\ModularCharacter.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\ModularGameplayActors.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\ModularPlayerController.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\Default.rc2.res"
+/OUT:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\ModularGameplayActors\Intermediate\Build\Win64\x64\UnrealEditor\Development\ModularGameplayActors\UnrealEditor-ModularGameplayActors.lib"

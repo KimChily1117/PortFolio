@@ -2,6 +2,7 @@
 #include "C:/Users/Yeop/Documents/Task/Unreal Project/Lyra_Clone/LyraClone/Plugins/CommonGame/Intermediate/Build/Win64/UnrealEditor/Inc/CommonGame/UHT/CommonGame.init.gen.cpp"
 #include "C:/Users/Yeop/Documents/Task/Unreal Project/Lyra_Clone/LyraClone/Plugins/CommonGame/Intermediate/Build/Win64/UnrealEditor/Inc/CommonGame/UHT/CommonGameInstance.gen.cpp"
 #include "C:/Users/Yeop/Documents/Task/Unreal Project/Lyra_Clone/LyraClone/Plugins/CommonGame/Intermediate/Build/Win64/UnrealEditor/Inc/CommonGame/UHT/CommonLocalPlayer.gen.cpp"
+#include "C:/Users/Yeop/Documents/Task/Unreal Project/Lyra_Clone/LyraClone/Plugins/CommonGame/Intermediate/Build/Win64/UnrealEditor/Inc/CommonGame/UHT/CommonPlayerController.gen.cpp"
 #include "C:/Users/Yeop/Documents/Task/Unreal Project/Lyra_Clone/LyraClone/Plugins/CommonGame/Intermediate/Build/Win64/UnrealEditor/Inc/CommonGame/UHT/CommonUIExtentions.gen.cpp"
 #include "C:/Users/Yeop/Documents/Task/Unreal Project/Lyra_Clone/LyraClone/Plugins/CommonGame/Intermediate/Build/Win64/UnrealEditor/Inc/CommonGame/UHT/GameUIManagerSubsystem.gen.cpp"
 #include "C:/Users/Yeop/Documents/Task/Unreal Project/Lyra_Clone/LyraClone/Plugins/CommonGame/Intermediate/Build/Win64/UnrealEditor/Inc/CommonGame/UHT/GameUIPolicy.gen.cpp"
