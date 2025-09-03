@@ -54,6 +54,11 @@
 		{
 			"Name": "CommonUI",
 			"Enabled": true
+		},
+		{
+			"Name": "UIExtension",
+			"Enabled": true
 		}
+
 	]
 }

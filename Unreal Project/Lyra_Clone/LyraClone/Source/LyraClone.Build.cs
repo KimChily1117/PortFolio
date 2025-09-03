@@ -27,7 +27,9 @@ public class LyraClone : ModuleRules
             "CommonUser",
             "CommonUI",
             "CommonGame",
-            "UMG"
+            "UMG",
+            "UIExtension"
+
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
