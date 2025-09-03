@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-UIExtension-1241.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Code\HakGame\Intermediate\Build\Win64\x64\HakGameEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"C:\Code\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Module.UIExtension.cpp.obj"
+"C:\Code\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionPointWidget.cpp.obj"
+"C:\Code\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Default.rc2.res"
+/OUT:"C:\Code\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UnrealEditor-UIExtension-1241.lib"
