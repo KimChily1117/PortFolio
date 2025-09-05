@@ -66,4 +66,9 @@ public:
 	TArray<FLyraCloneMappableConfigPair> DefaultInputConfigs;
 
 
+	bool RetryInitInput(float /*DeltaTime*/, TWeakObjectPtr<UInputComponent> PIC);
+	FTSTicker::FDelegateHandle InitInputRetryHandle;
+	int32 InitInputRetryCount = 0;
+	bool bInputInitialized = false;
+
 };

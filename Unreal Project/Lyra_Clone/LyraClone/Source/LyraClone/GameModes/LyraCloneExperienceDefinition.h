@@ -21,6 +21,9 @@ class LYRACLONE_API ULyraCloneExperienceDefinition : public UPrimaryDataAsset
 public:
 	ULyraCloneExperienceDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+#if WITH_EDITORONLY_DATA
+	virtual void UpdateAssetBundleData() override;
+#endif
 
 	/**
 	 * member variables

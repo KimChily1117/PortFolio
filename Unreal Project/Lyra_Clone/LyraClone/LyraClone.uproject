@@ -13,9 +13,10 @@
 				"ModularGameplay",
 				"CoreUObject",
 				"EnhancedInput",
-				"GameFeatures",
 				"GameplayAbilities",
-				"CommonGame"
+				"CommonGame",
+				"CommonUI",
+				"UMG"
 			]
 		}
 	],

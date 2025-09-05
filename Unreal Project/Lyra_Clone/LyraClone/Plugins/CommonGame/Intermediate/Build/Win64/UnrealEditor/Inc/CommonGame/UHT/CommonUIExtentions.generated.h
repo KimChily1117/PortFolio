@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define COMMONGAME_CommonUIExtentions_generated_h
 
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_15_INCLASS_NO_PURE_DECLS \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_23_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUCommonUIExtentions(); \
 	friend struct Z_Construct_UClass_UCommonUIExtentions_Statics; \
@@ -23,9 +23,7 @@ public: \
 	DECLARE_SERIALIZER(UCommonUIExtentions)
 
 
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_15_ENHANCED_CONSTRUCTORS \
-	/** Standard constructor, called after all reflected properties have been initialized */ \
-	NO_API UCommonUIExtentions(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_23_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	UCommonUIExtentions(UCommonUIExtentions&&); \
@@ -33,16 +31,16 @@ private: \
 public: \
 	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, UCommonUIExtentions); \
 	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UCommonUIExtentions); \
-	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UCommonUIExtentions) \
+	DEFINE_DEFAULT_CONSTRUCTOR_CALL(UCommonUIExtentions) \
 	NO_API virtual ~UCommonUIExtentions();
 
 
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_12_PROLOG
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_15_GENERATED_BODY \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_20_PROLOG
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_23_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_15_INCLASS_NO_PURE_DECLS \
-	FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_15_ENHANCED_CONSTRUCTORS \
+	FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_23_INCLASS_NO_PURE_DECLS \
+	FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_23_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -50,7 +48,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> COMMONGAME_API UClass* StaticClass<class UCommonUIExtentions>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h
+#define CURRENT_FILE_ID FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

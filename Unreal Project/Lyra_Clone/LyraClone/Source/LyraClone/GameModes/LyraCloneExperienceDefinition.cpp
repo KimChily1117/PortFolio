@@ -10,3 +10,8 @@ ULyraCloneExperienceDefinition::ULyraCloneExperienceDefinition(const FObjectInit
 {
 
 }
+
+void ULyraCloneExperienceDefinition::UpdateAssetBundleData()
+{
+	Super::UpdateAssetBundleData();
+}

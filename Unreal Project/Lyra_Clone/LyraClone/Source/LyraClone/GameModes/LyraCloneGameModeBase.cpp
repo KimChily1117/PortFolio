@@ -8,6 +8,7 @@
 #include "LyraClone/Character/LyraClonePawnData.h"
 #include "LyraClone/Character/LyraClonePawnExtensionComponent.h"
 #include "LyraClone/GameModes/LyraCloneExperienceDefinition.h"
+#include "LyraClone/UI/LyraCloneHUD.h"
 #include <Kismet\GameplayStatics.h>
 
 ALyraCloneGameModeBase::ALyraCloneGameModeBase()
@@ -16,6 +17,7 @@ ALyraCloneGameModeBase::ALyraCloneGameModeBase()
 	PlayerControllerClass = ALyraClonePlayerController::StaticClass();
 	PlayerStateClass = ALyraClonePlayerState::StaticClass();
 	DefaultPawnClass = ALyraCloneCharacter::StaticClass();
+	HUDClass = ALyraCloneHUD::StaticClass();
 }
 
 void ALyraCloneGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
