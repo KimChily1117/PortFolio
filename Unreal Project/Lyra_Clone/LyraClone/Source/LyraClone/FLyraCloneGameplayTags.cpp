@@ -29,8 +29,8 @@ void FHakGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 		Enhanced Input Tags
 	*/
 
-	AddTag(InputTag_Move, "InputTag_Move", "");
-	AddTag(InputTag_Look_Mouse, "InputTag_Look_Mouse", "");
+	AddTag(InputTag_Move, "InputTag.Move", "");
+	AddTag(InputTag_Look_Mouse, "InputTag.Look.Mouse", "");
 
 
 }

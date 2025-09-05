@@ -6,6 +6,11 @@ UPrimaryGameLayout::UPrimaryGameLayout(const FObjectInitializer& obj = FObjectIn
 {
 }
 
+UCommonActivatableWidgetContainerBase* UPrimaryGameLayout::GetLayerWidget(FGameplayTag LayerName)
+{
+	return Layers.FindRef(LayerName);
+}
+
 void UPrimaryGameLayout::RegisterLayer(FGameplayTag LayerTag, UCommonActivatableWidgetContainerBase* LayerWidget)
 {
 	if (!IsDesignTime()) // 그리는 시간이 아니라면 

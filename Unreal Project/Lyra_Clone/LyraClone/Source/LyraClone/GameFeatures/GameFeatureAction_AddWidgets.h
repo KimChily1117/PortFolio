@@ -41,7 +41,7 @@ struct FHakHUDElementEntry
 	FGameplayTag SlotID;
 };
 
-UCLASS()
+UCLASS(meta=(DisplayName="Add Widgets"))
 class LYRACLONE_API UGameFeatureAction_AddWidgets : public UGameFeatureAction_WorldActionBase
 {
 	GENERATED_BODY()
@@ -58,6 +58,7 @@ public:
 	void AddWidgets(AActor* Actor, FPerContextData& ActiveData);
 	void RemoveWidgets(AActor* Actor, FPerContextData& ActiveData);
 
+	void Reset(FPerContextData& ActiveData);
 
 	/**
 	 * UGameFeatureAction's interface

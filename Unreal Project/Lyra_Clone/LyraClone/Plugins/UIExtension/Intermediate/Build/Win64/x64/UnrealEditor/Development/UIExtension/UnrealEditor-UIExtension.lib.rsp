@@ -6,10 +6,10 @@
 /NAME:"UnrealEditor-UIExtension.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Module.UIExtension.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtension.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionPointWidget.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionSystem.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Default.rc2.res"
-/OUT:"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UnrealEditor-UIExtension.lib"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Module.UIExtension.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtension.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionPointWidget.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionSystem.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Default.rc2.res"
+/OUT:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UnrealEditor-UIExtension.lib"

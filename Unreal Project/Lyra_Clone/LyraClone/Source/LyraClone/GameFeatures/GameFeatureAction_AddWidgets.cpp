@@ -2,6 +2,7 @@
 
 #include "GameFeatureAction_AddWidgets.h"
 #include "Components/GameFrameworkComponentManager.h"
+#include "CommonUIExtentions.h"
 #include "LyraClone/UI/LyraCloneHUD.h"
 
 void UGameFeatureAction_AddWidgets::AddWidgets(AActor* Actor, FPerContextData& ActiveData)
@@ -16,7 +17,7 @@ void UGameFeatureAction_AddWidgets::AddWidgets(AActor* Actor, FPerContextData& A
 		{
 			if (TSubclassOf<UCommonActivatableWidget> ConcreteWidgetClass = Entry.LayoutClass.Get())
 			{
-				//ActiveData.LayoutsAdded.Add(UCommonUIExtensions::PushContentToLayer_ForPlayer(LocalPlayer, Entry.LayerID, ConcreteWidgetClass));
+				ActiveData.LayoutsAdded.Add(UCommonUIExtentions::PushContentToLayer_ForPlayer(LocalPlayer, Entry.LayerID, ConcreteWidgetClass));
 			}
 		}
 
@@ -31,12 +32,51 @@ void UGameFeatureAction_AddWidgets::AddWidgets(AActor* Actor, FPerContextData& A
 
 void UGameFeatureAction_AddWidgets::RemoveWidgets(AActor* Actor, FPerContextData& ActiveData)
 {
-	
+	ALyraCloneHUD* HUD = CastChecked<ALyraCloneHUD>(Actor);
+
+	// HakHUD에 추가된 CommonActivatableWidget을 순회하며, Deativate 시켜준다
+	for (TWeakObjectPtr<UCommonActivatableWidget>& AddedLayout : ActiveData.LayoutsAdded)
+	{
+		if (AddedLayout.IsValid())
+		{
+			AddedLayout->DeactivateWidget();
+		}
+	}
+	ActiveData.LayoutsAdded.Reset();
+
+	// UIExtension에 대해 순회하며, Unregister() 한다
+	for (FUIExtensionHandle& Handle : ActiveData.ExtensionHandles)
+	{
+		// Unregister()는 UUIExtensionSystem에서 제거가 올바르게 되야 한다
+		Handle.Unregister();
+	}
+	ActiveData.ExtensionHandles.Reset();
+}
+
+void UGameFeatureAction_AddWidgets::Reset(FPerContextData& ActiveData)
+{
+	ActiveData.ComponentRequests.Empty();
+	ActiveData.LayoutsAdded.Empty();
+
+
+	for (FUIExtensionHandle& Handle : ActiveData.ExtensionHandles)
+	{
+		Handle.Unregister();
+	}
+
+	ActiveData.ExtensionHandles.Reset();
 }
 
 void UGameFeatureAction_AddWidgets::OnGameFeatureDeactivating(FGameFeatureDeactivatingContext& Context)
 {
 	Super::OnGameFeatureDeactivating(Context);
+
+	FPerContextData* ActiveData = ContextData.Find(Context);
+
+	if (ensure(ActiveData))
+	{
+		Reset(*ActiveData);
+	}
 }
 
 void UGameFeatureAction_AddWidgets::AddToWorld(const FWorldContext& WorldContext,const FGameFeatureStateChangeContext& ChangeContext)

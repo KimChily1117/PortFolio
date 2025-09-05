@@ -14,28 +14,28 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define UIEXTENSION_UIExtensionSystem_generated_h
 
-#define FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_47_GENERATED_BODY \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_47_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FUIExtensionHandle_Statics; \
 	static class UScriptStruct* StaticStruct();
 
 
 template<> UIEXTENSION_API UScriptStruct* StaticStruct<struct FUIExtensionHandle>();
 
-#define FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_74_GENERATED_BODY \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_74_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FUIExtensionRequest_Statics; \
 	UIEXTENSION_API static class UScriptStruct* StaticStruct();
 
 
 template<> UIEXTENSION_API UScriptStruct* StaticStruct<struct FUIExtensionRequest>();
 
-#define FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_121_GENERATED_BODY \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_121_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FUIExtensionPointHandle_Statics; \
 	static class UScriptStruct* StaticStruct();
 
 
 template<> UIEXTENSION_API UScriptStruct* StaticStruct<struct FUIExtensionPointHandle>();
 
-#define FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_INCLASS_NO_PURE_DECLS \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUUIExtensionSubsystem(); \
 	friend struct Z_Construct_UClass_UUIExtensionSubsystem_Statics; \
@@ -44,7 +44,7 @@ public: \
 	DECLARE_SERIALIZER(UUIExtensionSubsystem)
 
 
-#define FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_ENHANCED_CONSTRUCTORS \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UUIExtensionSubsystem(); \
 private: \
@@ -58,12 +58,12 @@ public: \
 	NO_API virtual ~UUIExtensionSubsystem();
 
 
-#define FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_147_PROLOG
-#define FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_GENERATED_BODY \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_147_PROLOG
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_INCLASS_NO_PURE_DECLS \
-	FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_ENHANCED_CONSTRUCTORS \
+	FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_INCLASS_NO_PURE_DECLS \
+	FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h_150_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -71,7 +71,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> UIEXTENSION_API UClass* StaticClass<class UUIExtensionSubsystem>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h
+#define CURRENT_FILE_ID FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_UIExtension_Source_UIExtension_Public_UIExtensionSystem_h
 
 
 #define FOREACH_ENUM_EUIEXTENSIONPOINTMATCH(op) \

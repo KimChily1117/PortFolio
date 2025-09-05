@@ -1,0 +1,85 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/PawnComponent.h"
+#include "HakGame/AbilitySystem/HakAbilitySet.h"
+#include "HakEquipmentManagerComponent.generated.h"
+
+/** forward declarations */
+class UHakEquipmentDefinition;
+class UHakEquipmentInstance;
+
+USTRUCT(BlueprintType)
+struct FHakAppliedEquipmentEntry
+{
+	GENERATED_BODY()
+
+	/** 장착물에 대한 메타 데이터 */
+	UPROPERTY()
+	TSubclassOf<UHakEquipmentDefinition> EquipmentDefinition;
+
+	/** EquipmentDefinition을 통해 생성도니 인스턴스 */
+	UPROPERTY()
+	TObjectPtr<UHakEquipmentInstance> Instance = nullptr;
+
+	/** 무기에 할당된 허용가능한 GameplayAbility */
+	UPROPERTY()
+	FHakAbilitySet_GrantedHandles GrantedHandles;
+};
+
+/**
+ * 참고로 EquipmentInstance의 인스턴스를 Entry에서 관리하고 있다:
+ * - HakEquipmentList는 생성된 객체를 관리한다고 보면 된다
+ */
+USTRUCT(BlueprintType)
+struct FHakEquipmentList
+{
+	GENERATED_BODY()
+
+	FHakEquipmentList(UActorComponent* InOwnerComponent = nullptr)
+		: OwnerComponent(InOwnerComponent)
+	{}
+
+	UHakEquipmentInstance* AddEntry(TSubclassOf<UHakEquipmentDefinition> EquipmentDefinition);
+	void RemoveEntry(UHakEquipmentInstance* Instance);
+
+	UHakAbilitySystemComponent* GetAbilitySystemComponent() const;
+
+	/** 장착물에 대한 관리 리스트 */
+	UPROPERTY()
+	TArray<FHakAppliedEquipmentEntry> Entries;
+
+	UPROPERTY()
+	TObjectPtr<UActorComponent> OwnerComponent;
+};
+
+/**
+ * Pawn의 Component로서 장착물에 대한 관리를 담당한다
+ */
+UCLASS()
+class HAKGAME_API UHakEquipmentManagerComponent : public UPawnComponent
+{
+	GENERATED_BODY()
+public:
+	UHakEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	UHakEquipmentInstance* EquipItem(TSubclassOf<UHakEquipmentDefinition> EquipmentDefinition);
+	void UnequipItem(UHakEquipmentInstance* ItemInstance);
+
+	/** 장착물 중 처음 것을 반환 없으면 NULL */
+	UHakEquipmentInstance* GetFirstInstanceOfType(TSubclassOf<UHakEquipmentInstance> InstanceType);
+
+	template <typename T>
+	T* GetFirstInstanceOfType()
+	{
+		return (T*)GetFirstInstanceOfType(T::StaticClass());
+	}
+
+	UFUNCTION(BlueprintCallable)
+	TArray<UHakEquipmentInstance*> GetEquipmentInstancesOfType(TSubclassOf<UHakEquipmentInstance> InstanceType) const;
+
+	UPROPERTY()
+	FHakEquipmentList EquipmentList;
+};

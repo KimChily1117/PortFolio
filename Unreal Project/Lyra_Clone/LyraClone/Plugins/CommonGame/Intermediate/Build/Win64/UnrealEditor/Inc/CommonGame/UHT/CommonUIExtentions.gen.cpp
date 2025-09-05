@@ -74,20 +74,19 @@ template<> COMMONGAME_API UClass* StaticClass<UCommonUIExtentions>()
 {
 	return UCommonUIExtentions::StaticClass();
 }
-UCommonUIExtentions::UCommonUIExtentions(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {}
 DEFINE_VTABLE_PTR_HELPER_CTOR(UCommonUIExtentions);
 UCommonUIExtentions::~UCommonUIExtentions() {}
 // End Class UCommonUIExtentions
 
 // Begin Registration
-struct Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_Statics
+struct Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
 		{ Z_Construct_UClass_UCommonUIExtentions, UCommonUIExtentions::StaticClass, TEXT("UCommonUIExtentions"), &Z_Registration_Info_UClass_UCommonUIExtentions, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCommonUIExtentions), 730442221U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_3855384754(TEXT("/Script/CommonGame"),
-	Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_Statics::ClassInfo),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_3855384754(TEXT("/Script/CommonGame"),
+	Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonUIExtentions_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
 // End Registration
