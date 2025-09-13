@@ -6,10 +6,10 @@
 /NAME:"UnrealEditor-UIExtension-Win64-DebugGame.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\Users\Yeop\Documents\HakGame\HakGame\Intermediate\Build\Win64\x64\HakGameEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.Project.NonOptimized.ValApi.Cpp20.h.obj"
-"C:\Users\Yeop\Documents\HakGame\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\Module.UIExtension.cpp.obj"
-"C:\Users\Yeop\Documents\HakGame\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UIExtension.cpp.obj"
-"C:\Users\Yeop\Documents\HakGame\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UIExtensionPointWidget.cpp.obj"
-"C:\Users\Yeop\Documents\HakGame\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UIExtensionSystem.cpp.obj"
-"C:\Users\Yeop\Documents\HakGame\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\Default.rc2.res"
-/OUT:"C:\Users\Yeop\Documents\HakGame\HakGame\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UnrealEditor-UIExtension-Win64-DebugGame.lib"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.Project.NonOptimized.ValApi.Cpp20.h.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\Module.UIExtension.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UIExtension.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UIExtensionPointWidget.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UIExtensionSystem.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\Default.rc2.res"
+/OUT:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UIExtension\UnrealEditor-UIExtension-Win64-DebugGame.lib"

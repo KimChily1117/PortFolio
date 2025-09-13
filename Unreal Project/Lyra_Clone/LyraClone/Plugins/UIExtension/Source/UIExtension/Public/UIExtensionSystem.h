@@ -112,6 +112,7 @@ public:
 
 	/** Widget을 ExtensionPointWidget에 연결하기 위한 Callback 함수 */
 	FExtendExtensionPointDelegate Callback;
+
 	EUIExtensionPointMatch ExtensionPointTagMatchType = EUIExtensionPointMatch::ExactMatch;
 };
 

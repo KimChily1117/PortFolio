@@ -1,0 +1,14 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-CommonUser-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.Project.NonOptimized.ValApi.Cpp20.h.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonUser\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\CommonUser\Module.CommonUser.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonUser\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\CommonUser\CommonSessionSubsystem.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonUser\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\CommonUser\CommonUser.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonUser\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\CommonUser\Default.rc2.res"
+/OUT:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\CommonUser\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\CommonUser\UnrealEditor-CommonUser-Win64-DebugGame.lib"

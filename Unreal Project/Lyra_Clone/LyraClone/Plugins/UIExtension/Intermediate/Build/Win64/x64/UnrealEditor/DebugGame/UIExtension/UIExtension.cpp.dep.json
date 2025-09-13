@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\source\\uiextension\\private\\uiextension.cpp",
+        "ProvidedModule": "",
+        "PCH": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\debuggame\\unrealed\\sharedpch.unrealed.project.nonoptimized.valapi.cpp20.h.pch",
+        "Includes": [
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\intermediate\\build\\win64\\x64\\unrealeditor\\debuggame\\uiextension\\definitions.uiextension.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\source\\uiextension\\public\\uiextension.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

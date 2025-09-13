@@ -28,7 +28,9 @@ public class LyraClone : ModuleRules
             "CommonUI",
             "CommonGame",
             "UMG",
-            "UIExtension"
+            "UIExtension",
+            "Slate",
+            "SlateCore"
 
         });
 
