@@ -14,10 +14,15 @@
 #include "LyraClone/GameModes/ExperienceManagerComponent.h"
 #include "LyraClone/GameModes/LyraCloneGameModeBase.h"
 
+#include "LyraClone/AbilitySystem/Attributes/LyraCloneHealthSet.h"
+#include "LyraClone/AbilitySystem/Attributes/LyraCloneCombatSet.h"
 
 ALyraClonePlayerState::ALyraClonePlayerState(const FObjectInitializer& ObjectInitializer)
 {
 	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<ULyraCloneAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
+
+	CreateDefaultSubobject<ULyraCloneHealthSet>(TEXT("HealthSet"));
+	CreateDefaultSubobject<ULyraCloneCombatSet>(TEXT("CombatSet"));
 }
 
 void ALyraClonePlayerState::PostInitializeComponents()

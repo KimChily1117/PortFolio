@@ -8,3 +8,20 @@
 ULyraCloneExperienceActionSet::ULyraCloneExperienceActionSet() : Super()
 {
 }
+
+#if WITH_EDITORONLY_DATA
+void ULyraCloneExperienceActionSet::UpdateAssetBundleData()
+{
+	Super::UpdateAssetBundleData();
+
+	//UGameFeatureAction*ÀÌ¶û °°À½
+
+	for (UGameFeatureAction* Action : Actions)
+	{
+		if (Action)
+		{
+			Action->AddAdditionalAssetBundleData(AssetBundleData);
+		}
+	}
+}
+#endif

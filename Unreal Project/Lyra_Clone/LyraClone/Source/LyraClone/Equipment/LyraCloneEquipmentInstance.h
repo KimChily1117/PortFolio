@@ -45,6 +45,10 @@ public:
 	TArray<AActor*> GetSpawnedActors() const { return SpawnedActors; }
 
 
+	UFUNCTION(BlueprintPure, Category = Equipment)
+	UObject* GetInstigator() const { return Instigator; }
+
+
 	/**
  * DeterminesOutputType은 C++ 정의에는 APawn* 반환하지만, BP에서는 PawnType에 따라 OutputType이 결정되도록 리다이렉트(Redirect)한다
  */
