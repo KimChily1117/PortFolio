@@ -5,6 +5,7 @@
 #include "LyraClonePawnExtensionComponent.h"
 #include "LyraClone/AbilitySystem/LyraCloneAbilitySystemComponent.h"
 #include "LyraClone/Camera/LyraCloneCameraComponent.h"
+#include "LyraClone/Character/LyraCloneHealthComponent.h"
 // Sets default values
 ALyraCloneCharacter::ALyraCloneCharacter()
 {
@@ -13,11 +14,34 @@ ALyraCloneCharacter::ALyraCloneCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
 	PawnExtComponent = CreateDefaultSubobject<ULyraClonePawnExtensionComponent>(TEXT("PawnExtensionComponent"));
-	
+	{
+		PawnExtComponent->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+		PawnExtComponent->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
+	}
+
+
 	{
 		CameraComponent = CreateDefaultSubobject<ULyraCloneCameraComponent>(TEXT("CameraComponent"));
 		CameraComponent->SetRelativeLocation(FVector(-300.0f,0.0f,75.0f));
 	}
+
+	{
+		HealthComponent = CreateDefaultSubobject<ULyraCloneHealthComponent>(TEXT("HealthComponent"));
+	}
+}
+
+void ALyraCloneCharacter::OnAbilitySystemInitialized()
+{
+	ULyraCloneAbilitySystemComponent* HakASC = Cast<ULyraCloneAbilitySystemComponent>(GetAbilitySystemComponent());
+	check(HakASC);
+
+	// HealthComponent의 ASC를 통한 초기화
+	HealthComponent->InitializeWithAbilitySystem(HakASC);
+}
+
+void ALyraCloneCharacter::OnAbilitySystemUninitialized()
+{
+	HealthComponent->UninitializeWithAbilitySystem();
 }
 
 UAbilitySystemComponent* ALyraCloneCharacter::GetAbilitySystemComponent() const

@@ -44,6 +44,12 @@ public:
 	void UninitializeAbilitySystem();
 
 
+	/** OnAbilitySystem[Initialized|Uninitialized] Delegate¿¡ Ãß°¡: */
+	void OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate);
+	void OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate);
+
+
+
 	/**
 	* UPawnComponent interfaces
 	 */

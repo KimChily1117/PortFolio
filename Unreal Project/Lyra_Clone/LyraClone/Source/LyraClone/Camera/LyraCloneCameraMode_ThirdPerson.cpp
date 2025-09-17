@@ -31,7 +31,7 @@ void ULyraCloneCameraMode_ThirdPerson::UpdateView(float DeltaTime)
 		View.Location = PivotLocation + PivotRotation.RotateVector(TargetOffset);
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("PivotRotation: Pitch=%f, Yaw=%f, Roll=%f"),
-		PivotRotation.Pitch, PivotRotation.Yaw, PivotRotation.Roll);
+	//UE_LOG(LogTemp, Warning, TEXT("PivotRotation: Pitch=%f, Yaw=%f, Roll=%f"),
+	//	PivotRotation.Pitch, PivotRotation.Yaw, PivotRotation.Roll);
 
 }

@@ -1,42 +1,51 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "LyraCloneGameplayAbility.h"
-#include "AbilitySystemComponent.h"
-#include "AbilitySystemGlobals.h"
+#include "LyraClone/AbilitySystem/Abilities/LyraCloneAbilityCost.h"
 
 
 ULyraCloneGameplayAbility::ULyraCloneGameplayAbility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	ActivationPolicy = ELyraCloneAbilityActivationPolicy::OnInputTriggered;
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
 }
 
 bool ULyraCloneGameplayAbility::CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, OUT FGameplayTagContainer* OptionalRelevantTags) const
 {
-	UGameplayEffect* CostGE = GetCostGameplayEffect();
-	if (CostGE)
+	if (!Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags) || !ActorInfo)
 	{
-		UAbilitySystemComponent* const AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get();
-		check(AbilitySystemComponent != nullptr);
-		if (!AbilitySystemComponent->CanApplyAttributeModifiers(CostGE, GetAbilityLevel(Handle, ActorInfo), MakeEffectContext(Handle, ActorInfo)))
-		{
-			const FGameplayTag& CostTag = UAbilitySystemGlobals::Get().ActivateFailCostTag;
+		return false;
+	}
 
-			if (OptionalRelevantTags && CostTag.IsValid())
+	// verify AdditionalCosts defined in HakGameplayAbility to activate GameplayAbility:
+	for (TObjectPtr<ULyraCloneAbilityCost> AdditionalCost : AdditionalCosts)
+	{
+		if (AdditionalCost != nullptr)
+		{
+			if (!AdditionalCost->CheckCost(this, Handle, ActorInfo, OptionalRelevantTags))
 			{
-				OptionalRelevantTags->AddTag(CostTag);
+				return false;
 			}
-			return false;
 		}
 	}
+
+	// all cost requipements are meet! ready to activate!
 	return true;
+
 }
 
 void ULyraCloneGameplayAbility::ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const
 {
-	UGameplayEffect* CostGE = GetCostGameplayEffect();
-	if (CostGE)
+	Super::ApplyCost(Handle, ActorInfo, ActivationInfo);
+	check(ActorInfo);
+
+	// pay any additional cost
+	for (TObjectPtr<ULyraCloneAbilityCost> AdditionalCost : AdditionalCosts)
 	{
-		ApplyGameplayEffectToOwner(Handle, ActorInfo, ActivationInfo, CostGE, GetAbilityLevel(Handle, ActorInfo));
+		if (AdditionalCost != nullptr)
+		{
+			AdditionalCost->ApplyCost(this, Handle, ActorInfo, ActivationInfo);
+		}
 	}
 }
