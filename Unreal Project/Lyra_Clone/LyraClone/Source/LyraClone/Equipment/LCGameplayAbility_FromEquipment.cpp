@@ -26,7 +26,7 @@ ULyraCloneInventoryItemInstance* ULCGameplayAbility_FromEquipment::GetAssociated
 		// In Lyra, equipment is equipped by inventory item instance:
 		// - so, equipment's instigator should be inventory item instance
 		// - otherwise, it will return nullptr by failing casting to HakInventoryItemInstance
-		//return Cast<ULyraCloneInventoryItemInstance>(Equipment->GetInstigator());
+		return Cast<ULyraCloneInventoryItemInstance>(Equipment->GetInstigator());
 	}
 	return nullptr;
 }

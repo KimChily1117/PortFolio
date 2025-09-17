@@ -18,6 +18,8 @@ enum class ELyraCloneAbilityActivationPolicy : uint8
 };
 
 
+class ULyraCloneAbilityCost;
+
 /**
  * 
  */
@@ -39,7 +41,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hak|AbilityActivation")
 	ELyraCloneAbilityActivationPolicy ActivationPolicy;
 
-	///** ability costs to apply HakGameplayAbility separately */
-	//UPROPERTY(EditDefaultsOnly, Instanced, Category = "Hak|Costs")
-	//TArray<TObjectPtr<ULyraCloneAbilityCost>> AdditionalCosts;
+	/** ability costs to apply HakGameplayAbility separately */
+	UPROPERTY(EditDefaultsOnly, Instanced, Category = "Hak|Costs")
+	TArray<TObjectPtr<ULyraCloneAbilityCost>> AdditionalCosts;
 };

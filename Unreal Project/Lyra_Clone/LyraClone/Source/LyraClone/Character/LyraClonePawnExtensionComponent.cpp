@@ -88,6 +88,29 @@ void ULyraClonePawnExtensionComponent::UninitializeAbilitySystem()
 
 }
 
+void ULyraClonePawnExtensionComponent::OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	// OnAbilitySystemInitialized에 UObject가 바인딩되어 있지 않으면 추가 (Uniqueness)
+	if (!OnAbilitySystemInitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemInitialized.Add(Delegate);
+	}
+
+	// 이미 ASC가 설정되었으면, Delegate에 추가하는게 아닌 바로 호출 (이미 초기화되어 있으니깐!)
+	if (AbilitySystemComponent)
+	{
+		Delegate.Execute();
+	}
+}
+
+void ULyraClonePawnExtensionComponent::OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	if (!OnAbilitySystemUninitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemUninitialized.Add(Delegate);
+	}
+}
+
 void ULyraClonePawnExtensionComponent::OnRegister()
 {
 	Super::OnRegister();
