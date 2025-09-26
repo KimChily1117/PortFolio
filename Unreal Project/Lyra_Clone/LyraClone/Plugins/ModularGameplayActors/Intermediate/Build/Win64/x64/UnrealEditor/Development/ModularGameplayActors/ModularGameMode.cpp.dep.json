@@ -1,0 +1,36 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\private\\modulargamemode.cpp",
+        "ProvidedModule": "",
+        "PCH": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\modulargameplayactors\\definitions.modulargameplayactors.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\public\\modulargamemode.h",
+            "e:\\epic games\\ue_5.4\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemode.h",
+            "e:\\epic games\\ue_5.4\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemodebase.h",
+            "e:\\epic games\\ue_5.4\\engine\\source\\runtime\\engine\\classes\\engine\\serverstatreplicator.h",
+            "e:\\epic games\\ue_5.4\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\serverstatreplicator.generated.h",
+            "e:\\epic games\\ue_5.4\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamemodebase.generated.h",
+            "e:\\epic games\\ue_5.4\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamemode.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\unrealeditor\\inc\\modulargameplayactors\\uht\\modulargamemode.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\public\\modulargamestate.h",
+            "e:\\epic games\\ue_5.4\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamestate.h",
+            "e:\\epic games\\ue_5.4\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamestatebase.h",
+            "e:\\epic games\\ue_5.4\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamestatebase.generated.h",
+            "e:\\epic games\\ue_5.4\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamestate.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\unrealeditor\\inc\\modulargameplayactors\\uht\\modulargamestate.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\public\\modularpawn.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\unrealeditor\\inc\\modulargameplayactors\\uht\\modularpawn.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\public\\modularplayercontroller.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\unrealeditor\\inc\\modulargameplayactors\\uht\\modularplayercontroller.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\public\\modularplayerstate.h",
+            "e:\\epic games\\ue_5.4\\engine\\source\\runtime\\engine\\classes\\gameframework\\playerstate.h",
+            "e:\\epic games\\ue_5.4\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\playerstate.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\unrealeditor\\inc\\modulargameplayactors\\uht\\modularplayerstate.generated.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\unrealeditor\\inc\\modulargameplayactors\\uht\\modulargamemode.gen.cpp"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
