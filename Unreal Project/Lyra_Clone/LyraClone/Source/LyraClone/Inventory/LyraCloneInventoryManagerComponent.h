@@ -38,6 +38,11 @@ struct FLyraCloneInventoryList
 	TObjectPtr<UActorComponent> OwnerComponent;
 };
 
+// LyraCloneInventoryManagerComponent.h
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemAdded, ULyraCloneInventoryItemInstance* /*NewItem*/);
+
+
+
 /**
  * PlayerController의 Component로서 Inventory를 관리한다
  * - 사실 UActorComponent 상속이 아닌 UControllerComponent를 상속받아도 될거 같은데... 일단 Lyra 기준으로 UActorComponent를 상속받고 있다
@@ -49,10 +54,15 @@ class LYRACLONE_API ULyraCloneInventoryManagerComponent : public UActorComponent
 public:
 	ULyraCloneInventoryManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+
 	/** InventoryItemDefinition을 통해, InventoryList에 추가하여 관리하며, InventoryItemInstance를 반환한다 */
 	UFUNCTION(BlueprintCallable, Category = Inventory)
 	ULyraCloneInventoryItemInstance* AddItemDefinition(TSubclassOf<ULyraCloneInventoryItemDefinition> ItemDef);
 
 	UPROPERTY()
 	FLyraCloneInventoryList InventoryList;
+
+
+public:
+	FOnItemAdded OnItemAdded;
 };

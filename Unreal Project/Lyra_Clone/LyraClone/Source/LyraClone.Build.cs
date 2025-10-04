@@ -30,7 +30,8 @@ public class LyraClone : ModuleRules
             "UMG",
             "UIExtension",
             "Slate",
-            "SlateCore"
+            "SlateCore",
+            "Niagara"
 
         });
 

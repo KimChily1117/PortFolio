@@ -20,4 +20,6 @@ public:
 	/** InitialItemStats gives constructor's parameters for LyraCloneGameplayTagStackContainer */
 	UPROPERTY(EditDefaultsOnly, Category = Equipment)
 	TMap<FGameplayTag, int32> InitialItemStats;
+
+	int32 GetItemStatByTag(FGameplayTag Tag) const;
 };

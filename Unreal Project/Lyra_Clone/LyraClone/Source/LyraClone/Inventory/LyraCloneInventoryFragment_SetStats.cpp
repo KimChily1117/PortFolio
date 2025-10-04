@@ -11,3 +11,13 @@ void ULyraCloneInventoryFragment_SetStats::OnInstanceCreated(ULyraCloneInventory
 		Instance->AddStatTagStack(InitialItemStat.Key, InitialItemStat.Value);
 	}
 }
+
+int32 ULyraCloneInventoryFragment_SetStats::GetItemStatByTag(FGameplayTag Tag) const
+{
+	if (const int32* StatPtr = InitialItemStats.Find(Tag))
+	{
+		return *StatPtr;
+	}
+
+	return 0;
+}
