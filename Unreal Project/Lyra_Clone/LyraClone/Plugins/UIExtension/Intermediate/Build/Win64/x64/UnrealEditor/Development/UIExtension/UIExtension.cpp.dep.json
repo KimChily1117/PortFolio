@@ -1,12 +1,12 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\source\\uiextension\\private\\uiextension.cpp",
+        "Source": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\source\\uiextension\\private\\uiextension.cpp",
         "ProvidedModule": "",
-        "PCH": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "PCH": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
         "Includes": [
-            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\uiextension\\definitions.uiextension.h",
-            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\source\\uiextension\\public\\uiextension.h"
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\uiextension\\definitions.uiextension.h",
+            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\uiextension\\source\\uiextension\\public\\uiextension.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

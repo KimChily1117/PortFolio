@@ -6,6 +6,7 @@
 #include "LyraCloneEquipmentManagerComponent.h"
 #include "LyraClone/Inventory/LyraCloneInventoryFragment_EquippableItem.h"
 #include "LyraClone/Inventory/LyraCloneInventoryItemInstance.h"
+#include <LyraClone/Inventory/LyraCloneInventoryManagerComponent.h>
 
 ULyraCloneQuickBarComponent::ULyraCloneQuickBarComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -18,6 +19,21 @@ void ULyraCloneQuickBarComponent::BeginPlay()
 	{
 		Slots.AddDefaulted(NumSlots - Slots.Num());
 	}
+
+	// 인벤토리 추가 이벤트 바인딩
+	if (AController* OwnerController = Cast<AController>(GetOwner()))
+	{
+		if (APawn* Pawn = OwnerController->GetPawn())
+		{
+			if (auto* Inv = Pawn->FindComponentByClass<ULyraCloneInventoryManagerComponent>())
+			{
+				Inv->OnItemAdded.AddUObject(this, &ThisClass::HandleItemAdded);
+			}
+		}
+	}
+
+
+
 
 	// 반드시 BeginPlay() 불러주는 것을 까먹지 말자!
 	Super::BeginPlay();
@@ -86,6 +102,29 @@ void ULyraCloneQuickBarComponent::EquipItemInSlot()
 	}
 }
 
+void ULyraCloneQuickBarComponent::HandleItemAdded(ULyraCloneInventoryItemInstance* NewItem)
+{
+	if (!NewItem) return;
+
+	// 1) 빈 슬롯 우선 배치
+	int32 SlotIndex = FindFirstEmptySlot();
+	if (SlotIndex != INDEX_NONE)
+	{
+		AddItemToSlot(SlotIndex, NewItem);
+
+		// 2) “빈손이면 자동 장착” 정책만 허용
+		if (ActiveSlotIndex == INDEX_NONE)
+		{
+			SetActiveSlotIndex(SlotIndex);
+		}
+	}
+	else
+	{
+		// 슬롯이 꽉 찼으면: 그냥 보관만(스왑은 입력으로)
+		// 원하면 정책에 따라 덮어쓰기/큐잉 로직을 여기서 구현
+	}
+}
+
 void ULyraCloneQuickBarComponent::AddItemToSlot(int32 SlotIndex, ULyraCloneInventoryItemInstance* Item)
 {
 	// 해당 로직을 보면, Slosts는 Add로 동적 추가가 아닌, Index에 바로 넣는다:
@@ -101,11 +140,66 @@ void ULyraCloneQuickBarComponent::AddItemToSlot(int32 SlotIndex, ULyraCloneInven
 
 void ULyraCloneQuickBarComponent::SetActiveSlotIndex(int32 NewIndex)
 {
-	if (Slots.IsValidIndex(NewIndex) && (ActiveSlotIndex != NewIndex))
+	//if (Slots.IsValidIndex(NewIndex) && (ActiveSlotIndex != NewIndex))
+	//{
+	//	// UnequipItem/EquipItem을 통해, NewIndex를 통해 할당된 Item을 창착 및 업데이트를 진행한다
+	//	UnequipItemInSlot();
+	//	ActiveSlotIndex = NewIndex;
+	//	EquipItemInSlot();
+	//}
+
+	if (!Slots.IsValidIndex(NewIndex) || ActiveSlotIndex == NewIndex)
+		return;
+
+	const int32 PrevIndex = ActiveSlotIndex;
+
+	UnequipItemInSlot();           // 이전 무기 해제
+	ActiveSlotIndex = NewIndex;
+	EquipItemInSlot();             // 새 무기 장착
+
+	if (!EquippedItem)             // 장착 실패한 경우 롤백
 	{
-		// UnequipItem/EquipItem을 통해, NewIndex를 통해 할당된 Item을 창착 및 업데이트를 진행한다
-		UnequipItemInSlot();
-		ActiveSlotIndex = NewIndex;
-		EquipItemInSlot();
+		ActiveSlotIndex = PrevIndex;
+		if (PrevIndex != INDEX_NONE) EquipItemInSlot();
+	}
+}
+
+int32 ULyraCloneQuickBarComponent::FindFirstEmptySlot() const
+{
+	for (int32 i = 0; i < Slots.Num(); ++i)
+	{
+		if (Slots[i] == nullptr) return i;
+	}
+	return INDEX_NONE;
+}
+
+ULyraCloneInventoryItemInstance* ULyraCloneQuickBarComponent::GetItemInSlot(int32 Index) const
+{
+	return Slots.IsValidIndex(Index) ? Slots[Index] : nullptr;
+}
+
+void ULyraCloneQuickBarComponent::ClearSlot(int32 Index)
+{
+	if (Slots.IsValidIndex(Index)) Slots[Index] = nullptr;
+}
+
+int32 ULyraCloneQuickBarComponent::GetActiveSlotIndex() const
+{
+	return ActiveSlotIndex;
+}
+
+void ULyraCloneQuickBarComponent::CycleActiveSlot(int32 Step)
+{
+	if (Slots.Num() == 0) return;
+
+	const int32 Start = (ActiveSlotIndex == INDEX_NONE) ? -1 : ActiveSlotIndex;
+	for (int32 hop = 1; hop <= Slots.Num(); ++hop)
+	{
+		const int32 Try = (Start + Step * hop + Slots.Num() * 8) % Slots.Num();
+		if (GetItemInSlot(Try))
+		{
+			SetActiveSlotIndex(Try);
+			break;
+		}
 	}
 }

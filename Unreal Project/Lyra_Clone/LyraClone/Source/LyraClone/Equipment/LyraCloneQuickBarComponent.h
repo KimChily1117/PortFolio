@@ -37,11 +37,24 @@ public:
 	void UnequipItemInSlot();
 	void EquipItemInSlot();
 
+	void HandleItemAdded(ULyraCloneInventoryItemInstance* NewItem);
+
+
 	UFUNCTION(BlueprintCallable)
 	void AddItemToSlot(int32 SlotIndex, ULyraCloneInventoryItemInstance* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "LyraClone")
 	void SetActiveSlotIndex(int32 NewIndex);
+
+	int32 FindFirstEmptySlot() const;
+
+	ULyraCloneInventoryItemInstance* GetItemInSlot(int32 Index) const;
+
+	void ClearSlot(int32 Index);
+
+	int32 GetActiveSlotIndex() const;
+
+	void CycleActiveSlot(int32 Step);
 
 	/** HUD QuickBar Slot °¹¼ö */
 	UPROPERTY()

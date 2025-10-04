@@ -42,6 +42,11 @@ ULyraCloneInventoryItemInstance* ULyraCloneInventoryManagerComponent::AddItemDef
 	if (ItemDef)
 	{
 		Result = InventoryList.AddEntry(ItemDef);
+		if (Result)
+		{
+			OnItemAdded.Broadcast(Result);
+		}
+	
 	}
 	return Result;
 }
