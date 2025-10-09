@@ -20,16 +20,13 @@ void ULyraCloneQuickBarComponent::BeginPlay()
 		Slots.AddDefaulted(NumSlots - Slots.Num());
 	}
 
-	// 인벤토리 추가 이벤트 바인딩
 	if (AController* OwnerController = Cast<AController>(GetOwner()))
 	{
-		if (APawn* Pawn = OwnerController->GetPawn())
-		{
-			if (auto* Inv = Pawn->FindComponentByClass<ULyraCloneInventoryManagerComponent>())
-			{
-				Inv->OnItemAdded.AddUObject(this, &ThisClass::HandleItemAdded);
-			}
-		}
+		// 앞으로 Pawn이 바뀔 때마다(처음 Possess 포함) 콜백이 온다
+		OwnerController->GetOnNewPawnNotifier().AddUObject(this, &ThisClass::HandleNewPawn);
+
+		// 이미 Pawn이 있으면 지금 바로 1회 바인딩
+		HandleNewPawn(OwnerController->GetPawn());
 	}
 
 
@@ -106,23 +103,19 @@ void ULyraCloneQuickBarComponent::HandleItemAdded(ULyraCloneInventoryItemInstanc
 {
 	if (!NewItem) return;
 
-	// 1) 빈 슬롯 우선 배치
 	int32 SlotIndex = FindFirstEmptySlot();
-	if (SlotIndex != INDEX_NONE)
-	{
-		AddItemToSlot(SlotIndex, NewItem);
 
-		// 2) “빈손이면 자동 장착” 정책만 허용
-		if (ActiveSlotIndex == INDEX_NONE)
-		{
-			SetActiveSlotIndex(SlotIndex);
-		}
-	}
-	else
+	// 슬롯이 없으면 활성 슬롯으로 교체(= 스왑)
+	if (SlotIndex == INDEX_NONE)
 	{
-		// 슬롯이 꽉 찼으면: 그냥 보관만(스왑은 입력으로)
-		// 원하면 정책에 따라 덮어쓰기/큐잉 로직을 여기서 구현
+		SlotIndex = (ActiveSlotIndex != INDEX_NONE) ? ActiveSlotIndex : 0;
+		// 기존 장착 해제/정리
+		UnequipItemInSlot();
+		Slots[SlotIndex] = nullptr;
 	}
+
+	AddItemToSlot(SlotIndex, NewItem);
+	SetActiveSlotIndex(SlotIndex);   // 새 무기로 즉시 장착
 }
 
 void ULyraCloneQuickBarComponent::AddItemToSlot(int32 SlotIndex, ULyraCloneInventoryItemInstance* Item)
@@ -202,4 +195,18 @@ void ULyraCloneQuickBarComponent::CycleActiveSlot(int32 Step)
 			break;
 		}
 	}
+}
+
+void ULyraCloneQuickBarComponent::HandleNewPawn(APawn* NewPawn)
+{
+	if (!NewPawn) return;
+
+	if (ULyraCloneInventoryManagerComponent* Inv = NewPawn->FindComponentByClass<ULyraCloneInventoryManagerComponent>())
+	{
+		// 중복 바인딩 방지
+		Inv->OnItemAdded.RemoveAll(this);
+		Inv->OnItemAdded.AddUObject(this, &ThisClass::HandleItemAdded);
+	}
+
+	// 필요하면 EquipmentManager 등도 여기서 캐시/바인딩
 }

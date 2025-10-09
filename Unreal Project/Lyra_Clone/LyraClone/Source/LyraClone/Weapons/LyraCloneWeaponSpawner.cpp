@@ -14,6 +14,7 @@
 #include "NiagaraSystem.h"
 #include "TimerManager.h"
 #include <LyraClone/Inventory/LyraCloneInventoryManagerComponent.h>
+#include <LyraClone/Equipment/LyraCloneQuickBarComponent.h>
 
 
 // Sets default values
@@ -113,7 +114,7 @@ void ALyraCloneWeaponSpawner::CheckForExistingOverlaps()
 	}
 }
 
-void ALyraCloneWeaponSpawner::AttemptPickUpWeapon_Implementation(APawn* Pawn)
+void ALyraCloneWeaponSpawner::AttemptPickUpWeapon(APawn* Pawn)
 {
 	if (GetLocalRole() == ROLE_Authority && bIsWeaponAvailable && UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Pawn))
 	{
@@ -142,8 +143,18 @@ bool ALyraCloneWeaponSpawner::GiveWeapon(TSubclassOf<ULyraCloneInventoryItemDefi
 	if (!Inv) return false;
 
 	ULyraCloneInventoryItemInstance* NewItem = Inv->AddItemDefinition(WeaponItemClass);
+	if (!NewItem) return false;
 
-	return (NewItem != nullptr);
+	// ?? Ãß°¡: ½½·Ô/ÀåÂø Æ®¸®°Å
+	if (AController* Ctrl = ReceivingPawn->GetController())
+	{
+		if (auto* QuickBar = Ctrl->FindComponentByClass<ULyraCloneQuickBarComponent>())
+		{
+			QuickBar->HandleItemAdded(NewItem);
+		}
+	}
+
+	return true;
 }
 
 void ALyraCloneWeaponSpawner::StartCoolDown()

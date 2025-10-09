@@ -84,7 +84,6 @@ public:
 	//Check for pawns standing on pad when the weapon is spawned. 
 	void CheckForExistingOverlaps();
 
-	UFUNCTION(BlueprintNativeEvent)
 	void AttemptPickUpWeapon(APawn* Pawn);
 
 	bool GiveWeapon(TSubclassOf<ULyraCloneInventoryItemDefinition> WeaponItemClass, APawn* ReceivingPawn);

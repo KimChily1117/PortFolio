@@ -6,6 +6,7 @@
 #include "LyraClone/AbilitySystem/LyraCloneAbilitySystemComponent.h"
 #include "LyraClone/Camera/LyraCloneCameraComponent.h"
 #include "LyraClone/Character/LyraCloneHealthComponent.h"
+#include "LyraClone/Inventory/LyraCloneInventoryManagerComponent.h"
 // Sets default values
 ALyraCloneCharacter::ALyraCloneCharacter()
 {
@@ -28,6 +29,11 @@ ALyraCloneCharacter::ALyraCloneCharacter()
 	{
 		HealthComponent = CreateDefaultSubobject<ULyraCloneHealthComponent>(TEXT("HealthComponent"));
 	}
+
+	{
+		InventoryManagerComponent = CreateDefaultSubobject<ULyraCloneInventoryManagerComponent>(TEXT("InventoryManagerComponent"));
+	}
+
 }
 
 void ALyraCloneCharacter::OnAbilitySystemInitialized()
