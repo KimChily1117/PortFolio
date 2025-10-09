@@ -55,6 +55,8 @@ public:
 	int32 GetActiveSlotIndex() const;
 
 	void CycleActiveSlot(int32 Step);
+	void HandleNewPawn(APawn* NewPawn);
+
 
 	/** HUD QuickBar Slot °¹¼ö */
 	UPROPERTY()

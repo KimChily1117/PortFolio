@@ -11,6 +11,7 @@
 class ULyraClonePawnExtensionComponent;
 class ULyraCloneCameraComponent;
 class ULyraCloneHealthComponent;
+class ULyraCloneInventoryManagerComponent;
 
 UCLASS()
 class LYRACLONE_API ALyraCloneCharacter : public AModularCharacter, public IAbilitySystemInterface
@@ -36,8 +37,6 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 
-
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -60,4 +59,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hak|Character")
 	TObjectPtr<ULyraCloneHealthComponent> HealthComponent;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hak|Character")
+	TObjectPtr<ULyraCloneInventoryManagerComponent> InventoryManagerComponent = nullptr;
 };
