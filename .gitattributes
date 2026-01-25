@@ -32,6 +32,8 @@ sysinfo.txt
 [Ii]ntermediate/
 [Ss]aved/
 [Dd]erivedDataCache/
+[Co]entent/
+[Pl]ugins/
 
 ############################################
 # Unreal Plugins (IMPORTANT)
