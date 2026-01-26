@@ -102,6 +102,9 @@ void ULyraCloneQuickBarComponent::EquipItemInSlot()
 void ULyraCloneQuickBarComponent::HandleItemAdded(ULyraCloneInventoryItemInstance* NewItem)
 {
 	if (!NewItem) return;
+	if (FindSlotWithItem(NewItem) != INDEX_NONE)
+		return; // 또는 기존 슬롯 비우고 이동 처리
+
 
 	int32 SlotIndex = FindFirstEmptySlot();
 
@@ -116,6 +119,16 @@ void ULyraCloneQuickBarComponent::HandleItemAdded(ULyraCloneInventoryItemInstanc
 
 	AddItemToSlot(SlotIndex, NewItem);
 	SetActiveSlotIndex(SlotIndex);   // 새 무기로 즉시 장착
+}
+
+int32 ULyraCloneQuickBarComponent::FindSlotWithItem(ULyraCloneInventoryItemInstance* Item) const
+{
+	for (int32 i = 0; i < Slots.Num(); ++i)
+	{
+		if (Slots[i] == Item) 
+			return i;
+	}
+	return INDEX_NONE;
 }
 
 void ULyraCloneQuickBarComponent::AddItemToSlot(int32 SlotIndex, ULyraCloneInventoryItemInstance* Item)

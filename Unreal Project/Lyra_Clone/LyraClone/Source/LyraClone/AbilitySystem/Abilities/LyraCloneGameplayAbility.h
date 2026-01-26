@@ -19,7 +19,7 @@ enum class ELyraCloneAbilityActivationPolicy : uint8
 
 
 class ULyraCloneAbilityCost;
-
+class ALyraCloneCharacter;
 /**
  * 
  */
@@ -36,6 +36,12 @@ public:
 	 */
 	virtual bool CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 	virtual void ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
+
+
+	UFUNCTION(BlueprintCallable, Category = "Lyra|Ability")
+	ALyraCloneCharacter* GetLyraCharacterFromActorInfo() const;
+
+
 
 	/** 언제 GA가 활성화될지 정책 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hak|AbilityActivation")

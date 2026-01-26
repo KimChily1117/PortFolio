@@ -2,6 +2,7 @@
 
 #include "LyraCloneGameplayAbility.h"
 #include "LyraClone/AbilitySystem/Abilities/LyraCloneAbilityCost.h"
+#include "LyraClone/Character/LyraCloneCharacter.h"
 
 
 ULyraCloneGameplayAbility::ULyraCloneGameplayAbility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -48,4 +49,9 @@ void ULyraCloneGameplayAbility::ApplyCost(const FGameplayAbilitySpecHandle Handl
 			AdditionalCost->ApplyCost(this, Handle, ActorInfo, ActivationInfo);
 		}
 	}
+}
+
+ALyraCloneCharacter* ULyraCloneGameplayAbility::GetLyraCharacterFromActorInfo() const
+{
+	return (CurrentActorInfo ? Cast<ALyraCloneCharacter>(CurrentActorInfo->AvatarActor.Get()) : nullptr);
 }

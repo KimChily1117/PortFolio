@@ -6,7 +6,7 @@
 /NAME:"UnrealEditor-ShooterCoreRuntime.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\ShooterCoreRuntimeModule.cpp.obj"
-"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\Default.rc2.res"
-/OUT:"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\UnrealEditor-ShooterCoreRuntime.lib"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\ShooterCoreRuntimeModule.cpp.obj"
+"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\Default.rc2.res"
+/OUT:"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\GameFeatures\ShooterCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\ShooterCoreRuntime\UnrealEditor-ShooterCoreRuntime.lib"

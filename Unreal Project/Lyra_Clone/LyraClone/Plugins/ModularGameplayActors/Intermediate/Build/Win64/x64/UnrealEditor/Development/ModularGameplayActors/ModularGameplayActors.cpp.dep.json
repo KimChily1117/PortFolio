@@ -1,12 +1,12 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\private\\modulargameplayactors.cpp",
+        "Source": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\private\\modulargameplayactors.cpp",
         "ProvidedModule": "",
-        "PCH": "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "PCH": "e:\\task\\unreal project\\lyra_clone\\lyraclone\\intermediate\\build\\win64\\x64\\lyracloneeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
         "Includes": [
-            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\modulargameplayactors\\definitions.modulargameplayactors.h",
-            "c:\\users\\yeop\\documents\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\public\\modulargameplayactors.h"
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\modulargameplayactors\\definitions.modulargameplayactors.h",
+            "e:\\task\\unreal project\\lyra_clone\\lyraclone\\plugins\\modulargameplayactors\\source\\modulargameplayactors\\public\\modulargameplayactors.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []
