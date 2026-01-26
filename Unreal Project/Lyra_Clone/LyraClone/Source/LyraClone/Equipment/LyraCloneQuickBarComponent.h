@@ -39,6 +39,7 @@ public:
 
 	void HandleItemAdded(ULyraCloneInventoryItemInstance* NewItem);
 
+	int32 FindSlotWithItem(ULyraCloneInventoryItemInstance* Item) const;
 
 	UFUNCTION(BlueprintCallable)
 	void AddItemToSlot(int32 SlotIndex, ULyraCloneInventoryItemInstance* Item);

@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define COMMONGAME_CommonPlayerController_generated_h
 
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_INCLASS_NO_PURE_DECLS \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesACommonPlayerController(); \
 	friend struct Z_Construct_UClass_ACommonPlayerController_Statics; \
@@ -23,7 +23,7 @@ public: \
 	DECLARE_SERIALIZER(ACommonPlayerController)
 
 
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_ENHANCED_CONSTRUCTORS \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API ACommonPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 private: \
@@ -37,12 +37,12 @@ public: \
 	NO_API virtual ~ACommonPlayerController();
 
 
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_12_PROLOG
-#define FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_GENERATED_BODY \
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_12_PROLOG
+#define FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_INCLASS_NO_PURE_DECLS \
-	FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_ENHANCED_CONSTRUCTORS \
+	FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_INCLASS_NO_PURE_DECLS \
+	FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h_15_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -50,7 +50,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> COMMONGAME_API UClass* StaticClass<class ACommonPlayerController>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h
+#define CURRENT_FILE_ID FID_task_Unreal_Project_Lyra_Clone_LyraClone_Plugins_CommonGame_Source_CommonGame_Public_CommonPlayerController_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

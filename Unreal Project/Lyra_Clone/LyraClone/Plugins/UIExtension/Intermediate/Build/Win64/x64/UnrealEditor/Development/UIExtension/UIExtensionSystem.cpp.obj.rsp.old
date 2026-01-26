@@ -1,11 +1,11 @@
-"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Source\UIExtension\Private\UIExtensionSystem.cpp"
-/FI"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
-/FI"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Definitions.UIExtension.h"
-/Yu"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
-/Fp"E:\task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.pch"
-/Fo"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionSystem.cpp.obj"
-/sourceDependencies "E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionSystem.cpp.dep.json"
-@"E:\task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtension.Shared.rsp"
+"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Source\UIExtension\Private\UIExtensionSystem.cpp"
+/FI"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
+/FI"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\Definitions.UIExtension.h"
+/Yu"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
+/Fp"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Intermediate\Build\Win64\x64\LyraCloneEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.pch"
+/Fo"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionSystem.cpp.obj"
+/sourceDependencies "C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtensionSystem.cpp.dep.json"
+@"C:\Users\Yeop\Documents\Task\Unreal Project\Lyra_Clone\LyraClone\Plugins\UIExtension\Intermediate\Build\Win64\x64\UnrealEditor\Development\UIExtension\UIExtension.Shared.rsp"
 /Zc:inline
 /nologo
 /Oi
