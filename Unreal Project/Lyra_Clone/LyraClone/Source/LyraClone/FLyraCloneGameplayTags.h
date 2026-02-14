@@ -39,6 +39,7 @@ struct FHakGameplayTags
 	 */
 	FGameplayTag InputTag_Move;
 	FGameplayTag InputTag_Look_Mouse;
+	FGameplayTag TAG_BlockMove;
 
 
 private:

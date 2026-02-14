@@ -15,13 +15,13 @@
 #include "LyraClone/Player/LyraClonePlayerController.h"
 #include "LyraClone/Camera/LyraCloneCameraComponent.h"
 #include "LyraClone/AbilitySystem/LyraCloneAbilitySystemComponent.h"
+#include "AbilitySystemGlobals.h"
 
 /** FeatureName 정의: static member variable 초기화 */
 const FName ULyraCloneHeroComponent::NAME_ActorFeatureName("Hero");
 
 /** InputConfig의 GameFeatureAction 활성화 ExtensioEvent 이름 */
 const FName ULyraCloneHeroComponent::NAME_BindInputsNow("BindInputsNow");
-
 
 
 ULyraCloneHeroComponent::ULyraCloneHeroComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -278,6 +278,18 @@ void ULyraCloneHeroComponent::Input_Move(const FInputActionValue& InputActionVal
 {
 	APawn* Pawn = GetPawn<APawn>();
 	AController* Controller = Pawn ? Pawn->GetController() : nullptr;
+
+	FGameplayTag TAG_BlockMove = FGameplayTag::RequestGameplayTag(TEXT("State.Movement.Blocked"));
+
+
+	if (UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(Pawn))
+	{
+		if (ASC->HasMatchingGameplayTag(TAG_BlockMove))
+		{
+			return;
+		}
+	} 
+
 
 	if (Controller)
 	{
