@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/GameFrameworkComponent.h"
 #include "Delegates/Delegate.h"
+#include "GameplayEffectTypes.h"
 #include "LyraCloneHealthComponent.generated.h"
-
 
 /** forward declarations */
 class ULyraCloneAbilitySystemComponent;
@@ -57,6 +57,14 @@ public:
 	/** ASC를 통해, HealthSet의 HealthAttribute 변경이 있을때 호출하는 메서드 (내부적으로 OnHealthChanged 호출) */
 	void HandleHealthChanged(const FOnAttributeChangeData& ChangeData);
 
+	void HandleMaxHealthChanged(const FOnAttributeChangeData& ChangeData);
+
+	void HandleOutOfHealth(
+		AActor* DamageInstigator,
+		AActor* DamageCauser,
+		const FGameplayEffectSpec& DamageEffectSpec,
+		float DamageMagnitude
+	);
 	/** HealthSet을 접근하기 위한 AbilitySystemComponent */
 	UPROPERTY()
 	TObjectPtr<ULyraCloneAbilitySystemComponent> AbilitySystemComponent;
@@ -68,5 +76,10 @@ public:
 	/** health 변화에 따른 Delegate(Multicast) */
 	UPROPERTY(BlueprintAssignable)
 	FLyraCloneHealth_AttributeChanged OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FLyraCloneHealth_AttributeChanged OnMaxHealthChanged;
+
+
 };
 

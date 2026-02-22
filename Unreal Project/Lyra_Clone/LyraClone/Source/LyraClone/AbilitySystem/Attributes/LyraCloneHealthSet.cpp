@@ -7,6 +7,10 @@ ULyraCloneHealthSet::ULyraCloneHealthSet() : Super(), Health(50), MaxHealth(100)
 {
 }
 
+void ULyraCloneHealthSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+}
+
 void ULyraCloneHealthSet::ClampAttribute(const FGameplayAttribute& Attribute, float& NewValue) const
 {
 	// HealthAttribute는 [0,GetMaxHealth]로 설정

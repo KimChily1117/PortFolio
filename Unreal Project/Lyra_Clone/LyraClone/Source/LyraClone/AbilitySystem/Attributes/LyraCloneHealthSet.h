@@ -7,6 +7,20 @@
 #include "AbilitySystemComponent.h"
 #include "LyraCloneHealthSet.generated.h"
 
+
+class AActor;
+struct FGameplayEffectSpec;
+struct FGameplayEffectModCallbackData;
+
+DECLARE_MULTICAST_DELEGATE_FourParams(
+	FLyraCloneOutOfHealthEvent,
+	AActor* /*Instigator*/,
+	AActor* /*Causer*/,
+	const FGameplayEffectSpec& /*EffectSpec*/,
+	float /*EffectMagnitude*/
+);
+
+
 /**
  * 
  */
@@ -24,6 +38,18 @@ public:
 	ATTRIBUTE_ACCESSORS(ULyraCloneHealthSet, Health);
 	ATTRIBUTE_ACCESSORS(ULyraCloneHealthSet, MaxHealth);
 	ATTRIBUTE_ACCESSORS(ULyraCloneHealthSet, Healing);
+	ATTRIBUTE_ACCESSORS(ULyraCloneHealthSet, Damage);
+
+
+	// Health가 0이 되는 순간 1회 Broadcast
+	mutable FLyraCloneOutOfHealthEvent OnOutOfHealth;
+
+
+
+
+	// Replication
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 
 	/**
 	* Attribute의 값을 ClampAttribute()를 활용하여, 값의 범위를 유지시켜주기 위해
@@ -51,4 +77,8 @@ public:
 	/** 체력 회복치 */
 	UPROPERTY(BlueprintReadOnly, Category = "LyraClone|Health")
 	FGameplayAttributeData Healing;
+
+	/** 데미지 */
+	UPROPERTY(BlueprintReadOnly, Category = "LyraClone|Health")
+	FGameplayAttributeData Damage;
 };

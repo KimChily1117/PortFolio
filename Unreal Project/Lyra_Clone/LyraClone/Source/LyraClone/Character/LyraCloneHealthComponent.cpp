@@ -55,10 +55,28 @@ void ULyraCloneHealthComponent::InitializeWithAbilitySystem(ULyraCloneAbilitySys
 	}
 
 	// HealthSet의 HealthAttribute의 업데이트가 일어날때마다 호출할 콜백으로 멤버메서드 HandleHealthChanged를 등록하자:
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(ULyraCloneHealthSet::GetHealthAttribute()).AddUObject(this, &ThisClass::HandleHealthChanged);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(ULyraCloneHealthSet::GetHealthAttribute()).
+		AddUObject(this, &ThisClass::HandleHealthChanged);
+
+	// 2) Out of health delegate (HealthSet에서 체력 0될 때 발생)
+	HealthSet->OnOutOfHealth.AddUObject(this, &ThisClass::HandleOutOfHealth);
+
+	// 3) 시작 체력 = 최대 체력 (Lyra 데모 핵심 포인트)
+	AbilitySystemComponent->SetNumericAttributeBase(
+		ULyraCloneHealthSet::GetHealthAttribute(),
+		HealthSet->GetMaxHealth()
+	);
+
+	AbilitySystemComponent
+		->GetGameplayAttributeValueChangeDelegate(ULyraCloneHealthSet::GetMaxHealthAttribute())
+		.AddUObject(this, &ThisClass::HandleMaxHealthChanged);
+
+
 
 	// 초기화 한번 해줬으니깐 Broadcast 해주자
 	OnHealthChanged.Broadcast(this, 0, HealthSet->GetHealth(), nullptr);
+	// 풀피도! 
+	OnMaxHealthChanged.Broadcast(this, HealthSet->GetMaxHealth(), HealthSet->GetMaxHealth(), nullptr);
 }
 
 
@@ -86,6 +104,21 @@ void ULyraCloneHealthComponent::HandleHealthChanged(const FOnAttributeChangeData
 	OnHealthChanged.Broadcast(this, ChangeData.OldValue, ChangeData.NewValue, GetInstigatorFromAttrChangeData(ChangeData));
 }
 
+void ULyraCloneHealthComponent::HandleMaxHealthChanged(const FOnAttributeChangeData& ChangeData)
+{
+	OnMaxHealthChanged.Broadcast(this, ChangeData.OldValue, ChangeData.NewValue, GetInstigatorFromAttrChangeData(ChangeData));
+}
+
+
+void ULyraCloneHealthComponent::HandleOutOfHealth(
+	AActor* DamageInstigator,
+	AActor* DamageCauser,
+	const FGameplayEffectSpec& DamageEffectSpec,
+	float DamageMagnitude
+)
+{
+	// TODO: 죽음 처리 시작점
+}
 
 
 ULyraCloneHealthComponent* ULyraCloneHealthComponent::FindHealthComponent(const AActor* Actor)
