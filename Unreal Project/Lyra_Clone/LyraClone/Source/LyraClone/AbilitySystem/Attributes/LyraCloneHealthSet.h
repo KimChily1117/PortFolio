@@ -44,9 +44,6 @@ public:
 	// Health가 0이 되는 순간 1회 Broadcast
 	mutable FLyraCloneOutOfHealthEvent OnOutOfHealth;
 
-
-
-
 	// Replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -66,6 +63,23 @@ public:
 	virtual bool PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+
+	// MaxHealth 변할 때 Health 정리용 (Lyra 패턴)
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+
+protected:
+	// OnRep
+	UFUNCTION()
+	void OnRep_Health(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
+
+
+private:
+	//OutOfHealth 중복 방지
+	bool bOutOfHealth = false;
+public:
 	/** 현재 체력 */
 	UPROPERTY(BlueprintReadOnly, Category = "LyraClone|Health")
 	FGameplayAttributeData Health;

@@ -29,7 +29,7 @@ void ULyraCloneHealthComponent::InitializeWithAbilitySystem(ULyraCloneAbilitySys
 
 	if (AbilitySystemComponent)
 	{
-		UE_LOG(LogLyraClone, Error, TEXT("HealthComponent: Health component for owner [%s] has already been initialized with an ability system."), *GetNameSafe(Owner));
+		UE_LOG(LogLyraClone, Error, TEXT("HealthComponent: Health component		for owner [%s] has already been initialized with an ability system."), *GetNameSafe(Owner));
 		return;
 	}
 
@@ -61,11 +61,11 @@ void ULyraCloneHealthComponent::InitializeWithAbilitySystem(ULyraCloneAbilitySys
 	// 2) Out of health delegate (HealthSet에서 체력 0될 때 발생)
 	HealthSet->OnOutOfHealth.AddUObject(this, &ThisClass::HandleOutOfHealth);
 
-	// 3) 시작 체력 = 최대 체력 (Lyra 데모 핵심 포인트)
-	AbilitySystemComponent->SetNumericAttributeBase(
-		ULyraCloneHealthSet::GetHealthAttribute(),
-		HealthSet->GetMaxHealth()
-	);
+	//// 3) 시작 체력 = 최대 체력 (Lyra 데모 핵심 포인트)
+	//AbilitySystemComponent->SetNumericAttributeBase(
+	//	ULyraCloneHealthSet::GetHealthAttribute(),
+	//	HealthSet->GetMaxHealth()
+	//);
 
 	AbilitySystemComponent
 		->GetGameplayAttributeValueChangeDelegate(ULyraCloneHealthSet::GetMaxHealthAttribute())
@@ -74,7 +74,7 @@ void ULyraCloneHealthComponent::InitializeWithAbilitySystem(ULyraCloneAbilitySys
 
 
 	// 초기화 한번 해줬으니깐 Broadcast 해주자
-	OnHealthChanged.Broadcast(this, 0, HealthSet->GetHealth(), nullptr);
+	OnHealthChanged.Broadcast(this, HealthSet->GetHealth(), HealthSet->GetHealth(), nullptr);
 	// 풀피도! 
 	OnMaxHealthChanged.Broadcast(this, HealthSet->GetMaxHealth(), HealthSet->GetMaxHealth(), nullptr);
 }
@@ -82,6 +82,22 @@ void ULyraCloneHealthComponent::InitializeWithAbilitySystem(ULyraCloneAbilitySys
 
 void ULyraCloneHealthComponent::UninitializeWithAbilitySystem()
 {
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(ULyraCloneHealthSet::GetHealthAttribute())
+			.RemoveAll(this);
+
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(ULyraCloneHealthSet::GetMaxHealthAttribute())
+			.RemoveAll(this);
+	}
+
+	if (HealthSet)
+	{
+		HealthSet->OnOutOfHealth.RemoveAll(this);
+	}
+
+
+
 	AbilitySystemComponent = nullptr;
 	HealthSet = nullptr;
 }
@@ -102,10 +118,30 @@ static AActor* GetInstigatorFromAttrChangeData(const FOnAttributeChangeData& Cha
 void ULyraCloneHealthComponent::HandleHealthChanged(const FOnAttributeChangeData& ChangeData)
 {
 	OnHealthChanged.Broadcast(this, ChangeData.OldValue, ChangeData.NewValue, GetInstigatorFromAttrChangeData(ChangeData));
+
+	// 데미지 텍스트용: HP가 내려갔으면 “실제 깎인 값”으로 처리
+	const float Delta = ChangeData.OldValue - ChangeData.NewValue;
+	if (Delta > 0.f)
+	{
+		OnDamaged.Broadcast(Delta);
+	}
 }
 
 void ULyraCloneHealthComponent::HandleMaxHealthChanged(const FOnAttributeChangeData& ChangeData)
 {
+	// 이전에 풀피였으면(Health == OldMax) → 새 Max로 유지
+	if (HealthSet && AbilitySystemComponent)
+	{
+		const float CurrentHealth = HealthSet->GetHealth();
+		if (FMath::IsNearlyEqual(CurrentHealth, ChangeData.OldValue))
+		{
+			AbilitySystemComponent->SetNumericAttributeBase(
+				ULyraCloneHealthSet::GetHealthAttribute(),
+				ChangeData.NewValue
+			);
+		}
+	}
+
 	OnMaxHealthChanged.Broadcast(this, ChangeData.OldValue, ChangeData.NewValue, GetInstigatorFromAttrChangeData(ChangeData));
 }
 

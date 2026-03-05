@@ -16,7 +16,8 @@
 				"GameplayAbilities",
 				"CommonGame",
 				"CommonUI",
-				"UMG"
+				"UMG",
+				"AIModule"
 			]
 		}
 	],
@@ -60,6 +61,5 @@
 			"Name": "UIExtension",
 			"Enabled": true
 		}
-
 	]
 }

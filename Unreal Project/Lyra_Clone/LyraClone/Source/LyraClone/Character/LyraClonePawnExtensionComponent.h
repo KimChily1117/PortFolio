@@ -37,7 +37,12 @@ public:
 	const T* GetPawnData() const { return Cast<T>(PawnData); }
 	void SetPawnData(const ULyraClonePawnData* InPawnData);
 	void SetupPlayerInputComponent();
+	
+	UFUNCTION(BlueprintCallable,Category = "LyraClone|Gas")
 	ULyraCloneAbilitySystemComponent* GetLyraCloneAbilitySystemComponent() const { return AbilitySystemComponent; }
+
+	void TryInitializeAbilitySystemFromPlayerState();
+
 
 	// AbilitySystemComponent의 AvatorActor 대상 초기화/해체 호출
 	void InitializeAbilitySystem(ULyraCloneAbilitySystemComponent* InASC, AActor* InOwnerActor);

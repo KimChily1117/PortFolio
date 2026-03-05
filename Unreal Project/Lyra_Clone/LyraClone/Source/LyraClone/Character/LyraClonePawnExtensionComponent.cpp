@@ -5,6 +5,8 @@
 #include "Components/GameFrameworkComponentManager.h"
 #include "LyraClone/FLyraCloneGameplayTags.h"
 #include "LyraClone/LyraLogSystem.h"
+#include "GameFramework/PlayerState.h"
+#include "LyraCloneCharacter.h"
 #include "LyraClone/AbilitySystem/LyraCloneAbilitySystemComponent.h"
 
 
@@ -45,6 +47,42 @@ void ULyraClonePawnExtensionComponent::SetupPlayerInputComponent()
 	CheckDefaultInitialization();
 }
 
+void ULyraClonePawnExtensionComponent::TryInitializeAbilitySystemFromPlayerState()
+{
+	APawn* Pawn = GetPawn<APawn>();
+	if (!Pawn) return;
+
+	APlayerState* PS = Pawn->GetPlayerState();
+	if (!PS) return;
+
+	IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(PS);
+	if (!ASI) return;
+
+	ULyraCloneAbilitySystemComponent* LyraASC = Cast<ULyraCloneAbilitySystemComponent>(ASI->GetAbilitySystemComponent());
+	if (!LyraASC) return;
+
+	UE_LOG(LogLyraClone, Warning, TEXT("[TryInitASC] %s Already have ASC: %s"),
+		*GetNameSafe(GetOwner()),
+		*GetNameSafe(AbilitySystemComponent));
+
+
+	// 핵심: 내 AbilitySystemComponent 포인터가 있더라도,
+	// Avatar가 Pawn이 아니면 다시 InitAbilityActorInfo 해줘야 함
+	const bool bNeedsReinit =
+		(AbilitySystemComponent == nullptr) ||
+		(AbilitySystemComponent != LyraASC) ||
+		(LyraASC->GetAvatarActor() != Pawn);
+
+	if (!bNeedsReinit)
+	{
+		UE_LOG(LogLyraClone, Warning, TEXT("[TryInitASC] OK: ASC=%s Avatar=%s"),
+			*GetNameSafe(LyraASC), *GetNameSafe(LyraASC->GetAvatarActor()));
+		return;
+	}
+
+	InitializeAbilitySystem(LyraASC, PS);
+}
+
 void ULyraClonePawnExtensionComponent::InitializeAbilitySystem(ULyraCloneAbilitySystemComponent* InASC, AActor* InOwnerActor)
 {
 	check(InASC && InOwnerActor);
@@ -69,10 +107,21 @@ void ULyraClonePawnExtensionComponent::InitializeAbilitySystem(ULyraCloneAbility
 
 	// OnAbilitySystemInitialized에 바인딩된 Delegate 호출
 	OnAbilitySystemInitialized.Broadcast();
+
+
+
+
+
+
 }
 
 void ULyraClonePawnExtensionComponent::UninitializeAbilitySystem()
 {
+	UE_LOG(LogLyraClone, Warning, TEXT("[PawnExt] UninitializeAbilitySystem called. ASC=%s Avatar=%s Owner=%s"),
+		*GetNameSafe(AbilitySystemComponent),
+		*GetNameSafe(AbilitySystemComponent ? AbilitySystemComponent->GetAvatarActor() : nullptr),
+		*GetNameSafe(GetOwner()));
+
 	if (!AbilitySystemComponent)
 	{
 		return;
@@ -241,6 +290,8 @@ void ULyraClonePawnExtensionComponent::CheckDefaultInitialization()
 	// - 이 메서드를 IGameFrameworkInitStateInterface가 제공하는데, CheckDefaultInitializationForImplementers이다:
 	// - 간단히 CheckDefaultInitializationForImplementers 보자:
 	CheckDefaultInitializationForImplementers();
+
+	TryInitializeAbilitySystemFromPlayerState();
 
 	const FHakGameplayTags& InitTags = FHakGameplayTags::Get();
 
