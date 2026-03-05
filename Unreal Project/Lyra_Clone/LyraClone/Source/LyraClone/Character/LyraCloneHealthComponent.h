@@ -19,6 +19,8 @@ struct FOnAttributeChangeData;
 /** Health 변화 콜백을 위한 델레게이트 */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FLyraCloneHealth_AttributeChanged,
 	ULyraCloneHealthComponent*, HealthComponent, float, OldValue, float, NewValue, AActor*, Instigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLyraCloneDamagedSig, float, DamageAmount);
+
 
 
 /**
@@ -54,7 +56,7 @@ public:
 	void InitializeWithAbilitySystem(ULyraCloneAbilitySystemComponent* InASC);
 	void UninitializeWithAbilitySystem();
 
-	/** ASC를 통해, HealthSet의 HealthAttribute 변경이 있을때 호출하는 메서드 (내부적으로 OnHealthChanged 호출) */
+	/** ASC를 통해, HealthSet의 HealthAttribute 변경이 있을때 호출하는 메서드 (내부적으로 OnHealthC	   hanged 호출) */
 	void HandleHealthChanged(const FOnAttributeChangeData& ChangeData);
 
 	void HandleMaxHealthChanged(const FOnAttributeChangeData& ChangeData);
@@ -73,12 +75,18 @@ public:
 	UPROPERTY()
 	TObjectPtr<const ULyraCloneHealthSet> HealthSet;
 
+
+	//UI
 	/** health 변화에 따른 Delegate(Multicast) */
 	UPROPERTY(BlueprintAssignable)
 	FLyraCloneHealth_AttributeChanged OnHealthChanged;
 
 	UPROPERTY(BlueprintAssignable)
 	FLyraCloneHealth_AttributeChanged OnMaxHealthChanged;
+
+
+	UPROPERTY(BlueprintAssignable, Category = "LyraClone|Health")
+	FLyraCloneDamagedSig OnDamaged;
 
 
 };

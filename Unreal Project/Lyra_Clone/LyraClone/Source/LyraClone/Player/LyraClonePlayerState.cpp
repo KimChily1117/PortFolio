@@ -71,6 +71,11 @@ void ALyraClonePlayerState::SetPawnData(const ULyraClonePawnData* InPawnData)
 	}
 }
 
+UAbilitySystemComponent* ALyraClonePlayerState::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;;
+}
+
 
 
 void ALyraClonePlayerState::OnExperienceLoaded(const ULyraCloneExperienceDefinition* CurrentExperience)

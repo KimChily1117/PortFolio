@@ -2,6 +2,9 @@
 
 
 #include "LyraCloneCharacter.h"
+#include "LyraClone/LyraLogSystem.h"
+#include "GameFramework/PlayerState.h"
+#include "GameFramework/Controller.h"
 #include "LyraClonePawnExtensionComponent.h"
 #include "LyraClone/AbilitySystem/LyraCloneAbilitySystemComponent.h"
 #include "LyraClone/Camera/LyraCloneCameraComponent.h"
@@ -43,6 +46,7 @@ void ALyraCloneCharacter::OnAbilitySystemInitialized()
 
 	// HealthComponent의 ASC를 통한 초기화
 	HealthComponent->InitializeWithAbilitySystem(HakASC);
+
 }
 
 void ALyraCloneCharacter::OnAbilitySystemUninitialized()
@@ -52,8 +56,19 @@ void ALyraCloneCharacter::OnAbilitySystemUninitialized()
 
 UAbilitySystemComponent* ALyraCloneCharacter::GetAbilitySystemComponent() const
 {
-	// 앞서, 우리는 PawnExtensionComponent에 AbilitySystemComponent를 캐싱하였다
-	return PawnExtComponent->GetLyraCloneAbilitySystemComponent();
+	//UE_LOG(LogLyraClone, Warning, TEXT("[Char::GetASC] called. PawnExt=%s  PawnExtASC=%s"),
+	//		*GetNameSafe(PawnExtComponent),
+	//		*GetNameSafe(PawnExtComponent ? PawnExtComponent->GetLyraCloneAbilitySystemComponent() : nullptr));
+	//// 앞서, 우리는 PawnExtensionComponent에 AbilitySystemComponent를 캐싱하였다
+	//return PawnExtComponent->GetLyraCloneAbilitySystemComponent();
+
+	auto* Asc = PawnExtComponent ? PawnExtComponent->GetLyraCloneAbilitySystemComponent() : nullptr;
+
+	UE_LOG(LogLyraClone, Warning, TEXT("[Char::GetASC] %s  PawnExtASC=%s"),
+		*GetNameSafe(this),
+		*GetNameSafe(Asc));
+
+	return Asc;
 }
 
 // Called when the game starts or when spawned
@@ -77,6 +92,27 @@ void ALyraCloneCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	// Pawn이 Possess로서, Controller와 PlayerState 정보 접근이 가능한 상태가 되었음:
 	// - SetupPlayerInputComponent 확인
+	PawnExtComponent->TryInitializeAbilitySystemFromPlayerState();
+
 	PawnExtComponent->SetupPlayerInputComponent();
 }
 
+void ALyraCloneCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (PawnExtComponent)
+	{
+		PawnExtComponent->TryInitializeAbilitySystemFromPlayerState();
+	}
+}
+
+void ALyraCloneCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	if (PawnExtComponent)
+	{
+		PawnExtComponent->TryInitializeAbilitySystemFromPlayerState();
+	}
+}

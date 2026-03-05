@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "AbilitySystemInterface.h"  
 #include "LyraClonePlayerState.generated.h"
 
 class ULyraClonePawnData;
@@ -13,7 +14,7 @@ class ULyraCloneAbilitySystemComponent;
  * 
  */
 UCLASS()
-class LYRACLONE_API ALyraClonePlayerState : public APlayerState
+class LYRACLONE_API ALyraClonePlayerState : public APlayerState , public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -33,6 +34,10 @@ public:
 	const T* GetPawnData() const { return Cast<T>(PawnData); }
 	void OnExperienceLoaded(const ULyraCloneExperienceDefinition* CurrentExperience);
 	void SetPawnData(const ULyraClonePawnData* InPawnData);
+
+	// IAbilitySystemInterface 필수 구현
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
 	ULyraCloneAbilitySystemComponent* GetHakAbilitySystemComponent() const { return AbilitySystemComponent; }
 	
 
