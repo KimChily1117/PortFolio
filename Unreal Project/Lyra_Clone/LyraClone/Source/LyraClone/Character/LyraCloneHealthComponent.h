@@ -21,7 +21,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FLyraCloneHealth_AttributeChanged,
 	ULyraCloneHealthComponent*, HealthComponent, float, OldValue, float, NewValue, AActor*, Instigator);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLyraCloneDamagedSig, float, DamageAmount);
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLyraCloneDeathStartedSig, AActor*, OwningActor);
 
 /**
  * Character(Pawn)에 대해 체력관련 처리를 담당하는 Component이다
@@ -76,6 +76,12 @@ public:
 	TObjectPtr<const ULyraCloneHealthSet> HealthSet;
 
 
+	UPROPERTY(BlueprintReadOnly, Category = "LyraClone|Health")
+	bool bIsDead = false;
+
+	UFUNCTION(BlueprintPure, Category = "LyraClone|Health")
+	bool IsDead() const { return bIsDead; }
+
 	//UI
 	/** health 변화에 따른 Delegate(Multicast) */
 	UPROPERTY(BlueprintAssignable)
@@ -88,6 +94,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "LyraClone|Health")
 	FLyraCloneDamagedSig OnDamaged;
 
+	UPROPERTY(BlueprintAssignable, Category = "LyraClone|Health")
+	FLyraCloneDeathStartedSig OnDeathStarted;
 
 };
 
