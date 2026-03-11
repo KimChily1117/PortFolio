@@ -21,6 +21,18 @@ ULyraCloneHealthComponent::ULyraCloneHealthComponent(const FObjectInitializer& O
 	HealthSet = nullptr;
 }
 
+
+ULyraCloneHealthComponent* ULyraCloneHealthComponent::FindHealthComponent(const AActor* Actor)
+{
+	if (!Actor)
+	{
+		return nullptr;
+	}
+
+	ULyraCloneHealthComponent* HealthComponent = Actor->FindComponentByClass<ULyraCloneHealthComponent>();
+	return HealthComponent;
+}
+
 void ULyraCloneHealthComponent::InitializeWithAbilitySystem(ULyraCloneAbilitySystemComponent* InASC)
 {
 	// AActor는 HakCharacter를 상속받고 있는 클래스일 것이다
@@ -71,7 +83,7 @@ void ULyraCloneHealthComponent::InitializeWithAbilitySystem(ULyraCloneAbilitySys
 		->GetGameplayAttributeValueChangeDelegate(ULyraCloneHealthSet::GetMaxHealthAttribute())
 		.AddUObject(this, &ThisClass::HandleMaxHealthChanged);
 
-
+	bIsDead = false;
 
 	// 초기화 한번 해줬으니깐 Broadcast 해주자
 	OnHealthChanged.Broadcast(this, HealthSet->GetHealth(), HealthSet->GetHealth(), nullptr);
@@ -100,6 +112,7 @@ void ULyraCloneHealthComponent::UninitializeWithAbilitySystem()
 
 	AbilitySystemComponent = nullptr;
 	HealthSet = nullptr;
+	bIsDead = false;
 }
 
 
@@ -153,19 +166,22 @@ void ULyraCloneHealthComponent::HandleOutOfHealth(
 	float DamageMagnitude
 )
 {
-	// TODO: 죽음 처리 시작점
-}
-
-
-ULyraCloneHealthComponent* ULyraCloneHealthComponent::FindHealthComponent(const AActor* Actor)
-{
-	if (!Actor)
+	if (bIsDead)
 	{
-		return nullptr;
+		return;
 	}
 
-	ULyraCloneHealthComponent* HealthComponent = Actor->FindComponentByClass<ULyraCloneHealthComponent>();
-	return HealthComponent;
+	bIsDead = true;
+
+	AActor* Owner = GetOwner();
+	if (!Owner)
+	{
+		return;
+	}
+
+	UE_LOG(LogLyraClone, Log, TEXT("HealthComponent: [%s] is out of health."), *GetNameSafe(Owner));
+
+	OnDeathStarted.Broadcast(Owner);
 }
 
 float ULyraCloneHealthComponent::GetHealth() const
