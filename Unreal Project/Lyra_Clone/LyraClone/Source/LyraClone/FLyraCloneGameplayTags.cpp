@@ -32,7 +32,12 @@ void FHakGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	AddTag(InputTag_Move, "InputTag.Move", "");
 	AddTag(InputTag_Look_Mouse, "InputTag.Look.Mouse", "");
 	AddTag(TAG_BlockMove, "State.Movement.Blocked", "");
+	 
 
+	AddTag(InputTag_QuickSlot1, "InputTag.QuickSlot1", "");
+	AddTag(InputTag_QuickSlot2, "InputTag.QuickSlot2", "");
+	AddTag(InputTag_QuickSlot3, "InputTag.QuickSlot3", "");
+	AddTag(InputTag_DropWeapon, "InputTag.DropWeapon", "");
 
 }
 

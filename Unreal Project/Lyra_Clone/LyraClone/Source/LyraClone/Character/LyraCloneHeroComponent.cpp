@@ -17,6 +17,7 @@
 #include "LyraClone/AbilitySystem/LyraCloneAbilitySystemComponent.h"
 
 #include "AbilitySystemGlobals.h"
+#include <LyraClone\Equipment\LyraCloneQuickBarComponent.h>
 
 /** FeatureName 정의: static member variable 초기화 */
 const FName ULyraCloneHeroComponent::NAME_ActorFeatureName("Hero");
@@ -266,6 +267,13 @@ void ULyraCloneHeroComponent::InitializePlayerInput(UInputComponent* PlayerInput
 
 					HakIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
 					HakIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, false);
+
+
+					HakIC->BindNativeAction(InputConfig, GameplayTags.InputTag_QuickSlot1, ETriggerEvent::Started, this, &ThisClass::Input_QuickSlot1, false);
+					HakIC->BindNativeAction(InputConfig, GameplayTags.InputTag_QuickSlot2, ETriggerEvent::Started, this, &ThisClass::Input_QuickSlot2, false);
+					HakIC->BindNativeAction(InputConfig, GameplayTags.InputTag_QuickSlot3, ETriggerEvent::Started, this, &ThisClass::Input_QuickSlot3, false);
+					HakIC->BindNativeAction(InputConfig, GameplayTags.InputTag_DropWeapon, ETriggerEvent::Started, this, &ThisClass::Input_DropWeapon, false);
+
 				}
 			}
 		}
@@ -340,6 +348,33 @@ void ULyraCloneHeroComponent::Input_LookMouse(const FInputActionValue& InputActi
 		Pawn->AddControllerPitchInput(AimInversionValue);
 	}
 }
+
+void ULyraCloneHeroComponent::Input_QuickSlot1(const FInputActionValue& InputActionValue) { HandleQuickSlotInput(0); }
+void ULyraCloneHeroComponent::Input_QuickSlot2(const FInputActionValue& InputActionValue) { HandleQuickSlotInput(1); }
+void ULyraCloneHeroComponent::Input_QuickSlot3(const FInputActionValue& InputActionValue) { HandleQuickSlotInput(2); }
+
+void ULyraCloneHeroComponent::Input_DropWeapon(const FInputActionValue& InputActionValue)
+{
+	if (ALyraClonePlayerController* HakPC = GetController<ALyraClonePlayerController>())
+	{
+		if (ULyraCloneQuickBarComponent* QuickBar = HakPC->FindComponentByClass<ULyraCloneQuickBarComponent>())
+		{
+			QuickBar->DropItemInActiveSlot();
+		}
+	}
+}
+
+void ULyraCloneHeroComponent::HandleQuickSlotInput(int32 SlotIndex)
+{
+	if (ALyraClonePlayerController* HakPC = GetController<ALyraClonePlayerController>())
+	{
+		if (ULyraCloneQuickBarComponent* QuickBar = HakPC->FindComponentByClass<ULyraCloneQuickBarComponent>())
+		{
+			QuickBar->SelectSlotByIndex(SlotIndex);
+		}
+	}
+}
+
 
 void ULyraCloneHeroComponent::Input_AbilityInputTagPressed(FGameplayTag InputTag)
 {

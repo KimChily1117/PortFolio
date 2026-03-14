@@ -55,8 +55,21 @@ public:
 	 */
 	TSubclassOf<ULyraCloneCameraMode> DetermineCameraMode() const;
 	void InitializePlayerInput(UInputComponent* PlayerInputComponent);
+
 	void Input_Move(const FInputActionValue& InputActionValue);
 	void Input_LookMouse(const FInputActionValue& InputActionValue);
+	
+	
+protected:
+	void Input_QuickSlot1(const FInputActionValue& InputActionValue);
+	void Input_QuickSlot2(const FInputActionValue& InputActionValue);
+	void Input_QuickSlot3(const FInputActionValue& InputActionValue);
+
+	void Input_DropWeapon(const FInputActionValue& InputActionValue);
+
+	void HandleQuickSlotInput(int32 SlotIndex);
+	
+	
 	void Input_AbilityInputTagPressed(FGameplayTag InputTag);
 	void Input_AbilityInputTagReleased(FGameplayTag InputTag);
 	/**

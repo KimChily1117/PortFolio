@@ -31,6 +31,26 @@ ULyraCloneInventoryItemInstance* FLyraCloneInventoryList::AddEntry(TSubclassOf<U
 	return Result;
 }
 
+ULyraCloneInventoryItemInstance* FLyraCloneInventoryList::RemoveEntry(ULyraCloneInventoryItemInstance* ItemInstance)
+{
+	if (!ItemInstance)
+	{
+		return nullptr;
+	}
+
+	for (int32 Index = 0; Index < Entries.Num(); ++Index)
+	{
+		if (Entries[Index].Instance == ItemInstance)
+		{
+			ULyraCloneInventoryItemInstance* RemovedInstance = Entries[Index].Instance;
+			Entries.RemoveAt(Index);
+			return RemovedInstance;
+		}
+	}
+
+	return nullptr;
+}
+
 ULyraCloneInventoryManagerComponent::ULyraCloneInventoryManagerComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 	, InventoryList(this)
@@ -49,4 +69,14 @@ ULyraCloneInventoryItemInstance* ULyraCloneInventoryManagerComponent::AddItemDef
 	
 	}
 	return Result;
+}
+
+ULyraCloneInventoryItemInstance* ULyraCloneInventoryManagerComponent::RemoveItemInstance(ULyraCloneInventoryItemInstance* ItemInstance)
+{
+	if (!ItemInstance)
+	{
+		return nullptr;
+	}
+
+	return InventoryList.RemoveEntry(ItemInstance);
 }
