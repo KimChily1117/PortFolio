@@ -39,6 +39,14 @@ struct FHakGameplayTags
 	 */
 	FGameplayTag InputTag_Move;
 	FGameplayTag InputTag_Look_Mouse;
+
+	FGameplayTag InputTag_QuickSlot1;
+	FGameplayTag InputTag_QuickSlot2;
+	FGameplayTag InputTag_QuickSlot3;
+	FGameplayTag InputTag_DropWeapon;
+
+
+
 	FGameplayTag TAG_BlockMove;
 
 

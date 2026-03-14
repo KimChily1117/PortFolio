@@ -30,6 +30,7 @@ struct FLyraCloneInventoryList
 	{}
 
 	ULyraCloneInventoryItemInstance* AddEntry(TSubclassOf<ULyraCloneInventoryItemDefinition> ItemDef);
+	ULyraCloneInventoryItemInstance* RemoveEntry(ULyraCloneInventoryItemInstance* ItemInstance);
 
 	UPROPERTY()
 	TArray<FLyraCloneInventoryEntry> Entries;
@@ -58,6 +59,12 @@ public:
 	/** InventoryItemDefinition을 통해, InventoryList에 추가하여 관리하며, InventoryItemInstance를 반환한다 */
 	UFUNCTION(BlueprintCallable, Category = Inventory)
 	ULyraCloneInventoryItemInstance* AddItemDefinition(TSubclassOf<ULyraCloneInventoryItemDefinition> ItemDef);
+
+	UFUNCTION(BlueprintCallable, Category = Inventory)
+	ULyraCloneInventoryItemInstance* RemoveItemInstance(ULyraCloneInventoryItemInstance* ItemInstance);
+
+
+
 
 	UPROPERTY()
 	FLyraCloneInventoryList InventoryList;
