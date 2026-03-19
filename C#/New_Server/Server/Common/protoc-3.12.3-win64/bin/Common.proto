@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package protocol;
+option csharp_namespace = "Server.Protocol";
+
+enum MsgId {
+  MSG_ID_NONE = 0;
+
+  C_PING = 1001;
+  S_PONG = 1002;
+}
+
+message C_Ping {
+  uint32 sequence = 1;
+  string message = 2;
+}
+
+message S_Pong {
+  uint32 sequence = 1;
+  string message = 2;
+}
