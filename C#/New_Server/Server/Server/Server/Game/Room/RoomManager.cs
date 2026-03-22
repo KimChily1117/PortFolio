@@ -1,84 +1,26 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Server.Game.Room
 {
-    public class RoomManager
+    public sealed class RoomManager
     {
         public static RoomManager Instance { get; } = new RoomManager();
 
-        object _lock = new object();
-        Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
-        int _roomId = 1;
+        private readonly Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
+        private int _roomId = 1;
 
-        //public GameRoom Add(RoomType roomType)
-        //{
-        //    GameRoom gameRoom = new GameRoom();
+        public GameRoom CreateRoom()
+        {
+            GameRoom room = new GameRoom();
+            room.RoomId = _roomId++;
+            _rooms.Add(room.RoomId, room);
+            return room;
+        }
 
-        //    lock (_lock)
-        //    {
-        //        gameRoom.RoomId = (int)roomType + 1;
-        //        gameRoom.RoomId = _roomId;
-        //        _rooms.Add(_roomId, gameRoom);
-        //        _roomId++;
-        //    }
-
-        //    return gameRoom;
-        //}
-
-
-        //public GameRoom Find(int roomId)
-        //{
-        //    lock (_lock)
-        //    {
-        //        GameRoom room = null;
-        //        if (_rooms.TryGetValue(roomId, out room))
-        //            return room;
-
-        //        return null;
-        //    }
-        //}
-
-        //public bool Remove(int roomId)
-        //{
-        //    lock (_lock)
-        //    {
-        //        return _rooms.Remove(roomId);
-        //    }
-        //}
-
-        //public GameRoom Find(RoomType roomType)
-        //{
-        //    int roomId = (int)roomType + 1;
-
-        //    lock (_lock)
-        //    {
-        //        GameRoom room = null;
-        //        if (_rooms.TryGetValue(roomId, out room))
-        //            return room;
-
-        //        return null;
-        //    }
-        //}
-
-        //public bool Remove(RoomType roomType)
-        //{
-        //    int roomId = (int)roomType + 1;
-        //    lock (_lock)
-        //    {
-        //        return _rooms.Remove(roomId);
-        //    }
-        //}
-
-        //public void UpdateRooms()
-        //{
-        //    foreach (GameRoom room in _rooms.Values)
-        //    {
-        //        room.Tick();
-        //    }    
-        //}
-
+        public void Tick()
+        {
+            foreach (GameRoom room in _rooms.Values)
+                room.Tick();
+        }
     }
 }

@@ -8,6 +8,12 @@ enum MsgId {
 
   C_PING = 1001;
   S_PONG = 1002;
+
+  C_MOVE_INPUT = 2001;
+  S_ROOM_SNAPSHOT = 2002;
+
+  C_ACTION_INPUT = 2003;
+  S_COMBAT_EVENTS = 2004;
 }
 
 message C_Ping {

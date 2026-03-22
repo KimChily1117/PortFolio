@@ -1,110 +1,185 @@
 ﻿using Google.Protobuf;
-using Microsoft.EntityFrameworkCore.Internal;
+using Server.Game.GameObjects;
+using Server.Protocol;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
 
 namespace Server.Game.Room
 {
-    public partial class GameRoom : JobSerializer
+    public partial class GameRoom
     {
         public int RoomId { get; set; }
         public int ServerTick { get; private set; }
 
-        //private readonly Dictionary<int, Player> _players = new Dictionary<int, Player>();
-        //private readonly Dictionary<int, Enemy> _enemies = new Dictionary<int, Enemy>();
-        //private readonly Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
+        private int _snapshotElapsedMs = 0;
 
-        //private readonly Queue<RoomCommand> _pendingCommands = new Queue<RoomCommand>();
-        //private readonly List<IMessage> _eventBuffer = new List<IMessage>();
+        public const int TickMs = 33;              // 현재 루프 기준
+        private const int SnapshotIntervalMs = 100; // 100ms 송신
 
-        //public void Enqueue(RoomCommand command)
-        //{
-        //    if (command == null)
-        //        return;
 
-        //    lock (_pendingCommands)
-        //    {
-        //        _pendingCommands.Enqueue(command);
-        //    }
-        //}
+        private readonly Dictionary<int, Player> _players = new Dictionary<int, Player>();
+        private readonly Queue<RoomCommand> _pendingCommands = new Queue<RoomCommand>();
+        private readonly List<RoomCombatEvent> _pendingCombatEvents = new List<RoomCombatEvent>();
+
+        public void Enqueue(RoomCommand command)
+        {
+            lock (_pendingCommands)
+            {
+                _pendingCommands.Enqueue(command);
+            }
+        }
 
         public void Tick()
         {
             ServerTick++;
+            _snapshotElapsedMs += TickMs;
 
             ConsumeCommands();
+            UpdatePlayers();
+            ResolveActions();
+
+            if (_snapshotElapsedMs >= SnapshotIntervalMs)
+            {
+                if (HasAnyDirtyPlayer())
+                {
+                    BroadcastSnapshot();
+                }
+                _snapshotElapsedMs -= SnapshotIntervalMs;
+            }
+            BroadcastCombatEvents();
+        }
 
 
-            //UpdatePlayers();
-            //UpdateEnemies();
-            //UpdateProjectiles();
-            //ResolveCombat();
-            //BroadcastSnapshot();
+
+        private bool CanUseAction(Player player)
+        {
+            // 쿨타임 체크
+            if (ServerTick < player.NextActionTick)
+                return false;
+
+            // 이미 공격 중인지
+            if (player.IsAttacking)
+                return false;
+
+            return true;
+        }
+
+        private void ResolveActions()
+        {
+            foreach (Player player in _players.Values)
+            {
+                if (!player.HasPendingAction)
+                    continue;
+
+                Console.WriteLine("[ResolveActions] player=" + player.Id +
+                    " action=" + player.PendingActionType +
+                    " canUse=" + CanUseAction(player));
+
+                if (!CanUseAction(player))
+                {
+                    player.HasPendingAction = false;
+                    continue;
+                }
+
+                switch (player.PendingActionType)
+                {
+                    case ActionType.ActionAttack:
+                        ExecuteAttack(player);
+                        break;
+                }
+
+                player.HasPendingAction = false;
+            }
+        }
+
+        private void ExecuteAttack(Player attacker)
+        {
+            // 공격 상태 진입
+            attacker.IsAttacking = true;
+
+            // 쿨타임 설정 (예: 0.5초 = 15 tick)
+            attacker.NextActionTick = ServerTick + 15;
+
+            RoomCombatEvent ev = new RoomCombatEvent
+            {
+                EventType = CombatEventType.CombatEventAttack,
+                AttackerId = attacker.Id,
+                TargetId = 0,
+                ActionType = ActionType.ActionAttack,
+                Value = 0
+            };
+
+            _pendingCombatEvents.Add(ev);
+
+            Console.WriteLine("[Attack] tick=" + ServerTick +
+                " attacker=" + attacker.Id +
+                " nextActionTick=" + attacker.NextActionTick);
+        }
 
 
+        private void BroadcastCombatEvents()
+        {
+            if (_pendingCombatEvents.Count == 0)
+                return;
 
-            //BroadcastEvents();
+            S_CombatEvents packet = new S_CombatEvents();
+            packet.ServerTick = ServerTick;
+
+            foreach (RoomCombatEvent ev in _pendingCombatEvents)
+            {
+                CombatEvent protoEvent = new CombatEvent();
+                protoEvent.EventType = ev.EventType;
+                protoEvent.AttackerId = ev.AttackerId;
+                protoEvent.TargetId = ev.TargetId;
+                protoEvent.ActionType = ev.ActionType;
+                protoEvent.Value = ev.Value;
+
+                packet.Events.Add(protoEvent);
+            }
+
+            Broadcast(packet);
+
+            Console.WriteLine("[CombatEvents] tick=" + ServerTick +
+                " count=" + packet.Events.Count);
+
+            _pendingCombatEvents.Clear();
         }
 
         private void ConsumeCommands()
         {
             while (true)
             {
-                //RoomCommand command = null;
+                RoomCommand command = null;
 
-                //lock (_pendingCommands)
-                //{
-                //    if (_pendingCommands.Count == 0)
-                //        break;
+                lock (_pendingCommands)
+                {
+                    if (_pendingCommands.Count == 0)
+                        break;
 
-                //    command = _pendingCommands.Dequeue();
-                //}
+                    command = _pendingCommands.Dequeue();
+                }
 
-                //HandleCommand(command);
+                HandleCommand(command);
             }
         }
 
-        //private void HandleCommand(RoomCommand command)
-        //{
-        //    switch (command)
-        //    {
-        //        case EnterRoomCommand enter:
-        //            HandleEnter(enter);
-        //            break;
+        private void HandleCommand(RoomCommand command)
+        {
+            if (command is EnterRoomCommand)
+                HandleEnter((EnterRoomCommand)command);
+            else if (command is LeaveRoomCommand)
+                HandleLeave((LeaveRoomCommand)command);
+            else if (command is MoveInputCommand)
+                HandleMoveInput((MoveInputCommand)command);
+            else if (command is ActionInputCommand)
+                HandleActionInput((ActionInputCommand)command);
+        }
 
-        //        case LeaveRoomCommand leave:
-        //            HandleLeave(leave);
-        //            break;
 
-        //        case MoveInputCommand move:
-        //            HandleMoveInput(move);
-        //            break;
-
-        //        case ActionInputCommand action:
-        //            HandleActionInput(action);
-        //            break;
-        //    }
-        //}
-
-        //private void BroadcastEvents()
-        //{
-        //    if (_eventBuffer.Count == 0)
-        //        return;
-
-        //    foreach (IMessage message in _eventBuffer)
-        //        Broadcast(message);
-
-        //    _eventBuffer.Clear();
-        //}
-
-        //public void Broadcast(IMessage message)
-        //{
-        //    foreach (Player player in _players.Values)
-        //        player.Session.Send(message);
-        //}
-
+        private void Broadcast(IMessage packet)
+        {
+            foreach (Player player in _players.Values)
+                player.Session.SendProto(packet);
+        }
     }
 }

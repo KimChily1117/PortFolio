@@ -1,76 +1,120 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Xml;
 
 namespace PacketGenerator
 {
     class Program
     {
-        static string clientRegister;
-        static string serverRegister;
+        static string clientRegister = "";
+        static string serverRegister = "";
+        static string serializerRegister = "";
 
         static void Main(string[] args)
         {
-            string file = "../../../Common/protoc-3.12.3-win64/bin/Protocol.proto";
-            if (args.Length >= 1)
-                file = args[0];
+            string protoDir = "../../../Server/Packet/proto";
+            string outputDir = "../../../Server/Packet/Generated";
 
-            bool startParsing = false;
-            foreach (string line in File.ReadAllLines(file))
+            if (args.Length >= 1)
+                protoDir = args[0];
+            if (args.Length >= 2)
+                outputDir = args[1];
+
+            if (Directory.Exists(outputDir) == false)
+                Directory.CreateDirectory(outputDir);
+
+            List<string> protoFiles = new List<string>(Directory.GetFiles(protoDir, "*.proto", SearchOption.AllDirectories));
+
+            foreach (string file in protoFiles)
             {
-                if (!startParsing && line.Contains("enum MsgId"))
+                ParseMsgIdEnum(file);
+            }
+
+            string packetManagerText = string.Format(PacketFormat.managerFormat, clientRegister);
+            File.WriteAllText(Path.Combine(outputDir, "PacketManager.g.cs"), packetManagerText);
+
+            string packetSerializerText = string.Format(PacketFormat.serializerFormat, serializerRegister);
+            File.WriteAllText(Path.Combine(outputDir, "PacketSerializer.g.cs"), packetSerializerText);
+
+            Console.WriteLine("Packet generation completed.");
+        }
+
+        static void ParseMsgIdEnum(string file)
+        {
+            bool startParsing = false;
+
+            foreach (string rawLine in File.ReadAllLines(file))
+            {
+                string line = rawLine.Trim();
+
+                if (line.StartsWith("//") || line.Length == 0)
+                    continue;
+
+                if (startParsing == false && line.Contains("enum MsgId"))
                 {
                     startParsing = true;
                     continue;
                 }
 
-                if (!startParsing)
+                if (startParsing == false)
                     continue;
 
                 if (line.Contains("}"))
                     break;
 
-                string[] names = line.Trim().Split(" =");
+                // ex) C_MOVE_INPUT = 2001;
+                string[] names = line.Split(new char[] { ' ', '=' }, StringSplitOptions.RemoveEmptyEntries);
                 if (names.Length == 0)
                     continue;
 
                 string name = names[0];
-                if (name.StartsWith("S_"))
+                if (name.EndsWith(";"))
+                    name = name.Substring(0, name.Length - 1);
+
+                if (name == "MSG_ID_NONE")
+                    continue;
+
+                if (name.StartsWith("C_"))
                 {
-                    string[] words = name.Split("_");
+                    string packetEnumName = ToEnumStyle(name);     // CPing
+                    string packetClassName = ToPacketClassName(name); // C_Ping
 
-                    string msgName = "";
-                    foreach (string word in words)
-                        msgName += FirstCharToUpper(word);
-
-                    string packetName = $"S_{msgName.Substring(1)}";
-                    clientRegister += string.Format(PacketFormat.managerRegisterFormat, msgName, packetName);
+                    clientRegister += string.Format(PacketFormat.managerRegisterFormat, packetEnumName, packetClassName);
                 }
-                else if (name.StartsWith("C_"))
+                else if (name.StartsWith("S_"))
                 {
-                    string[] words = name.Split("_");
+                    string packetEnumName = ToEnumStyle(name);       // SPong
+                    string packetClassName = ToPacketClassName(name); // S_Pong
 
-                    string msgName = "";
-                    foreach (string word in words)
-                        msgName += FirstCharToUpper(word);
-
-                    string packetName = $"C_{msgName.Substring(1)}";
-                    serverRegister += string.Format(PacketFormat.managerRegisterFormat, msgName, packetName);
+                    serializerRegister += string.Format(PacketFormat.serializerRegisterFormat, packetClassName, packetEnumName);
                 }
             }
-
-            string clientManagerText = string.Format(PacketFormat.managerFormat, clientRegister);
-            File.WriteAllText("ClientPacketManager.cs", clientManagerText);
-            string serverManagerText = string.Format(PacketFormat.managerFormat, serverRegister);
-            File.WriteAllText("ServerPacketManager.cs", serverManagerText);
         }
 
-        public static string FirstCharToUpper(string input)
+        static string ToEnumStyle(string input)
+        {
+            // C_MOVE_INPUT -> CMoveInput
+            string[] words = input.Split('_');
+            string result = "";
+
+            foreach (string word in words)
+                result += FirstCharToUpper(word);
+
+            return result;
+        }
+
+        static string ToPacketClassName(string input)
+        {
+            // C_MOVE_INPUT -> C_MoveInput
+            string enumStyle = ToEnumStyle(input);
+            return input.Substring(0, 2) + enumStyle.Substring(1);
+        }
+
+        static string FirstCharToUpper(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return "";
+
             return input[0].ToString().ToUpper() + input.Substring(1).ToLower();
         }
     }

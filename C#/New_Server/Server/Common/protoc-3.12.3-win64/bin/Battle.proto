@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package protocol;
+option csharp_namespace = "Server.Protocol";
+
+import "common.proto";
+
+enum ActionType {
+  ACTION_NONE = 0;
+  ACTION_ATTACK = 1;
+  ACTION_SKILL1 = 2;
+  ACTION_SKILL2 = 3;
+}
+
+enum CombatEventType {
+  COMBAT_EVENT_NONE = 0;
+  COMBAT_EVENT_ATTACK = 1;
+  COMBAT_EVENT_HIT = 2;
+  COMBAT_EVENT_DEATH = 3;
+  COMBAT_EVENT_SKILL = 4;
+}
+
+message C_ActionInput {
+  uint32 input_seq = 1;
+  ActionType action_type = 2;
+  int32 dir_x = 3;
+  int32 dir_y = 4;
+}
+
+message CombatEvent {
+  CombatEventType event_type = 1;
+  int32 attacker_id = 2;
+  int32 target_id = 3;
+  ActionType action_type = 4;
+  int32 value = 5;
+}
+
+message S_CombatEvents {
+  int32 server_tick = 1;
+  repeated CombatEvent events = 2;
+}
+
+enum ActorMainState {
+  ACTOR_MAIN_STATE_NONE = 0;
+  ACTOR_MAIN_STATE_IDLE = 1;
+  ACTOR_MAIN_STATE_MOVE = 2;
+}
+
+message Vec2Int {
+  sint32 x = 1;
+  sint32 y = 2;
+}
+
+message C_MoveInput {
+  uint32 input_seq = 1;
+  int32 client_tick = 2;
+  sint32 move_x = 3; // -1, 0, 1
+  sint32 move_y = 4; // -1, 0, 1
+}
+
+message ActorSnapshot {
+  int32 actor_id = 1;
+  Vec2Int pos = 2;
+  ActorMainState main_state = 3;
+}
+
+message S_RoomSnapshot {
+  int32 server_tick = 1;
+  uint32 ack_input_seq = 2;
+  repeated ActorSnapshot actors = 3;
+}

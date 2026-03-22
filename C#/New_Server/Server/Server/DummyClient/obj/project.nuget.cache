@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "x3zvIXHwdSj/QdKr6ebF960YY6w6FoM/LnKpCniCktuunirLwe39AwJpOjYxz0x7pZMrSxyTpS4IuMbEF3nrPQ==",
+  "dgSpecHash": "rmSFTysFV1Y=",
   "success": true,
-  "projectFilePath": "E:\\task\\C#\\New_Server\\Server\\Server\\DummyClient\\DummyClient.csproj",
+  "projectFilePath": "D:\\Dev\\New_Server\\Server\\Server\\DummyClient\\DummyClient.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\yeop_sun\\.nuget\\packages\\google.protobuf\\3.34.0\\google.protobuf.3.34.0.nupkg.sha512"
+    "C:\\Users\\Yeop\\.nuget\\packages\\google.protobuf\\3.34.0\\google.protobuf.3.34.0.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,49 +1,65 @@
 ﻿using Google.Protobuf;
-using Server.Protocol;
-using Server.Session;
+using ServerCore;
 using System;
 using System.Collections.Generic;
 
 namespace Server.Packet
 {
-    public sealed class PacketManager
+    partial class PacketManager
     {
-        public static PacketManager Instance { get; } = new PacketManager();
+        #region Singleton
+        static PacketManager _instance = new PacketManager();
+        public static PacketManager Instance { get { return _instance; } }
+        #endregion
 
-        private readonly Dictionary<ushort, Action<ClientSession, ArraySegment<byte>>> _handlers =
-            new Dictionary<ushort, Action<ClientSession, ArraySegment<byte>>>();
+        Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv
+            = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
 
-        private PacketManager() { }
+        Dictionary<ushort, Action<PacketSession, IMessage>> _handler
+            = new Dictionary<ushort, Action<PacketSession, IMessage>>();
 
-        public void Init()
+        public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
+
+        PacketManager()
         {
-            Register<C_Ping>((ushort)MsgId.CPing, PacketHandler.HandleC_Ping);
+            RegisterGenerated();
         }
 
-        private void Register<T>(ushort packetId, Action<ClientSession, T> handler)
-            where T : IMessage<T>, new()
+
+        // 얘를 Partial 개념을 사용해가지고 쭉 연결시키는 개념은 괜찮은거 같음
+        partial void RegisterGenerated();
+
+        public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
         {
-            _handlers[packetId] = (session, buffer) =>
-            {
-                int payloadOffset = buffer.Offset + 4;
-                int payloadCount = buffer.Count - 4;
+            ushort count = 0;
 
-                T packet = new T();
-                packet.MergeFrom(buffer.Array, payloadOffset, payloadCount);
+            ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+            count += 2;
+            ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
+            count += 2;
 
-                handler(session, packet);
-            };
+            Action<PacketSession, ArraySegment<byte>, ushort> action = null;
+            if (_onRecv.TryGetValue(id, out action))
+                action.Invoke(session, buffer, id);
+            else
+                Console.WriteLine("[PacketManager] Unknown Packet Id = " + id);
         }
 
-        public void HandlePacket(ClientSession session, ushort packetId, ArraySegment<byte> buffer)
+        void MakePacket<T>(PacketSession session, ArraySegment<byte> buffer, ushort id)
+            where T : IMessage, new()
         {
-            if (_handlers.TryGetValue(packetId, out var action))
+            T pkt = new T();
+            pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
+
+            if (CustomHandler != null)
             {
-                action(session, buffer);
+                CustomHandler.Invoke(session, pkt, id);
             }
             else
             {
-                Console.WriteLine($"[Unknown Packet] id={packetId}");
+                Action<PacketSession, IMessage> action = null;
+                if (_handler.TryGetValue(id, out action))
+                    action.Invoke(session, pkt);
             }
         }
     }

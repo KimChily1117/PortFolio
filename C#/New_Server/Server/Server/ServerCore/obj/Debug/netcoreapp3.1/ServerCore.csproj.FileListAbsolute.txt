@@ -34,3 +34,12 @@ E:\task\C#\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCor
 E:\task\C#\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
 E:\task\C#\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
 E:\task\C#\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
+D:\Dev\New_Server\Server\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+D:\Dev\New_Server\Server\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+D:\Dev\New_Server\Server\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+D:\Dev\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+D:\Dev\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+D:\Dev\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+D:\Dev\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+D:\Dev\New_Server\Server\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb

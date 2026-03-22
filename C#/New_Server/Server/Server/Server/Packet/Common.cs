@@ -26,9 +26,11 @@ namespace Server.Protocol {
           string.Concat(
             "CgxDb21tb24ucHJvdG8SCHByb3RvY29sIisKBkNfUGluZxIQCghzZXF1ZW5j",
             "ZRgBIAEoDRIPCgdtZXNzYWdlGAIgASgJIisKBlNfUG9uZxIQCghzZXF1ZW5j",
-            "ZRgBIAEoDRIPCgdtZXNzYWdlGAIgASgJKjIKBU1zZ0lkEg8KC01TR19JRF9O",
-            "T05FEAASCwoGQ19QSU5HEOkHEgsKBlNfUE9ORxDqB0ISqgIPU2VydmVyLlBy",
-            "b3RvY29sYgZwcm90bzM="));
+            "ZRgBIAEoDRIPCgdtZXNzYWdlGAIgASgJKoYBCgVNc2dJZBIPCgtNU0dfSURf",
+            "Tk9ORRAAEgsKBkNfUElORxDpBxILCgZTX1BPTkcQ6gcSEQoMQ19NT1ZFX0lO",
+            "UFVUENEPEhQKD1NfUk9PTV9TTkFQU0hPVBDSDxITCg5DX0FDVElPTl9JTlBV",
+            "VBDTDxIUCg9TX0NPTUJBVF9FVkVOVFMQ1A9CEqoCD1NlcnZlci5Qcm90b2Nv",
+            "bGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Server.Protocol.MsgId), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -44,6 +46,10 @@ namespace Server.Protocol {
     [pbr::OriginalName("MSG_ID_NONE")] None = 0,
     [pbr::OriginalName("C_PING")] CPing = 1001,
     [pbr::OriginalName("S_PONG")] SPong = 1002,
+    [pbr::OriginalName("C_MOVE_INPUT")] CMoveInput = 2001,
+    [pbr::OriginalName("S_ROOM_SNAPSHOT")] SRoomSnapshot = 2002,
+    [pbr::OriginalName("C_ACTION_INPUT")] CActionInput = 2003,
+    [pbr::OriginalName("S_COMBAT_EVENTS")] SCombatEvents = 2004,
   }
 
   #endregion

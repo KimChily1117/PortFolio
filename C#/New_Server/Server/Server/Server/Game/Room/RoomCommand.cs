@@ -1,73 +1,57 @@
-﻿namespace Server.Game.Room
+﻿using Server.Game.GameObjects;
+using Server.Protocol;
+
+namespace Server.Game.Room
 {
-    //public abstract class RoomCommand
-    //{
-    //}
+    public abstract class RoomCommand
+    {
+    }
 
-    //public sealed class EnterRoomCommand : RoomCommand
-    //{
-    //    public GameObject GameObject { get; }
+    public sealed class EnterRoomCommand : RoomCommand
+    {
+        public Player Player { get; private set; }
 
-    //    public EnterRoomCommand(GameObject gameObject)
-    //    {
-    //        GameObject = gameObject;
-    //    }
-    //}
+        public EnterRoomCommand(Player player)
+        {
+            Player = player;
+        }
+    }
 
-    //public sealed class LeaveRoomCommand : RoomCommand
-    //{
-    //    public int ObjectId { get; }
+    public sealed class LeaveRoomCommand : RoomCommand
+    {
+        public int PlayerId { get; private set; }
 
-    //    public LeaveRoomCommand(int objectId)
-    //    {
-    //        ObjectId = objectId;
-    //    }
-    //}
+        public LeaveRoomCommand(int playerId)
+        {
+            PlayerId = playerId;
+        }
+    }
 
-    //public sealed class MoveInputCommand : RoomCommand
-    //{
-    //    public Player Player { get; }
-    //    public uint InputSeq { get; }
-    //    public int ClientTick { get; }
-    //    public int MoveX { get; }
-    //    public int MoveY { get; }
+    public sealed class MoveInputCommand : RoomCommand
+    {
+        public Player Player { get; private set; }
+        public uint InputSeq { get; private set; }
+        public int ClientTick { get; private set; }
+        public int MoveX { get; private set; }
+        public int MoveY { get; private set; }
 
-    //    public MoveInputCommand(Player player, uint inputSeq, int clientTick, int moveX, int moveY)
-    //    {
-    //        Player = player;
-    //        InputSeq = inputSeq;
-    //        ClientTick = clientTick;
-    //        MoveX = moveX;
-    //        MoveY = moveY;
-    //    }
-    //}
+        public MoveInputCommand(Player player, uint inputSeq, int clientTick, int moveX, int moveY)
+        {
+            Player = player;
+            InputSeq = inputSeq;
+            ClientTick = clientTick;
+            MoveX = moveX;
+            MoveY = moveY;
+        }
+    }
 
-    //public sealed class ActionInputCommand : RoomCommand
-    //{
-    //    public Player Player { get; }
-    //    public uint InputSeq { get; }
-    //    public int ClientTick { get; }
-    //    public int InputType { get; }
-    //    public int RequestActionId { get; }
-    //    public int AimX { get; }
-    //    public int AimY { get; }
+    public class ActionInputCommand : RoomCommand
+    {
+        public Player Player { get; set; }
+        public uint InputSeq { get; set; }
+        public ActionType ActionType { get; set; }
+        public int DirX { get; set; }
+        public int DirY { get; set; }
+    }
 
-    //    public ActionInputCommand(
-    //        Player player,
-    //        uint inputSeq,
-    //        int clientTick,
-    //        int inputType,
-    //        int requestActionId,
-    //        int aimX,
-    //        int aimY)
-    //    {
-    //        Player = player;
-    //        InputSeq = inputSeq;
-    //        ClientTick = clientTick;
-    //        InputType = inputType;
-    //        RequestActionId = requestActionId;
-    //        AimX = aimX;
-    //        AimY = aimY;
-    //    }
-    //}
 }
