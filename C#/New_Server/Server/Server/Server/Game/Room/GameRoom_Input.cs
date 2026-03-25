@@ -56,5 +56,48 @@ namespace Server.Game.Room
                 " action=" + command.ActionType +
                 " dir=(" + command.DirX + "," + command.DirY + ")");
         }
+
+
+        private int GetDistSqr(Player a, Player b)
+        {
+            int dx = a.PosX - b.PosX;
+            int dy = a.PosY - b.PosY;
+            return dx * dx + dy * dy;
+        }
+
+        private Player FindTargetInRange(Player attacker, int range)
+        {
+            int rangeSqr = range * range;
+
+            foreach (Player target in _players.Values)
+            {
+                if (target == attacker)
+                    continue;
+
+                if (target.IsDead)
+                    continue;
+
+                int distSqr = GetDistSqr(attacker, target);
+                if (distSqr <= rangeSqr)
+                    return target;
+            }
+
+            return null;
+        }
+
+        private void AddCombatEvent(CombatEventType eventType, int attackerId,
+        int targetId,ActionType actionType,int value)
+        {
+            RoomCombatEvent combatEvent = new RoomCombatEvent
+            {
+                EventType = eventType,
+                AttackerId = attackerId,
+                TargetId = targetId,
+                ActionType = actionType,
+                Value = value
+            };
+
+            _pendingCombatEvents.Add(combatEvent);
+        }
     }
 }

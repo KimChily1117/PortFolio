@@ -1,4 +1,6 @@
 ﻿using Server.Game.GameObjects;
+using System;
+using Server.Protocol;
 
 namespace Server.Game.Room
 {
@@ -10,10 +12,19 @@ namespace Server.Game.Room
             if (player == null)
                 return;
 
-            _players[player.Id] = player;
-            player.Room = this;
+            if (_players.ContainsKey(player.Id))
+                return;
 
-            System.Console.WriteLine("[Room] Player Enter. id=" + player.Id);
+            player.Room = this; // 중요
+            player.MoveInputX = 0;
+            player.MoveInputY = 0;
+            player.MainState = ActorMainState.Idle;
+
+            _players.Add(player.Id, player);
+
+            Console.WriteLine("[Room] Player Enter. id=" + player.Id);
+
+            SpawnTestTargetIfNeeded();
 
             foreach (Player p in _players.Values)
                 p.MarkDirty();
@@ -33,8 +44,6 @@ namespace Server.Game.Room
 
             foreach (Player p in _players.Values)
                 p.MarkDirty();
-
-
         }
     }
 }

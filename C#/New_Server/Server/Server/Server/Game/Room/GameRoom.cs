@@ -16,6 +16,9 @@ namespace Server.Game.Room
         public const int TickMs = 33;              // 현재 루프 기준
         private const int SnapshotIntervalMs = 100; // 100ms 송신
 
+        private const int AttackRange = 50;
+        private const int AttackDamage = 10;
+        private const int AttackCooldownTick = 15;
 
         private readonly Dictionary<int, Player> _players = new Dictionary<int, Player>();
         private readonly Queue<RoomCommand> _pendingCommands = new Queue<RoomCommand>();
@@ -49,15 +52,41 @@ namespace Server.Game.Room
             BroadcastCombatEvents();
         }
 
+        private void SpawnTestTargetIfNeeded()
+        {
+            const int testTargetId = 1000;
 
+            if (_players.ContainsKey(testTargetId))
+                return;
+
+            Player dummy = new Player();
+            dummy.Id = testTargetId;
+            dummy.PosX = 180;
+            dummy.PosY = 0;
+            dummy.Speed = 0;
+            dummy.Hp = 30;
+            dummy.MaxHp = 30;
+            dummy.MainState = ActorMainState.Idle;
+
+            _players.Add(dummy.Id, dummy);
+            dummy.MarkDirty();
+
+            Console.WriteLine("[Room] TestTarget Spawned. id=" + dummy.Id +
+                " pos=(" + dummy.PosX + "," + dummy.PosY + ")" +
+                " hp=" + dummy.Hp);
+        }
 
         private bool CanUseAction(Player player)
         {
-            // 쿨타임 체크
+            if (player == null)
+                return false;
+
+            if (player.IsDead)
+                return false;
+
             if (ServerTick < player.NextActionTick)
                 return false;
 
-            // 이미 공격 중인지
             if (player.IsAttacking)
                 return false;
 
@@ -94,26 +123,72 @@ namespace Server.Game.Room
 
         private void ExecuteAttack(Player attacker)
         {
-            // 공격 상태 진입
+            if (attacker == null)
+                return;
+
             attacker.IsAttacking = true;
+            attacker.NextActionTick = ServerTick + AttackCooldownTick;
 
-            // 쿨타임 설정 (예: 0.5초 = 15 tick)
-            attacker.NextActionTick = ServerTick + 15;
-
-            RoomCombatEvent ev = new RoomCombatEvent
-            {
-                EventType = CombatEventType.CombatEventAttack,
-                AttackerId = attacker.Id,
-                TargetId = 0,
-                ActionType = ActionType.ActionAttack,
-                Value = 0
-            };
-
-            _pendingCombatEvents.Add(ev);
+            // 1) 공격 시작 이벤트
+            AddCombatEvent(
+                CombatEventType.CombatEventAttack,
+                attacker.Id,
+                0,
+                ActionType.ActionAttack,
+                0);
 
             Console.WriteLine("[Attack] tick=" + ServerTick +
                 " attacker=" + attacker.Id +
                 " nextActionTick=" + attacker.NextActionTick);
+
+            // 2) 타겟 탐색
+            Player target = FindTargetInRange(attacker, AttackRange);
+            if (target == null)
+            {
+                Console.WriteLine("[HitCheck] attacker=" + attacker.Id + " no target in range");
+                return;
+            }
+
+            // 3) 데미지 적용
+            int beforeHp = target.Hp;
+            target.Hp -= AttackDamage;
+            if (target.Hp < 0)
+                target.Hp = 0;
+
+            target.MarkDirty();
+
+            Console.WriteLine("[Hit] tick=" + ServerTick +
+                " attacker=" + attacker.Id +
+                " target=" + target.Id +
+                " damage=" + AttackDamage +
+                " hp=" + beforeHp + "->" + target.Hp);
+
+            // 4) 히트 이벤트
+            AddCombatEvent(
+                CombatEventType.CombatEventHit,
+                attacker.Id,
+                target.Id,
+                ActionType.ActionAttack,
+                AttackDamage);
+
+            // 5) 죽음 이벤트
+            if (target.IsDead)
+            {
+                target.MoveInputX = 0;
+                target.MoveInputY = 0;
+                target.MainState = ActorMainState.Idle;
+                target.MarkDirty();
+
+                AddCombatEvent(
+                    CombatEventType.CombatEventDeath,
+                    attacker.Id,
+                    target.Id,
+                    ActionType.ActionAttack,
+                    0);
+
+                Console.WriteLine("[Death] tick=" + ServerTick +
+                    " target=" + target.Id);
+            }
         }
 
 
@@ -179,7 +254,12 @@ namespace Server.Game.Room
         private void Broadcast(IMessage packet)
         {
             foreach (Player player in _players.Values)
+            {
+                if (player.Session == null)
+                    continue;
+
                 player.Session.SendProto(packet);
+            }
         }
     }
 }

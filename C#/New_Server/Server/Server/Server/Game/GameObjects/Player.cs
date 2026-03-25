@@ -23,7 +23,9 @@ namespace Server.Game.GameObjects
         public int NextActionTick { get; set; } = 0;
         public bool IsAttacking { get; set; } = false;
         public ActorMainState MainState { get; set; } = ActorMainState.Idle;
-
+        public int MaxHp { get; set; } = 100;
+        public int Hp { get; set; } = 100;
+        public bool IsDead => Hp <= 0;
         public ClientSession Session { get; set; }
         public void MarkDirty()
         {

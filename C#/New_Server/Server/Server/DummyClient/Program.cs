@@ -65,21 +65,24 @@ namespace DummyClient
                     break;
             }
 
-            // 4. 공격 입력
-            C_ActionInput action = new C_ActionInput();
-            action.InputSeq = seq++;
-            action.ActionType = ActionType.ActionAttack;
-            action.DirX = 1;
-            action.DirY = 0;
-
-            SendPacket(socket, MsgId.CActionInput, action);
-            Console.WriteLine("ActionInput sent. seq=" + action.InputSeq);
-
-            // CombatEvents 수신 시도
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if (!TryReceiveOnePacket(socket))
-                    break;
+                C_ActionInput action = new C_ActionInput();
+                action.InputSeq = seq++;
+                action.ActionType = ActionType.ActionAttack;
+                action.DirX = 1;
+                action.DirY = 0;
+
+                SendPacket(socket, MsgId.CActionInput, action);
+                Console.WriteLine("ActionInput sent. seq=" + action.InputSeq);
+
+                for (int j = 0; j < 3; j++)
+                {
+                    if (!TryReceiveOnePacket(socket))
+                        break;
+                }
+
+                Thread.Sleep(200);
             }
 
             Console.WriteLine("Press any key to exit...");

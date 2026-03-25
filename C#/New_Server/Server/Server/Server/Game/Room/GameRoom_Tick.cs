@@ -10,6 +10,9 @@ namespace Server.Game.Room
         {
             foreach (Player player in _players.Values)
             {
+                if (player.IsDead)
+                    continue;
+
                 int newX = player.PosX + player.MoveInputX * player.Speed;
                 int newY = player.PosY + player.MoveInputY * player.Speed;
 
@@ -20,7 +23,6 @@ namespace Server.Game.Room
                     player.MarkDirty();
                 }
 
-                // 공격 상태 해제 (간단 버전)
                 if (player.IsAttacking && ServerTick >= player.NextActionTick)
                 {
                     player.IsAttacking = false;
@@ -32,18 +34,24 @@ namespace Server.Game.Room
                 foreach (Player player in _players.Values)
                 {
                     Console.WriteLine("[Tick] tick=" + ServerTick +
-                      " player=" + player.Id +
-                      " input=(" + player.MoveInputX + "," + player.MoveInputY + ")" +
-                      " pos=(" + player.PosX + "," + player.PosY + ")" +
-                      " dirty=" + player.IsDirty);
+                        " player=" + player.Id +
+                        " hp=" + player.Hp +
+                        " input=(" + player.MoveInputX + "," + player.MoveInputY + ")" +
+                        " pos=(" + player.PosX + "," + player.PosY + ")" +
+                        " dirty=" + player.IsDirty);
                 }
             }
         }
+
+
 
         private void BroadcastSnapshot()
         {
             foreach (Player receiver in _players.Values)
             {
+                if (receiver.Session == null)
+                    continue;
+
                 S_RoomSnapshot snapshot = new S_RoomSnapshot();
                 snapshot.ServerTick = ServerTick;
                 snapshot.AckInputSeq = receiver.LastAckInputSeq;
@@ -68,11 +76,9 @@ namespace Server.Game.Room
                 receiver.Session.SendProto(snapshot);
 
                 Console.WriteLine("[Snapshot] tick=" + ServerTick +
-           " receiver=" + receiver.Id +
-           " ack=" + receiver.LastAckInputSeq +
-           " actorCount=" + snapshot.Actors.Count);
-
-
+                    " receiver=" + receiver.Id +
+                    " ack=" + receiver.LastAckInputSeq +
+                    " actorCount=" + snapshot.Actors.Count);
             }
 
             foreach (Player player in _players.Values)
