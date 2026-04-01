@@ -11,6 +11,7 @@ namespace Server.Packet
             typeToId.Add(typeof(S_Pong), MsgId.SPong);
             typeToId.Add(typeof(S_RoomSnapshot), MsgId.SRoomSnapshot);
             typeToId.Add(typeof(S_CombatEvents), MsgId.SCombatEvents);
+            typeToId.Add(typeof(S_PatternZones), MsgId.SPatternZones);
         }
     }
 }

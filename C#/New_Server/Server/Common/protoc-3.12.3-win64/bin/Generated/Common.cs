@@ -26,11 +26,11 @@ namespace Server.Protocol {
           string.Concat(
             "CgxDb21tb24ucHJvdG8SCHByb3RvY29sIisKBkNfUGluZxIQCghzZXF1ZW5j",
             "ZRgBIAEoDRIPCgdtZXNzYWdlGAIgASgJIisKBlNfUG9uZxIQCghzZXF1ZW5j",
-            "ZRgBIAEoDRIPCgdtZXNzYWdlGAIgASgJKoYBCgVNc2dJZBIPCgtNU0dfSURf",
+            "ZRgBIAEoDRIPCgdtZXNzYWdlGAIgASgJKpwBCgVNc2dJZBIPCgtNU0dfSURf",
             "Tk9ORRAAEgsKBkNfUElORxDpBxILCgZTX1BPTkcQ6gcSEQoMQ19NT1ZFX0lO",
             "UFVUENEPEhQKD1NfUk9PTV9TTkFQU0hPVBDSDxITCg5DX0FDVElPTl9JTlBV",
-            "VBDTDxIUCg9TX0NPTUJBVF9FVkVOVFMQ1A9CEqoCD1NlcnZlci5Qcm90b2Nv",
-            "bGIGcHJvdG8z"));
+            "VBDTDxIUCg9TX0NPTUJBVF9FVkVOVFMQ1A8SFAoPU19QQVRURVJOX1pPTkVT",
+            "ENUPQhKqAg9TZXJ2ZXIuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Server.Protocol.MsgId), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -50,6 +50,7 @@ namespace Server.Protocol {
     [pbr::OriginalName("S_ROOM_SNAPSHOT")] SRoomSnapshot = 2002,
     [pbr::OriginalName("C_ACTION_INPUT")] CActionInput = 2003,
     [pbr::OriginalName("S_COMBAT_EVENTS")] SCombatEvents = 2004,
+    [pbr::OriginalName("S_PATTERN_ZONES")] SPatternZones = 2005,
   }
 
   #endregion

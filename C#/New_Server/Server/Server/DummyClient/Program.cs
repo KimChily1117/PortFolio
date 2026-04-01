@@ -30,7 +30,11 @@ namespace DummyClient
 
             ReceiveOnePacket(socket); // Pong
 
-            // 2. 오른쪽 이동 입력 여러 번
+            // 2. 첫 RoomSnapshot 받을 때까지 대기
+            WaitUntilPacket(socket, MsgId.SRoomSnapshot);
+            Console.WriteLine("Initial room snapshot received.");
+
+            // 3. 오른쪽 이동 입력 여러 번
             uint seq = 1;
 
             for (int i = 0; i < 5; i++)
@@ -48,7 +52,7 @@ namespace DummyClient
                 Thread.Sleep(100);
             }
 
-            // 3. 정지
+            // 4. 정지
             C_MoveInput stop = new C_MoveInput();
             stop.InputSeq = seq++;
             stop.ClientTick = 999;
@@ -58,13 +62,13 @@ namespace DummyClient
             SendPacket(socket, MsgId.CMoveInput, stop);
             Console.WriteLine("Stop sent.");
 
-            // 정지 후 마지막 snapshot 수신 시도
             for (int i = 0; i < 3; i++)
             {
                 if (!TryReceiveOnePacket(socket))
                     break;
             }
 
+            // 5. 공격 입력 3회
             for (int i = 0; i < 3; i++)
             {
                 C_ActionInput action = new C_ActionInput();
@@ -123,6 +127,17 @@ namespace DummyClient
 
             return buffer;
         }
+        static void WaitUntilPacket(Socket socket, MsgId targetPacketId, int maxPackets = 10)
+        {
+            for (int i = 0; i < maxPackets; i++)
+            {
+                MsgId packetId = ReceiveOnePacket(socket);
+                if (packetId == targetPacketId)
+                    return;
+            }
+
+            throw new Exception("Expected packet not received: " + targetPacketId);
+        }
 
         static bool TryReceiveOnePacket(Socket socket)
         {
@@ -138,7 +153,7 @@ namespace DummyClient
             }
         }
 
-        static void ReceiveOnePacket(Socket socket)
+        static MsgId ReceiveOnePacket(Socket socket)
         {
             byte[] headerBuffer = ReceiveExactly(socket, 4);
 
@@ -149,6 +164,7 @@ namespace DummyClient
             byte[] payloadBuffer = ReceiveExactly(socket, payloadSize);
 
             HandleReceivedPacket(packetId, payloadBuffer);
+            return (MsgId)packetId;
         }
 
         static void HandleReceivedPacket(ushort packetId, byte[] payloadBuffer)
@@ -169,9 +185,12 @@ namespace DummyClient
                 foreach (ActorSnapshot actor in snapshot.Actors)
                 {
                     Console.WriteLine(
-                        " ActorId=" + actor.ActorId +
-                        " Pos=(" + actor.Pos.X + "," + actor.Pos.Y + ")" +
-                        " State=" + actor.MainState);
+    " ActorId=" + actor.ActorId +
+    " Type=" + actor.ActorType +
+    " Pos=(" + actor.Pos.X + "," + actor.Pos.Y + ")" +
+    " State=" + actor.MainState +
+    " Hp=" + actor.Hp + "/" + actor.MaxHp +
+    " Dead=" + actor.IsDead);
                 }
             }
             else if ((MsgId)packetId == MsgId.SCombatEvents)

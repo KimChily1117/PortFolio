@@ -35,28 +35,33 @@ namespace Server.Protocol {
             "AygLMhUucHJvdG9jb2wuQ29tYmF0RXZlbnQiHwoHVmVjMkludBIJCgF4GAEg",
             "ASgREgkKAXkYAiABKBEiVQoLQ19Nb3ZlSW5wdXQSEQoJaW5wdXRfc2VxGAEg",
             "ASgNEhMKC2NsaWVudF90aWNrGAIgASgFEg4KBm1vdmVfeBgDIAEoERIOCgZt",
-            "b3ZlX3kYBCABKBEibwoNQWN0b3JTbmFwc2hvdBIQCghhY3Rvcl9pZBgBIAEo",
-            "BRIeCgNwb3MYAiABKAsyES5wcm90b2NvbC5WZWMySW50EiwKCm1haW5fc3Rh",
-            "dGUYAyABKA4yGC5wcm90b2NvbC5BY3Rvck1haW5TdGF0ZSJlCg5TX1Jvb21T",
-            "bmFwc2hvdBITCgtzZXJ2ZXJfdGljaxgBIAEoBRIVCg1hY2tfaW5wdXRfc2Vx",
-            "GAIgASgNEicKBmFjdG9ycxgDIAMoCzIXLnByb3RvY29sLkFjdG9yU25hcHNo",
-            "b3QqVgoKQWN0aW9uVHlwZRIPCgtBQ1RJT05fTk9ORRAAEhEKDUFDVElPTl9B",
-            "VFRBQ0sQARIRCg1BQ1RJT05fU0tJTEwxEAISEQoNQUNUSU9OX1NLSUxMMhAD",
-            "KocBCg9Db21iYXRFdmVudFR5cGUSFQoRQ09NQkFUX0VWRU5UX05PTkUQABIX",
-            "ChNDT01CQVRfRVZFTlRfQVRUQUNLEAESFAoQQ09NQkFUX0VWRU5UX0hJVBAC",
-            "EhYKEkNPTUJBVF9FVkVOVF9ERUFUSBADEhYKEkNPTUJBVF9FVkVOVF9TS0lM",
-            "TBAEKmEKDkFjdG9yTWFpblN0YXRlEhkKFUFDVE9SX01BSU5fU1RBVEVfTk9O",
-            "RRAAEhkKFUFDVE9SX01BSU5fU1RBVEVfSURMRRABEhkKFUFDVE9SX01BSU5f",
-            "U1RBVEVfTU9WRRACQhKqAg9TZXJ2ZXIuUHJvdG9jb2xiBnByb3RvMw=="));
+            "b3ZlX3kYBCABKBEixQEKDUFjdG9yU25hcHNob3QSEAoIYWN0b3JfaWQYASAB",
+            "KAUSLAoKbWFpbl9zdGF0ZRgCIAEoDjIYLnByb3RvY29sLkFjdG9yTWFpblN0",
+            "YXRlEh4KA3BvcxgDIAEoCzIRLnByb3RvY29sLlZlYzJJbnQSCgoCaHAYBCAB",
+            "KAUSDgoGbWF4X2hwGAUgASgFEg8KB2lzX2RlYWQYBiABKAgSJwoKYWN0b3Jf",
+            "dHlwZRgHIAEoDjITLnByb3RvY29sLkFjdG9yVHlwZSJlCg5TX1Jvb21TbmFw",
+            "c2hvdBITCgtzZXJ2ZXJfdGljaxgBIAEoBRIVCg1hY2tfaW5wdXRfc2VxGAIg",
+            "ASgNEicKBmFjdG9ycxgDIAMoCzIXLnByb3RvY29sLkFjdG9yU25hcHNob3Qq",
+            "VgoKQWN0aW9uVHlwZRIPCgtBQ1RJT05fTk9ORRAAEhEKDUFDVElPTl9BVFRB",
+            "Q0sQARIRCg1BQ1RJT05fU0tJTEwxEAISEQoNQUNUSU9OX1NLSUxMMhADKocB",
+            "Cg9Db21iYXRFdmVudFR5cGUSFQoRQ09NQkFUX0VWRU5UX05PTkUQABIXChND",
+            "T01CQVRfRVZFTlRfQVRUQUNLEAESFAoQQ09NQkFUX0VWRU5UX0hJVBACEhYK",
+            "EkNPTUJBVF9FVkVOVF9ERUFUSBADEhYKEkNPTUJBVF9FVkVOVF9TS0lMTBAE",
+            "KnwKDkFjdG9yTWFpblN0YXRlEhkKFUFDVE9SX01BSU5fU1RBVEVfTk9ORRAA",
+            "EhkKFUFDVE9SX01BSU5fU1RBVEVfSURMRRABEhkKFUFDVE9SX01BSU5fU1RB",
+            "VEVfTU9WRRACEhkKFUFDVE9SX01BSU5fU1RBVEVfREVBRBADKk0KCUFjdG9y",
+            "VHlwZRITCg9BQ1RPUl9UWVBFX05PTkUQABIVChFBQ1RPUl9UWVBFX1BMQVlF",
+            "UhABEhQKEEFDVE9SX1RZUEVfRU5FTVkQAkISqgIPU2VydmVyLlByb3RvY29s",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Server.Protocol.CommonReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Server.Protocol.ActionType), typeof(global::Server.Protocol.CombatEventType), typeof(global::Server.Protocol.ActorMainState), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Server.Protocol.ActionType), typeof(global::Server.Protocol.CombatEventType), typeof(global::Server.Protocol.ActorMainState), typeof(global::Server.Protocol.ActorType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.C_ActionInput), global::Server.Protocol.C_ActionInput.Parser, new[]{ "InputSeq", "ActionType", "DirX", "DirY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.CombatEvent), global::Server.Protocol.CombatEvent.Parser, new[]{ "EventType", "AttackerId", "TargetId", "ActionType", "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.S_CombatEvents), global::Server.Protocol.S_CombatEvents.Parser, new[]{ "ServerTick", "Events" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.Vec2Int), global::Server.Protocol.Vec2Int.Parser, new[]{ "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.C_MoveInput), global::Server.Protocol.C_MoveInput.Parser, new[]{ "InputSeq", "ClientTick", "MoveX", "MoveY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.ActorSnapshot), global::Server.Protocol.ActorSnapshot.Parser, new[]{ "ActorId", "Pos", "MainState" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.ActorSnapshot), global::Server.Protocol.ActorSnapshot.Parser, new[]{ "ActorId", "MainState", "Pos", "Hp", "MaxHp", "IsDead", "ActorType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.S_RoomSnapshot), global::Server.Protocol.S_RoomSnapshot.Parser, new[]{ "ServerTick", "AckInputSeq", "Actors" }, null, null, null, null)
           }));
     }
@@ -83,6 +88,13 @@ namespace Server.Protocol {
     [pbr::OriginalName("ACTOR_MAIN_STATE_NONE")] None = 0,
     [pbr::OriginalName("ACTOR_MAIN_STATE_IDLE")] Idle = 1,
     [pbr::OriginalName("ACTOR_MAIN_STATE_MOVE")] Move = 2,
+    [pbr::OriginalName("ACTOR_MAIN_STATE_DEAD")] Dead = 3,
+  }
+
+  public enum ActorType {
+    [pbr::OriginalName("ACTOR_TYPE_NONE")] None = 0,
+    [pbr::OriginalName("ACTOR_TYPE_PLAYER")] Player = 1,
+    [pbr::OriginalName("ACTOR_TYPE_ENEMY")] Enemy = 2,
   }
 
   #endregion
@@ -1093,8 +1105,12 @@ namespace Server.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ActorSnapshot(ActorSnapshot other) : this() {
       actorId_ = other.actorId_;
-      pos_ = other.pos_ != null ? other.pos_.Clone() : null;
       mainState_ = other.mainState_;
+      pos_ = other.pos_ != null ? other.pos_.Clone() : null;
+      hp_ = other.hp_;
+      maxHp_ = other.maxHp_;
+      isDead_ = other.isDead_;
+      actorType_ = other.actorType_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1114,8 +1130,19 @@ namespace Server.Protocol {
       }
     }
 
+    /// <summary>Field number for the "main_state" field.</summary>
+    public const int MainStateFieldNumber = 2;
+    private global::Server.Protocol.ActorMainState mainState_ = global::Server.Protocol.ActorMainState.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Server.Protocol.ActorMainState MainState {
+      get { return mainState_; }
+      set {
+        mainState_ = value;
+      }
+    }
+
     /// <summary>Field number for the "pos" field.</summary>
-    public const int PosFieldNumber = 2;
+    public const int PosFieldNumber = 3;
     private global::Server.Protocol.Vec2Int pos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Server.Protocol.Vec2Int Pos {
@@ -1125,14 +1152,47 @@ namespace Server.Protocol {
       }
     }
 
-    /// <summary>Field number for the "main_state" field.</summary>
-    public const int MainStateFieldNumber = 3;
-    private global::Server.Protocol.ActorMainState mainState_ = global::Server.Protocol.ActorMainState.None;
+    /// <summary>Field number for the "hp" field.</summary>
+    public const int HpFieldNumber = 4;
+    private int hp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Server.Protocol.ActorMainState MainState {
-      get { return mainState_; }
+    public int Hp {
+      get { return hp_; }
       set {
-        mainState_ = value;
+        hp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "max_hp" field.</summary>
+    public const int MaxHpFieldNumber = 5;
+    private int maxHp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaxHp {
+      get { return maxHp_; }
+      set {
+        maxHp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_dead" field.</summary>
+    public const int IsDeadFieldNumber = 6;
+    private bool isDead_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsDead {
+      get { return isDead_; }
+      set {
+        isDead_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "actor_type" field.</summary>
+    public const int ActorTypeFieldNumber = 7;
+    private global::Server.Protocol.ActorType actorType_ = global::Server.Protocol.ActorType.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Server.Protocol.ActorType ActorType {
+      get { return actorType_; }
+      set {
+        actorType_ = value;
       }
     }
 
@@ -1150,8 +1210,12 @@ namespace Server.Protocol {
         return true;
       }
       if (ActorId != other.ActorId) return false;
-      if (!object.Equals(Pos, other.Pos)) return false;
       if (MainState != other.MainState) return false;
+      if (!object.Equals(Pos, other.Pos)) return false;
+      if (Hp != other.Hp) return false;
+      if (MaxHp != other.MaxHp) return false;
+      if (IsDead != other.IsDead) return false;
+      if (ActorType != other.ActorType) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1159,8 +1223,12 @@ namespace Server.Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (ActorId != 0) hash ^= ActorId.GetHashCode();
-      if (pos_ != null) hash ^= Pos.GetHashCode();
       if (MainState != global::Server.Protocol.ActorMainState.None) hash ^= MainState.GetHashCode();
+      if (pos_ != null) hash ^= Pos.GetHashCode();
+      if (Hp != 0) hash ^= Hp.GetHashCode();
+      if (MaxHp != 0) hash ^= MaxHp.GetHashCode();
+      if (IsDead != false) hash ^= IsDead.GetHashCode();
+      if (ActorType != global::Server.Protocol.ActorType.None) hash ^= ActorType.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1178,13 +1246,29 @@ namespace Server.Protocol {
         output.WriteRawTag(8);
         output.WriteInt32(ActorId);
       }
+      if (MainState != global::Server.Protocol.ActorMainState.None) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) MainState);
+      }
       if (pos_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(Pos);
       }
-      if (MainState != global::Server.Protocol.ActorMainState.None) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) MainState);
+      if (Hp != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Hp);
+      }
+      if (MaxHp != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(MaxHp);
+      }
+      if (IsDead != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsDead);
+      }
+      if (ActorType != global::Server.Protocol.ActorType.None) {
+        output.WriteRawTag(56);
+        output.WriteEnum((int) ActorType);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1197,11 +1281,23 @@ namespace Server.Protocol {
       if (ActorId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorId);
       }
+      if (MainState != global::Server.Protocol.ActorMainState.None) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MainState);
+      }
       if (pos_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pos);
       }
-      if (MainState != global::Server.Protocol.ActorMainState.None) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MainState);
+      if (Hp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Hp);
+      }
+      if (MaxHp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxHp);
+      }
+      if (IsDead != false) {
+        size += 1 + 1;
+      }
+      if (ActorType != global::Server.Protocol.ActorType.None) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ActorType);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1217,14 +1313,26 @@ namespace Server.Protocol {
       if (other.ActorId != 0) {
         ActorId = other.ActorId;
       }
+      if (other.MainState != global::Server.Protocol.ActorMainState.None) {
+        MainState = other.MainState;
+      }
       if (other.pos_ != null) {
         if (pos_ == null) {
           Pos = new global::Server.Protocol.Vec2Int();
         }
         Pos.MergeFrom(other.Pos);
       }
-      if (other.MainState != global::Server.Protocol.ActorMainState.None) {
-        MainState = other.MainState;
+      if (other.Hp != 0) {
+        Hp = other.Hp;
+      }
+      if (other.MaxHp != 0) {
+        MaxHp = other.MaxHp;
+      }
+      if (other.IsDead != false) {
+        IsDead = other.IsDead;
+      }
+      if (other.ActorType != global::Server.Protocol.ActorType.None) {
+        ActorType = other.ActorType;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1241,15 +1349,31 @@ namespace Server.Protocol {
             ActorId = input.ReadInt32();
             break;
           }
-          case 18: {
+          case 16: {
+            MainState = (global::Server.Protocol.ActorMainState) input.ReadEnum();
+            break;
+          }
+          case 26: {
             if (pos_ == null) {
               Pos = new global::Server.Protocol.Vec2Int();
             }
             input.ReadMessage(Pos);
             break;
           }
-          case 24: {
-            MainState = (global::Server.Protocol.ActorMainState) input.ReadEnum();
+          case 32: {
+            Hp = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            MaxHp = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            IsDead = input.ReadBool();
+            break;
+          }
+          case 56: {
+            ActorType = (global::Server.Protocol.ActorType) input.ReadEnum();
             break;
           }
         }

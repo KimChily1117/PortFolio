@@ -9,25 +9,34 @@ namespace Server.Game.Room
         private void HandleEnter(EnterRoomCommand command)
         {
             Player player = command.Player;
-            if (player == null)
-                return;
+            player.Room = this;
 
-            if (_players.ContainsKey(player.Id))
-                return;
-
-            player.Room = this; // 중요
-            player.MoveInputX = 0;
-            player.MoveInputY = 0;
-            player.MainState = ActorMainState.Idle;
+            player.Hp = player.MaxHp;            
+            player.IsJumping = false;
+            player.SpawnProtectionEndTick = ServerTick + SpawnProtectionTick;
 
             _players.Add(player.Id, player);
 
-            Console.WriteLine("[Room] Player Enter. id=" + player.Id);
+            Console.WriteLine("[Room] Player Enter. id=" + player.Id +
+                " spawnProtectionEndTick=" + player.SpawnProtectionEndTick);
 
-            SpawnTestTargetIfNeeded();
+            // 테스트용 enemy spawn 로직 있으면 그대로 유지
+            if (_enemies.Count == 0)
+            {
+                Enemy enemy = new Enemy();
+                enemy.Id = 1000;
+                enemy.PosX = 40;   // 테스트용으로 플레이어 근처
+                enemy.PosY = 0;
+                enemy.Room = this;
 
-            foreach (Player p in _players.Values)
-                p.MarkDirty();
+                _enemies.Add(enemy.Id, enemy);
+
+                Console.WriteLine("[Room] TestEnemy Spawned. id=" + enemy.Id +
+                    " pos=(" + enemy.PosX + "," + enemy.PosY + ")" +
+                    " hp=" + enemy.Hp);
+            }
+
+            BroadcastSnapshot();
         }
 
         private void HandleLeave(LeaveRoomCommand command)
@@ -42,8 +51,8 @@ namespace Server.Game.Room
             System.Console.WriteLine("[Room] Player Leave. id=" + command.PlayerId);
 
 
-            foreach (Player p in _players.Values)
-                p.MarkDirty();
+            foreach (GameObject obj in GetAllObjects())
+                obj.MarkDirty();
         }
     }
 }

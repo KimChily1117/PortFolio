@@ -3,6 +3,7 @@ using Server.Game.GameObjects;
 using Server.Protocol;
 using System;
 using System.Collections.Generic;
+using static Server.Game.GameObjects.Enemy;
 
 namespace Server.Game.Room
 {
@@ -19,11 +20,93 @@ namespace Server.Game.Room
         private const int AttackRange = 50;
         private const int AttackDamage = 10;
         private const int AttackCooldownTick = 15;
+        private const int JumpDurationTick = 40; // 0.5초
+
+        private const int EnemyDetectRange = 200;
+        private const int EnemyAttackRange = 30;
+        private const int EnemyAttackDamage = 10;
+        private const int EnemyAttackCooldownTick = 30;
+
+        private const int SpawnProtectionTick = 60; // 2초 @ 30TPS
+
+        // Shockwave
+        private const int ShockwaveWarningTick = 20;       // 0.66초
+        private const int ShockwaveRecoverTick = 35;       // 패턴 자체 종료 시점
+        private const int ShockwavePostCooldownTick = 45;  // 종료 후 다음 패턴까지 쉬는 시간
+        private const int ShockwaveRange = 80;
+        private const int ShockwaveDamage = 20;
+
+        #region Boss Pattern 2
+        // Light Zone
+        private const int LightZoneDurationTick = 210;     // 7초
+        private const int LightZonePostCooldownTick = 75;  // 종료 후 다음 패턴까지 쉬는 시간
+        private const int LightZoneRadius = 25;
+        private const int LightZoneFailDamage = 20;
+        #endregion
+
+        private const int StageMinX = -660;
+        private const int StageMaxX = 660;
+        private const int StageMinY = -220;
+        private const int StageMaxY = 0;
+
+        // 맵 고정 위치용
+        private const int ZoneCornerOffsetX = 180;
+        private const int ZoneCornerOffsetY = 90;
+
+        private const int PatternStartRange = 120;
+        
 
         private readonly Dictionary<int, Player> _players = new Dictionary<int, Player>();
+        private readonly Dictionary<int, Enemy> _enemies = new Dictionary<int, Enemy>();
+
+
         private readonly Queue<RoomCommand> _pendingCommands = new Queue<RoomCommand>();
         private readonly List<RoomCombatEvent> _pendingCombatEvents = new List<RoomCombatEvent>();
 
+        #region Util(Getter)
+        private int ClampX(int x)
+        {
+            if (x < StageMinX) return StageMinX;
+            if (x > StageMaxX) return StageMaxX;
+            return x;
+        }
+
+        private int ClampY(int y)
+        {
+            if (y < StageMinY) return StageMinY;
+            if (y > StageMaxY) return StageMaxY;
+            return y;
+        }
+
+        private int GetAlivePlayerCount()
+        {
+            int count = 0;
+
+            foreach (Player player in _players.Values)
+            {
+                if (!player.IsDead)
+                    count++;
+            }
+
+            return count;
+        }
+        private IEnumerable<GameObject> GetAllObjects()
+        {
+            foreach (Player player in _players.Values)
+                yield return player;
+
+            foreach (Enemy enemy in _enemies.Values)
+                yield return enemy;
+        }
+
+        private IEnumerable<Creature> GetAllCreatures()
+        {
+            foreach (Player player in _players.Values)
+                yield return player;
+
+            foreach (Enemy enemy in _enemies.Values)
+                yield return enemy;
+        }
         public void Enqueue(RoomCommand command)
         {
             lock (_pendingCommands)
@@ -32,6 +115,14 @@ namespace Server.Game.Room
             }
         }
 
+        private bool IsUnderSpawnProtection(Player player)
+        {
+            if (player == null)
+                return false;
+
+            return ServerTick < player.SpawnProtectionEndTick;
+        }
+        #endregion
         public void Tick()
         {
             ServerTick++;
@@ -39,41 +130,40 @@ namespace Server.Game.Room
 
             ConsumeCommands();
             UpdatePlayers();
+            UpdateEnemies();
             ResolveActions();
 
             if (_snapshotElapsedMs >= SnapshotIntervalMs)
             {
-                if (HasAnyDirtyPlayer())
-                {
+                if (HasAnyDirtyCreature())
                     BroadcastSnapshot();
-                }
+
                 _snapshotElapsedMs -= SnapshotIntervalMs;
             }
+
             BroadcastCombatEvents();
         }
 
-        private void SpawnTestTargetIfNeeded()
+        private void SpawnTestEnemyIfNeeded()
         {
-            const int testTargetId = 1000;
+            const int testEnemyId = 1000;
 
-            if (_players.ContainsKey(testTargetId))
+            if (_enemies.ContainsKey(testEnemyId))
                 return;
 
-            Player dummy = new Player();
-            dummy.Id = testTargetId;
-            dummy.PosX = 180;
-            dummy.PosY = 0;
-            dummy.Speed = 0;
-            dummy.Hp = 30;
-            dummy.MaxHp = 30;
-            dummy.MainState = ActorMainState.Idle;
+            Enemy enemy = new Enemy();
+            enemy.Id = testEnemyId;
+            enemy.Name = "TestEnemy";
+            enemy.Room = this;
+            enemy.PosX = 20;
+            enemy.PosY = 0;
+            enemy.MarkDirty();
 
-            _players.Add(dummy.Id, dummy);
-            dummy.MarkDirty();
+            _enemies.Add(enemy.Id, enemy);
 
-            Console.WriteLine("[Room] TestTarget Spawned. id=" + dummy.Id +
-                " pos=(" + dummy.PosX + "," + dummy.PosY + ")" +
-                " hp=" + dummy.Hp);
+            Console.WriteLine("[Room] TestEnemy Spawned. id=" + enemy.Id +
+                " pos=(" + enemy.PosX + "," + enemy.PosY + ")" +
+                " hp=" + enemy.Hp);
         }
 
         private bool CanUseAction(Player player)
@@ -93,6 +183,21 @@ namespace Server.Game.Room
             return true;
         }
 
+        private bool CanJump(Player player)
+        {
+            if (player == null)
+                return false;
+
+            if (player.IsDead)
+                return false;
+
+            if (player.IsJumping)
+                return false;
+            if(player.LastJumpRequestTick == ServerTick)
+                return false;
+
+            return true;
+        }
         private void ResolveActions()
         {
             foreach (Player player in _players.Values)
@@ -100,20 +205,35 @@ namespace Server.Game.Room
                 if (!player.HasPendingAction)
                     continue;
 
-                Console.WriteLine("[ResolveActions] player=" + player.Id +
-                    " action=" + player.PendingActionType +
-                    " canUse=" + CanUseAction(player));
-
-                if (!CanUseAction(player))
-                {
-                    player.HasPendingAction = false;
-                    continue;
-                }
-
                 switch (player.PendingActionType)
                 {
                     case ActionType.ActionAttack:
-                        ExecuteAttack(player);
+                        {
+                            Console.WriteLine("[ResolveActions] player=" + player.Id +
+                                " action=Attack canUse=" + CanUseAction(player));
+
+                            if (CanUseAction(player))
+                                ExecuteAttack(player);
+
+                            break;
+                        }
+
+                    case ActionType.ActionJump:
+                        {
+                            Console.WriteLine("[ResolveActions] player=" + player.Id +
+                                " action=Jump canUse=" + CanJump(player));
+
+                            if (CanJump(player))
+                                ExecuteJump(player);
+
+                            break;
+                        }
+
+                    case ActionType.ActionNone:
+                        break;
+                    case ActionType.ActionSkill1:
+                        break;
+                    case ActionType.ActionSkill2:
                         break;
                 }
 
@@ -121,6 +241,80 @@ namespace Server.Game.Room
             }
         }
 
+        private void BroadcastPatternZones(Enemy enemy, ActionType actionType, List<PatternZone> zones, int durationTick)
+        {
+            S_PatternZones packet = new S_PatternZones();
+            packet.ServerTick = ServerTick;
+            packet.OwnerEnemyId = enemy.Id;
+            packet.ActionType = actionType;
+            packet.DurationTick = durationTick;
+
+            foreach (PatternZone zone in zones)
+            {
+                ZoneInfo info = new ZoneInfo();
+                info.ZoneId = zone.ZoneId;
+                info.Pos = new Vec2Int
+                {
+                    X = zone.PosX,
+                    Y = zone.PosY
+                };
+                info.Radius = zone.Radius;
+
+                packet.Zones.Add(info);
+            }
+
+            Broadcast(packet);
+
+            Console.WriteLine("[PatternZones] tick=" + ServerTick +
+                " owner=" + enemy.Id +
+                " action=" + actionType +
+                " zoneCount=" + zones.Count +
+                " durationTick=" + durationTick);
+        }
+
+
+        private void TryStartShockwavePattern(Enemy enemy)
+        {
+            if (ServerTick < enemy.NextPatternAvailableTick)
+                return;
+
+            enemy.State = Enemy.EnemyState.Pattern;
+            enemy.CurrentPatternType = Enemy.EnemyPatternType.Shockwave;
+            enemy.PatternStartTick = ServerTick;
+            enemy.PatternTriggered = false;
+            enemy.MarkDirty();
+
+            AddCombatEvent(
+                CombatEventType.CombatEventSkill,
+                enemy.Id,
+                0,
+                ActionType.ActionSkill1,
+                0);
+
+            Console.WriteLine("[PatternStart] enemy=" + enemy.Id +
+                " tick=" + ServerTick +
+                " pattern=Shockwave");
+        }
+
+
+        private void ExecuteJump(Player player)
+        {
+            player.LastJumpRequestTick = ServerTick;
+            player.IsJumping = true;
+            player.JumpEndTick = ServerTick + JumpDurationTick;
+            player.MarkDirty();
+
+            Console.WriteLine("[Jump] tick=" + ServerTick +
+                " player=" + player.Id +
+                " jumpEndTick=" + player.JumpEndTick);
+
+            AddCombatEvent(
+                CombatEventType.CombatEventSkill,
+                player.Id,
+                0,
+                ActionType.ActionJump,
+                0);
+        }
         private void ExecuteAttack(Player attacker)
         {
             if (attacker == null)
@@ -129,7 +323,6 @@ namespace Server.Game.Room
             attacker.IsAttacking = true;
             attacker.NextActionTick = ServerTick + AttackCooldownTick;
 
-            // 1) 공격 시작 이벤트
             AddCombatEvent(
                 CombatEventType.CombatEventAttack,
                 attacker.Id,
@@ -141,15 +334,13 @@ namespace Server.Game.Room
                 " attacker=" + attacker.Id +
                 " nextActionTick=" + attacker.NextActionTick);
 
-            // 2) 타겟 탐색
-            Player target = FindTargetInRange(attacker, AttackRange);
+            Enemy target = FindEnemyInRange(attacker, AttackRange);
             if (target == null)
             {
-                Console.WriteLine("[HitCheck] attacker=" + attacker.Id + " no target in range");
+                Console.WriteLine("[HitCheck] attacker=" + attacker.Id + " no enemy in range");
                 return;
             }
 
-            // 3) 데미지 적용
             int beforeHp = target.Hp;
             target.Hp -= AttackDamage;
             if (target.Hp < 0)
@@ -163,7 +354,6 @@ namespace Server.Game.Room
                 " damage=" + AttackDamage +
                 " hp=" + beforeHp + "->" + target.Hp);
 
-            // 4) 히트 이벤트
             AddCombatEvent(
                 CombatEventType.CombatEventHit,
                 attacker.Id,
@@ -171,13 +361,9 @@ namespace Server.Game.Room
                 ActionType.ActionAttack,
                 AttackDamage);
 
-            // 5) 죽음 이벤트
             if (target.IsDead)
             {
-                target.MoveInputX = 0;
-                target.MoveInputY = 0;
-                target.MainState = ActorMainState.Idle;
-                target.MarkDirty();
+                target.OnDead();
 
                 AddCombatEvent(
                     CombatEventType.CombatEventDeath,
@@ -191,7 +377,94 @@ namespace Server.Game.Room
             }
         }
 
+        private void ExecuteShockwave(Enemy enemy)
+        {
+            int rangeSqr = ShockwaveRange * ShockwaveRange;
 
+            Console.WriteLine("[Shockwave] enemy=" + enemy.Id +
+                " tick=" + ServerTick);
+
+            foreach (Player player in _players.Values)
+            {
+                if (player.IsDead)
+                    continue;
+
+                if (IsUnderSpawnProtection(player))
+                {
+                    Console.WriteLine("[ShockwaveBlocked] player=" + player.Id +
+                        " reason=SpawnProtection");
+                    continue;
+                }
+
+                int distSqr = GetDistSqr(enemy, player);
+                if (distSqr > rangeSqr)
+                    continue;
+
+                if (player.IsJumping)
+                {
+                    Console.WriteLine("[ShockwaveEvaded] player=" + player.Id);
+                    continue;
+                }
+
+                int beforeHp = player.Hp;
+                player.Hp -= ShockwaveDamage;
+                if (player.Hp < 0)
+                    player.Hp = 0;
+
+                player.MarkDirty();
+
+                AddCombatEvent(
+                    CombatEventType.CombatEventHit,
+                    enemy.Id,
+                    player.Id,
+                    ActionType.ActionSkill1,
+                    ShockwaveDamage);
+
+                Console.WriteLine("[ShockwaveHit] enemy=" + enemy.Id +
+                    " player=" + player.Id +
+                    " hp=" + beforeHp + "->" + player.Hp);
+
+                if (player.IsDead)
+                {
+                    player.OnDead();
+
+                    AddCombatEvent(
+                        CombatEventType.CombatEventDeath,
+                        enemy.Id,
+                        player.Id,
+                        ActionType.ActionSkill1,
+                        0);
+
+                    Console.WriteLine("[PlayerDeath] tick=" + ServerTick +
+                        " player=" + player.Id);
+                }
+            }
+        }
+
+
+        private void UpdateShockwavePattern(Enemy enemy)
+        {
+            int elapsed = ServerTick - enemy.PatternStartTick;
+
+            if (elapsed >= ShockwaveWarningTick && !enemy.PatternTriggered)
+            {
+                enemy.PatternTriggered = true;
+                ExecuteShockwave(enemy);
+            }
+
+            if (elapsed >= ShockwaveRecoverTick)
+            {
+                enemy.State = Enemy.EnemyState.Idle;
+                enemy.CurrentPatternType = Enemy.EnemyPatternType.None;
+                enemy.NextPatternAvailableTick = ServerTick + ShockwavePostCooldownTick;
+                enemy.MarkDirty();
+
+                Console.WriteLine("[PatternEnd] enemy=" + enemy.Id +
+                    " tick=" + ServerTick +
+                    " pattern=Shockwave" +
+                    " nextAvailable=" + enemy.NextPatternAvailableTick);
+            }
+        }
         private void BroadcastCombatEvents()
         {
             if (_pendingCombatEvents.Count == 0)

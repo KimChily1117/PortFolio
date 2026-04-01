@@ -35,29 +35,42 @@ namespace Server.Protocol {
             "AygLMhUucHJvdG9jb2wuQ29tYmF0RXZlbnQiHwoHVmVjMkludBIJCgF4GAEg",
             "ASgREgkKAXkYAiABKBEiVQoLQ19Nb3ZlSW5wdXQSEQoJaW5wdXRfc2VxGAEg",
             "ASgNEhMKC2NsaWVudF90aWNrGAIgASgFEg4KBm1vdmVfeBgDIAEoERIOCgZt",
-            "b3ZlX3kYBCABKBEibwoNQWN0b3JTbmFwc2hvdBIQCghhY3Rvcl9pZBgBIAEo",
-            "BRIeCgNwb3MYAiABKAsyES5wcm90b2NvbC5WZWMySW50EiwKCm1haW5fc3Rh",
-            "dGUYAyABKA4yGC5wcm90b2NvbC5BY3Rvck1haW5TdGF0ZSJlCg5TX1Jvb21T",
-            "bmFwc2hvdBITCgtzZXJ2ZXJfdGljaxgBIAEoBRIVCg1hY2tfaW5wdXRfc2Vx",
-            "GAIgASgNEicKBmFjdG9ycxgDIAMoCzIXLnByb3RvY29sLkFjdG9yU25hcHNo",
-            "b3QqVgoKQWN0aW9uVHlwZRIPCgtBQ1RJT05fTk9ORRAAEhEKDUFDVElPTl9B",
-            "VFRBQ0sQARIRCg1BQ1RJT05fU0tJTEwxEAISEQoNQUNUSU9OX1NLSUxMMhAD",
-            "KocBCg9Db21iYXRFdmVudFR5cGUSFQoRQ09NQkFUX0VWRU5UX05PTkUQABIX",
-            "ChNDT01CQVRfRVZFTlRfQVRUQUNLEAESFAoQQ09NQkFUX0VWRU5UX0hJVBAC",
-            "EhYKEkNPTUJBVF9FVkVOVF9ERUFUSBADEhYKEkNPTUJBVF9FVkVOVF9TS0lM",
-            "TBAEKmEKDkFjdG9yTWFpblN0YXRlEhkKFUFDVE9SX01BSU5fU1RBVEVfTk9O",
-            "RRAAEhkKFUFDVE9SX01BSU5fU1RBVEVfSURMRRABEhkKFUFDVE9SX01BSU5f",
-            "U1RBVEVfTU9WRRACQhKqAg9TZXJ2ZXIuUHJvdG9jb2xiBnByb3RvMw=="));
+            "b3ZlX3kYBCABKBEi2QEKDUFjdG9yU25hcHNob3QSEAoIYWN0b3JfaWQYASAB",
+            "KAUSLAoKbWFpbl9zdGF0ZRgCIAEoDjIYLnByb3RvY29sLkFjdG9yTWFpblN0",
+            "YXRlEh4KA3BvcxgDIAEoCzIRLnByb3RvY29sLlZlYzJJbnQSCgoCaHAYBCAB",
+            "KAUSDgoGbWF4X2hwGAUgASgFEg8KB2lzX2RlYWQYBiABKAgSJwoKYWN0b3Jf",
+            "dHlwZRgHIAEoDjITLnByb3RvY29sLkFjdG9yVHlwZRISCgppc19qdW1waW5n",
+            "GAggASgIImUKDlNfUm9vbVNuYXBzaG90EhMKC3NlcnZlcl90aWNrGAEgASgF",
+            "EhUKDWFja19pbnB1dF9zZXEYAiABKA0SJwoGYWN0b3JzGAMgAygLMhcucHJv",
+            "dG9jb2wuQWN0b3JTbmFwc2hvdCJLCghab25lSW5mbxIPCgd6b25lX2lkGAEg",
+            "ASgFEh4KA3BvcxgCIAEoCzIRLnByb3RvY29sLlZlYzJJbnQSDgoGcmFkaXVz",
+            "GAMgASgFIqIBCg5TX1BhdHRlcm5ab25lcxITCgtzZXJ2ZXJfdGljaxgBIAEo",
+            "BRIWCg5vd25lcl9lbmVteV9pZBgCIAEoBRIpCgthY3Rpb25fdHlwZRgDIAEo",
+            "DjIULnByb3RvY29sLkFjdGlvblR5cGUSIQoFem9uZXMYBCADKAsyEi5wcm90",
+            "b2NvbC5ab25lSW5mbxIVCg1kdXJhdGlvbl90aWNrGAUgASgFKmcKCkFjdGlv",
+            "blR5cGUSDwoLQUNUSU9OX05PTkUQABIRCg1BQ1RJT05fQVRUQUNLEAESEQoN",
+            "QUNUSU9OX1NLSUxMMRACEhEKDUFDVElPTl9TS0lMTDIQAxIPCgtBQ1RJT05f",
+            "SlVNUBAEKocBCg9Db21iYXRFdmVudFR5cGUSFQoRQ09NQkFUX0VWRU5UX05P",
+            "TkUQABIXChNDT01CQVRfRVZFTlRfQVRUQUNLEAESFAoQQ09NQkFUX0VWRU5U",
+            "X0hJVBACEhYKEkNPTUJBVF9FVkVOVF9ERUFUSBADEhYKEkNPTUJBVF9FVkVO",
+            "VF9TS0lMTBAEKnwKDkFjdG9yTWFpblN0YXRlEhkKFUFDVE9SX01BSU5fU1RB",
+            "VEVfTk9ORRAAEhkKFUFDVE9SX01BSU5fU1RBVEVfSURMRRABEhkKFUFDVE9S",
+            "X01BSU5fU1RBVEVfTU9WRRACEhkKFUFDVE9SX01BSU5fU1RBVEVfREVBRBAD",
+            "Kk0KCUFjdG9yVHlwZRITCg9BQ1RPUl9UWVBFX05PTkUQABIVChFBQ1RPUl9U",
+            "WVBFX1BMQVlFUhABEhQKEEFDVE9SX1RZUEVfRU5FTVkQAkISqgIPU2VydmVy",
+            "LlByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Server.Protocol.CommonReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Server.Protocol.ActionType), typeof(global::Server.Protocol.CombatEventType), typeof(global::Server.Protocol.ActorMainState), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Server.Protocol.ActionType), typeof(global::Server.Protocol.CombatEventType), typeof(global::Server.Protocol.ActorMainState), typeof(global::Server.Protocol.ActorType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.C_ActionInput), global::Server.Protocol.C_ActionInput.Parser, new[]{ "InputSeq", "ActionType", "DirX", "DirY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.CombatEvent), global::Server.Protocol.CombatEvent.Parser, new[]{ "EventType", "AttackerId", "TargetId", "ActionType", "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.S_CombatEvents), global::Server.Protocol.S_CombatEvents.Parser, new[]{ "ServerTick", "Events" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.Vec2Int), global::Server.Protocol.Vec2Int.Parser, new[]{ "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.C_MoveInput), global::Server.Protocol.C_MoveInput.Parser, new[]{ "InputSeq", "ClientTick", "MoveX", "MoveY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.ActorSnapshot), global::Server.Protocol.ActorSnapshot.Parser, new[]{ "ActorId", "Pos", "MainState" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.S_RoomSnapshot), global::Server.Protocol.S_RoomSnapshot.Parser, new[]{ "ServerTick", "AckInputSeq", "Actors" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.ActorSnapshot), global::Server.Protocol.ActorSnapshot.Parser, new[]{ "ActorId", "MainState", "Pos", "Hp", "MaxHp", "IsDead", "ActorType", "IsJumping" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.S_RoomSnapshot), global::Server.Protocol.S_RoomSnapshot.Parser, new[]{ "ServerTick", "AckInputSeq", "Actors" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.ZoneInfo), global::Server.Protocol.ZoneInfo.Parser, new[]{ "ZoneId", "Pos", "Radius" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Server.Protocol.S_PatternZones), global::Server.Protocol.S_PatternZones.Parser, new[]{ "ServerTick", "OwnerEnemyId", "ActionType", "Zones", "DurationTick" }, null, null, null, null)
           }));
     }
     #endregion
@@ -69,6 +82,7 @@ namespace Server.Protocol {
     [pbr::OriginalName("ACTION_ATTACK")] ActionAttack = 1,
     [pbr::OriginalName("ACTION_SKILL1")] ActionSkill1 = 2,
     [pbr::OriginalName("ACTION_SKILL2")] ActionSkill2 = 3,
+    [pbr::OriginalName("ACTION_JUMP")] ActionJump = 4,
   }
 
   public enum CombatEventType {
@@ -83,6 +97,13 @@ namespace Server.Protocol {
     [pbr::OriginalName("ACTOR_MAIN_STATE_NONE")] None = 0,
     [pbr::OriginalName("ACTOR_MAIN_STATE_IDLE")] Idle = 1,
     [pbr::OriginalName("ACTOR_MAIN_STATE_MOVE")] Move = 2,
+    [pbr::OriginalName("ACTOR_MAIN_STATE_DEAD")] Dead = 3,
+  }
+
+  public enum ActorType {
+    [pbr::OriginalName("ACTOR_TYPE_NONE")] None = 0,
+    [pbr::OriginalName("ACTOR_TYPE_PLAYER")] Player = 1,
+    [pbr::OriginalName("ACTOR_TYPE_ENEMY")] Enemy = 2,
   }
 
   #endregion
@@ -1093,8 +1114,13 @@ namespace Server.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ActorSnapshot(ActorSnapshot other) : this() {
       actorId_ = other.actorId_;
-      pos_ = other.pos_ != null ? other.pos_.Clone() : null;
       mainState_ = other.mainState_;
+      pos_ = other.pos_ != null ? other.pos_.Clone() : null;
+      hp_ = other.hp_;
+      maxHp_ = other.maxHp_;
+      isDead_ = other.isDead_;
+      actorType_ = other.actorType_;
+      isJumping_ = other.isJumping_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1114,8 +1140,19 @@ namespace Server.Protocol {
       }
     }
 
+    /// <summary>Field number for the "main_state" field.</summary>
+    public const int MainStateFieldNumber = 2;
+    private global::Server.Protocol.ActorMainState mainState_ = global::Server.Protocol.ActorMainState.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Server.Protocol.ActorMainState MainState {
+      get { return mainState_; }
+      set {
+        mainState_ = value;
+      }
+    }
+
     /// <summary>Field number for the "pos" field.</summary>
-    public const int PosFieldNumber = 2;
+    public const int PosFieldNumber = 3;
     private global::Server.Protocol.Vec2Int pos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Server.Protocol.Vec2Int Pos {
@@ -1125,14 +1162,58 @@ namespace Server.Protocol {
       }
     }
 
-    /// <summary>Field number for the "main_state" field.</summary>
-    public const int MainStateFieldNumber = 3;
-    private global::Server.Protocol.ActorMainState mainState_ = global::Server.Protocol.ActorMainState.None;
+    /// <summary>Field number for the "hp" field.</summary>
+    public const int HpFieldNumber = 4;
+    private int hp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Server.Protocol.ActorMainState MainState {
-      get { return mainState_; }
+    public int Hp {
+      get { return hp_; }
       set {
-        mainState_ = value;
+        hp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "max_hp" field.</summary>
+    public const int MaxHpFieldNumber = 5;
+    private int maxHp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaxHp {
+      get { return maxHp_; }
+      set {
+        maxHp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_dead" field.</summary>
+    public const int IsDeadFieldNumber = 6;
+    private bool isDead_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsDead {
+      get { return isDead_; }
+      set {
+        isDead_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "actor_type" field.</summary>
+    public const int ActorTypeFieldNumber = 7;
+    private global::Server.Protocol.ActorType actorType_ = global::Server.Protocol.ActorType.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Server.Protocol.ActorType ActorType {
+      get { return actorType_; }
+      set {
+        actorType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_jumping" field.</summary>
+    public const int IsJumpingFieldNumber = 8;
+    private bool isJumping_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsJumping {
+      get { return isJumping_; }
+      set {
+        isJumping_ = value;
       }
     }
 
@@ -1150,8 +1231,13 @@ namespace Server.Protocol {
         return true;
       }
       if (ActorId != other.ActorId) return false;
-      if (!object.Equals(Pos, other.Pos)) return false;
       if (MainState != other.MainState) return false;
+      if (!object.Equals(Pos, other.Pos)) return false;
+      if (Hp != other.Hp) return false;
+      if (MaxHp != other.MaxHp) return false;
+      if (IsDead != other.IsDead) return false;
+      if (ActorType != other.ActorType) return false;
+      if (IsJumping != other.IsJumping) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1159,8 +1245,13 @@ namespace Server.Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (ActorId != 0) hash ^= ActorId.GetHashCode();
-      if (pos_ != null) hash ^= Pos.GetHashCode();
       if (MainState != global::Server.Protocol.ActorMainState.None) hash ^= MainState.GetHashCode();
+      if (pos_ != null) hash ^= Pos.GetHashCode();
+      if (Hp != 0) hash ^= Hp.GetHashCode();
+      if (MaxHp != 0) hash ^= MaxHp.GetHashCode();
+      if (IsDead != false) hash ^= IsDead.GetHashCode();
+      if (ActorType != global::Server.Protocol.ActorType.None) hash ^= ActorType.GetHashCode();
+      if (IsJumping != false) hash ^= IsJumping.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1178,13 +1269,33 @@ namespace Server.Protocol {
         output.WriteRawTag(8);
         output.WriteInt32(ActorId);
       }
+      if (MainState != global::Server.Protocol.ActorMainState.None) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) MainState);
+      }
       if (pos_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(Pos);
       }
-      if (MainState != global::Server.Protocol.ActorMainState.None) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) MainState);
+      if (Hp != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Hp);
+      }
+      if (MaxHp != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(MaxHp);
+      }
+      if (IsDead != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsDead);
+      }
+      if (ActorType != global::Server.Protocol.ActorType.None) {
+        output.WriteRawTag(56);
+        output.WriteEnum((int) ActorType);
+      }
+      if (IsJumping != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(IsJumping);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1197,11 +1308,26 @@ namespace Server.Protocol {
       if (ActorId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActorId);
       }
+      if (MainState != global::Server.Protocol.ActorMainState.None) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MainState);
+      }
       if (pos_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pos);
       }
-      if (MainState != global::Server.Protocol.ActorMainState.None) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MainState);
+      if (Hp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Hp);
+      }
+      if (MaxHp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxHp);
+      }
+      if (IsDead != false) {
+        size += 1 + 1;
+      }
+      if (ActorType != global::Server.Protocol.ActorType.None) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ActorType);
+      }
+      if (IsJumping != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1217,14 +1343,29 @@ namespace Server.Protocol {
       if (other.ActorId != 0) {
         ActorId = other.ActorId;
       }
+      if (other.MainState != global::Server.Protocol.ActorMainState.None) {
+        MainState = other.MainState;
+      }
       if (other.pos_ != null) {
         if (pos_ == null) {
           Pos = new global::Server.Protocol.Vec2Int();
         }
         Pos.MergeFrom(other.Pos);
       }
-      if (other.MainState != global::Server.Protocol.ActorMainState.None) {
-        MainState = other.MainState;
+      if (other.Hp != 0) {
+        Hp = other.Hp;
+      }
+      if (other.MaxHp != 0) {
+        MaxHp = other.MaxHp;
+      }
+      if (other.IsDead != false) {
+        IsDead = other.IsDead;
+      }
+      if (other.ActorType != global::Server.Protocol.ActorType.None) {
+        ActorType = other.ActorType;
+      }
+      if (other.IsJumping != false) {
+        IsJumping = other.IsJumping;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1241,15 +1382,35 @@ namespace Server.Protocol {
             ActorId = input.ReadInt32();
             break;
           }
-          case 18: {
+          case 16: {
+            MainState = (global::Server.Protocol.ActorMainState) input.ReadEnum();
+            break;
+          }
+          case 26: {
             if (pos_ == null) {
               Pos = new global::Server.Protocol.Vec2Int();
             }
             input.ReadMessage(Pos);
             break;
           }
-          case 24: {
-            MainState = (global::Server.Protocol.ActorMainState) input.ReadEnum();
+          case 32: {
+            Hp = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            MaxHp = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            IsDead = input.ReadBool();
+            break;
+          }
+          case 56: {
+            ActorType = (global::Server.Protocol.ActorType) input.ReadEnum();
+            break;
+          }
+          case 64: {
+            IsJumping = input.ReadBool();
             break;
           }
         }
@@ -1427,6 +1588,430 @@ namespace Server.Protocol {
           }
           case 26: {
             actors_.AddEntriesFrom(input, _repeated_actors_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ZoneInfo : pb::IMessage<ZoneInfo> {
+    private static readonly pb::MessageParser<ZoneInfo> _parser = new pb::MessageParser<ZoneInfo>(() => new ZoneInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ZoneInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Server.Protocol.BattleReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ZoneInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ZoneInfo(ZoneInfo other) : this() {
+      zoneId_ = other.zoneId_;
+      pos_ = other.pos_ != null ? other.pos_.Clone() : null;
+      radius_ = other.radius_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ZoneInfo Clone() {
+      return new ZoneInfo(this);
+    }
+
+    /// <summary>Field number for the "zone_id" field.</summary>
+    public const int ZoneIdFieldNumber = 1;
+    private int zoneId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ZoneId {
+      get { return zoneId_; }
+      set {
+        zoneId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "pos" field.</summary>
+    public const int PosFieldNumber = 2;
+    private global::Server.Protocol.Vec2Int pos_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Server.Protocol.Vec2Int Pos {
+      get { return pos_; }
+      set {
+        pos_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "radius" field.</summary>
+    public const int RadiusFieldNumber = 3;
+    private int radius_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Radius {
+      get { return radius_; }
+      set {
+        radius_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ZoneInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ZoneInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ZoneId != other.ZoneId) return false;
+      if (!object.Equals(Pos, other.Pos)) return false;
+      if (Radius != other.Radius) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ZoneId != 0) hash ^= ZoneId.GetHashCode();
+      if (pos_ != null) hash ^= Pos.GetHashCode();
+      if (Radius != 0) hash ^= Radius.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ZoneId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(ZoneId);
+      }
+      if (pos_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Pos);
+      }
+      if (Radius != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Radius);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ZoneId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ZoneId);
+      }
+      if (pos_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pos);
+      }
+      if (Radius != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Radius);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ZoneInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ZoneId != 0) {
+        ZoneId = other.ZoneId;
+      }
+      if (other.pos_ != null) {
+        if (pos_ == null) {
+          Pos = new global::Server.Protocol.Vec2Int();
+        }
+        Pos.MergeFrom(other.Pos);
+      }
+      if (other.Radius != 0) {
+        Radius = other.Radius;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            ZoneId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            if (pos_ == null) {
+              Pos = new global::Server.Protocol.Vec2Int();
+            }
+            input.ReadMessage(Pos);
+            break;
+          }
+          case 24: {
+            Radius = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class S_PatternZones : pb::IMessage<S_PatternZones> {
+    private static readonly pb::MessageParser<S_PatternZones> _parser = new pb::MessageParser<S_PatternZones>(() => new S_PatternZones());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<S_PatternZones> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Server.Protocol.BattleReflection.Descriptor.MessageTypes[8]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_PatternZones() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_PatternZones(S_PatternZones other) : this() {
+      serverTick_ = other.serverTick_;
+      ownerEnemyId_ = other.ownerEnemyId_;
+      actionType_ = other.actionType_;
+      zones_ = other.zones_.Clone();
+      durationTick_ = other.durationTick_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S_PatternZones Clone() {
+      return new S_PatternZones(this);
+    }
+
+    /// <summary>Field number for the "server_tick" field.</summary>
+    public const int ServerTickFieldNumber = 1;
+    private int serverTick_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ServerTick {
+      get { return serverTick_; }
+      set {
+        serverTick_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "owner_enemy_id" field.</summary>
+    public const int OwnerEnemyIdFieldNumber = 2;
+    private int ownerEnemyId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int OwnerEnemyId {
+      get { return ownerEnemyId_; }
+      set {
+        ownerEnemyId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "action_type" field.</summary>
+    public const int ActionTypeFieldNumber = 3;
+    private global::Server.Protocol.ActionType actionType_ = global::Server.Protocol.ActionType.ActionNone;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Server.Protocol.ActionType ActionType {
+      get { return actionType_; }
+      set {
+        actionType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "zones" field.</summary>
+    public const int ZonesFieldNumber = 4;
+    private static readonly pb::FieldCodec<global::Server.Protocol.ZoneInfo> _repeated_zones_codec
+        = pb::FieldCodec.ForMessage(34, global::Server.Protocol.ZoneInfo.Parser);
+    private readonly pbc::RepeatedField<global::Server.Protocol.ZoneInfo> zones_ = new pbc::RepeatedField<global::Server.Protocol.ZoneInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Server.Protocol.ZoneInfo> Zones {
+      get { return zones_; }
+    }
+
+    /// <summary>Field number for the "duration_tick" field.</summary>
+    public const int DurationTickFieldNumber = 5;
+    private int durationTick_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int DurationTick {
+      get { return durationTick_; }
+      set {
+        durationTick_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as S_PatternZones);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(S_PatternZones other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ServerTick != other.ServerTick) return false;
+      if (OwnerEnemyId != other.OwnerEnemyId) return false;
+      if (ActionType != other.ActionType) return false;
+      if(!zones_.Equals(other.zones_)) return false;
+      if (DurationTick != other.DurationTick) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ServerTick != 0) hash ^= ServerTick.GetHashCode();
+      if (OwnerEnemyId != 0) hash ^= OwnerEnemyId.GetHashCode();
+      if (ActionType != global::Server.Protocol.ActionType.ActionNone) hash ^= ActionType.GetHashCode();
+      hash ^= zones_.GetHashCode();
+      if (DurationTick != 0) hash ^= DurationTick.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ServerTick != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(ServerTick);
+      }
+      if (OwnerEnemyId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(OwnerEnemyId);
+      }
+      if (ActionType != global::Server.Protocol.ActionType.ActionNone) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) ActionType);
+      }
+      zones_.WriteTo(output, _repeated_zones_codec);
+      if (DurationTick != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(DurationTick);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ServerTick != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ServerTick);
+      }
+      if (OwnerEnemyId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(OwnerEnemyId);
+      }
+      if (ActionType != global::Server.Protocol.ActionType.ActionNone) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ActionType);
+      }
+      size += zones_.CalculateSize(_repeated_zones_codec);
+      if (DurationTick != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DurationTick);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(S_PatternZones other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ServerTick != 0) {
+        ServerTick = other.ServerTick;
+      }
+      if (other.OwnerEnemyId != 0) {
+        OwnerEnemyId = other.OwnerEnemyId;
+      }
+      if (other.ActionType != global::Server.Protocol.ActionType.ActionNone) {
+        ActionType = other.ActionType;
+      }
+      zones_.Add(other.zones_);
+      if (other.DurationTick != 0) {
+        DurationTick = other.DurationTick;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            ServerTick = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            OwnerEnemyId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            ActionType = (global::Server.Protocol.ActionType) input.ReadEnum();
+            break;
+          }
+          case 34: {
+            zones_.AddEntriesFrom(input, _repeated_zones_codec);
+            break;
+          }
+          case 40: {
+            DurationTick = input.ReadInt32();
             break;
           }
         }

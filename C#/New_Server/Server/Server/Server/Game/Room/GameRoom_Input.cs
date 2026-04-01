@@ -58,33 +58,28 @@ namespace Server.Game.Room
         }
 
 
-        private int GetDistSqr(Player a, Player b)
+        private int GetDistSqr(Creature a, Creature b)
         {
             int dx = a.PosX - b.PosX;
             int dy = a.PosY - b.PosY;
             return dx * dx + dy * dy;
         }
 
-        private Player FindTargetInRange(Player attacker, int range)
+        private Enemy FindEnemyInRange(Player attacker, int range)
         {
             int rangeSqr = range * range;
 
-            foreach (Player target in _players.Values)
+            foreach (Enemy enemy in _enemies.Values)
             {
-                if (target == attacker)
+                if (enemy.IsDead)
                     continue;
 
-                if (target.IsDead)
-                    continue;
-
-                int distSqr = GetDistSqr(attacker, target);
-                if (distSqr <= rangeSqr)
-                    return target;
+                if (GetDistSqr(attacker, enemy) <= rangeSqr)
+                    return enemy;
             }
 
             return null;
         }
-
         private void AddCombatEvent(CombatEventType eventType, int attackerId,
         int targetId,ActionType actionType,int value)
         {

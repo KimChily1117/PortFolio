@@ -10,6 +10,7 @@ enum ActionType {
   ACTION_ATTACK = 1;
   ACTION_SKILL1 = 2;
   ACTION_SKILL2 = 3;
+  ACTION_JUMP = 4;
 }
 
 enum CombatEventType {
@@ -44,6 +45,7 @@ enum ActorMainState {
   ACTOR_MAIN_STATE_NONE = 0;
   ACTOR_MAIN_STATE_IDLE = 1;
   ACTOR_MAIN_STATE_MOVE = 2;
+  ACTOR_MAIN_STATE_DEAD = 3;
 }
 
 message Vec2Int {
@@ -57,15 +59,38 @@ message C_MoveInput {
   sint32 move_x = 3; // -1, 0, 1
   sint32 move_y = 4; // -1, 0, 1
 }
+enum ActorType {
+  ACTOR_TYPE_NONE = 0;
+  ACTOR_TYPE_PLAYER = 1;
+  ACTOR_TYPE_ENEMY = 2;
+}
 
 message ActorSnapshot {
   int32 actor_id = 1;
-  Vec2Int pos = 2;
-  ActorMainState main_state = 3;
+  ActorMainState main_state = 2;
+  Vec2Int pos = 3;
+  int32 hp = 4;
+  int32 max_hp = 5;
+  bool is_dead = 6;
+  ActorType actor_type = 7;
+  bool is_jumping = 8;
 }
-
 message S_RoomSnapshot {
   int32 server_tick = 1;
   uint32 ack_input_seq = 2;
   repeated ActorSnapshot actors = 3;
+}
+
+message ZoneInfo {
+  int32 zone_id = 1;
+  Vec2Int pos = 2;
+  int32 radius = 3;
+}
+
+message S_PatternZones {
+  int32 server_tick = 1;
+  int32 owner_enemy_id = 2;
+  ActionType action_type = 3;
+  repeated ZoneInfo zones = 4;
+  int32 duration_tick = 5;
 }
