@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,7 +37,8 @@ public class Define
       LOBBY,
       TOWN,
       DUNGEONSELECT,
-      BAKAL
+      BAKAL,
+      LOADING
     }
 
     public enum SoundType
@@ -75,3 +76,4 @@ public class Define
     }
 
 }
+

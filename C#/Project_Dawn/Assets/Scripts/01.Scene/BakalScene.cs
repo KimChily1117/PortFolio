@@ -29,7 +29,10 @@ public class BakalScene : BaseScene
 
         GameManager.Sound.Play("Sounds/mon/bakal/bakal_dragon_meet");
         // 바칼 조우 effect 소리 들어가야함
-        GameManager.UI.ShowSceneUI<UI_BakalSceneUI>("BossHpBar");
+        UI_HUD hud = GameManager.UI.ShowSceneUI<UI_HUD>("HUD");
+        UI_BakalSceneUI bakalSceneUI = GameManager.UI.ShowSceneUI<UI_BakalSceneUI>("BossHpBar");
+        if (bakalSceneUI != null)
+            bakalSceneUI.SetExternalHud(hud);
 
        
     }

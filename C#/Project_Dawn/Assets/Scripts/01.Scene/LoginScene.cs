@@ -15,6 +15,9 @@ public class LoginScene : BaseScene
         GameManager.Sound.BGMStop();
         GameManager.Sound.Play("Sounds/CharacterSelect", Define.SoundType.BGM);
 
+        GameManager.Network.SetForceInvalidUdpTokenForTest(false);
+        GameManager.Network.SetUseUdpMovementForTest(true);
+
 
     }
 

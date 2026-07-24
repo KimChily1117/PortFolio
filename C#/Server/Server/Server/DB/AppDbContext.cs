@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Server.Data;
 using System;
@@ -14,12 +14,24 @@ namespace Server.DB
         public DbSet<PlayerDb> Players { get; set; }
 
         public DbSet<ItemDb> Items { get; set; }
+        public DbSet<MatchHistoryDb> MatchHistories { get; set; }
+        public DbSet<MatchHistoryMemberDb> MatchHistoryMembers { get; set; }
          
         static readonly ILoggerFactory _logger = LoggerFactory.Create(
             builder => { builder.AddConsole();});
 
         string _connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameDB;";
         string _awsConnectionString = @"Server=database-1.cte0o02aow5r.ap-southeast-2.rds.amazonaws.com;Database=GameDB;User Id=kimchily;Password=a987654!;";
+
+        public AppDbContext()
+        {
+        }
+
+        public AppDbContext(string connectionString)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString) == false)
+                _connectionString = connectionString;
+        }
         
 
 
@@ -38,6 +50,14 @@ namespace Server.DB
             modelBuilder.Entity<PlayerDb>()
                 .HasIndex(a => a.PlayerName)
                 .IsUnique();
+
+            modelBuilder.Entity<MatchHistoryDb>()
+                .HasIndex(m => m.PartyId);
+
+            modelBuilder.Entity<MatchHistoryMemberDb>()
+                .HasOne(m => m.MatchHistory)
+                .WithMany(h => h.Members)
+                .HasForeignKey(m => m.MatchHistoryId);
         }
 
     }

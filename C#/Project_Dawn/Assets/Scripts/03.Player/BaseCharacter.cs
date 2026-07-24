@@ -11,6 +11,8 @@ namespace Character
 {
     public abstract class BaseCharacter : MonoBehaviour
     {
+        private const bool VerboseCharacterStateLog = false;
+
         public int WeaponDamage { get; private set; }
         public int ArmorDefence { get; private set; }
 
@@ -20,6 +22,7 @@ namespace Character
 
         public Vector2 _moveDir;
         public MoveDir _lastDir = MoveDir.None;
+        public MoveDir _lastHorizontalDir = MoveDir.Right;
 
         public bool _updated = false;
 
@@ -32,6 +35,7 @@ namespace Character
         public bool isJumping = false;
         protected float jumpTimer = 0.0f;
         public Vector2 initialPosition;
+        protected Vector3 _spriteDefaultLocalPosition;
         // 점프를 시작한 최초의 위치 백터
 
 
@@ -45,6 +49,7 @@ namespace Character
 
 
         public float HP = 100;
+        public float MaxHP = 100;
 
 
         public int Id { set; get; }
@@ -87,32 +92,56 @@ namespace Character
                 PositionInfo.PosX = value.PosX;
                 PositionInfo.PosY = value.PosY;
                 PositionInfo.MoveDir = value.MoveDir;
+                if (value.MoveDir == MoveDir.Left || value.MoveDir == MoveDir.Right)
+                    _lastHorizontalDir = value.MoveDir;
                 PositionInfo.State = value.State;
 
 
                 _moveDir = GetVecFromDir(Dir);
-                Debug.Log($"Dir Set , state {_state} , Dir {Dir} , vec : {_moveDir}");
+                if (VerboseCharacterStateLog)
+                    Debug.Log($"Dir Set , Id={Id}, Name={ObjInfo?.Name}, state {_state} , Dir {Dir} , vec : {_moveDir}");
 
             }
         }
 
 
 
+        protected void EnsureAnimationEventProxy()
+        {
+            Animator animator = _animator != null ? _animator : GetComponentInChildren<Animator>();
+            if (animator == null)
+            {
+                Debug.LogWarning($"[CLIENT][ANIM_EVENT_PROXY_MISSING] Reason=AnimatorNotFound, Owner={ObjInfo?.Name ?? name}, OwnerType={GetType().Name}");
+                return;
+            }
+
+            AnimationEventProxy proxy = animator.GetComponent<AnimationEventProxy>();
+            if (proxy == null)
+            {
+                animator.gameObject.AddComponent<AnimationEventProxy>();
+                Debug.Log($"[CLIENT][ANIM_EVENT_PROXY_ADDED] AnimatorObject={animator.gameObject.name}, Owner={ObjInfo?.Name ?? name}, OwnerType={GetType().Name}");
+            }
+            else
+            {
+                Debug.Log($"[CLIENT][ANIM_EVENT_PROXY_EXISTS] AnimatorObject={animator.gameObject.name}, Owner={ObjInfo?.Name ?? name}, OwnerType={GetType().Name}");
+            }
+
+            Debug.Log($"[CLIENT][ANIM_EVENT_PROXY_READY] AnimatorObject={animator.gameObject.name}, Owner={ObjInfo?.Name ?? name}, OwnerType={GetType().Name}");
+        }
         public virtual PlayerState _state
         {
             get { return PositionInfo.State; }
             set
             {
-                bool _updated = _positionInfo.State != value;
+                bool stateChanged = _positionInfo.State != value;
 
 
-                if (_positionInfo.State == value)
+                if (!stateChanged)
                     return;
                 _positionInfo.State = value;
                 _updated = true;
 
-                if(_updated)
-                    CheckUpdatedFlag();
+                CheckUpdatedFlag();
             }
         }
         public MoveDir Dir
@@ -127,6 +156,8 @@ namespace Character
                 _positionInfo.MoveDir = value;
                 if (value != MoveDir.None)
                     _lastDir = value;
+                if (value == MoveDir.Left || value == MoveDir.Right)
+                    _lastHorizontalDir = value;
 
                 //UpdateAnimation();
                 _updated = true;
@@ -193,7 +224,9 @@ namespace Character
         {
             _Sprite = this.GetComponentInChildren<SpriteRenderer>().gameObject;
             _animator = this.GetComponentInChildren<Animator>();
+            EnsureAnimationEventProxy();
             _shadowObject = Util.FindChild<SpriteRenderer>(this.gameObject, "Base/Shadow", true).gameObject;
+            _spriteDefaultLocalPosition = _Sprite.transform.localPosition;
 
             _moveDir = GetVecFromDir(Dir);
 
@@ -211,7 +244,8 @@ namespace Character
 
         protected virtual void Update()
         {
-            Debug.Log($"Current State?? : {_state}");
+            if (VerboseCharacterStateLog)
+                Debug.Log($"Current State?? : Id={Id}, Name={ObjInfo?.Name}, State={_state}, Transform={transform.position}, Cell={CellPos}");
 
 
             if (_combatSystem != null) _combatSystem.OnUpdate();
@@ -251,9 +285,32 @@ namespace Character
         }
 
 
+        protected Vector2 ClampLocalPlayerMovement(Vector2 requested)
+        {
+            if (GameManager.ObjectManager == null || GameManager.ObjectManager.MyPlayer != this)
+                return requested;
+
+            if (GameManager.SCENE == null || GameManager.SCENE.CurrentScene != Define.Scenes.TOWN)
+                return requested;
+
+            TownScene townScene = TownScene.Current;
+            if (townScene != null && townScene.CurrentMapState == TownMapState.SERIAROOM)
+                return requested;
+
+            if (MovementBoundsRuntime.TryClamp(GameManager.SCENE.CurrentScene, requested, out Vector2 clamped) == false)
+                return requested;
+
+            if ((clamped - requested).sqrMagnitude > 0.0001f)
+            {
+                Debug.Log($"[CLIENT][MOVE_BOUNDS_CLAMP] Scene={GameManager.SCENE.CurrentScene}, Requested=({requested.x:0.00},{requested.y:0.00}), Accepted=({clamped.x:0.00},{clamped.y:0.00}), Player={ObjInfo?.Name}, ObjectId={Id}");
+            }
+
+            return clamped;
+        }
         public virtual void ProcWalkPlayer()
         {
-            Debug.Log($"walk State");
+            if (VerboseCharacterStateLog)
+                Debug.Log($"walk State. Id={Id}, Name={ObjInfo?.Name}, Transform={transform.position}, Cell={CellPos}, MoveDir={_moveDir}");
 
             if (_moveDir.x < 0)
             {
@@ -272,15 +329,18 @@ namespace Character
             //_Sprite.transform.Translate(_moveDir * Time.deltaTime * _speed);
             //_shadowObject.transform.position = _Sprite.transform.position;
 
-            this.transform.Translate(_moveDir * Time.deltaTime * _speed);
+            Vector2 requested = (Vector2)transform.position + _moveDir * Time.deltaTime * _speed;
+            Vector2 accepted = ClampLocalPlayerMovement(requested);
+            transform.position = new Vector3(accepted.x, accepted.y, transform.position.z);
 
-            CellPos = new Vector2(transform.position.x, transform.position.y);
+            CellPos = accepted;
         }
 
         public virtual void ProcRunPlayer()
         {
 
-            Debug.Log($"Run State!!!");
+            if (VerboseCharacterStateLog)
+                Debug.Log($"Run State!!! Id={Id}, Name={ObjInfo?.Name}, Transform={transform.position}, Cell={CellPos}, MoveDir={_moveDir}");
 
 
 
@@ -298,8 +358,10 @@ namespace Character
             //_shadowObject.transform.position = _Sprite.transform.position;
             //_shadowObject.transform.Translate(_moveDir * Time.deltaTime * _speed);
 
-            this.transform.Translate(_moveDir * Time.deltaTime * _speed);
-            CellPos = new Vector2(transform.position.x, transform.position.y);
+            Vector2 requested = (Vector2)transform.position + _moveDir * Time.deltaTime * _speed;
+            Vector2 accepted = ClampLocalPlayerMovement(requested);
+            transform.position = new Vector3(accepted.x, accepted.y, transform.position.z);
+            CellPos = accepted;
         }
 
 
@@ -324,7 +386,7 @@ namespace Character
 
                 float jumpProgress = jumpTimer / jumpDuration;
                 float yOffset = Mathf.Sin(jumpProgress * Mathf.PI) * jumpHeight;
-                _Sprite.transform.position = initialPosition + new Vector2(0, yOffset);
+                _Sprite.transform.localPosition = _spriteDefaultLocalPosition + new Vector3(0, yOffset, 0);
                 _animator.SetBool("isJump", true);
 
             }
@@ -332,12 +394,12 @@ namespace Character
             {
                 isJumping = false;
                 jumpTimer = 0.0f;
-                _Sprite.transform.position = initialPosition;
-
-                _shadowObject.transform.position = _Sprite.transform.position;
+                _Sprite.transform.localPosition = _spriteDefaultLocalPosition;
+                CellPos = transform.position;
+                _shadowObject.transform.position = CellPos;
 
                 _animator.SetBool("isJump", false);
-                _positionInfo.State = PlayerState.Idle;
+                _state = PlayerState.Idle;
             }
         }
 
@@ -423,4 +485,6 @@ namespace Character
     }
 
 }
+
+
 

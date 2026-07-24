@@ -1,12 +1,12 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Server.DB
 {
-    // ì¿¼ë¦¬ì— ëŒ€í•´ì„œ ì•Œì•„ë´…ì‹œë‹¤. ìƒê°í•´ë³´ë©´ U+DIVEí• ë–„ë„ LINQë¥¼ ìì£¼ì»ì—ˆì£ ? ê·¼ë° ì“°ëŠ”ë°©ë²•ì„ ëª°ëì–´ìš”
-    // ê²Œì„ ì œì‘ì— í•„ìš”í•œ Dataë“¤ì„ ëª¨ì•„ë†“ì€ class
+    // Äõ¸®¿¡ ´ëÇØ¼­ ¾Ë¾Æº¾½Ã´Ù. »ı°¢ÇØº¸¸é U+DIVEÇÒ‹šµµ LINQ¸¦ ÀÚÁÖ›§¾úÁÒ? ±Ùµ¥ ¾²´Â¹æ¹ıÀ» ¸ô¶ú¾î¿ä
+    // °ÔÀÓ Á¦ÀÛ¿¡ ÇÊ¿äÇÑ DataµéÀ» ¸ğ¾Æ³õÀº class
 
     [Table("Account")]
     public class AccountDb
@@ -52,5 +52,34 @@ namespace Server.DB
         public PlayerDb Owner { get; set; }
     }
 
+    [Table("MatchHistory")]
+    public class MatchHistoryDb
+    {
+        public int Id { get; set; }
+        public int PartyId { get; set; }
+        public string QueueKey { get; set; }
+        public string TargetRoomType { get; set; }
+        public int? TargetRoomId { get; set; }
+        public int? TransferId { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
+        public DateTime? TransferStartedAtUtc { get; set; }
+        public DateTime? DungeonEnteredAtUtc { get; set; }
+        public string ResultStatus { get; set; }
+        public string FailureReason { get; set; }
+        public ICollection<MatchHistoryMemberDb> Members { get; set; }
+    }
+
+    [Table("MatchHistoryMember")]
+    public class MatchHistoryMemberDb
+    {
+        public int Id { get; set; }
+
+        [ForeignKey("MatchHistory")]
+        public int MatchHistoryId { get; set; }
+        public MatchHistoryDb MatchHistory { get; set; }
+
+        public int PlayerId { get; set; }
+        public string PlayerName { get; set; }
+    }
 
 }

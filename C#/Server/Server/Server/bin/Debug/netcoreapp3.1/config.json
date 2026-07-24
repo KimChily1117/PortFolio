@@ -1,4 +1,4 @@
 {
-	"dataPath": "../../../../../../Project_Dawn/Assets/Resources/Data",
+	"dataPath": "../../../../../../Unity Project/Project_Dawn/Assets/Resources/Data",
 	"connectionString": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=GameDB;"
 }

@@ -35,6 +35,13 @@ enum MsgId {
   S_EQUIP_ITEM = 27;
   C_EQUIP_ITEM = 28;
   S_CHANGE_STAT = 29;
+  C_UDP_HELLO = 30;
+  S_UDP_HELLO = 31;
+  C_UDP_MOVE = 32;
+  C_SCENE_READY = 33;
+  S_DUNGEON_CLEAR = 34;
+  C_CHANNEL_MOVE = 35;
+  S_CHANNEL_MOVE = 36;
 }
 
 enum PlayerState {
@@ -76,6 +83,16 @@ enum PlayerServerState
 	SERVER_STATE_DUNGEON = 3;
 }
 
+enum SceneType
+{
+	SCENE_NONE = 0;
+	SCENE_LOGIN = 1;
+	SCENE_LOBBY = 2;
+	SCENE_TOWN = 3;
+	SCENE_DUNGEONSELECT = 4;
+	SCENE_BAKAL = 5;
+}
+
 
 enum ItemType {
   ITEM_TYPE_NONE = 0;
@@ -115,6 +132,7 @@ message S_Login
 {
 	int32 loginOK = 1;	
 	repeated LobbyPlayerInfo players = 2;
+	string udpToken = 3;
 }
 
 message C_CreatePlayer
@@ -187,6 +205,37 @@ message C_SceneMove {
 
 message S_SceneMove {
   ObjectInfo playerinfo = 1;
+  RoomType targetRoomType = 2;
+  int32 targetRoomId = 3;
+  int32 transferId = 4;
+  SceneType sceneType = 5;
+}
+
+message C_SceneReady {
+  int32 targetRoomId = 1;
+  int32 transferId = 2;
+  RoomType targetRoomType = 3;
+  SceneType sceneType = 4;
+}
+
+
+message S_DungeonClear {
+  int32 clearedRoomId = 1;
+  string message = 2;
+  int32 returnDelaySeconds = 3;
+  RoomType targetRoomType = 4;
+  SceneType sceneType = 5;
+}
+
+message C_ChannelMove {
+  int32 targetRoomId = 1;
+}
+
+message S_ChannelMove {
+  bool success = 1;
+  int32 currentRoomId = 2;
+  int32 targetRoomId = 3;
+  string reason = 4;
 }
 
 message C_EquipItem {
@@ -240,6 +289,20 @@ message S_Skill {
   SkillInfo info = 2;
 }
 
+message C_UdpHello {
+  string token = 1;
+}
+
+message S_UdpHello {
+  bool ok = 1;
+  string message = 2;
+}
+
+message C_UdpMove {
+  PositionInfo posInfo = 1;
+  uint32 sequence = 2;
+}
+
 message S_ItemList {
   repeated ItemInfo items = 1;
 }
@@ -286,3 +349,5 @@ message StatInfo {
   float speed = 5;
   int32 totalExp = 6;
 }
+
+

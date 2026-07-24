@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class UI_PartyEntry : UI_PopUp
 {
@@ -27,7 +28,6 @@ public class UI_PartyEntry : UI_PopUp
     {
         rectTransform.anchoredPosition = new Vector2(0, 0);
 
-
         if (isMaster)
         {
             Get<TextMeshProUGUI>((int)Texts.StartBtnText).text = "Start";
@@ -42,6 +42,7 @@ public class UI_PartyEntry : UI_PopUp
 
         }
 
+        SetMatchingState();
 
     }
 
@@ -82,6 +83,18 @@ public class UI_PartyEntry : UI_PopUp
                 Get<TextMeshProUGUI>(i).text = _alreadyPlayerInfos[i - 1].Name;
         }
 
+        SetMatchingState();
+
+    }
+
+    private void SetMatchingState()
+    {
+        TextMeshProUGUI startButtonText = Get<TextMeshProUGUI>((int)Texts.StartBtnText);
+        startButtonText.text = "Matching...";
+        startButtonText.color = Color.yellow;
+
+        Button startButton = GetButton((int)Buttons.StartButton);
+        startButton.interactable = false;
     }
 
     protected override void OnEnable()
@@ -93,26 +106,14 @@ public class UI_PartyEntry : UI_PopUp
     protected override void Start()
     {
         base.Start();
+        this.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
     }
 
     #region Button Interaction
     public void OnClickEnterBtn(PointerEventData evt)
     {
-
-        C_SceneMove c_Scene_Move = new C_SceneMove();
-
-        if (c_Scene_Move.Playerinfo == null)
-        {
-            c_Scene_Move.Playerinfo = new ObjectInfo();
-        }
-        
-        c_Scene_Move.Playerinfo.Name = GameManager.MyName;
-        c_Scene_Move.Playerinfo.IsMaster = true;
-
-
-
-        GameManager.Network.Send(c_Scene_Move);
-
+        Debug.Log("[MATCH] Party matching button click ignored. Automatic matching flow is active.");
     }
 
     #endregion Button Interaction

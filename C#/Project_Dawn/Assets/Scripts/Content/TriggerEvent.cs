@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,13 +33,13 @@ public class TriggerEvent : MonoBehaviour
         _exitAction = exitAction;
     }
 
-    public void RemoveTriggerEnterEvent(Action<Collider2D> exitAction) 
+    public void RemoveTriggerEnterEvent(Action<Collider2D> enterAction) 
     { 
-        _exitAction -= exitAction;
+        _enterAction -= enterAction;
     }
-    public void RemoveTriggerStayEvent(Action<Collider2D> exitAction) 
+    public void RemoveTriggerStayEvent(Action<Collider2D> stayAction) 
     {
-        _exitAction -= exitAction; 
+        _stayAction -= stayAction; 
     }
     public void RemoveTriggerExitEvent(Action<Collider2D> exitAction) 
     {
@@ -78,6 +78,9 @@ public class TriggerEvent : MonoBehaviour
     //    _exitAction?.Invoke(other);
     //}
 }
+
+
+
 
 
 

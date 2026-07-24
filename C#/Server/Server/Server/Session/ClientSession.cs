@@ -1,4 +1,4 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net.Sockets;
@@ -10,6 +10,7 @@ using Google.Protobuf.Protocol;
 using Google.Protobuf;
 using Server.Game.Room;
 using Server.Game.Object;
+using Server.Game.Match;
 
 namespace Server
 {
@@ -19,6 +20,61 @@ namespace Server
 
         public Player MyPlayer { get; set; }
         public int SessionId { get; set; }
+        public string UdpToken { get; set; }
+        public DateTime UdpTokenExpiresAt { get; set; }
+        public EndPoint UdpEndPoint { get; set; }
+        public DateTime LastUdpSeenAt { get; set; }
+        public bool HasLastUdpMoveSequence { get; set; }
+        public uint LastUdpMoveSequence { get; set; }
+        public DateTime UdpMoveRateWindowStartedAt { get; set; }
+        public int UdpMoveRateWindowCount { get; set; }
+        public int UdpMoveRateLimitedDropCount { get; set; }
+        public bool HasLastAcceptedUdpMove { get; set; }
+        public float LastAcceptedUdpMoveX { get; set; }
+        public float LastAcceptedUdpMoveY { get; set; }
+        public DateTime LastAcceptedUdpMoveAt { get; set; }
+        public int UdpMoveSequenceDropCount { get; set; }
+        public int UdpMoveValidationDropCount { get; set; }
+        public bool IsTransferring { get; set; }
+        public int PendingRoomId { get; set; }
+        public RoomType PendingRoomType { get; set; }
+        public int PendingTransferId { get; set; }
+        public SceneType PendingSceneType { get; set; }
+        public int PendingMatchPartyId { get; set; }
+
+        public void ClearPendingTransfer()
+        {
+            IsTransferring = false;
+            PendingRoomId = 0;
+            PendingRoomType = RoomType.Town;
+            PendingTransferId = 0;
+            PendingSceneType = SceneType.SceneNone;
+            PendingMatchPartyId = 0;
+        }
+
+        public void ClearUdpSecurityState()
+        {
+            UdpToken = null;
+            UdpTokenExpiresAt = DateTime.MinValue;
+            UdpEndPoint = null;
+            LastUdpSeenAt = DateTime.MinValue;
+            ResetUdpMoveSecurityState();
+        }
+
+        public void ResetUdpMoveSecurityState()
+        {
+            HasLastUdpMoveSequence = false;
+            LastUdpMoveSequence = 0;
+            UdpMoveRateWindowStartedAt = DateTime.MinValue;
+            UdpMoveRateWindowCount = 0;
+            UdpMoveRateLimitedDropCount = 0;
+            HasLastAcceptedUdpMove = false;
+            LastAcceptedUdpMoveX = 0f;
+            LastAcceptedUdpMoveY = 0f;
+            LastAcceptedUdpMoveAt = DateTime.MinValue;
+            UdpMoveSequenceDropCount = 0;
+            UdpMoveValidationDropCount = 0;
+        }
 
         #region Network
         public void Send(IMessage packet)
@@ -49,14 +105,23 @@ namespace Server
 
         public override void OnDisconnected(EndPoint endPoint)
         {
+            MatchManager.Instance.OnDisconnected(this);
+
             if (MyPlayer != null)
             {
-                RoomManager.Instance.Find(RoomType.Town)?.LeaveRoom(MyPlayer.Info.ObjectId);
-                RoomManager.Instance.Find(RoomType.Bakal)?.LeaveRoom(MyPlayer.Info.ObjectId);
-
+                GameRoom currentRoom = MyPlayer.Room;
+                if (currentRoom != null && IsTransferring == false)
+                {
+                    currentRoom.LeaveRoom(MyPlayer.Info.ObjectId);
+                }
+                else if (currentRoom != null)
+                {
+                    Console.WriteLine($"[SESSION] Disconnect during transfer. Room leave is owned by transfer flow. SessionId={SessionId}, PlayerId={MyPlayer.Id}, RoomId={currentRoom.RoomId}");
+                }
             }
-            SessionManager.Instance.Remove(this);
 
+            ClearUdpSecurityState();
+            SessionManager.Instance.Remove(this);
 
             Console.WriteLine($"OnDisconnected : {endPoint}");
         }
@@ -70,28 +135,13 @@ namespace Server
 
         public void HandleCreateRoom(C_CreateRoom c_CreateRoom)
         {
-            // Step 1 : Í∞úÏÑ§ Îêú Î∞©Ïù¥ ÏóÜÎã§Î©¥ Î∞©(Room , ÌååÌã∞)Î•º ÏÉàÎ°ú Í∞úÏÑ§.
-
-            if (RoomManager.Instance.Find(RoomType.Bakal) == null)
-            {
-                GameRoom room = RoomManager.Instance.Add(RoomType.Bakal);
-              
-                
-                Player p = ObjectManager.Instance.Find(c_CreateRoom.Playerinfo.ObjectId);
-                p.Info.IsMaster = true;
-
-                GameRoom preRoom = RoomManager.Instance.Find(RoomType.Town);
-                preRoom.LeaveRoom(p.Id);
-
-                room.EnterParty(p);
-                room.InitEnemy();
-            };
+            MatchManager.Instance.RequestMatch(this);
         }
 
 
         public void HandleEnterParty(C_EnterParty c_EnterParty)
         {
-            // Ïù¥ÎØ∏ ÎßåÎì§Ïñ¥Ï†∏ÏûàÏùå.(ÌååÏû•Ïù¥ ÏïÑÎãå ÏùºÎ∞ò ÌååÌã∞ÏõêÏù¥ Îì§Ïñ¥Í∞ÑÎã§ÎäîÎúª)
+            // ¿ÃπÃ ∏∏µÈæÓ¡Æ¿÷¿Ω.(∆ƒ¿Â¿Ã æ∆¥— ¿œπ› ∆ƒ∆ºø¯¿Ã µÈæÓ∞£¥Ÿ¥¬∂Ê)
             GameRoom room = RoomManager.Instance.Find(RoomType.Bakal);
 
             Player p = ObjectManager.Instance.Find(c_EnterParty.Playerinfo.ObjectId);
@@ -117,3 +167,4 @@ namespace Server
 
     } 
 }
+

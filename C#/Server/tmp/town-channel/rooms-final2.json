@@ -1,0 +1,702 @@
+[
+    {
+        "roomId":  1,
+        "roomType":  "Town",
+        "state":  "Running",
+        "createdAtUtc":  "2026-07-07T07:58:28.4892817Z",
+        "lastUpdatedAtUtc":  "2026-07-07T07:59:12.2426903Z",
+        "elapsedSeconds":  43.7534223,
+        "playerCount":  49,
+        "enemyCount":  0,
+        "isEmpty":  false,
+        "isDungeonRoom":  false,
+        "players":  [
+                        {
+                            "objectId":  0,
+                            "playerDbId":  399,
+                            "name":  "PD_TownChannel2_0005",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.6272727,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  1,
+                            "playerDbId":  408,
+                            "name":  "PD_TownChannel2_0014",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.38181818,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  5,
+                            "playerDbId":  403,
+                            "name":  "PD_TownChannel2_0008",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.54545456,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  13,
+                            "playerDbId":  398,
+                            "name":  "PD_TownChannel2_0006",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.9750001,
+                            "posY":  -1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  12,
+                            "playerDbId":  407,
+                            "name":  "PD_TownChannel2_0004",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.775,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  15,
+                            "playerDbId":  416,
+                            "name":  "PD_TownChannel2_0021",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.4749999,
+                            "posY":  1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  11,
+                            "playerDbId":  400,
+                            "name":  "PD_TownChannel2_0013",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.27500004,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  6,
+                            "playerDbId":  409,
+                            "name":  "PD_TownChannel2_0007",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.45000005,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  3,
+                            "playerDbId":  410,
+                            "name":  "PD_TownChannel2_0002",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.7090909,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  8,
+                            "playerDbId":  401,
+                            "name":  "PD_TownChannel2_0003",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  1.5,
+                            "posY":  -0.8000001,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  9,
+                            "playerDbId":  402,
+                            "name":  "PD_TownChannel2_0009",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.125,
+                            "posY":  1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  20,
+                            "playerDbId":  415,
+                            "name":  "PD_TownChannel2_0016",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.42499995,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  7,
+                            "playerDbId":  406,
+                            "name":  "PD_TownChannel2_0012",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  1.5,
+                            "posY":  1.125,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  2,
+                            "playerDbId":  405,
+                            "name":  "PD_TownChannel2_0010",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.59999996,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  4,
+                            "playerDbId":  404,
+                            "name":  "PD_TownChannel2_0011",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.46363637,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  14,
+                            "playerDbId":  412,
+                            "name":  "PD_TownChannel2_0017",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.3,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  16,
+                            "playerDbId":  413,
+                            "name":  "PD_TownChannel2_0015",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  1.5,
+                            "posY":  -1.1500001,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  17,
+                            "playerDbId":  418,
+                            "name":  "PD_TownChannel2_0022",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.24999996,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  18,
+                            "playerDbId":  417,
+                            "name":  "PD_TownChannel2_0020",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.21818182,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  19,
+                            "playerDbId":  423,
+                            "name":  "PD_TownChannel2_0023",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.13636364,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  10,
+                            "playerDbId":  411,
+                            "name":  "PD_TownChannel2_0001",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.62500006,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  21,
+                            "playerDbId":  414,
+                            "name":  "PD_TownChannel2_0018",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.325,
+                            "posY":  -1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  22,
+                            "playerDbId":  419,
+                            "name":  "PD_TownChannel2_0019",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.10000004,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  23,
+                            "playerDbId":  422,
+                            "name":  "PD_TownChannel2_0024",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  1.5,
+                            "posY":  1.4749999,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  24,
+                            "playerDbId":  425,
+                            "name":  "PD_TownChannel2_0028",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.07499996,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  25,
+                            "playerDbId":  427,
+                            "name":  "PD_TownChannel2_0025",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.10000004,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  26,
+                            "playerDbId":  421,
+                            "name":  "PD_TownChannel2_0026",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -0.054545455,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  27,
+                            "playerDbId":  424,
+                            "name":  "PD_TownChannel2_0027",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  1.5,
+                            "posY":  -1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  28,
+                            "playerDbId":  426,
+                            "name":  "PD_TownChannel2_0029",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.027272727,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  29,
+                            "playerDbId":  420,
+                            "name":  "PD_TownChannel2_0030",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.5,
+                            "posY":  -1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  30,
+                            "playerDbId":  428,
+                            "name":  "PD_TownChannel2_0031",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.07499996,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  31,
+                            "playerDbId":  429,
+                            "name":  "PD_TownChannel2_0032",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.10909091,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  32,
+                            "playerDbId":  432,
+                            "name":  "PD_TownChannel2_0033",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.5,
+                            "posY":  1.325,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  33,
+                            "playerDbId":  430,
+                            "name":  "PD_TownChannel2_0034",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.10000004,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  34,
+                            "playerDbId":  441,
+                            "name":  "PD_TownChannel2_0044",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.43636364,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  35,
+                            "playerDbId":  431,
+                            "name":  "PD_TownChannel2_0035",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.19090909,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  36,
+                            "playerDbId":  434,
+                            "name":  "PD_TownChannel2_0036",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  1.325,
+                            "posY":  1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  37,
+                            "playerDbId":  433,
+                            "name":  "PD_TownChannel2_0037",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.24999996,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  38,
+                            "playerDbId":  435,
+                            "name":  "PD_TownChannel2_0038",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.27272728,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  39,
+                            "playerDbId":  436,
+                            "name":  "PD_TownChannel2_0039",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  1.3,
+                            "posY":  -1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  40,
+                            "playerDbId":  438,
+                            "name":  "PD_TownChannel2_0041",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.35454544,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  41,
+                            "playerDbId":  437,
+                            "name":  "PD_TownChannel2_0040",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.27500004,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  42,
+                            "playerDbId":  439,
+                            "name":  "PD_TownChannel2_0042",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.5,
+                            "posY":  -1.3,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  43,
+                            "playerDbId":  440,
+                            "name":  "PD_TownChannel2_0043",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.42499995,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  44,
+                            "playerDbId":  442,
+                            "name":  "PD_TownChannel2_0045",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.5,
+                            "posY":  0.9750001,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  45,
+                            "playerDbId":  443,
+                            "name":  "PD_TownChannel2_0046",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.45000005,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  46,
+                            "playerDbId":  444,
+                            "name":  "PD_TownChannel2_0047",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.5181818,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  47,
+                            "playerDbId":  445,
+                            "name":  "PD_TownChannel2_0048",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.9750001,
+                            "posY":  1.5,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  49,
+                            "playerDbId":  447,
+                            "name":  "PD_TownChannel2_0050",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.6,
+                            "posY":  -0.07499996,
+                            "state":  "Moving"
+                        }
+                    ],
+        "enemies":  [
+
+                    ],
+        "updateCount":  437,
+        "lastUpdateMs":  0.0025,
+        "maxUpdateMs":  50.5853,
+        "bossObjectId":  null,
+        "bossName":  null,
+        "bossHp":  null,
+        "bossMaxHp":  null,
+        "bossIsDead":  false
+    },
+    {
+        "roomId":  2,
+        "roomType":  "Town",
+        "state":  "Running",
+        "createdAtUtc":  "2026-07-07T07:58:52.6582192Z",
+        "lastUpdatedAtUtc":  "2026-07-07T07:59:12.2426912Z",
+        "elapsedSeconds":  19.5845313,
+        "playerCount":  2,
+        "enemyCount":  0,
+        "isEmpty":  false,
+        "isDungeonRoom":  false,
+        "players":  [
+                        {
+                            "objectId":  54,
+                            "playerDbId":  452,
+                            "name":  "PD_TownChannel2_0055",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.775,
+                            "posY":  0,
+                            "state":  "Moving"
+                        },
+                        {
+                            "objectId":  52,
+                            "playerDbId":  451,
+                            "name":  "PD_TownChannel2_0053",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.6818182,
+                            "posY":  0.07499996,
+                            "state":  "Moving"
+                        }
+                    ],
+        "enemies":  [
+
+                    ],
+        "updateCount":  196,
+        "lastUpdateMs":  0.0004,
+        "maxUpdateMs":  0.5084,
+        "bossObjectId":  null,
+        "bossName":  null,
+        "bossHp":  null,
+        "bossMaxHp":  null,
+        "bossIsDead":  false
+    },
+    {
+        "roomId":  3,
+        "roomType":  "Town",
+        "state":  "Running",
+        "createdAtUtc":  "2026-07-07T07:58:52.6582293Z",
+        "lastUpdatedAtUtc":  "2026-07-07T07:59:12.2426922Z",
+        "elapsedSeconds":  19.5845235,
+        "playerCount":  1,
+        "enemyCount":  0,
+        "isEmpty":  false,
+        "isDungeonRoom":  false,
+        "players":  [
+                        {
+                            "objectId":  48,
+                            "playerDbId":  446,
+                            "name":  "PD_TownChannel2_0049",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.59999996,
+                            "posY":  0,
+                            "state":  "Moving"
+                        }
+                    ],
+        "enemies":  [
+
+                    ],
+        "updateCount":  196,
+        "lastUpdateMs":  0.0008,
+        "maxUpdateMs":  0.2532,
+        "bossObjectId":  null,
+        "bossName":  null,
+        "bossHp":  null,
+        "bossMaxHp":  null,
+        "bossIsDead":  false
+    },
+    {
+        "roomId":  4,
+        "roomType":  "Town",
+        "state":  "Running",
+        "createdAtUtc":  "2026-07-07T07:58:52.6582305Z",
+        "lastUpdatedAtUtc":  "2026-07-07T07:59:12.2426927Z",
+        "elapsedSeconds":  19.5845236,
+        "playerCount":  1,
+        "enemyCount":  0,
+        "isEmpty":  false,
+        "isDungeonRoom":  false,
+        "players":  [
+                        {
+                            "objectId":  53,
+                            "playerDbId":  450,
+                            "name":  "PD_TownChannel2_0054",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  -1.5,
+                            "posY":  -0.95,
+                            "state":  "Moving"
+                        }
+                    ],
+        "enemies":  [
+
+                    ],
+        "updateCount":  196,
+        "lastUpdateMs":  0.0004,
+        "maxUpdateMs":  0.2317,
+        "bossObjectId":  null,
+        "bossName":  null,
+        "bossHp":  null,
+        "bossMaxHp":  null,
+        "bossIsDead":  false
+    },
+    {
+        "roomId":  5,
+        "roomType":  "Town",
+        "state":  "Running",
+        "createdAtUtc":  "2026-07-07T07:58:52.6584963Z",
+        "lastUpdatedAtUtc":  "2026-07-07T07:59:12.2426932Z",
+        "elapsedSeconds":  19.584259,
+        "playerCount":  1,
+        "enemyCount":  0,
+        "isEmpty":  false,
+        "isDungeonRoom":  false,
+        "players":  [
+                        {
+                            "objectId":  50,
+                            "playerDbId":  449,
+                            "name":  "PD_TownChannel2_0051",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.95,
+                            "posY":  -1.5,
+                            "state":  "Moving"
+                        }
+                    ],
+        "enemies":  [
+
+                    ],
+        "updateCount":  196,
+        "lastUpdateMs":  0.0003,
+        "maxUpdateMs":  0.1536,
+        "bossObjectId":  null,
+        "bossName":  null,
+        "bossHp":  null,
+        "bossMaxHp":  null,
+        "bossIsDead":  false
+    },
+    {
+        "roomId":  6,
+        "roomType":  "Town",
+        "state":  "Running",
+        "createdAtUtc":  "2026-07-07T07:58:52.6584998Z",
+        "lastUpdatedAtUtc":  "2026-07-07T07:59:12.242694Z",
+        "elapsedSeconds":  19.5842568,
+        "playerCount":  1,
+        "enemyCount":  0,
+        "isEmpty":  false,
+        "isDungeonRoom":  false,
+        "players":  [
+                        {
+                            "objectId":  51,
+                            "playerDbId":  448,
+                            "name":  "PD_TownChannel2_0052",
+                            "hp":  100,
+                            "maxHp":  100,
+                            "posX":  0.62500006,
+                            "posY":  0,
+                            "state":  "Moving"
+                        }
+                    ],
+        "enemies":  [
+
+                    ],
+        "updateCount":  196,
+        "lastUpdateMs":  0.0005,
+        "maxUpdateMs":  0.174,
+        "bossObjectId":  null,
+        "bossName":  null,
+        "bossHp":  null,
+        "bossMaxHp":  null,
+        "bossIsDead":  false
+    }
+]

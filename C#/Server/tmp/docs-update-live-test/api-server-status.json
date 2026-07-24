@@ -1,0 +1,18 @@
+﻿{
+    "online":  true,
+    "startedAtUtc":  "2026-07-06T07:06:02.4097949Z",
+    "snapshotUpdatedAtUtc":  "2026-07-06T07:06:14.2230588Z",
+    "uptimeSeconds":  11.8845619,
+    "totalRooms":  1,
+    "townRooms":  1,
+    "dungeonRooms":  0,
+    "totalPlayers":  0,
+    "totalEnemies":  0,
+    "onlinePlayers":  0,
+    "matchingWaitingPlayers":  0,
+    "matchingQueueCount":  0,
+    "maxRoomUpdateMs":  0.0252,
+    "lastMaxRoomUpdateMs":  0.0022,
+    "serverName":  "ProjectDawnGameServer",
+    "apiVersion":  "monitoring-v1"
+}

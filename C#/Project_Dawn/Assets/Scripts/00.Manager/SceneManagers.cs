@@ -1,11 +1,12 @@
+ï»¿using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneManagers : MonoBehaviour 
+public class SceneManagers : MonoBehaviour
 {
+    private const float LoadingSceneMinimumSeconds = 1.2f;
 
     private Define.Scenes _currentScene = Define.Scenes.NONE;
     public Define.Scenes CurrentScene { get { return _currentScene; } set { _currentScene = value; } }
@@ -13,64 +14,92 @@ public class SceneManagers : MonoBehaviour
     private Define.Scenes _nextScene = Define.Scenes.NONE;
     public Define.Scenes NextScene { get { return _nextScene; } set { _nextScene = value; } }
 
-
     public BaseScene CurrentActiveScene
     {
         get { return GameObject.FindObjectOfType<BaseScene>(); }
     }
 
-
     private string GetSceneNames(Define.Scenes type)
     {
-        string Scenename = Enum.GetName(typeof(Define.Scenes), type);
-        return Scenename;
+        switch (type)
+        {
+            case Define.Scenes.LOGIN:
+                return "Title(Login)";
+            case Define.Scenes.LOBBY:
+                return "Character SelectScene";
+            case Define.Scenes.TOWN:
+                return "Town";
+            case Define.Scenes.BAKAL:
+                return "Bakal";
+            case Define.Scenes.LOADING:
+                return "LoadingScene";
+            default:
+                return Enum.GetName(typeof(Define.Scenes), type);
+        }
     }
 
     public void LoadScene(Define.Scenes type)
     {
         NextScene = type;
-        //TODO : SwitchSceneÀ¸·Î ³Ñ¾î°¡´Â È¿°ú ¿¬Ãâ Ãß°¡ ÄÚµå ÇÊ¿ä
-        LoadScene(GetSceneNames((type)));
+        LoadScene(GetSceneNames(type));
     }
+
     private void LoadScene(string scenename)
     {
         SceneManager.LoadScene(scenename);
     }
 
-
-    public void LoadSceneAsync(Define.Scenes type , Action cbAction)
+    public void LoadSceneAsync(Define.Scenes type, Action cbAction)
     {
         NextScene = type;
-        StartCoroutine(LoadSceneAsnyc(GetSceneNames(type), cbAction));
+        StartCoroutine(LoadSceneThroughLoadingScene(type, cbAction));
     }
 
-    private IEnumerator LoadSceneAsnyc(string scenename , Action cbCompleteAction)
+    private IEnumerator LoadSceneThroughLoadingScene(Define.Scenes targetScene, Action cbCompleteAction)
     {
-        AsyncOperation ao = SceneManager.LoadSceneAsync(scenename);
+        string loadingSceneName = GetSceneNames(Define.Scenes.LOADING);
+        string targetSceneName = GetSceneNames(targetScene);
 
-        while(!ao.isDone) 
+        if (targetScene != Define.Scenes.LOADING && SceneManager.GetActiveScene().name != loadingSceneName)
         {
-            yield return null;
+            SceneLoadingOverlay.SetDetail("ë¡œë”© í™”ë©´ì„ ì¤€ë¹„í•˜ëŠ” ì¤‘ì…ë‹ˆë‹¤.");
+            yield return LoadUnitySceneAsync(loadingSceneName);
+            CurrentScene = Define.Scenes.LOADING;
+            yield return new WaitForSecondsRealtime(LoadingSceneMinimumSeconds);
         }
 
-        cbCompleteAction.Invoke();
+        SceneLoadingOverlay.SetDetail("ëª©ì ì§€ ì”¬ì„ ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘ì…ë‹ˆë‹¤.");
+        yield return LoadUnitySceneAsync(targetSceneName);
+
+        cbCompleteAction?.Invoke();
     }
 
+    private IEnumerator LoadUnitySceneAsync(string sceneName)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+        if (operation == null)
+        {
+            Debug.LogError($"[SCENE] LoadSceneAsync failed to start. Scene={sceneName}");
+            yield break;
+        }
 
+        operation.allowSceneActivation = true;
+        while (!operation.isDone)
+            yield return null;
+    }
 
-
-    #region ¾ÀÀüÈ¯¿¡ µé¾î°¡´Â ¿¬Ãâ code
+    #region ì”¬ì „í™˜ì— ë“¤ì–´ê°€ëŠ” ì—°ì¶œ code
 
     public void SceneTransferLefttoRight()
     {
-
     }
 
     public void SceneTransferFadeInout()
     {
-
+        DOTween.Kill("SceneTransferFadeInout");
     }
-
 
     #endregion
 }
+
+

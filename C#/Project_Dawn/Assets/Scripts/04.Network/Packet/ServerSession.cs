@@ -9,6 +9,10 @@ using UnityEngine;
 
 public class ServerSession : PacketSession
 {
+    public bool IsConnected { get; private set; }
+    public Action<bool> ConnectionStateChanged { get; set; }
+    public event Action<string> Disconnected;
+
     public void Send(IMessage packet)
     {
         string msgName = packet.Descriptor.Name.Replace("_", string.Empty);
@@ -24,7 +28,9 @@ public class ServerSession : PacketSession
 
     public override void OnConnected(EndPoint endPoint)
 	{
-		Debug.Log($"OnConnected : {endPoint}");
+        IsConnected = true;
+        ConnectionStateChanged?.Invoke(true);
+        Debug.Log($"OnConnected : {endPoint}");
 
 		PacketManager.Instance.CustomHandler = (s, m, i) =>
 		{
@@ -34,7 +40,10 @@ public class ServerSession : PacketSession
 
 	public override void OnDisconnected(EndPoint endPoint)
 	{
+        IsConnected = false;
+        ConnectionStateChanged?.Invoke(false);
 		Debug.Log($"OnDisconnected : {endPoint}");
+        Disconnected?.Invoke(endPoint == null ? "Unknown" : endPoint.ToString());
 	}
 
 	public override void OnRecvPacket(ArraySegment<byte> buffer)
@@ -47,3 +56,6 @@ public class ServerSession : PacketSession
 		//Console.WriteLine($"Transferred bytes: {numOfBytes}");
 	}
 }
+
+
+

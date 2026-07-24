@@ -1,0 +1,12 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\projectdawn]
+@="URL:Project Dawn Launcher"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\projectdawn\shell]
+
+[HKEY_CLASSES_ROOT\projectdawn\shell\open]
+
+[HKEY_CLASSES_ROOT\projectdawn\shell\open\command]
+@="\"E:\\task\\Server\\WebLauncher\\tools\\launch-projectdawn.bat\" \"%1\""

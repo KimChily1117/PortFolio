@@ -1,0 +1,22 @@
+﻿{
+    "snapshotUpdatedAtUtc":  "2026-07-06T07:06:39.1781527Z",
+    "count":  1,
+    "players":  [
+                    {
+                        "sessionId":  1,
+                        "objectId":  0,
+                        "playerDbId":  4,
+                        "name":  "Player_0054",
+                        "roomId":  1,
+                        "roomType":  "Town",
+                        "isTransferring":  false,
+                        "pendingRoomId":  null,
+                        "transferId":  null,
+                        "hp":  100,
+                        "maxHp":  100,
+                        "posX":  0.71941113,
+                        "posY":  -1.6957828,
+                        "state":  "Run"
+                    }
+                ]
+}

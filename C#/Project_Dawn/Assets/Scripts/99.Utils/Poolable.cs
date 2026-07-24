@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Poolable : MonoBehaviour
 {
-   
+    public string PoolKey { get; set; }
+    public bool IsUsing { get; set; }
 }

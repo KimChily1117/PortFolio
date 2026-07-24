@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MeteorSpawner : MonoBehaviour
 {
@@ -11,19 +8,20 @@ public class MeteorSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        GameObject spawnEffect = GameManager.Resources.Instantiate("Effect/MeteorAreaSpawnEffect");   
-        
+        GameObject spawnEffect = GameManager.Resources.Instantiate("Effect/MeteorAreaSpawnEffect");
+
         spawnEffect.transform.position = transform.position;
         spawnEffect.GetComponent<Animator>().Play("Bakal_Skill_AreaExplosion");
-        Destroy(spawnEffect,0.5f);
-        
+        Destroy(spawnEffect, 0.5f);
+
         GameObject go = GameManager.Resources.Instantiate("Enemy/Meteor");
-        go.transform.SetParent(this.transform);
-        go.transform.position = new Vector2(this.transform.position.x, 6.5f);
+        go.transform.SetParent(transform);
+        go.transform.position = transform.position;
+
+        Meteor meteor = go.GetComponent<Meteor>();
+        if (meteor != null)
+            meteor.InitializeGroundImpact(transform.position);
+        else
+            Debug.LogWarning($"[METEOR][SPAWN_FAILED] Reason=MeteorComponentMissing, GroundCenter=({transform.position.x:0.00},{transform.position.y:0.00})");
     }
-
-
 }
-
-
-

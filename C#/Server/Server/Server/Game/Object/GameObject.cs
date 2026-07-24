@@ -35,6 +35,8 @@ namespace Server.Game.Object
 
 
         public float HP { get; protected set; }
+        public float MaxHP { get; protected set; }
+        public bool IsDead { get; protected set; }
 
 
         public GameObject()
@@ -45,11 +47,17 @@ namespace Server.Game.Object
 
         public void OnDamaged(float damage , GameObject attacker)
         {
+            if (IsDead)
+                return;
+
+            if (damage <= 0)
+                return;
             
             HP -= damage;
 
             if (HP <= 0)
             {
+                IsDead = true;
                 OnDead(attacker);
             }
         }
@@ -67,3 +75,5 @@ namespace Server.Game.Object
 
     }
 }
+
+

@@ -237,7 +237,7 @@ Transform:
   m_GameObject: {fileID: 5676231013538926961}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.67, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5676231012679287597}
@@ -257,6 +257,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427ecda2e863d3040b4f902cf364da95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _visual: {fileID: 0}
+  _damage: 25
+  _startHeight: 6.5
+  _fallSpeed: 2.6777
+  _meteorHalfWidth: 1.1
+  _meteorHalfDepth: 0.4
 --- !u!61 &7419758652141860139
 BoxCollider2D:
   m_ObjectHideFlags: 0

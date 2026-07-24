@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +8,10 @@ using UnityEngine.EventSystems;
 public class InputManager
 {
     public Action KeyDownAction = null; 
-    // Key를 눌렀을 떄 동작을 Invoke 시키기 위해 선언
+    // Key瑜??뚮??????숈옉??Invoke ?쒗궎湲??꾪빐 ?좎뼵
     
     public Action KeyUpAction = null;
-    // Key를 뗬을 때 동작을 Invoke 시키기 위해 선언 
+    // Key瑜??ъ쓣 ???숈옉??Invoke ?쒗궎湲??꾪빐 ?좎뼵 
     
     public Action<Define.MouseEvent> MouseAction = null;
 
@@ -25,7 +25,7 @@ public class InputManager
     // Double Input 
     public float lastInputElapsed = 0f;
     
-    //두 번 눌러서 유지한 상태
+    //??踰??뚮윭???좎????곹깭
     public bool DoublePressed { get; private set; }
 
     private bool doubleInputPressed;
@@ -35,10 +35,12 @@ public class InputManager
     private KeyCode _inputKeycode;
 
     public Action DoubleKeyAction = null;
-    // Key를 뗬을 때 동작을 Invoke 시키기 위해 선언 
+    // Key瑜??ъ쓣 ???숈옉??Invoke ?쒗궎湲??꾪빐 ?좎뼵 
 
     
     public Action<Define.InputType> inputTypeAction = null;
+
+    public bool IsInputLocked { get; private set; }
 
 
     private float _horizontal;
@@ -47,14 +49,30 @@ public class InputManager
 
     bool _pressed = false;
     public bool _keypressed = false;
+
+    public void SetInputLocked(bool locked)
+    {
+        if (IsInputLocked == locked)
+            return;
+
+        IsInputLocked = locked;
+        doubleInputPressed = false;
+        DoublePressed = false;
+        _keypressed = false;
+        _pressed = false;
+        Debug.Log($"[INPUT][LOCK] Locked={IsInputLocked}");
+    }
     public void OnUpdate()
     {
+        if (IsInputLocked)
+            return;
+
         // if(EventSystem.current.IsPointerOverGameObject() == true)
         // {   
         //     //Debug.Log($"OnClick Over UI Object");
         //     return;
         // }
-        // 3D 게임이 아니기 때문에 문제없을것으로 생각됨
+        // 3D 寃뚯엫???꾨땲湲??뚮Ц??臾몄젣?놁쓣寃껋쑝濡??앷컖??
         
         if (KeyDownAction != null)
         {
@@ -79,7 +97,7 @@ public class InputManager
                     {
                         Debug.Log(($"Pressed"));
                         _keypressed = false;
-                        KeyUpAction.Invoke();
+                        KeyUpAction?.Invoke();
                         doubleInputPressed = false;
                         DoublePressed = false;
                     }
@@ -87,7 +105,7 @@ public class InputManager
                     return;
                 }
 
-                // double input의 조건 -> 제시된 시간(0.3초)이내로 다시 입력을 하면 대쉬와 같은 입력을 처리 할 수잇다. 
+                // double input??議곌굔 -> ?쒖떆???쒓컙(0.3珥??대궡濡??ㅼ떆 ?낅젰???섎㈃ ??ъ? 媛숈? ?낅젰??泥섎━ ???섏엲?? 
                 doubleInputPressed = Time.time - lastInputElapsed  < doubleInputThreshold;
                 lastInputElapsed = Time.time; 
             }
@@ -97,7 +115,7 @@ public class InputManager
                 if (doubleInputPressed)
                 {
                     DoublePressed = true;
-                    DoubleKeyAction.Invoke();
+                    DoubleKeyAction?.Invoke();
                 }                
             }
 
@@ -107,7 +125,7 @@ public class InputManager
                 {
                     Debug.Log(($"Pressed"));
                     _keypressed = false;
-                    KeyUpAction.Invoke();
+                    KeyUpAction?.Invoke();
                     doubleInputPressed = false;
                     DoublePressed = false;
                 }
@@ -140,10 +158,23 @@ public class InputManager
     public void Clear()
     {
         MouseAction = null;
+        ClearPlayerInputCallbacks();
+    }
+
+    public void ClearPlayerInputCallbacks()
+    {
         KeyDownAction = null;
         KeyUpAction = null;
-
+        DoubleKeyAction = null;
         TouchAction = null;
+        TouchAttackAction = null;
+        TouchJumpAction = null;
+        EndDragAction = null;
+        inputTypeAction = null;
+        doubleInputPressed = false;
+        DoublePressed = false;
+        _keypressed = false;
+        Debug.Log("[INPUT][CLEAR_PLAYER_INPUT_CALLBACKS]");
     }
 
 
@@ -165,3 +196,4 @@ public class InputManager
     }
     
 }
+

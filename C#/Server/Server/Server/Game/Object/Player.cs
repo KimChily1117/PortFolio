@@ -12,6 +12,10 @@ namespace Server.Game.Object
         public int PlayerDbId { get; set; }
         public ClientSession Session { get; set; }
 
+        // Town starts in a per-player private MyRoom. A player participates in
+        // public Town AOI only after crossing into the lobby walkable area.
+        public bool IsInPublicTownArea { get; set; }
+
         public int WeaponDamage { get; private set; }
         public int ArmorDefence { get; private set; }
 
@@ -20,13 +24,27 @@ namespace Server.Game.Object
 
         public int TotalDefence { get { return ArmorDefence; } }
 
+        private const float CombatAnchorOffsetX = 0.05f;
+        private const float CombatAnchorOffsetY = -0.15f;
+
+        public SkillCastState SkillCastState { get; } = new SkillCastState();
+        public MoveDir LastFacingDir { get; private set; } = MoveDir.Right;
+        public float CombatAnchorX => Info?.PosInfo == null ? 0f : Info.PosInfo.PosX + CombatAnchorOffsetX;
+        public float CombatAnchorY => Info?.PosInfo == null ? 0f : Info.PosInfo.PosY + CombatAnchorOffsetY;
 
         public Inventory Inven { get; private set; } = new Inventory();
         public Player()
         {
             ObjectType = GameObjectType.Player;
             CurrentPlayerState = PlayerState.Idle;
-            HP = 100;
+            MaxHP = 100;
+            HP = MaxHP;
+        }
+
+        public void UpdateFacing(MoveDir moveDir)
+        {
+            if (moveDir == MoveDir.Left || moveDir == MoveDir.Right)
+                LastFacingDir = moveDir;
         }
 
         public override void OnDead(GameObject attacker)
@@ -130,3 +148,7 @@ namespace Server.Game.Object
 
     }
 }
+
+
+
+

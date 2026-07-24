@@ -1,10 +1,11 @@
-﻿using Google.Protobuf.Protocol;
+using Google.Protobuf.Protocol;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Server.DB;
 using Server.Game;
 using Server.Game.Object;
 using Server.Game.Room;
+using Server.Data;
 using ServerCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,24 @@ namespace Server
     {
         public int AccountDbId { get; set; }
 
+        private const string DummyPlayerPrefix = "PD_Dummy";
+        private const int PreferredDummyStarterWeaponTemplateId = 1;
+        private const int PreferredDummyStarterArmorTemplateId = 100;
+        private const int MinInventorySlot = 0;
+        private const int MaxInventorySlot = 19;
+
         private List<LobbyPlayerInfo> LobbyPlayers { get; set; } = new List<LobbyPlayerInfo>();
+
+        void IssueUdpToken()
+        {
+            UdpToken = Guid.NewGuid().ToString("N");
+            UdpTokenExpiresAt = DateTime.UtcNow.AddMinutes(2);
+            UdpEndPoint = null;
+            LastUdpSeenAt = DateTime.MinValue;
+            ResetUdpMoveSecurityState();
+
+            Console.WriteLine($"[UDP] Token issued. SessionId={SessionId}, TokenLength={UdpToken.Length}, ExpiresAt={UdpTokenExpiresAt:O}");
+        }
 
         public void HandleLogin(C_Login c_Login)
         {
@@ -40,10 +58,14 @@ namespace Server
                     S_Login s_Login = new S_Login();
                     AccountDbId = findDb.AccountDbId;
                     s_Login.LoginOK = 1;
+                    IssueUdpToken();
+                    s_Login.UdpToken = UdpToken;
 
 
+                    bool equipmentChanged = false;
                     foreach (PlayerDb playerDb in findDb.Players)
                     {
+                        equipmentChanged |= EnsureDummyRequiredEquipment(db, playerDb);
 
                         LobbyPlayerInfo playerInfo = new LobbyPlayerInfo()
                         {
@@ -55,6 +77,9 @@ namespace Server
                         LobbyPlayers.Add(playerInfo);
                         s_Login.Players.Add(LobbyPlayers);
                     }
+
+                    if (equipmentChanged)
+                        db.SaveChanges();
 
                     Send(s_Login);
 
@@ -76,6 +101,8 @@ namespace Server
 
                     S_Login s_Login = new S_Login();
                     s_Login.LoginOK = 1;
+                    IssueUdpToken();
+                    s_Login.UdpToken = UdpToken;
 
                     Send(s_Login);
                     ServerState = PlayerServerState.ServerStateCharecterselect;
@@ -88,6 +115,15 @@ namespace Server
 
             LobbyPlayerInfo playerInfo = LobbyPlayers.Find(p => p.Name == c_EnterGame.Name);
 
+            if (IsTransferring)
+            {
+                if (MyPlayer != null && c_EnterGame.Name == MyPlayer.Info.Name)
+                {
+                    Console.WriteLine($"[TRANSFER] Fallback C_EnterGame used as SceneReady. SessionId={SessionId}, PendingRoomId={PendingRoomId}, TransferId={PendingTransferId}");
+                    if (RoomTransferService.Instance.TryEnterPendingRoom(this))
+                        return;
+                }
+            }
 
             if (ServerState == PlayerServerState.ServerStateIngame)
             {
@@ -113,12 +149,7 @@ namespace Server
             {
                 MyPlayer.Info.Name = c_EnterGame.Name;
                 MyPlayer.PlayerDbId = playerInfo.PlayerDbId;
-                MyPlayer.Info.PosInfo.State = PlayerState.Idle;
-                MyPlayer.Info.PosInfo.MoveDir = MoveDir.Right;
-
                 MyPlayer.Info.Damage = 10.0f;
-                MyPlayer.Info.PosInfo.PosX = 0;
-                MyPlayer.Info.PosInfo.PosY = 0;
                 MyPlayer.Session = this;
 
                 S_ItemList itemListPacket = new S_ItemList();
@@ -147,9 +178,126 @@ namespace Server
 
             ServerState = PlayerServerState.ServerStateIngame;
 
-            GameRoom room = RoomManager.Instance.Find(RoomType.Town);
+            GameRoom room = RoomManager.Instance.FindOrCreateTownChannel();
+            Console.WriteLine($"[TOWN_CHANNEL] EnterGame assigned. SessionId={SessionId}, Player={MyPlayer.Info.Name}, RoomId={room?.RoomId ?? 0}, MaxPlayers={RoomManager.TownChannelMaxPlayers}");
 
+            TownSpawnService.ApplyMyRoomSpawn(MyPlayer, room, "EnterGame");
             room.Push(room.EnterRoom, MyPlayer);
+        }
+        private static bool EnsureDummyRequiredEquipment(AppDbContext db, PlayerDb playerDb)
+        {
+            if (db == null || playerDb == null || string.IsNullOrWhiteSpace(playerDb.PlayerName))
+                return false;
+
+            if (playerDb.PlayerName.StartsWith(DummyPlayerPrefix, StringComparison.Ordinal) == false)
+                return false;
+
+            int weaponTemplateId = ResolveStarterTemplateId(ItemType.Weapon, PreferredDummyStarterWeaponTemplateId);
+            int armorTemplateId = ResolveStarterTemplateId(ItemType.Armor, PreferredDummyStarterArmorTemplateId);
+            if (weaponTemplateId <= 0 || armorTemplateId <= 0)
+            {
+                Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_CHECK] Player={playerDb.PlayerName}, HasWeapon=False, HasArmor=False, Reason=StarterTemplateNotFound, WeaponTemplateId={weaponTemplateId}, ArmorTemplateId={armorTemplateId}");
+                return false;
+            }
+
+            List<ItemDb> playerItems = db.Items
+                .Where(i => i.OwnerDbId == playerDb.PlayerDbId)
+                .ToList();
+
+            bool hasWeapon = playerItems.Any(i => i.Equipped && IsTemplateType(i.TemplateId, ItemType.Weapon));
+            bool hasArmor = playerItems.Any(i => i.Equipped && IsTemplateType(i.TemplateId, ItemType.Armor));
+            Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_CHECK] Player={playerDb.PlayerName}, HasWeapon={hasWeapon}, HasArmor={hasArmor}");
+
+            bool changed = false;
+            ItemDb weapon = EnsureTemplateItem(db, playerDb, playerItems, weaponTemplateId, "Weapon", ref changed);
+            ItemDb armor = EnsureTemplateItem(db, playerDb, playerItems, armorTemplateId, "Armor", ref changed);
+
+            if (weapon != null && weapon.Equipped == false)
+            {
+                weapon.Equipped = true;
+                changed = true;
+                Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_EQUIPPED] Player={playerDb.PlayerName}, TemplateId={weapon.TemplateId}, Slot={weapon.Slot}");
+            }
+
+            if (armor != null && armor.Equipped == false)
+            {
+                armor.Equipped = true;
+                changed = true;
+                Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_EQUIPPED] Player={playerDb.PlayerName}, TemplateId={armor.TemplateId}, Slot={armor.Slot}");
+            }
+
+            bool readyWeapon = playerItems.Any(i => i.Equipped && IsTemplateType(i.TemplateId, ItemType.Weapon));
+            bool readyArmor = playerItems.Any(i => i.Equipped && IsTemplateType(i.TemplateId, ItemType.Armor));
+            Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_READY] Player={playerDb.PlayerName}, HasWeapon={readyWeapon}, HasArmor={readyArmor}");
+
+            return changed;
+        }
+
+        private static ItemDb EnsureTemplateItem(AppDbContext db, PlayerDb playerDb, List<ItemDb> playerItems, int templateId, string slotLabel, ref bool changed)
+        {
+            ItemDb item = playerItems
+                .OrderByDescending(i => i.Equipped)
+                .ThenBy(i => i.Slot)
+                .FirstOrDefault(i => i.TemplateId == templateId);
+
+            if (item != null)
+                return item;
+
+            int? slot = FindEmptyInventorySlot(playerItems);
+            if (slot.HasValue == false)
+            {
+                Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_CHECK] Player={playerDb.PlayerName}, Reason=NoEmptySlot, TemplateId={templateId}, SlotType={slotLabel}");
+                return null;
+            }
+
+            item = new ItemDb
+            {
+                TemplateId = templateId,
+                Count = 1,
+                Slot = slot.Value,
+                OwnerDbId = playerDb.PlayerDbId,
+                Equipped = false
+            };
+
+            playerItems.Add(item);
+            db.Items.Add(item);
+            changed = true;
+            Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_CREATED] Player={playerDb.PlayerName}, TemplateId={templateId}, Slot={item.Slot}, SlotType={slotLabel}");
+            return item;
+        }
+
+        private static int? FindEmptyInventorySlot(List<ItemDb> playerItems)
+        {
+            HashSet<int> usedSlots = new HashSet<int>(playerItems.Select(i => i.Slot));
+            for (int slot = MinInventorySlot; slot <= MaxInventorySlot; slot++)
+            {
+                if (usedSlots.Contains(slot) == false)
+                    return slot;
+            }
+
+            return null;
+        }
+
+        private static int ResolveStarterTemplateId(ItemType itemType, int preferredTemplateId)
+        {
+            if (IsTemplateType(preferredTemplateId, itemType))
+                return preferredTemplateId;
+
+            KeyValuePair<int, ItemData> fallback = DataManager.ItemDict
+                .OrderBy(pair => pair.Key)
+                .FirstOrDefault(pair => pair.Value != null && pair.Value.itemType == itemType);
+
+            if (fallback.Value == null)
+                return 0;
+
+            Console.WriteLine($"[DUMMY_SETUP][EQUIPMENT_CHECK] PreferredTemplateInvalid. ItemType={itemType}, PreferredTemplateId={preferredTemplateId}, FallbackTemplateId={fallback.Key}");
+            return fallback.Key;
+        }
+
+        private static bool IsTemplateType(int templateId, ItemType itemType)
+        {
+            ItemData itemData;
+            return DataManager.ItemDict.TryGetValue(templateId, out itemData) && itemData != null && itemData.itemType == itemType;
         }
 
         public void HandleCreateCharecter(C_CreatePlayer c_CreatePlayer)
@@ -180,9 +328,13 @@ namespace Server
                     db.Players.Add(createDB);
                     db.SaveChanges();
 
+                    if (EnsureDummyRequiredEquipment(db, createDB))
+                        db.SaveChanges();
+
                     LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
                     {
-                        Name = c_CreatePlayer.Name
+                        Name = c_CreatePlayer.Name,
+                        PlayerDbId = createDB.PlayerDbId
                     };
 
                     // 메모리에도 들고 있다
@@ -202,3 +354,7 @@ namespace Server
 
     }
 }
+
+
+
+

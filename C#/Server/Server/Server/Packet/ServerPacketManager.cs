@@ -44,7 +44,15 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.CEnterParty, MakePacket<C_EnterParty>);
 		_handler.Add((ushort)MsgId.CEnterParty, PacketHandler.C_EnterPartyHandler);		
 		_onRecv.Add((ushort)MsgId.CEquipItem, MakePacket<C_EquipItem>);
-		_handler.Add((ushort)MsgId.CEquipItem, PacketHandler.C_EquipItemHandler);
+		_handler.Add((ushort)MsgId.CEquipItem, PacketHandler.C_EquipItemHandler);		
+		_onRecv.Add((ushort)MsgId.CUdpHello, MakePacket<C_UdpHello>);
+		_handler.Add((ushort)MsgId.CUdpHello, PacketHandler.C_UdpHelloHandler);		
+		_onRecv.Add((ushort)MsgId.CUdpMove, MakePacket<C_UdpMove>);
+		_handler.Add((ushort)MsgId.CUdpMove, PacketHandler.C_UdpMoveHandler);		
+		_onRecv.Add((ushort)MsgId.CSceneReady, MakePacket<C_SceneReady>);
+		_handler.Add((ushort)MsgId.CSceneReady, PacketHandler.C_SceneReadyHandler);		
+		_onRecv.Add((ushort)MsgId.CChannelMove, MakePacket<C_ChannelMove>);
+		_handler.Add((ushort)MsgId.CChannelMove, PacketHandler.C_ChannelMoveHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

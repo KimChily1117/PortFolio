@@ -17,7 +17,7 @@ public class UI_StatInfo : UI_PopUp
 
     enum Texts
     {
-        NameText,
+        Stats,
         AttackValueText,
         DefenceValueText
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.CanvasScaler;
 
 
 public class UIController
@@ -9,11 +10,13 @@ public class UIController
 
 }
 
-// UI의 sort order를 
+// UI??sort order�?
 public class UIManager
 {
     public int _order = 10;
     Stack<UI_PopUp> _popupStack = new Stack<UI_PopUp>();
+    ToastPopup _toastPopup;
+    UI_ComboCounter _comboCounter;
 
     public UI_Scene _scene { private set; get; }
 
@@ -45,12 +48,13 @@ public class UIManager
         CanvasScaler sc = Util.GetOrAddComponent<CanvasScaler>(Root);
 
         sc.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        sc.referenceResolution = new Vector2(1920, 1080);
+        sc.referenceResolution = new Vector2(1920,1080);
+        sc.screenMatchMode = ScreenMatchMode.MatchWidthOrHeight;
 
 
 
         canvas.overrideSorting = true;
-        if (sort) //팝업이랑 관련 있는 Sorting이 필요한 UI
+        if (sort) //?�업?�랑 관???�는 Sorting???�요??UI
         {
             canvas.sortingOrder = _order;
             _order++;
@@ -90,6 +94,72 @@ public class UIManager
         return popup;
     }
 
+    public void PreloadToast()
+    {
+        if (_toastPopup != null && _toastPopup.gameObject != null)
+            return;
+
+        EnsureRootCanvasForToast();
+
+        GameObject go = GameManager.Resources.Instantiate("UI/PopUp/ToastPopup");
+        if (go == null)
+        {
+            Debug.LogWarning("[UI] ToastPopup prefab preload failed.");
+            return;
+        }
+
+        go.transform.SetParent(Root.transform, false);
+        go.transform.SetAsLastSibling();
+
+        _toastPopup = Util.GetOrAddComponent<ToastPopup>(go);
+        _toastPopup.Prepare();
+        Debug.Log("[UI] ToastPopup prepared.");
+    }
+
+    public void ShowToast(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        EnsureRootCanvasForToast();
+        PreloadToast();
+        if (_toastPopup == null)
+        {
+            Debug.LogWarning($"[UI] ToastPopup is not available. Message={message}");
+            return;
+        }
+
+        _toastPopup.transform.SetAsLastSibling();
+        Debug.Log($"[UI] ToastPopup show. Message={message}");
+        _toastPopup.Show(message);
+    }
+
+
+    public void ShowComboHit()
+    {
+        EnsureRootCanvasForToast();
+
+        if (_comboCounter == null || _comboCounter.gameObject == null)
+            _comboCounter = UI_ComboCounter.Create(Root.transform);
+
+        _comboCounter.transform.SetAsLastSibling();
+        _comboCounter.ShowHit();
+    }
+    private void EnsureRootCanvasForToast()
+    {
+        Canvas canvas = Util.GetOrAddComponent<Canvas>(Root);
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.overrideSorting = true;
+        if (canvas.sortingOrder < 1000)
+            canvas.sortingOrder = 1000;
+
+        Util.GetOrAddComponent<GraphicRaycaster>(Root);
+
+        CanvasScaler scaler = Util.GetOrAddComponent<CanvasScaler>(Root);
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.screenMatchMode = ScreenMatchMode.MatchWidthOrHeight;
+    }
     public T ShowSceneUI<T>(string name = null) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(name) == true)
@@ -106,7 +176,7 @@ public class UIManager
 
         go.transform.SetParent(Root.transform);
 
-        return null;
+        return sceneUI;
     }
 
 
@@ -150,3 +220,7 @@ public class UIManager
         }
     }
 }
+
+
+
+

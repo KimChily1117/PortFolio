@@ -1,0 +1,63 @@
+﻿{
+    "snapshotUpdatedAtUtc":  "2026-07-06T06:57:17.6732411Z",
+    "count":  4,
+    "maxEvents":  300,
+    "events":  [
+                   {
+                       "type":  "MatchAccepted",
+                       "reason":  null,
+                       "occurredAtUtc":  "2026-07-06T06:57:14.4503523Z",
+                       "detail":  "Player=PD_Dummy_0002, QueueKey=Bakal:Bakal:L0:M1000",
+                       "partyId":  null,
+                       "playerId":  0,
+                       "playerName":  "PD_Dummy_0002",
+                       "queueKey":  "Bakal:Bakal:L0:M1000",
+                       "roomType":  "Bakal",
+                       "roomId":  null,
+                       "transferId":  null,
+                       "count":  null
+                   },
+                   {
+                       "type":  "MatchAccepted",
+                       "reason":  null,
+                       "occurredAtUtc":  "2026-07-06T06:57:14.4503501Z",
+                       "detail":  "Player=PD_Dummy_0001, QueueKey=Bakal:Bakal:L0:M1000",
+                       "partyId":  null,
+                       "playerId":  1,
+                       "playerName":  "PD_Dummy_0001",
+                       "queueKey":  "Bakal:Bakal:L0:M1000",
+                       "roomType":  "Bakal",
+                       "roomId":  null,
+                       "transferId":  null,
+                       "count":  null
+                   },
+                   {
+                       "type":  "MatchAccepted",
+                       "reason":  null,
+                       "occurredAtUtc":  "2026-07-06T06:57:14.4503473Z",
+                       "detail":  "Player=PD_Dummy_0003, QueueKey=Bakal:Bakal:L0:M1000",
+                       "partyId":  null,
+                       "playerId":  2,
+                       "playerName":  "PD_Dummy_0003",
+                       "queueKey":  "Bakal:Bakal:L0:M1000",
+                       "roomType":  "Bakal",
+                       "roomId":  null,
+                       "transferId":  null,
+                       "count":  null
+                   },
+                   {
+                       "type":  "RoomCreated",
+                       "reason":  null,
+                       "occurredAtUtc":  "2026-07-06T06:56:48.4990757Z",
+                       "detail":  "RoomId=1, RoomType=Town, TotalRooms=1",
+                       "partyId":  null,
+                       "playerId":  null,
+                       "playerName":  null,
+                       "queueKey":  null,
+                       "roomType":  "Town",
+                       "roomId":  1,
+                       "transferId":  null,
+                       "count":  1
+                   }
+               ]
+}

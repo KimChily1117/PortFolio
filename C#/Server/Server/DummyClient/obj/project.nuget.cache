@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "BAsmM5qBdJLzrJ0cqXIZvJTKvN3Tw6feE1X7n7QiSK83Ecq/7sqa/RltxGq7khm6IKXjg1uajFZhWcRibaWwyA==",
+  "success": true,
+  "projectFilePath": "E:\\task\\Server\\Server\\DummyClient\\DummyClient.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\yeop_sun\\.nuget\\packages\\google.protobuf\\3.25.1\\google.protobuf.3.25.1.nupkg.sha512",
+    "C:\\Users\\yeop_sun\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\yeop_sun\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+  ],
+  "logs": []
+}

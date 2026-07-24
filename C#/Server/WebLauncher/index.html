@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Dawn Web Launcher</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <h1>Project Dawn Web Launcher</h1>
+        <p class="subtitle">GameServer monitoring dashboard</p>
+      </div>
+      <div class="status-strip" aria-live="polite">
+        <span id="onlineBadge" class="badge badge-offline">Offline</span>
+        <span class="api-base" id="apiBaseText">http://127.0.0.1:8090</span>
+      </div>
+    </header>
+
+    <section class="toolbar" aria-label="Dashboard controls">
+      <div class="meta">
+        <span>Last updated</span>
+        <strong id="lastUpdated">Never</strong>
+      </div>
+      <label class="toggle">
+        <input id="autoRefreshToggle" type="checkbox" checked>
+        <span>Auto refresh</span>
+      </label>
+      <button id="refreshButton" type="button">Refresh</button>
+    </section>
+
+    <section id="errorPanel" class="error-panel hidden" role="alert"></section>
+
+    <section class="launcher-card" aria-label="Game start">
+      <div class="launcher-head">
+        <div>
+          <span class="label">Game Start</span>
+          <h2 id="gameName">Project Dawn</h2>
+        </div>
+        <span id="launchStatusBadge" class="badge badge-info">Ready</span>
+      </div>
+
+      <div class="launcher-details">
+        <div class="detail-row">
+          <span>Executable Path</span>
+          <code id="gameExecutablePath">-</code>
+        </div>
+        <div class="detail-row">
+          <span>Launch Mode</span>
+          <strong id="launchModeText">Copy command mode</strong>
+        </div>
+        <div class="detail-row detail-command">
+          <span>Launch Command</span>
+          <code id="launchCommandText">-</code>
+        </div>
+      </div>
+
+      <p id="launchMessage" class="launcher-message info" aria-live="polite">Ready</p>
+
+      <div class="launcher-actions">
+        <button id="startGameButton" type="button">Start Game</button>
+        <button id="startAllClientsButton" type="button">Start All</button>
+        <div id="clientLaunchButtons" class="client-launch-buttons" aria-label="Client launch buttons"></div>
+        <button id="copyLaunchCommandButton" type="button">Copy Command</button>
+        <button id="openSetupGuideButton" type="button">Open Setup Guide</button>
+        <label class="toggle protocol-toggle">
+          <input id="customProtocolToggle" type="checkbox">
+          <span>Custom protocol mode</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="status-grid" aria-label="Server status">
+      <article class="status-card">
+        <span class="label">Online</span>
+        <strong id="statusOnline">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Total Rooms</span>
+        <strong id="totalRooms">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Town Rooms</span>
+        <strong id="townRooms">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Dungeon Rooms</span>
+        <strong id="dungeonRooms">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Total Players</span>
+        <strong id="totalPlayers">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Total Enemies</span>
+        <strong id="totalEnemies">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Online Players</span>
+        <strong id="onlinePlayers">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Matching Waiting</span>
+        <strong id="matchingWaitingPlayers">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Matching Queues</span>
+        <strong id="matchingQueueCount">-</strong>
+      </article>
+      <article class="status-card">
+        <span class="label">Max Room Update</span>
+        <strong id="maxRoomUpdateMs">-</strong>
+      </article>
+      <article class="status-card wide">
+        <span class="label">Snapshot Updated</span>
+        <strong id="snapshotUpdatedAtUtc">-</strong>
+      </article>
+    </section>
+
+
+
+    <section class="section-heading channel-heading">
+      <h2>Town Channels</h2>
+      <span id="townChannelCountText">0 channels</span>
+    </section>
+    <section id="townChannelsGrid" class="channels-grid" aria-live="polite"></section>
+    <section class="monitor-grid" aria-label="Player and matching monitoring">
+      <article class="monitor-card">
+        <div class="monitor-head">
+          <div>
+            <span class="label">Online Players</span>
+            <h2 id="onlinePlayersCount">0 players</h2>
+          </div>
+          <span id="onlinePlayersStatus" class="mini-badge badge-info">Ready</span>
+        </div>
+        <div id="onlinePlayersList" class="monitor-list" aria-live="polite"></div>
+      </article>
+
+      <article class="monitor-card">
+        <div class="monitor-head">
+          <div>
+            <span class="label">Matching Queue</span>
+            <h2><span id="matchingWaitingCount">0 waiting</span> / <span id="matchingQueueCountText">0 queues</span></h2>
+          </div>
+          <span id="matchingQueueStatus" class="mini-badge badge-info">Ready</span>
+        </div>
+        <div id="matchingQueuesList" class="monitor-list" aria-live="polite"></div>
+      </article>
+
+      <article class="monitor-card">
+        <div class="monitor-head">
+          <div>
+            <span class="label">Recent Events</span>
+            <h2 id="recentEventsCount">0 events</h2>
+          </div>
+          <span id="recentEventsStatus" class="mini-badge badge-info">Ready</span>
+        </div>
+        <div id="recentEventsList" class="monitor-list" aria-live="polite"></div>
+      </article>
+
+      <article class="monitor-card">
+        <div class="monitor-head">
+          <div>
+            <span class="label">Reject Reasons</span>
+            <h2 id="rejectReasonsCount">0 rejects</h2>
+          </div>
+          <span id="rejectReasonsStatus" class="mini-badge badge-info">Ready</span>
+        </div>
+        <div id="rejectReasonsList" class="monitor-list" aria-live="polite"></div>
+      </article>
+    </section>
+    <section class="section-heading">
+      <h2>Rooms</h2>
+      <span id="roomCountText">0 rooms</span>
+    </section>
+    <section id="roomsGrid" class="rooms-grid" aria-live="polite"></section>
+  </main>
+
+  <script src="launcher-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
+
+
+

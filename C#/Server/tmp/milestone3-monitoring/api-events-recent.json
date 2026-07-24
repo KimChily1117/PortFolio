@@ -1,0 +1,21 @@
+﻿{
+    "snapshotUpdatedAtUtc":  "2026-07-06T06:57:00.176065Z",
+    "count":  1,
+    "maxEvents":  300,
+    "events":  [
+                   {
+                       "type":  "RoomCreated",
+                       "reason":  null,
+                       "occurredAtUtc":  "2026-07-06T06:56:48.4990757Z",
+                       "detail":  "RoomId=1, RoomType=Town, TotalRooms=1",
+                       "partyId":  null,
+                       "playerId":  null,
+                       "playerName":  null,
+                       "queueKey":  null,
+                       "roomType":  "Town",
+                       "roomId":  1,
+                       "transferId":  null,
+                       "count":  1
+                   }
+               ]
+}

@@ -1,4 +1,4 @@
-﻿using Google.Protobuf.Protocol;
+using Google.Protobuf.Protocol;
 using Server.Data;
 using Server.Game;
 using Server.Game.Object;
@@ -41,6 +41,8 @@ namespace Server.DB
                         {
                             Item newItem = Item.MakeItem(itemDb);
                             player.Inven.Add(newItem);
+
+                            Console.WriteLine($"[REWARD] Player={player.Info?.Name ?? "Unknown"}, PlayerDbId={player.PlayerDbId}, ItemId={rewardData.itemId}, Count={rewardData.count}, ItemDbId={itemDb.ItemDbId}");
 
                             // Client Noti
                             {

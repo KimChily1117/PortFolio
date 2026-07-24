@@ -1,0 +1,46 @@
+﻿{
+    "snapshotUpdatedAtUtc":  "2026-07-06T06:57:17.7068473Z",
+    "totalWaitingPlayers":  3,
+    "queueCount":  1,
+    "queues":  [
+                   {
+                       "queueKey":  "Bakal:Bakal:L0:M1000",
+                       "dungeonType":  "Bakal",
+                       "roomType":  "Bakal",
+                       "waitingCount":  3,
+                       "partySize":  4,
+                       "players":  [
+                                       {
+                                           "sessionId":  3,
+                                           "playerDbId":  2,
+                                           "playerName":  "PD_Dummy_0003",
+                                           "level":  1,
+                                           "mmr":  1000,
+                                           "hasWeapon":  true,
+                                           "hasArmor":  true,
+                                           "waitingSeconds":  3.2565
+                                       },
+                                       {
+                                           "sessionId":  1,
+                                           "playerDbId":  1,
+                                           "playerName":  "PD_Dummy_0001",
+                                           "level":  1,
+                                           "mmr":  1000,
+                                           "hasWeapon":  true,
+                                           "hasArmor":  true,
+                                           "waitingSeconds":  3.2564972
+                                       },
+                                       {
+                                           "sessionId":  2,
+                                           "playerDbId":  0,
+                                           "playerName":  "PD_Dummy_0002",
+                                           "level":  1,
+                                           "mmr":  1000,
+                                           "hasWeapon":  true,
+                                           "hasArmor":  true,
+                                           "waitingSeconds":  3.256495
+                                       }
+                                   ]
+                   }
+               ]
+}

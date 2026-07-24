@@ -1,0 +1,31 @@
+﻿{
+    "value":  [
+                  {
+                      "roomId":  1,
+                      "roomType":  "Town",
+                      "state":  "Running",
+                      "createdAtUtc":  "2026-07-06T06:56:48.4990757Z",
+                      "lastUpdatedAtUtc":  "2026-07-06T06:57:00.1489153Z",
+                      "elapsedSeconds":  11.6498469,
+                      "playerCount":  0,
+                      "enemyCount":  0,
+                      "isEmpty":  true,
+                      "isDungeonRoom":  false,
+                      "players":  [
+
+                                  ],
+                      "enemies":  [
+
+                                  ],
+                      "updateCount":  116,
+                      "lastUpdateMs":  0.0014,
+                      "maxUpdateMs":  0.0234,
+                      "bossObjectId":  null,
+                      "bossName":  null,
+                      "bossHp":  null,
+                      "bossMaxHp":  null,
+                      "bossIsDead":  false
+                  }
+              ],
+    "Count":  1
+}

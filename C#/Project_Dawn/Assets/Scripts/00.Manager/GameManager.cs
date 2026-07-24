@@ -1,9 +1,11 @@
-using Data;
+﻿using Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -90,6 +92,34 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public static string GetLoginUniqueId()
+    {
+        string uniqueIdOverride = GetCommandLineValue("-uniqueIdOverride=");
+        if (!string.IsNullOrWhiteSpace(uniqueIdOverride))
+            return uniqueIdOverride.Trim();
+
+        string testClientId = GetCommandLineValue("-testClientId=");
+        if (!string.IsNullOrWhiteSpace(testClientId))
+            return $"{SystemInfo.deviceUniqueIdentifier}_{testClientId.Trim()}";
+
+        return SystemInfo.deviceUniqueIdentifier;
+    }
+
+    private static string GetCommandLineValue(string prefix)
+    {
+        string[] args = Environment.GetCommandLineArgs();
+        for (int i = 0; i < args.Length; i++)
+        {
+            string arg = args[i];
+            if (!arg.StartsWith(prefix, StringComparison.Ordinal))
+                continue;
+
+            return arg.Substring(prefix.Length);
+        }
+
+        return null;
+    }
+
 
 
 
@@ -117,23 +147,58 @@ public class GameManager : MonoBehaviour
         Sound.Init();
 
         DataManager.Init();
-        GameObject evt = GameObject.Find("EventSystem");
-        if (!evt)
-        {
-            evt = Resources.Instantiate("UI/EventSystem");
-        }
+        EnsureSingleEventSystem();
         Application.runInBackground = true;
         Application.targetFrameRate = 300;
 
-        Screen.SetResolution(1920, 1080, true);
+        Screen.SetResolution(800, 600, false);
 
-        DontDestroyOnLoad(evt);
+        UI.PreloadToast();
     }
 
+
+    private static void EnsureSingleEventSystem()
+    {
+        EventSystem[] eventSystems = GameObject.FindObjectsOfType<EventSystem>(true);
+        EventSystem keep = null;
+
+        foreach (EventSystem eventSystem in eventSystems)
+        {
+            if (eventSystem == null)
+                continue;
+
+            if (keep == null)
+            {
+                keep = eventSystem;
+                continue;
+            }
+
+            Destroy(eventSystem.gameObject);
+        }
+
+        if (keep == null)
+        {
+            GameObject evt = Resources.Instantiate("UI/EventSystem");
+            keep = evt != null ? evt.GetComponent<EventSystem>() : null;
+        }
+
+        if (keep != null)
+        {
+            keep.gameObject.name = "EventSystem";
+            DontDestroyOnLoad(keep.gameObject);
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EnsureSingleEventSystem();
+    }
     void OnEnable()
     {
 
         Init();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
         //StartCoroutine(InitializeNetwork());
 
         Network.apiHelper.MakeCharInfoURL();
@@ -168,6 +233,11 @@ public class GameManager : MonoBehaviour
         //}));
     }
 
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
     private void Update()
     {
@@ -255,3 +325,5 @@ public class GameManager : MonoBehaviour
 
     #endregion
 }
+
+
