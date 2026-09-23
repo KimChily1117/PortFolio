@@ -35,3 +35,11 @@ crashinfo--*
 
 # Temp files
 *.tmp
+
+# Unity generated data (keep Assets, Packages, and ProjectSettings)
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+UserSettings/
+sysinfo.txt
