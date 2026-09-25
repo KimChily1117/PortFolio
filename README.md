@@ -50,6 +50,16 @@ C++ / D3D_Server           👉 C# TCP 서버
 
 ---
 
+### 3. Kimchily (Unity WebGL·모바일 월드)
+
+- Unity 6 제작기·SDK·WebGL 실행기, Expo 앱, 웹 앱, Python 게시 서버로 구성됩니다.
+- 프로젝트 간 로컬 패키지와 상대 경로 참조를 위해 [KimchilyWebGL](KimchilyWebGL) 묶음을 함께 유지합니다.
+- [프로젝트 안내](KimchilyWebGL/README.md) · [이전 후 실행 준비](KimchilyWebGL/MIGRATION.md)
+
+DirectX 클라이언트와 서버의 새 경로 빌드 순서는 [D3D 이전 안내](C++/D3D_Popol/MIGRATION.md)를 참고하세요.
+
+---
+
 ## 📞 Contact
 
 **김선엽 / Game Developer**  
