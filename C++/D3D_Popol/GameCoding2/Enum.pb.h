@@ -128,6 +128,75 @@ inline bool OBJECT_STATE_TYPE_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<OBJECT_STATE_TYPE>(
     OBJECT_STATE_TYPE_descriptor(), name, value);
 }
+enum MOVE_REJECT_REASON : int {
+  MOVE_REJECT_REASON_NONE = 0,
+  MOVE_REJECT_REASON_NO_PLAYER = 1,
+  MOVE_REJECT_REASON_NO_ROOM = 2,
+  MOVE_REJECT_REASON_ROOM_MISMATCH = 3,
+  MOVE_REJECT_REASON_INVALID_PLAYER_STATE = 4,
+  MOVE_REJECT_REASON_INVALID_SEQUENCE = 5,
+  MOVE_REJECT_REASON_INVALID_COORDINATE = 6,
+  MOVE_REJECT_REASON_NAVIGATION_MAP_MISMATCH = 7,
+  MOVE_REJECT_REASON_NAVIGATION_HASH_MISMATCH = 8,
+  MOVE_REJECT_REASON_OUTSIDE_NAVIGATION_BOUNDS = 9,
+  MOVE_REJECT_REASON_DESTINATION_BLOCKED = 10,
+  MOVE_REJECT_REASON_NO_NEARBY_WALKABLE_CELL = 11,
+  MOVE_REJECT_REASON_MOVEMENT_NOT_ALLOWED = 12,
+  MOVE_REJECT_REASON_SERVER_ERROR = 13,
+  MOVE_REJECT_REASON_NO_PATH = 14,
+  MOVE_REJECT_REASON_PATH_SEARCH_LIMIT_EXCEEDED = 15,
+  MOVE_REJECT_REASON_PATH_TOO_LONG = 16,
+  MOVE_REJECT_REASON_INVALID_NAVIGATION_START = 17,
+  MOVE_REJECT_REASON_RATE_LIMITED = 18,
+  MOVE_REJECT_REASON_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  MOVE_REJECT_REASON_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool MOVE_REJECT_REASON_IsValid(int value);
+constexpr MOVE_REJECT_REASON MOVE_REJECT_REASON_MIN = MOVE_REJECT_REASON_NONE;
+constexpr MOVE_REJECT_REASON MOVE_REJECT_REASON_MAX = MOVE_REJECT_REASON_RATE_LIMITED;
+constexpr int MOVE_REJECT_REASON_ARRAYSIZE = MOVE_REJECT_REASON_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MOVE_REJECT_REASON_descriptor();
+template<typename T>
+inline const std::string& MOVE_REJECT_REASON_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, MOVE_REJECT_REASON>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function MOVE_REJECT_REASON_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    MOVE_REJECT_REASON_descriptor(), enum_t_value);
+}
+inline bool MOVE_REJECT_REASON_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MOVE_REJECT_REASON* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MOVE_REJECT_REASON>(
+    MOVE_REJECT_REASON_descriptor(), name, value);
+}
+enum MOVEMENT_SNAPSHOT_STATE : int {
+  MOVEMENT_SNAPSHOT_STATE_UNKNOWN = 0,
+  MOVEMENT_SNAPSHOT_STATE_MOVING = 1,
+  MOVEMENT_SNAPSHOT_STATE_ARRIVED = 2,
+  MOVEMENT_SNAPSHOT_STATE_CANCELLED = 3,
+  MOVEMENT_SNAPSHOT_STATE_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  MOVEMENT_SNAPSHOT_STATE_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool MOVEMENT_SNAPSHOT_STATE_IsValid(int value);
+constexpr MOVEMENT_SNAPSHOT_STATE MOVEMENT_SNAPSHOT_STATE_MIN = MOVEMENT_SNAPSHOT_STATE_UNKNOWN;
+constexpr MOVEMENT_SNAPSHOT_STATE MOVEMENT_SNAPSHOT_STATE_MAX = MOVEMENT_SNAPSHOT_STATE_CANCELLED;
+constexpr int MOVEMENT_SNAPSHOT_STATE_ARRAYSIZE = MOVEMENT_SNAPSHOT_STATE_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MOVEMENT_SNAPSHOT_STATE_descriptor();
+template<typename T>
+inline const std::string& MOVEMENT_SNAPSHOT_STATE_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, MOVEMENT_SNAPSHOT_STATE>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function MOVEMENT_SNAPSHOT_STATE_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    MOVEMENT_SNAPSHOT_STATE_descriptor(), enum_t_value);
+}
+inline bool MOVEMENT_SNAPSHOT_STATE_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MOVEMENT_SNAPSHOT_STATE* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MOVEMENT_SNAPSHOT_STATE>(
+    MOVEMENT_SNAPSHOT_STATE_descriptor(), name, value);
+}
 // ===================================================================
 
 
@@ -164,6 +233,16 @@ template <> struct is_proto_enum< ::Protocol::OBJECT_STATE_TYPE> : ::std::true_t
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::OBJECT_STATE_TYPE>() {
   return ::Protocol::OBJECT_STATE_TYPE_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::MOVE_REJECT_REASON> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::MOVE_REJECT_REASON>() {
+  return ::Protocol::MOVE_REJECT_REASON_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::MOVEMENT_SNAPSHOT_STATE> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::MOVEMENT_SNAPSHOT_STATE>() {
+  return ::Protocol::MOVEMENT_SNAPSHOT_STATE_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

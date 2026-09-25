@@ -17,6 +17,10 @@ public:
 	void SetMesh(shared_ptr<Mesh> mesh) { _mesh = mesh; }
 	void SetMaterial(shared_ptr<Material> material) { _material = material; }
 	void SetPass(uint8 pass) { _pass = pass; }
+	uint8 GetPass() const { return _pass; }
+	void SetWorldOverlay(int32 order) { _worldOverlay = true; _overlayOrder = order; }
+	bool IsWorldOverlay() const { return _worldOverlay || _pass == 14 || _pass == 15 || _pass == 16; }
+	int32 GetOverlayOrder() const { return _overlayOrder; }
 	shared_ptr<Material> GetMaterial() { return _material; }
 
 
@@ -33,6 +37,8 @@ private:
 	shared_ptr<Mesh> _mesh;
 	shared_ptr<Material> _material;
 	uint8 _pass = 0;
+	bool _worldOverlay = false;
+	int32 _overlayOrder = 0;
 	D3D11_PRIMITIVE_TOPOLOGY type = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 };
 

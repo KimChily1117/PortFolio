@@ -23,7 +23,7 @@ void UIManager::Update()
 }
 
 
-// Server¿¡¼­ ¹Þ¾Æ¿Â ObjectÁ¤º¸¿¡¼­ Ã¨ÇÁ Å¸ÀÔÀ» ¹Þ¾Æ¿Í UI InformationÀ» Set
+// Serverï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ Objectï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¨ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ UI Informationï¿½ï¿½ Set
 void UIManager::SetTarget(Protocol::PLAYER_CHAMPION_TYPE type)
 {
 	switch (type)
@@ -59,8 +59,8 @@ void UIManager::SetTarget(Protocol::PLAYER_CHAMPION_TYPE type)
 void UIManager::InitHUD()
 {
 	// Todo UI Informaition Setting
-	// ¿©±â¼­ ÇÊ¿äÇÑ Resources Set
-	{ // UI ÂÊ
+	// ï¿½ï¿½ï¿½â¼­ ï¿½Ê¿ï¿½ï¿½ï¿½ Resources Set
+	{ // UI ï¿½ï¿½
 			// Material
 		{
 			shared_ptr<Material> material = make_shared<Material>();
@@ -260,7 +260,7 @@ void UIManager::InitHUD()
 void UIManager::InitCursor()
 {
 	// Todo UI Cursor Texture Setting
-	// ¿©±â¼­ ÇÊ¿äÇÑ Resources Set
+	// ï¿½ï¿½ï¿½â¼­ ï¿½Ê¿ï¿½ï¿½ï¿½ Resources Set
 	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(_shader);
@@ -301,7 +301,7 @@ void UIManager::InitCursor()
 void UIManager::InitIndicator()
 {
 	// Todo UI Indicator Texture Setting
-	// ¿©±â¼­ ÇÊ¿äÇÑ Resources Set
+	// ï¿½ï¿½ï¿½â¼­ ï¿½Ê¿ï¿½ï¿½ï¿½ Resources Set
 	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(_shader);
@@ -320,7 +320,7 @@ void UIManager::InitIndicator()
 		material->SetDiffuseMap(texture);
 		MaterialDesc& desc = material->GetMaterialDesc();
 		desc.ambient = Vec4(1.f);
-		desc.diffuse = Vec4(1.f);
+		desc.diffuse = Vec4(1.f, 1.f, 1.f, 0.55f);
 		desc.specular = Vec4(1.f);
 		RESOURCES->Add(L"conicrangeindicator", material);
 	}

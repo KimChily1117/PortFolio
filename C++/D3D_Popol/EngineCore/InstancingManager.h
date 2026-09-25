@@ -14,7 +14,7 @@ public:
 	void ClearData();
 
 private:
-	void RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameObjects);
+	void RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameObjects, bool overlayOnly);
 	void RenderModelRenderer(vector<shared_ptr<GameObject>>& gameObjects);
 	void RenderAnimRenderer(vector<shared_ptr<GameObject>>& gameObjects);;
 	void RenderParticleRenderer(vector<shared_ptr<GameObject>>& gameObjects);;

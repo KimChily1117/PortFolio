@@ -1,0 +1,10 @@
+<linker>
+  <!-- Downloaded worlds reference SDK classes absent from the built-in scenes. -->
+  <assembly fullname="Kimchily.Creator.Runtime" preserve="all" />
+  <assembly fullname="Kimchily.Scripting.Runtime" preserve="all" />
+  <assembly fullname="MoonSharp.Interpreter" preserve="all" />
+  <assembly fullname="Kimchily.TypeScript.Runtime" preserve="all" />
+  <assembly fullname="Jint" preserve="all" />
+  <assembly fullname="Acornima" preserve="all" />
+  <assembly fullname="System.Runtime.CompilerServices.Unsafe" preserve="all" />
+</linker>

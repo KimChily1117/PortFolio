@@ -1,0 +1,27 @@
+--- a/source/MoonSharp.Interpreter/Platforms/PlatformAutoDetector.cs
++++ b/source/MoonSharp.Interpreter/Platforms/PlatformAutoDetector.cs
+@@ -128,20 +128,10 @@
+ 
+ 		internal static IScriptLoader GetDefaultScriptLoader()
+ 		{
+-			AutoDetectPlatformFlags();
+-
+-			if (IsRunningOnUnity)
+-				return new UnityAssetsScriptLoader();
+-			else
+-			{
+-#if (DOTNET_CORE)
+-				return new FileSystemScriptLoader();
+-#elif (PCL || ENABLE_DOTNET || NETFX_CORE)
+-				return new InvalidScriptLoader("Portable Framework");
+-#else
+-				return new FileSystemScriptLoader();
+-#endif
+-			}
++			// Kimchily loads validated TextAsset source explicitly with Script.LoadString.
++			// Script's static constructor calls this before DefaultOptions can be set.
++			// The dictionary constructor avoids Unity Resources reflection and filesystem IO.
++			return new UnityAssetsScriptLoader(new System.Collections.Generic.Dictionary<string, string>());
+ 		}
+ 	}
+ }

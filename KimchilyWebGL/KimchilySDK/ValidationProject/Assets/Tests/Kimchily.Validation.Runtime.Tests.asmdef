@@ -1,0 +1,13 @@
+{
+  "name": "Kimchily.Validation.Runtime.Tests",
+  "references": [
+    "Kimchily.Creator.Runtime"
+  ],
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "KimchilyBaseFramework.dll"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

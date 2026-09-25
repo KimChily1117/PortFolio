@@ -17,6 +17,7 @@ public:
 
 protected:
 	virtual void ProcSkill(int32 skillId) override;
+    void StopMovementForAction() override;
 	bool _hasTargetPosition = false;       // 목표 위치 존재 여부
 	Vec3 _lastKnownTargetPos;
 
@@ -28,6 +29,6 @@ protected:
 
 
 public:
-	float _timeToIdle = 0.3f;
+
 };
 

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Runtime/TypeScriptVm.cs" Link="TypeScriptVm.cs" />
+    <Reference Include="Jint"><HintPath>../../Runtime/Plugins/Jint.dll</HintPath></Reference>
+    <Reference Include="Acornima"><HintPath>../../Runtime/Plugins/Acornima.dll</HintPath></Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe"><HintPath>../../Runtime/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath></Reference>
+    <None Include="../../Runtime/Resources/Kimchily/TypeScript/Bootstrap.js.txt" Link="Bootstrap.js.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

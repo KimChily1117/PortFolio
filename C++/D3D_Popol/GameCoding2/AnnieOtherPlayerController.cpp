@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "AnnieOtherPlayerController.h"
 #include "ModelAnimator.h"
 #include "ISkill.h"
@@ -7,7 +7,10 @@
 
 void AnnieOtherPlayerController::ProcSkill(int32 skillId)
 {
-	AlignToTarget();
+	// W already faces the authoritative cast direction. A previous Q/basic
+	// target must not turn its animation away from the fixed flame cone.
+	if (skillId != (int)SkillType::WSpell)
+		AlignToTarget();
 
 	if (skillId == (int)SkillType::GeneralAtk)
 	{
@@ -22,13 +25,6 @@ void AnnieOtherPlayerController::ProcSkill(int32 skillId)
 		case SkillType::WSpell:
 		{
 			_currentState = PlayerState::W;
-			Vec3 pos = GetTransform()->GetPosition();
-
-			// 이동 중 방향이 유효하면 그걸 사용, 아니라면 기본 forward
-			Vec3 dir = (direction.LengthSquared() > 0.001f) ? direction : GetTransform()->GetLook();
-			Vec3 rot = CalculateRotationFromDirection(dir);
-
-			PARTICLE->Play(L"AnnieW", pos, rot);
 			break;
 		}
 
@@ -38,17 +34,13 @@ void AnnieOtherPlayerController::ProcSkill(int32 skillId)
 	}
 
 
+	BeginActionAnimation();
 	auto animator = GetGameObject()->GetModelAnimator();
 	if (animator)
 	{
 		_isAttackMode = true;
 		animator->SetAnimation((int32)_currentState, false); // ❌ 루프 없음
 
-		float duration = animator->GetAnimationDuration((int32)_currentState);
-		if (duration <= 0.01f)
-			duration = 1.0f;
-
-		_timeToIdle = TIME->GetGameTime() + duration;
 
 		DEBUG_LOG("[Client] 🎬 AnnieOtherPlayer Skill Played: " << skillId);
 	}
@@ -78,18 +70,16 @@ void AnnieOtherPlayerController::Update()
 	{
 		if (TIME->GetGameTime() >= _timeToIdle)
 		{
-			_isAttackMode = false;
-			_currentState = PlayerState::IDLE;
-			GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
-
+			FinishActionAnimation();
 			uint64 casterId = _playerInfo->objectid();
 			ClientPacketHandler::g_lastPlayedSkill.erase(casterId);
-			DEBUG_LOG("[Client] ✅ AnnieOtherPlayer → IDLE (timeout)");
 		}
 		return;
 	}
 
-	// 이동 처리
+	if (HasAuthoritativeSnapshotStream())
+		return;
+
 	if (_hasTargetPosition)
 	{
 		if (_currentState != PlayerState::RUN)
@@ -104,7 +94,6 @@ void AnnieOtherPlayerController::Update()
 		GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
 	}
 }
-
 void AnnieOtherPlayerController::AlignToTarget()
 {
 	if (_target)
@@ -129,6 +118,6 @@ Vec3 AnnieOtherPlayerController::CalculateRotationFromDirection(const Vec3& dir)
 	forward.y = 0.f;
 	forward.Normalize();
 
-	float angleY = atan2f(forward.x, forward.z); // 🔥 XM_PI 곱하지 말기
+	float angleY = atan2f(forward.x, forward.z); // XM_PI 곱하지 말기
 	return Vec3((0.f), XMConvertToRadians(angleY), 0.f); // X=90 유지 (파티클이 위를 향하게)
 }

@@ -1,0 +1,7 @@
+{
+  "name": "Kimchily.Scripting.Runtime",
+  "rootNamespace": "Kimchily.Scripting",
+  "references": ["Kimchily.Creator.Runtime"],
+  "overrideReferences": true,
+  "precompiledReferences": ["MoonSharp.Interpreter.dll"]
+}

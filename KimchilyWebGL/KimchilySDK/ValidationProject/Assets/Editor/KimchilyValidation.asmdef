@@ -1,0 +1,10 @@
+{
+  "name": "Kimchily.Validation.Editor",
+  "references": [
+    "Kimchily.Creator.Runtime",
+    "Kimchily.Creator.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

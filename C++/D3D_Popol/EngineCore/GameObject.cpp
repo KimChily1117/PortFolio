@@ -187,18 +187,18 @@ void GameObject::GUIRender()
 	if (!_enableGUI || GetTransform() == nullptr)
 		return;
 
-	static unordered_set<string> printedNames; // ✅ 외부에서 유지되는 변수 (매 프레임 초기화 방지)
-	printedNames.clear(); // ✅ 매 프레임 새로운 오브젝트들을 추가할 수 있도록 초기화
+	static unordered_set<string> printedNames; // 외부에서 유지되는 변수 (매 프레임 초기화 방지)
+	printedNames.clear(); // 매 프레임 새로운 오브젝트들을 추가할 수 있도록 초기화
 
 	if (ImGui::Begin("Inspector")) // 창 시작
 	{
 		if (printedNames.find(_name) != printedNames.end())
 		{
 			ImGui::End();
-			return; // ✅ 이미 출력된 오브젝트면 추가하지 않음
+			return; // 이미 출력된 오브젝트면 추가하지 않음
 		}
 
-		printedNames.insert(_name); // ✅ 현재 오브젝트 추가
+		printedNames.insert(_name); // 현재 오브젝트 추가
 
 		if (ImGui::TreeNode(_name.c_str())) // TreeNode
 		{

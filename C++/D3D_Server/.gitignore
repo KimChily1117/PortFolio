@@ -1,0 +1,13 @@
+!*.sln
+.vs/
+obj/
+__pycache__/
+*.user
+*.suo
+*.pdb
+*.log
+*.tmp
+*.pyc
+*.bak
+# Scope managed output ignores so Server/Common/protoc-*/bin remains tracked.
+/Server/Server/*/bin/

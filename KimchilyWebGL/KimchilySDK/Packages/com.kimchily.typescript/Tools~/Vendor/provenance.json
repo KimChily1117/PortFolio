@@ -1,0 +1,26 @@
+﻿[
+    {
+        "package":  "Jint",
+        "version":  "4.16.2",
+        "url":  "https://api.nuget.org/v3-flatcontainer/jint/4.16.2/jint.4.16.2.nupkg",
+        "framework":  "netstandard2.1",
+        "archiveSha256":  "46C99DFAA5BAA93D0418C7EE969023EC6E5910AA65CDAC4657D4D8986E9DB592",
+        "dllSha256":  "9140479D41924188B147563596FD8CE11D45924CC4180AE6ACB162C9766DF711"
+    },
+    {
+        "package":  "Acornima",
+        "version":  "1.7.0",
+        "url":  "https://api.nuget.org/v3-flatcontainer/acornima/1.7.0/acornima.1.7.0.nupkg",
+        "framework":  "netstandard2.1",
+        "archiveSha256":  "44C74D86BF468A71986380B787BF32FC6A38ECDC293396FD1056B0BB94DBF404",
+        "dllSha256":  "7A4E3E81699539161F8E8C8FD738C32FEACC1A0F34B69DFD90A4D1C33D57905B"
+    },
+    {
+        "package":  "System.Runtime.CompilerServices.Unsafe",
+        "version":  "6.0.0",
+        "url":  "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg",
+        "framework":  "netstandard2.0",
+        "archiveSha256":  "6C41B53E70E9EEE298CFF3A02CE5ACDD15B04125589BE0273F0566026720A762",
+        "dllSha256":  "01748200F2400C742AA689F1F5101BD6298EFDFD92C00C18F4FA473847235BA9"
+    }
+]

@@ -1,0 +1,35 @@
+{
+  "source": "C:\\Users\\yeop_sun\\Desktop\\Extract\\assets\\characters\\annie\\skins\\base\\particles",
+  "effects": [
+    "Annie_Base_Q_mis",
+    "Annie_Base_Q_tar"
+  ],
+  "files": {
+    "annie_base_fireshapes_00.dds": "5ed525c1fcce0c5ca22410a60fb31aaeba02d999b9294cad6a546bc0cdd62137",
+    "annie_base_glow2.dds": "d99df7ea1edbfefcb98ee86438482ce66abcc1b11ec010d13880cebfb14e3747",
+    "annie_base_glow3.dds": "d9835f42c4746b3f038fbff263e9f685469b585a07c2ef261a44da618ce29fcf",
+    "annie_base_glow4.dds": "66fec39c8d29052c6e2ae2d43d152f70b10f905e41a6a35a2a85f01fa6a92703",
+    "annie_base_noise2.dds": "6711f16b5208c6a62fd3e8f8b491643103b0adbc865d5b7a69bad8582360d571",
+    "annie_base_q_ash.dds": "2ef146c6f1c97c3f361679b0f7f80fb395d6e2ac69838a92285332733fc8a519",
+    "annie_base_q_radgrad.dds": "a82b1a82858a3ad2e2b300259f7bcd6b03bdb38561f0c6bf9caf2a6b4f9649b5",
+    "annie_base_q_smoke_2x2.dds": "1899b448b695924029ad881784d5590871512ff96284cf39eae77d43fd6092bb",
+    "annie_base_q_sparks_2x2.dds": "5bd74e2b10292f7d4be586e563e2f4efedb8108f30e593f3e2e60558640ce05c",
+    "annie_base_q_mis_01.dds": "8bbb148d66aa17b31f273817def5ff757514b08a5807dd505d75b188e46f981f",
+    "annie_base_q_mis_flames.dds": "e1eeb7f5dfda088bde274e36cdf8b52801556e503a27a79b5a7a4c39c23dec7f",
+    "annie_base_q_mis_smoke_trail.dds": "29315ac5a26fbfd56796f504bd20c7c86ff1afc7d5feae95ea669dcecbe82e1b",
+    "annie_base_q_mis_trail.dds": "2eeddd97e96039fce8570d49af3b4baa9b6e6380d8118804c702204d00012278",
+    "annie_base_shockwave.dds": "84d0e1eeac88f26e54b72b5695d0003e7892f868059e4b367edc8f2e5df28c09",
+    "annie_base_smokeerode.dds": "1c47c0642e050d855fffbd57f06fef4793cc157ec7c5bbc106b7c65542d0e02f",
+    "annie_base_smoke_01.dds": "9679e943b41583f893ea29128b76ad8079068d2f9695a9570dee611e5267ee20",
+    "annie_base_wall_erosion.dds": "5300faa09987eb1a87315006f613a7138611dc84f6fcf4fa009b285131317b93",
+    "annie_spirit_phoenix_flames.dds": "edc653ef4850fc9204f8ce8ddd1716257a8449bd65adad9f956150c77816fba7",
+    "annie_spirit_phoenix_flames_mult.dds": "858fdc409aaf16c904b8e41a09285c8f9c4520fb2a708460abd1e4e049d2a587",
+    "annie_fire_glow.dds": "522e0a4ed692e980ff26fbeee491db2cd6d0d54c1d8ed6f1d1d514440fdf78c7",
+    "annie_base_q_mis_01.scb": "3774f0093ceb657351b8afb0a03b5f45a82fa151209ccee7f43bf7799cca073a"
+  },
+  "converter": "AssimpTool --convert-scb-vfx",
+  "mesh_vertices": 439,
+  "mesh_indices": 2280,
+  "mesh_bytes": 28456,
+  "baked_mesh_sha256": "2e265b17591fd0f468a60ad744c2b148bba9efc86b7c8be3bd74f5173f2e512c"
+}

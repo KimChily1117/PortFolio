@@ -1,0 +1,7 @@
+<!-- Copy to consuming project's Assets/link.xml. Unity does not honor package-local link.xml. -->
+<linker>
+  <assembly fullname="Kimchily.TypeScript.Runtime" preserve="all" />
+  <assembly fullname="Jint" preserve="all" />
+  <assembly fullname="Acornima" preserve="all" />
+  <assembly fullname="System.Runtime.CompilerServices.Unsafe" preserve="all" />
+</linker>

@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using ServerCore;
 using System.Net;
 using Google.Protobuf.Protocol;
@@ -21,6 +22,53 @@ namespace Server
 
         public Player Player { get; set; }
 
+        private bool _hasProcessedMoveSequence;
+        private uint _lastProcessedMoveSequence;
+        private const double MoveRequestTokensPerSecond = 12.0;
+        private const double MoveRequestBurstCapacity = 4.0;
+        private double _moveRequestTokens = MoveRequestBurstCapacity;
+        private long _moveRequestBudgetTimestamp;
+
+        public uint LastProcessedMoveSequence => _lastProcessedMoveSequence;
+
+        internal bool TryConsumeMoveSequence(uint sequence)
+        {
+            if (sequence == 0 || (_hasProcessedMoveSequence && sequence <= _lastProcessedMoveSequence))
+                return false;
+
+            _hasProcessedMoveSequence = true;
+            _lastProcessedMoveSequence = sequence;
+            return true;
+        }
+
+        internal bool TryConsumeMoveRequestBudget(long timestamp)
+        {
+            if (timestamp < 0)
+                return false;
+            if (_moveRequestBudgetTimestamp == 0)
+            {
+                _moveRequestBudgetTimestamp = timestamp;
+            }
+            else if (timestamp >= _moveRequestBudgetTimestamp)
+            {
+                double elapsedSeconds = (timestamp - _moveRequestBudgetTimestamp) / (double)Stopwatch.Frequency;
+                _moveRequestTokens = Math.Min(MoveRequestBurstCapacity, _moveRequestTokens + elapsedSeconds * MoveRequestTokensPerSecond);
+                _moveRequestBudgetTimestamp = timestamp;
+            }
+
+            if (_moveRequestTokens < 1.0)
+                return false;
+            _moveRequestTokens -= 1.0;
+            return true;
+        }
+
+        internal void ResetMoveSequence()
+        {
+            _hasProcessedMoveSequence = false;
+            _lastProcessedMoveSequence = 0;
+            _moveRequestTokens = MoveRequestBurstCapacity;
+            _moveRequestBudgetTimestamp = 0;
+        }
 
         #region Network
         public void Send(IMessage packet)
@@ -61,7 +109,8 @@ namespace Server
         public override void OnDisconnected(EndPoint endPoint)
         {
 
-            this.GameRoom.RemoveObject((ulong)SessionId);
+            GameRoom room = GameRoom;
+            room?.RemoveObject((ulong)SessionId);
             SessionManager.Instance.Remove(this);
             Console.WriteLine($"OnDisconnected : {endPoint}");
         }

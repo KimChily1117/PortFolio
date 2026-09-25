@@ -5,7 +5,8 @@ void AnnieESpell::Use(shared_ptr<GameObject> caster, shared_ptr<GameObject> targ
 {
 	
 	auto playerController = caster->GetScript<PlayerController>();
-	if (!playerController || !target) return;
+	if (!playerController) return;
+    const Vec3 castPosition = target ? target->GetTransform()->GetPosition() : caster->GetTransform()->GetPosition();
 
 	// Animation 처리 부분은 부모인  Champ클래스에서 처리함
 
@@ -13,9 +14,9 @@ void AnnieESpell::Use(shared_ptr<GameObject> caster, shared_ptr<GameObject> targ
 	Protocol::C_SkillCast skillPacket;
 	skillPacket.set_casterid(GAMEMANAGER->_myPlayer->_playerInfo->objectid());
 	skillPacket.set_skillid(3); // Annie Q 공격 ID
-	skillPacket.mutable_targetpos()->set_x(target->GetTransform()->GetPosition().x);
-	skillPacket.mutable_targetpos()->set_y(target->GetTransform()->GetPosition().y);
-	skillPacket.mutable_targetpos()->set_z(target->GetTransform()->GetPosition().z);
+	skillPacket.mutable_targetpos()->set_x(castPosition.x);
+	skillPacket.mutable_targetpos()->set_y(castPosition.y);
+	skillPacket.mutable_targetpos()->set_z(castPosition.z);
 
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(skillPacket, C_SKILL_CAST);
 	NETWORK->SendPacket(sendBuffer);

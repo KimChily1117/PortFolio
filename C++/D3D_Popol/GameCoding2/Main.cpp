@@ -5,6 +5,13 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+#if defined(_DEBUG)
+	if (strcmp(lpCmdLine, "--annie-q-smoke") == 0)
+	{
+		extern int RunAnnieQSmokeTest();
+		return RunAnnieQSmokeTest();
+	}
+#endif
 	GameDesc desc;
 	desc.appName = L"GameCoding";
 	desc.hInstance = hInstance;

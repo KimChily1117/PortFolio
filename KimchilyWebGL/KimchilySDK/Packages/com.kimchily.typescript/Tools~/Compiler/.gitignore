@@ -1,0 +1,4 @@
+node_modules/
+tests/.work/
+CompileCheck/bin/
+CompileCheck/obj/

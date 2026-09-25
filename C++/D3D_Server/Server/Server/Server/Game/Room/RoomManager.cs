@@ -1,69 +1,112 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
+using System.Diagnostics;
+using System.Linq;
+using Server.Game.Navigation;
 
 namespace Server.Game.Room
 {
     public class RoomManager
     {
         public static RoomManager Instance { get; } = new RoomManager();
-        object _lock = new object();
-        Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
-        int _roomId = 0;
+
+        private readonly object _lock = new object();
+        private readonly Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
+        private NavigationRegistry _navigationRegistry;
+        private long _lastUpdateTimestamp;
+
+        public void Initialize(NavigationRegistry navigationRegistry)
+        {
+            if (navigationRegistry == null)
+                throw new ArgumentNullException(nameof(navigationRegistry));
+
+            lock (_lock)
+            {
+                if (_rooms.Count != 0)
+                    throw new InvalidOperationException("RoomManager cannot be initialized after Rooms are created.");
+                if (_navigationRegistry != null)
+                    throw new InvalidOperationException("RoomManager is already initialized.");
+                _navigationRegistry = navigationRegistry;
+                _lastUpdateTimestamp = Stopwatch.GetTimestamp();
+            }
+        }
+
+        public void AddConfiguredRooms()
+        {
+            NavigationRegistration[] registrations;
+            lock (_lock)
+            {
+                EnsureInitialized();
+                registrations = _navigationRegistry.Registrations.OrderBy(item => item.RoomId).ToArray();
+            }
+
+            foreach (NavigationRegistration registration in registrations)
+                Add(registration.RoomId);
+        }
 
         public GameRoom Add(int roomId)
         {
-            GameRoom gameRoom = new GameRoom();
-            _roomId = roomId;
+            NavigationRegistration registration;
+            string contentRoot;
             lock (_lock)
             {
-                gameRoom.RoomId = _roomId;
-                _rooms.Add(_roomId, gameRoom);
-                _roomId++;
+                EnsureInitialized();
+                if (_rooms.ContainsKey(roomId))
+                    throw new InvalidOperationException("Room already exists: " + roomId);
+                if (!_navigationRegistry.TryGetRegistrationByRoomId(roomId, out registration))
+                    throw new InvalidOperationException("Room " + roomId + " has no required Navigation registration.");
+                contentRoot = _navigationRegistry.ContentRoot;
             }
 
-            gameRoom.Init();
+            var gameRoom = new GameRoom(registration);
+            gameRoom.Init(contentRoot);
+
+            lock (_lock)
+            {
+                if (_rooms.ContainsKey(roomId))
+                    throw new InvalidOperationException("Room already exists: " + roomId);
+                _rooms.Add(roomId, gameRoom);
+            }
             return gameRoom;
         }
-
 
         public GameRoom Find(int roomId)
         {
             lock (_lock)
             {
-                GameRoom room = null;
-                if (_rooms.TryGetValue(roomId, out room))
-                    return room;
-
-                return null;
+                _rooms.TryGetValue(roomId, out GameRoom room);
+                return room;
             }
         }
 
         public bool Remove(int roomId)
         {
             lock (_lock)
-            {
                 return _rooms.Remove(roomId);
-            }
         }
 
         public void UpdateRooms()
         {
-            foreach (GameRoom room in _rooms.Values)
+            GameRoom[] rooms;
+            float deltaTime;
+            lock (_lock)
             {
-                room.Update();
+                rooms = _rooms.Values.ToArray();
+                long now = Stopwatch.GetTimestamp();
+                deltaTime = _lastUpdateTimestamp == 0
+                    ? 0.0f
+                    : (float)((now - _lastUpdateTimestamp) / (double)Stopwatch.Frequency);
+                _lastUpdateTimestamp = now;
             }
+
+            foreach (GameRoom room in rooms)
+                room.Update(deltaTime);
         }
 
-
-        //public void AllLeaveroom(Player MyPlayer)
-        //{
-        //    foreach (GameRoom room in _rooms.Values)
-        //    {
-        //        room?.LeaveRoom(MyPlayer.Info.ObjectId);
-        //    }
-
-        //}
+        private void EnsureInitialized()
+        {
+            if (_navigationRegistry == null)
+                throw new InvalidOperationException("RoomManager requires a NavigationRegistry before creating Rooms.");
+        }
     }
 }

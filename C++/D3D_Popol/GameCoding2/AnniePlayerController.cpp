@@ -1,4 +1,4 @@
-﻿	#include "pch.h"
+	#include "pch.h"
 	#include "AnniePlayerController.h"
 	#include "ModelAnimator.h"
 	#include "TimeManager.h"
@@ -11,7 +11,7 @@
 
 	void AnniePlayerController::ProcSkill(int32 skillId)
 	{
-		if (_isAttackMode) return;
+		if (IsActionBusy()) return;
 
 
 
@@ -43,15 +43,6 @@
 			case SkillType::WSpell: 
 			{
 				_currentState = PlayerState::W;
-				Vec3 pos = GetTransform()->GetPosition();
-
-				// 이동 중 방향이 유효하면 그걸 사용, 아니라면 기본 forward
-				Vec3 dir = (direction.LengthSquared() > 0.001f) ? direction : GetTransform()->GetLook();
-				Vec3 rot = CalculateRotationFromDirection(dir);
-
-
-				SOUND->PlaySound("SFX_Annie_WSpell");
-				PARTICLE->Play(L"AnnieW", pos, rot);
 				break;
 			}
 			case SkillType::ESpell: _currentState = PlayerState::E; break;
@@ -61,31 +52,50 @@
 		}
 
 
+		BeginActionAnimation();
 		auto animator = GetGameObject()->GetModelAnimator();
 		if (animator)
 		{
 			_isAttackMode = true;
 			animator->SetAnimation((int32)_currentState, false);
 
-			_timeToIdle = TIME->GetGameTime() + animator->GetAnimationDuration((int32)_currentState);
 			DEBUG_LOG("[Client] ▶ AnniePlayer Skill Started: " << skillId);
 		}
 
-		if (skillInstance)
+		if (skillInstance && !_serverPresentationOnly)
 		{
 			skillInstance->Use(GetGameObject(), _target);
 		}
 	}
 
+	void AnniePlayerController::PlayServerSkillResult(int32 skillId, const Vec3& castOrigin, const Vec3& castDirection)
+	{
+		if (skillId != (int32)SkillType::WSpell)
+			return;
+		ConfirmSkillCooldown(skillId);
+		if (_isAttackMode) return;
+
+		_serverSkillCastOrigin = castOrigin;
+		_serverSkillCastDirection = castDirection;
+		direction = castDirection;
+		direction.y = 0.f;
+		if (direction.LengthSquared() <= 0.0001f)
+			return;
+		direction.Normalize();
+		_target.reset();
+		AlignToDirection(direction);
+		ClearPendingSkillRequest();
+		_serverPresentationOnly = true;
+		ProcSkill(skillId);
+		_serverPresentationOnly = false;
+	}
 	void AnniePlayerController::Update()
 	{
 		Super::Update();
 
 		if (_isAttackMode && TIME->GetGameTime() >= _timeToIdle)
 		{
-			_isAttackMode = false;
-			_currentState = PlayerState::IDLE;
-			GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
+			FinishActionAnimation();
 
 			uint64 casterId = _playerInfo->objectid();
 			ClientPacketHandler::g_lastPlayedSkill.erase(casterId);
@@ -132,7 +142,7 @@
 
 	void AnniePlayerController::Start()
 	{
-
+		Super::Start();
 	}
 
 	void AnniePlayerController::LateUpdate()

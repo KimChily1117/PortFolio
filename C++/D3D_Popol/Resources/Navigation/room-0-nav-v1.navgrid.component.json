@@ -1,0 +1,10 @@
+{
+  "assetPath": "../Resources/Navigation/room-0-nav-v1.navgrid",
+  "navigationMapId": "room-0-nav-v1",
+  "serverExportPath": "../../../D3D_Server/Server/Server/Server/Content/Navigation/room-0-nav-v1.navgrid",
+  "showBlocked": true,
+  "showCellBorders": true,
+  "showGrid": true,
+  "showSlow": true,
+  "showWalkable": false
+}

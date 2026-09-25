@@ -1,0 +1,7 @@
+Tools~/Compile/bin/
+Tools~/Compile/obj/
+Tools~/VmChecks/bin/
+Tools~/VmChecks/obj/
+Tools~/Vendor/bin/
+Tools~/Vendor/obj/
+Tools~/Vendor/*.zip

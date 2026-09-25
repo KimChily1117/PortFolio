@@ -1,0 +1,7 @@
+// Generate standard wrapper files without configuring the Android plugins.
+wrapper {
+    gradleVersion = '7.2'
+    distributionType = Wrapper.DistributionType.BIN
+    jarFile = file('../gradle/wrapper/gradle-wrapper.jar')
+    scriptFile = file('../gradlew')
+}

@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories { google(); mavenCentral(); gradlePluginPortal() }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories { google(); mavenCentral() }
+}
+rootProject.name = 'KimchilyAndroid'
+include ':app'
+
+def withUnity = providers.gradleProperty('withUnity').getOrElse('false').toBoolean()
+if (withUnity) {
+    def unityPath = providers.gradleProperty('unityLibraryDir')
+        .getOrElse('../KimchilyUnityRuntime/Builds/Android/unityLibrary')
+    def unityDirectory = file(unityPath)
+    if (!new File(unityDirectory, 'build.gradle').isFile()) {
+        throw new GradleException("Unity export missing: ${unityDirectory}. Export the Unity Android library before building with -PwithUnity=true.")
+    }
+    include ':unityLibrary'
+    project(':unityLibrary').projectDir = unityDirectory
+}

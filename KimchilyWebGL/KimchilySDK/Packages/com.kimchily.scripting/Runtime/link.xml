@@ -1,0 +1,6 @@
+<linker>
+  <!-- Template: copy into the consuming project's Assets directory before an IL2CPP build. -->
+  <assembly fullname="Kimchily.Creator.Runtime" preserve="all" />
+  <assembly fullname="MoonSharp.Interpreter" preserve="all" />
+  <assembly fullname="Kimchily.Scripting.Runtime" preserve="all" />
+</linker>

@@ -251,6 +251,9 @@
     <ClInclude Include="GameManager.h">
       <Filter>02.Managers</Filter>
     </ClInclude>
+    <ClInclude Include="NavGridAsset.h">
+      <Filter>00.Engine\Resource</Filter>
+    </ClInclude>
     <ClInclude Include="Tilemap.h">
       <Filter>00.Engine\Resource\Tilemap</Filter>
     </ClInclude>
@@ -456,6 +459,9 @@
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>02.Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="NavGridAsset.cpp">
+      <Filter>00.Engine\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Tilemap.cpp">
       <Filter>00.Engine\Resource\Tilemap</Filter>

@@ -1,0 +1,20 @@
+ValidationProject/Library/
+ValidationProject/Temp/
+ValidationProject/Logs/
+ValidationProject/obj/
+ValidationProject/UserSettings/
+ValidationProject/Assets/Fixtures/
+ValidationProject/Assets/Fixtures.meta
+ValidationProject/Assets/Plugins/
+ValidationProject/Assets/Plugins.meta
+ValidationProject/Assets/ValidationFixture_*/
+ValidationProject/Assets/ValidationFixture_*.meta
+**/obj/
+Artifacts/
+*.csproj
+*.sln
+
+# Handwritten build/check projects; Unity-generated project files remain ignored.
+!Build/
+!Build/**/*.csproj
+!Packages/**/Tools~/**/*.csproj

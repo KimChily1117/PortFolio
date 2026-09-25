@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "Kimchily · 나만의 월드",
+  "short_name": "Kimchily",
+  "description": "새로운 공간을 발견하고, QR로 나만의 월드에 들어가요.",
+  "lang": "ko",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f9f3",
+  "theme_color": "#153131",
+  "icons": [
+    { "src": "/app/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

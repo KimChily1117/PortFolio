@@ -1,0 +1,4 @@
+{
+  "typescript.tsdk": "../KimchilySDK/Packages/com.kimchily.typescript/Tools~/Compiler/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}

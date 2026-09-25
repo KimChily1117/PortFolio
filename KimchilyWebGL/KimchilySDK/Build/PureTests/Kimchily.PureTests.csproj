@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <OutputPath>../../Artifacts/PureTests/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Remove="@(Reference)" />
+    <Compile Include="../../Packages/com.kimchily.creator/Runtime/Content/WorldContentManifest.cs" />
+    <Compile Include="../../Packages/com.kimchily.creator/Runtime/Content/WorldManifestValidation.cs" />
+    <Compile Include="../../Packages/com.kimchily.creator/Runtime/Coroutines/CoroutineRoutine.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+</Project>
+

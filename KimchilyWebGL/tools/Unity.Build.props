@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <KimchilyUnityVersionJson>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)unity-version.json'))</KimchilyUnityVersionJson>
+    <KimchilyUnityVersion>$([System.Text.RegularExpressions.Regex]::Match('$(KimchilyUnityVersionJson)', '&quot;version&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</KimchilyUnityVersion>
+    <KimchilyConfiguredEditorRoot>$([System.Text.RegularExpressions.Regex]::Match('$(KimchilyUnityVersionJson)', '&quot;editorRoot&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</KimchilyConfiguredEditorRoot>
+    <UnityEditorRoot Condition="'$(UnityEditorRoot)' == '' And '$(KIMCHILY_UNITY_EDITOR_ROOT)' != ''">$(KIMCHILY_UNITY_EDITOR_ROOT)</UnityEditorRoot>
+    <UnityEditorRoot Condition="'$(UnityEditorRoot)' == '' And '$(KimchilyConfiguredEditorRoot)' != ''">$(KimchilyConfiguredEditorRoot)</UnityEditorRoot>
+    <UnityEditorRoot Condition="'$(UnityEditorRoot)' == ''">$(ProgramW6432)/Unity/Hub/Editor/$(KimchilyUnityVersion)/Editor</UnityEditorRoot>
+    <KimchilyWorkspaceRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))</KimchilyWorkspaceRoot>
+  </PropertyGroup>
+</Project>

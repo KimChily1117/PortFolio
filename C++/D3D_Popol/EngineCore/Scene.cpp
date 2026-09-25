@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Scene.h"
 #include "GameObject.h"
 #include "BaseCollider.h"
@@ -18,7 +18,7 @@ void Scene::Awake()
 	}
 }
  
-// Scene에 배치 되어있는 object들
+// Scene??배치 ?�어?�는 object??
 void Scene::Start()
 {
 	unordered_set<shared_ptr<GameObject>> objects = _objects;
@@ -82,7 +82,7 @@ void Scene::GUIRender()
 
 		// UI Transform
 		auto btnComponent = object->GetButton();
-		if (btnComponent) // Get되면 바로 실행
+		if (btnComponent) // Get?�면 바로 ?�행
 		{
 			btnComponent->GUIRender();
 		}
@@ -91,8 +91,8 @@ void Scene::GUIRender()
 
 void Scene::Add(shared_ptr<GameObject> object)
 {
-	if (_objects.find(object) != _objects.end()) // ✅ 중복 체크
-		return; // 이미 존재하는 객체라면 추가하지 않음
+	if (_objects.find(object) != _objects.end()) // ??중복 체크
+		return; // ?��? 존재?�는 객체?�면 추�??��? ?�음
 
 
 	_objects.insert(object);
@@ -117,14 +117,14 @@ void Scene::Remove(shared_ptr<GameObject> object)
 {
 	if (!object) return;
 
-	// 부모가 제거될 때 자식도 함께 제거
+	// 부모�? ?�거?????�식???�께 ?�거
 	auto children = object->GetTransform()->GetChildren();
 	for (auto& child : children)
 	{
 		Remove(child->GetGameObject());
 	}
 
-	// 리스트에서 제거
+	// 리스?�에???�거
 	_objects.erase(object);
 	_cameras.erase(object);
 	_lights.erase(object);
@@ -154,6 +154,9 @@ shared_ptr<GameObject> Scene::GetUICamera()
 
 void Scene::PickUI()
 {
+	if (_worldInputBlocked)
+		return;
+
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON) == false)
 		return;
 
@@ -176,158 +179,73 @@ void Scene::PickUI()
 	}
 }
 
-std::shared_ptr<class GameObject> Scene::Pick(int32 screenX, int32 screenY)
+bool Scene::TryCreatePickingRay(int32 screenX, int32 screenY, Ray& ray)
 {
-	shared_ptr<Camera> camera = GetMainCamera()->GetCamera();
+	auto cameraObject = GetMainCamera();
+	if (!cameraObject || !cameraObject->GetCamera())
+		return false;
 
-	float width = GRAPHICS->GetViewport().GetWidth();
-	float height = GRAPHICS->GetViewport().GetHeight();
-	//float width = static_cast<float>(GAME->GetGameDesc().width);
-	//float height = static_cast<float>(GAME->GetGameDesc().height);
+	const float width = GRAPHICS->GetViewport().GetWidth();
+	const float height = GRAPHICS->GetViewport().GetHeight();
+	if (width <= 0.f || height <= 0.f)
+		return false;
 
-	Matrix projectionMatrix = camera->GetProjectionMatrix();
+	const Matrix projection = cameraObject->GetCamera()->GetProjectionMatrix();
+	const float viewX = (+2.0f * screenX / width - 1.0f) / projection(0, 0);
+	const float viewY = (-2.0f * screenY / height + 1.0f) / projection(1, 1);
+	const Matrix inverseView = cameraObject->GetCamera()->GetViewMatrix().Invert();
 
-	float viewX = (+2.0f * screenX / width - 1.0f) / projectionMatrix(0, 0);
-	float viewY = (-2.0f * screenY / height + 1.0f) / projectionMatrix(1, 1);
+	const Vec3 worldOrigin = XMVector3TransformCoord(Vec3::Zero, inverseView);
+	Vec3 worldDirection = XMVector3TransformNormal(Vec3(viewX, viewY, 1.0f), inverseView);
+	if (worldDirection.LengthSquared() <= FLT_EPSILON)
+		return false;
 
-	Matrix viewMatrix = camera->GetViewMatrix();
-	Matrix viewMatrixInv = viewMatrix.Invert();
-
-	const auto& gameObjects = GetObjects();
-
-	float minDistance = FLT_MAX;
-	shared_ptr<GameObject> picked;
-
-	for (auto& gameObject : gameObjects)
-	{
-		if (gameObject->GetCollider() == nullptr)
-			continue;
-
-		// ViewSpace에서의 Ray 정의
-		Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
-		Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
-
-		// WorldSpace에서의 Ray 정의
-		Vec3 worldRayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
-		Vec3 worldRayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
-		worldRayDir.Normalize();
-
-		// WorldSpace에서 연산
-		Ray ray = Ray(worldRayOrigin, worldRayDir);
-
-		float distance = 0.f;
-		if (gameObject->GetCollider()->Intersects(ray, OUT distance) == false)
-			continue;
-
-		if (distance < minDistance)
-		{
-			minDistance = distance;
-			picked = gameObject;
-		}
-	}
-
-	for (auto& gameObject : gameObjects)
-	{
-		if (gameObject->GetTerrain() == nullptr)
-			continue;
-
-		Vec3 pickPos;
-		float distance = 0.f;
-		if (gameObject->GetTerrain()->Pick(screenX, screenY, OUT pickPos, OUT distance) == false)
-			continue;
-
-		if (distance < minDistance)
-		{
-			minDistance = distance;
-			picked = gameObject;
-		}
-	}
-
-	return picked;
+	worldDirection.Normalize();
+	ray = Ray(worldOrigin, worldDirection);
+	return true;
 }
 
-
-std::shared_ptr<class GameObject> Scene::Pick(int32 screenX, int32 screenY, Vec3& pickPos)
+shared_ptr<GameObject> Scene::Pick(int32 screenX, int32 screenY)
 {
-	shared_ptr<Camera> camera = GetMainCamera()->GetCamera();
+	Vec3 ignoredPickPosition;
+	return Pick(screenX, screenY, ignoredPickPosition);
+}
 
-	float width = GRAPHICS->GetViewport().GetWidth();
-	float height = GRAPHICS->GetViewport().GetHeight();
-	//float width = static_cast<float>(GAME->GetGameDesc().width);
-	//float height = static_cast<float>(GAME->GetGameDesc().height);
-
-	Matrix projectionMatrix = camera->GetProjectionMatrix();
-
-	float viewX = (+2.0f * screenX / width - 1.0f) / projectionMatrix(0, 0);
-	float viewY = (-2.0f * screenY / height + 1.0f) / projectionMatrix(1, 1);
-
-	Matrix viewMatrix = camera->GetViewMatrix();
-	Matrix viewMatrixInv = viewMatrix.Invert();
-
-	const auto& gameObjects = GetObjects();
+shared_ptr<GameObject> Scene::Pick(int32 screenX, int32 screenY, Vec3& pickPos)
+{
+	Ray ray;
+	if (!TryCreatePickingRay(screenX, screenY, ray))
+		return nullptr;
 
 	float minDistance = FLT_MAX;
 	shared_ptr<GameObject> picked;
 
-	for (auto& gameObject : gameObjects)
+	for (const auto& gameObject : _objects)
 	{
-		if (gameObject->GetCollider() == nullptr)
+		const auto collider = gameObject->GetCollider();
+		if (!collider)
 			continue;
-
-		// ViewSpace에서의 Ray 정의
-		Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
-		Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
-
-		// WorldSpace에서의 Ray 정의
-		Vec3 worldRayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
-		Vec3 worldRayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
-		worldRayDir.Normalize();
-
-		// WorldSpace에서 연산
-		Ray ray = Ray(worldRayOrigin, worldRayDir);
 
 		float distance = 0.f;
-		if (gameObject->GetCollider()->Intersects(ray, OUT distance) == false)
+		if (!collider->Intersects(ray, OUT distance) || distance >= minDistance)
 			continue;
 
-		if (distance < minDistance)
-		{
-			minDistance = distance;
-			picked = gameObject;
-		}
+		minDistance = distance;
+		picked = gameObject;
+		pickPos = ray.position + ray.direction * distance;
 	}
 
-	for (auto& gameObject : gameObjects)
+	if (_terrain && _terrain->GetTerrain())
 	{
-		if (gameObject->GetTerrain() == nullptr)
-			continue;
-
-		float distance = 0.f;
-		if (gameObject->GetTerrain()->Pick(screenX, screenY, OUT pickPos, OUT distance) == false)
-			continue;
-
-		if (distance < minDistance)
+		Vec3 terrainPickPosition;
+		float terrainDistance = 0.f;
+		if (_terrain->GetTerrain()->Pick(ray, OUT terrainPickPosition, OUT terrainDistance)
+			&& terrainDistance < minDistance)
 		{
-			minDistance = distance;
-			picked = gameObject;
+			picked = _terrain;
+			pickPos = terrainPickPosition;
 		}
 	}
-
-	/*for (auto& gameObject : gameObjects)
-	{
-		if (gameObject->GetModelAnimator() == nullptr)
-			continue;
-
-		float distance = 0.f;
-		if (gameObject->GetTerrain()->Pick(screenX, screenY, OUT pickPos, OUT distance) == false)
-			continue;
-
-		if (distance < minDistance)
-		{
-			minDistance = distance;
-			picked = gameObject;
-		}
-	}*/
 
 	return picked;
 }

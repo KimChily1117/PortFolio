@@ -12,7 +12,7 @@ void NetworkManager::Init()
 	_service = make_shared<ClientService>(
 		NetAddress(L"127.0.0.1", 8080),
 		make_shared<IocpCore>(),
-		[=]() { return CreateSession(); }, // TODO : SessionManager µî
+		[=]() { return CreateSession(); }, // TODO : SessionManager ï¿½ï¿½
 		1);
 
 	assert(_service->Start());
@@ -20,8 +20,14 @@ void NetworkManager::Init()
 
 void NetworkManager::Update()
 {
-	_service->GetIocpCore()->Dispatch(0);
-	
+	// Drain a bounded number of completions so damage-over-time packets are
+	// handled in the frame in which they arrive without starving rendering.
+	constexpr int32 MaxCompletionsPerFrame = 64;
+	for (int32 i = 0; i < MaxCompletionsPerFrame; ++i)
+	{
+		if (!_service->GetIocpCore()->Dispatch(0))
+			break;
+	}
 }
 
 ServerSessionRef NetworkManager::CreateSession()
@@ -35,4 +41,44 @@ void NetworkManager::SendPacket(SendBufferRef sendBuffer)
 	{
 		_session->Send(sendBuffer);
 	}
+}
+void NetworkManager::SetNavigationInfo(int32 roomId, uint32 formatVersion, const string& mapId, const string& contentHash)
+{
+	_navigationRoomId = roomId;
+	_navigationFormatVersion = formatVersion;
+	_navigationMapId = mapId;
+	_navigationContentHash = contentHash;
+	_clientMoveSequence = 0;
+	_lastMoveResponseSequence = 0;
+	_hasNavigationInfo = !_navigationMapId.empty() && !_navigationContentHash.empty();
+}
+
+void NetworkManager::ClearNavigationInfo()
+{
+	_hasNavigationInfo = false;
+	_navigationRoomId = -1;
+	_navigationFormatVersion = 0;
+	_clientMoveSequence = 0;
+	_lastMoveResponseSequence = 0;
+	_navigationMapId.clear();
+	_navigationContentHash.clear();
+}
+
+bool NetworkManager::TryGetNextMoveSequence(uint32& sequence)
+{
+	if (!_hasNavigationInfo || _clientMoveSequence == UINT32_MAX)
+		return false;
+
+	sequence = ++_clientMoveSequence;
+	return true;
+}
+bool NetworkManager::TryAcceptMoveResponse(uint32 sequence, const string& mapId, const string& contentHash)
+{
+	if (!_hasNavigationInfo || sequence == 0 || sequence > _clientMoveSequence || sequence <= _lastMoveResponseSequence)
+		return false;
+	if (mapId != _navigationMapId || contentHash != _navigationContentHash)
+		return false;
+
+	_lastMoveResponseSequence = sequence;
+	return true;
 }

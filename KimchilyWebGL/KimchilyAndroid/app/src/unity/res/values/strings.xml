@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- UnityPlayer looks this up by name. Unity exports it in launcher, not unityLibrary. -->
+    <string name="game_view_content_description">Unity 월드</string>
+</resources>

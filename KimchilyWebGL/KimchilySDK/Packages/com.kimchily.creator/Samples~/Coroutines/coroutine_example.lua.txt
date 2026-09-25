@@ -1,0 +1,35 @@
+-- Integration template for the existing KimchilyBehaviour + xLua environment.
+-- Rename/import as .lua only after restoring its ScriptedImporter.
+-- Bind CoroutineScheduler, CoroutineRoutine and CoroutineHandle in xLua's
+-- LuaCallCSharp list; IEnumerator and Action belong in CSharpCallLua.
+local util = require 'xlua.util'
+local handle
+
+function start()
+    local scheduler = self.gameObject:GetComponent(typeof(CS.Kimchily.Creator.CoroutineScheduler))
+    if scheduler == nil then
+        scheduler = self.gameObject:AddComponent(typeof(CS.Kimchily.Creator.CoroutineScheduler))
+    end
+    local routine = util.cs_generator(function()
+        coroutine.yield(CS.UnityEngine.WaitForSeconds(1.0))
+        self.transform.position = self.transform.position + CS.UnityEngine.Vector3(0, 1, 0)
+        coroutine.yield(nil) -- next frame
+        coroutine.yield(CS.UnityEngine.WaitForFixedUpdate())
+    end)
+    local wrapped = CS.Kimchily.Creator.CoroutineRoutine.WithCleanup(routine, function()
+        -- Runs on completion, cancellation and failure; a cancelled Lua
+        -- coroutine's remaining body does not run.
+        CS.UnityEngine.Debug.Log("Lua routine cleanup")
+    end)
+    handle = scheduler:StartRoutine(wrapped, self.gameObject)
+end
+
+function onDisable()
+    if handle ~= nil then handle:Cancel() end
+end
+
+function ondestroy()
+    if handle ~= nil then handle:Cancel() end
+    handle = nil
+end
+

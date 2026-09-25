@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 package Protocol;
 
 import "Enum.proto";
@@ -27,6 +27,11 @@ enum MsgId
 	S_PROJECTILE_HIT = 17;
 	S_DAMAGE = 18;
 	S_DEAD = 19;
+	S_NAVIGATION_INFO = 20;
+	C_MOVE_REQUEST = 21;
+	S_MOVE_ACCEPTED = 22;
+	S_MOVE_REJECTED = 23;
+	S_MOVEMENT_SNAPSHOT = 24;
 }
 
 message C_TESTMsg
@@ -68,6 +73,17 @@ message S_RemoveObject
 
 
 // ✅ 플레이어 이동 요청 (클라이언트 → 서버)
+message S_MovementSnapshot
+{
+    uint64 objectId = 1;
+    uint64 serverMoveId = 2;
+    uint64 serverTick = 3;
+    Vector3 position = 4;
+    MOVEMENT_SNAPSHOT_STATE movementState = 5;
+    uint32 currentWaypointIndex = 6;
+    uint32 clientMoveSequence = 7;
+    int32 roomId = 8;
+}
 message C_Move
 {
     uint64 objectId = 1;  // 이동하는 플레이어 ID
@@ -81,6 +97,45 @@ message S_Move
     ObjectInfo Info = 1;
 }
 
+// Room navigation identity. Sent by the server after the player enters a room.
+message S_NavigationInfo
+{
+    int32 roomId = 1;
+    uint32 formatVersion = 2;
+    string navigationMapId = 3;
+    string navigationContentHash = 4;
+}
+
+// Authoritative destination request. The moving object is derived from the session.
+message C_MoveRequest
+{
+    uint32 clientMoveSequence = 1;
+    float requestedDestinationX = 2;
+    float requestedDestinationZ = 3;
+    string navigationMapId = 4;
+    string navigationContentHash = 5;
+}
+
+message S_MoveAccepted
+{
+    uint32 clientMoveSequence = 1;
+    uint64 serverMoveId = 2;
+    string navigationMapId = 3;
+    string navigationContentHash = 4;
+    Vector3 requestedDestination = 5;
+    Vector3 acceptedDestination = 6;
+    Vector3 serverStartPosition = 7;
+    bool wasDestinationAdjusted = 8;
+}
+
+message S_MoveRejected
+{
+    uint32 clientMoveSequence = 1;
+    MOVE_REJECT_REASON rejectReason = 2;
+    Vector3 serverPosition = 3;
+    string navigationMapId = 4;
+    string navigationContentHash = 5;
+}
 // ✅ 서버에서 모든 오브젝트 상태 업데이트 (서버 → 클라이언트)
 message S_ObjectUpdate
 {
@@ -123,6 +178,8 @@ message S_SkillResult
     float areaRadius = 5;    // ✅ 범위형 스킬 반경 (isAreaSkill이 true일 때 사용)
     Vector3 centerPos = 6;   // ✅ 범위형 스킬의 중심 좌표 (isAreaSkill이 true일 때 사용)
     bool isBasicAttack = 7;  // ✅ 평타 여부 (true일 경우 클라이언트에서 기본 공격으로 처리)
+    Vector3 castOrigin = 8;  // 서버가 승인한 고정 시전 원점
+    Vector3 castDirection = 9; // 서버가 정규화한 XZ 시전 방향
 }
 
 
@@ -137,6 +194,7 @@ message S_ProjectileSpawn
     Vector3 startPos = 4;
     Vector3 endPos = 5;
     float speed = 6;
+    optional int32 skillId = 7; // 0 = basic, 1 = Q; absent = legacy server, do not guess.
 }
 
 // ✅ 서버에서 클라이언트로 투사체 충돌 및 삭제 알림

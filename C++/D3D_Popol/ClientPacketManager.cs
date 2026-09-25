@@ -1,0 +1,102 @@
+using Google.Protobuf;
+using Google.Protobuf.Protocol;
+using ServerCore;
+using System;
+using System.Collections.Generic;
+
+class PacketManager
+{
+	#region Singleton
+	static PacketManager _instance = new PacketManager();
+	public static PacketManager Instance { get { return _instance; } }
+	#endregion
+
+	PacketManager()
+	{
+		Register();
+	}
+
+	Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
+	Dictionary<ushort, Action<PacketSession, IMessage>> _handler = new Dictionary<ushort, Action<PacketSession, IMessage>>();
+		
+	public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
+
+	public void Register()
+	{		
+		_onRecv.Add((ushort)MsgId.STestMsg, MakePacket<S_TestMsg>);
+		_handler.Add((ushort)MsgId.STestMsg, PacketHandler.S_TestMsgHandler);		
+		_onRecv.Add((ushort)MsgId.SObjectUpdate, MakePacket<S_ObjectUpdate>);
+		_handler.Add((ushort)MsgId.SObjectUpdate, PacketHandler.S_ObjectUpdateHandler);		
+		_onRecv.Add((ushort)MsgId.SSkillResult, MakePacket<S_SkillResult>);
+		_handler.Add((ushort)MsgId.SSkillResult, PacketHandler.S_SkillResultHandler);		
+		_onRecv.Add((ushort)MsgId.SUpdateMap, MakePacket<S_UpdateMap>);
+		_handler.Add((ushort)MsgId.SUpdateMap, PacketHandler.S_UpdateMapHandler);		
+		_onRecv.Add((ushort)MsgId.SChatMessage, MakePacket<S_ChatMessage>);
+		_handler.Add((ushort)MsgId.SChatMessage, PacketHandler.S_ChatMessageHandler);		
+		_onRecv.Add((ushort)MsgId.SEnterGame, MakePacket<S_EnterGame>);
+		_handler.Add((ushort)MsgId.SEnterGame, PacketHandler.S_EnterGameHandler);		
+		_onRecv.Add((ushort)MsgId.SMyPlayer, MakePacket<S_MyPlayer>);
+		_handler.Add((ushort)MsgId.SMyPlayer, PacketHandler.S_MyPlayerHandler);		
+		_onRecv.Add((ushort)MsgId.SAddObject, MakePacket<S_AddObject>);
+		_handler.Add((ushort)MsgId.SAddObject, PacketHandler.S_AddObjectHandler);		
+		_onRecv.Add((ushort)MsgId.SRemoveObject, MakePacket<S_RemoveObject>);
+		_handler.Add((ushort)MsgId.SRemoveObject, PacketHandler.S_RemoveObjectHandler);		
+		_onRecv.Add((ushort)MsgId.SMove, MakePacket<S_Move>);
+		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
+		_onRecv.Add((ushort)MsgId.SProjectileSpawn, MakePacket<S_ProjectileSpawn>);
+		_handler.Add((ushort)MsgId.SProjectileSpawn, PacketHandler.S_ProjectileSpawnHandler);		
+		_onRecv.Add((ushort)MsgId.SProjectileHit, MakePacket<S_ProjectileHit>);
+		_handler.Add((ushort)MsgId.SProjectileHit, PacketHandler.S_ProjectileHitHandler);		
+		_onRecv.Add((ushort)MsgId.SDamage, MakePacket<S_Damage>);
+		_handler.Add((ushort)MsgId.SDamage, PacketHandler.S_DamageHandler);		
+		_onRecv.Add((ushort)MsgId.SDead, MakePacket<S_Dead>);
+		_handler.Add((ushort)MsgId.SDead, PacketHandler.S_DeadHandler);		
+		_onRecv.Add((ushort)MsgId.SNavigationInfo, MakePacket<S_NavigationInfo>);
+		_handler.Add((ushort)MsgId.SNavigationInfo, PacketHandler.S_NavigationInfoHandler);		
+		_onRecv.Add((ushort)MsgId.SMoveAccepted, MakePacket<S_MoveAccepted>);
+		_handler.Add((ushort)MsgId.SMoveAccepted, PacketHandler.S_MoveAcceptedHandler);		
+		_onRecv.Add((ushort)MsgId.SMoveRejected, MakePacket<S_MoveRejected>);
+		_handler.Add((ushort)MsgId.SMoveRejected, PacketHandler.S_MoveRejectedHandler);		
+		_onRecv.Add((ushort)MsgId.SMovementSnapshot, MakePacket<S_MovementSnapshot>);
+		_handler.Add((ushort)MsgId.SMovementSnapshot, PacketHandler.S_MovementSnapshotHandler);
+	}
+
+	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
+	{
+		ushort count = 0;
+
+		ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+		count += 2;
+		ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
+		count += 2;
+
+		Action<PacketSession, ArraySegment<byte>, ushort> action = null;
+		if (_onRecv.TryGetValue(id, out action))
+			action.Invoke(session, buffer, id);
+	}
+
+	void MakePacket<T>(PacketSession session, ArraySegment<byte> buffer, ushort id) where T : IMessage, new()
+	{
+		T pkt = new T();
+		pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
+
+		if (CustomHandler != null)
+		{
+			CustomHandler.Invoke(session, pkt, id);
+		}
+		else
+		{
+			Action<PacketSession, IMessage> action = null;
+			if (_handler.TryGetValue(id, out action))
+				action.Invoke(session, pkt);
+		}
+	}
+
+	public Action<PacketSession, IMessage> GetPacketHandler(ushort id)
+	{
+		Action<PacketSession, IMessage> action = null;
+		if (_handler.TryGetValue(id, out action))
+			return action;
+		return null;
+	}
+}

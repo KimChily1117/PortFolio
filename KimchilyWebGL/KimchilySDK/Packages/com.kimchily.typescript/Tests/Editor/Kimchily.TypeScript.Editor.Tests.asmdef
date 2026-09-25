@@ -1,0 +1,6 @@
+{
+  "name": "Kimchily.TypeScript.Editor.Tests",
+  "references": ["Kimchily.TypeScript.Runtime", "Kimchily.TypeScript.Editor", "Kimchily.Creator.Runtime", "Kimchily.Creator.Editor"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

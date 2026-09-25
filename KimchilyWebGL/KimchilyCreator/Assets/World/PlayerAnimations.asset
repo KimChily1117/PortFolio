@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 940d38eab3fb479fa4ba365419486d0f, type: 3}
+  m_Name: PlayerAnimations
+  m_EditorClassIdentifier: 
+  idle: {fileID: 7400000, guid: 0147e212f97e3d449a4b9e4f5d057180, type: 3}
+  walk: {fileID: 7400000, guid: e52be2fa48716194ea1d9d76686005f8, type: 3}
+  run: {fileID: 7400000, guid: 26055e26f15260e4e8e0e51f50c41926, type: 3}
+  jump: {fileID: 7400000, guid: ac75d16809dc0054d8e3449e7ba665f2, type: 3}
+  fall: {fileID: 0}
+  land: {fileID: 0}
+  walkSpeed: 2
+  runSpeed: 4
+  runThreshold: 2.8
+  idleThreshold: 0.08
+  blendDuration: 0.15
+  landingDuration: 0.15

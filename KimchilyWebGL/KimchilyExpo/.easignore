@@ -1,0 +1,16 @@
+node_modules/
+.expo/
+dist-check/
+dist/
+android/
+ios/
+.env.local
+.env.*.local
+credentials.json
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+tests/
+Artifacts/
+tools/

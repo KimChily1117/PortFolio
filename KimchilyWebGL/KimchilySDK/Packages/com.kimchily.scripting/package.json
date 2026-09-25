@@ -1,0 +1,9 @@
+{
+  "name": "com.kimchily.scripting",
+  "version": "0.1.0",
+  "displayName": "Kimchily Lua Scripting",
+  "description": "Restricted Lua behaviours for published Kimchily worlds, using MoonSharp and the Kimchily coroutine scheduler.",
+  "unity": "2022.3",
+  "dependencies": { "com.kimchily.creator": "0.1.0" },
+  "samples": [{ "displayName": "Rotating Lua Object", "description": "Attach the Lua script to a Kimchily Lua Behaviour.", "path": "Samples~/RotatingObject" }]
+}

@@ -1,0 +1,12 @@
+{
+  "package": "jsqr",
+  "version": "1.4.0",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/cozmo/jsQR",
+  "gitCommit": "49a9633931fb8030ac2fc9cecc121d6e5a19f9a3",
+  "archiveUrl": "https://registry.npmjs.org/jsqr/-/jsqr-1.4.0.tgz",
+  "archiveIntegrity": "sha512-dxLob7q65Xg2DvstYkRpkYtmKm2sPJ9oFhrhmudT1dZvNFFTlroai3AWSpLey/w5vMcLBXRgOJsbXpdN9HzU/A==",
+  "javascriptSha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+  "licenseSha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+  "modified": false
+}

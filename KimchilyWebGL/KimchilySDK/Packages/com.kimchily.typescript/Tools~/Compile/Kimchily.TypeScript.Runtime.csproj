@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../../../tools/Unity.Build.props" />
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>Kimchily.TypeScript.Runtime</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Runtime/**/*.cs" />
+    <Reference Include="$(UnityEditorRoot)/Data/Managed/UnityEngine/*.dll" />
+    <Reference Include="Jint"><HintPath>../../Runtime/Plugins/Jint.dll</HintPath></Reference>
+    <Reference Include="Acornima"><HintPath>../../Runtime/Plugins/Acornima.dll</HintPath></Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe"><HintPath>../../Runtime/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath></Reference>
+    <Reference Include="Kimchily.Creator.Runtime"><HintPath>../../../../Artifacts/Managed/Runtime/Kimchily.Creator.Runtime.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>

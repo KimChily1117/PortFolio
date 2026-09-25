@@ -1,0 +1,10 @@
+{
+  "name": "Kimchily.Creator.Editor",
+  "rootNamespace": "Kimchily.Creator.Editor",
+  "references": [
+    "Kimchily.Creator.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

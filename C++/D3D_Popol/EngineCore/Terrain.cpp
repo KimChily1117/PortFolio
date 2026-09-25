@@ -42,107 +42,38 @@ void Terrain::Create(int32 sizeX, int32 sizeZ, shared_ptr<Material> material)
 	}
 }
 
-bool Terrain::Pick(int32 screenX, int32 screenY, Vec3& pickPos, float& distance)
+bool Terrain::Pick(const Ray& worldRay, Vec3& pickPos, float& distance)
 {
-	if (!_tilemap)
+	if (!_tilemap || _sizeX <= 0 || _sizeZ <= 0)
 		return false;
 
-	Matrix W = GetTransform()->GetWorldMatrix();
-	Matrix V = CUR_SCENE->GetMainCamera()->GetCamera()->GetViewMatrix();
-	Matrix P = CUR_SCENE->GetMainCamera()->GetCamera()->GetProjectionMatrix();
+	const Matrix world = GetTransform()->GetWorldMatrix();
+	const Matrix inverseWorld = world.Invert();
 
-	Viewport& vp = GRAPHICS->GetViewport();
+	const Vec3 localOrigin = XMVector3TransformCoord(worldRay.position, inverseWorld);
+	Vec3 localDirection = XMVector3TransformNormal(worldRay.direction, inverseWorld);
+	if (localDirection.LengthSquared() <= FLT_EPSILON)
+		return false;
 
-	Vec3 n = vp.Unproject(Vec3(screenX, screenY, 0), W, V, P);
-	Vec3 f = vp.Unproject(Vec3(screenX, screenY, 1), W, V, P);
+	localDirection.Normalize();
+	const Ray localRay(localOrigin, localDirection);
+	const DirectX::SimpleMath::Plane terrainPlane(Vec3::UnitY, 0.f);
 
-	Vec3 start = n;
-	Vec3 direction = f - n;
-	direction.Normalize();
+	float localDistance = 0.f;
+	if (!localRay.Intersects(terrainPlane, OUT localDistance))
+		return false;
 
-	Ray ray = Ray(start, direction);
-
-	const auto& vertices = _mesh->GetGeometry()->GetVertices();
-
-	for (int32 z = 0; z < _sizeZ; z++)
+	const Vec3 localPickPosition = localRay.position + localRay.direction * localDistance;
+	if (localPickPosition.x < 0.f || localPickPosition.z < 0.f
+		|| localPickPosition.x >= static_cast<float>(_sizeX)
+		|| localPickPosition.z >= static_cast<float>(_sizeZ))
 	{
-		for (int32 x = 0; x < _sizeX; x++)
-		{
-			uint32 index[4];
-			index[0] = (_sizeX + 1) * z + x;
-			index[1] = (_sizeX + 1) * z + x + 1;
-			index[2] = (_sizeX + 1) * (z + 1) + x;
-			index[3] = (_sizeX + 1) * (z + 1) + x + 1;
-
-			Vec3 p[4];
-			for (int32 i = 0; i < 4; i++)
-				p[i] = vertices[index[i]].position;
-				//p[i] = XMVector3TransformCoord(vertices[index[i]].position, W);
-				// 월드 좌표 기준으로 연산
-			//  [2]
-			//   |	\
-			//  [0] - [1]
-			if (ray.Intersects(p[0], p[1], p[2], OUT distance))
-			{
-				pickPos = ray.position + ray.direction * distance;
-				pickPos = GetTileCorrectedPosition(pickPos);
-
-				// Tilemap에도 갱신
-				Vec3 tilePos = _tilemap->ConvertWorldToTile(pickPos);
-				Tile* tile = _tilemap->GetTileAt(tilePos);
-				DEBUG_LOG("Current Tile POS : [" << tilePos.x << " , " << tilePos.z << "]");
-
-
-				if (tile)
-				{
-					//// ✅ 충돌 체크
-					//if (_tilemap->CheckCollision(tilePos))
-					//	cout << "🚧 Collision Detected!" << endl;
-
-					//// ✅ 스킬 범위 예제 (반경 3)
-					//_tilemap->ApplySkillRange(tilePos, 3);
-
-					//// ✅ 전장의 안개 업데이트 (반경 5)
-					//_tilemap->UpdateFogOfWar(tilePos, 5);
-				}
-				
-				return true;
-			}
-
-			//  [2] - [3]
-			//   	\  |
-			//		  [1]
-			if (ray.Intersects(p[3], p[1], p[2], OUT distance))
-			{
-				pickPos = ray.position + ray.direction * distance;				
-				pickPos = GetTileCorrectedPosition(pickPos);
-				
-				// Tilemap에도 갱신
-				Vec3 tilePos = _tilemap->ConvertWorldToTile(pickPos);
-				Tile* tile = _tilemap->GetTileAt(tilePos);
-
-				DEBUG_LOG("Current Tile POS : [" << tilePos.x  << " , " << tilePos.z << "]");
-
-
-
-				if (tile)
-				{
-					//// ✅ 충돌 체크
-					//if (_tilemap->CheckCollision(tilePos))
-					//	cout << "🚧 Collision Detected!" << endl;
-
-					//// ✅ 스킬 범위 예제 (반경 3)
-					//_tilemap->ApplySkillRange(tilePos, 3);
-
-					//// ✅ 전장의 안개 업데이트 (반경 5)
-					//_tilemap->UpdateFogOfWar(tilePos, 5);
-				}
-				return true;				
-			}
-		}
+		return false;
 	}
 
-	return false;
+	pickPos = XMVector3TransformCoord(localPickPosition, world);
+	distance = (pickPos - worldRay.position).Length();
+	return true;
 }
 
 Vec3 Terrain::GetTileCorrectedPosition(Vec3 pickPos)
@@ -151,9 +82,9 @@ Vec3 Terrain::GetTileCorrectedPosition(Vec3 pickPos)
 	Tile* tile = _tilemap->GetTileAt(tilePos);
 
 	if (!tile)
-		return pickPos; // 타일이 없으면 원래 좌표 반환
+		return pickPos; // ?�?�이 ?�으�??�래 좌표 반환
 
-	// 🔥 해당 타일의 네 개의 꼭짓점 좌표 가져오기
+	// ?�� ?�당 ?�?�의 ??개의 �?��??좌표 가?�오�?
 	int x = static_cast<int>(tilePos.x);
 	int z = static_cast<int>(tilePos.z);
 
@@ -162,7 +93,7 @@ Vec3 Terrain::GetTileCorrectedPosition(Vec3 pickPos)
 	Vec3 p2 = _tilemap->GetTileAt(Vec3(x, 0, z + 1))->position;
 	Vec3 p3 = _tilemap->GetTileAt(Vec3(x + 1, 0, z + 1))->position;
 
-	// 🔥 삼각형 판별 (Barycentric 좌표계 사용)
+	// ?�� ?�각???�별 (Barycentric 좌표�??�용)
 	Vec3 barycentric;
 	if (IsPointInTriangle(pickPos, p0, p1, p2, barycentric))
 	{
@@ -173,7 +104,7 @@ Vec3 Terrain::GetTileCorrectedPosition(Vec3 pickPos)
 		return BarycentricInterpolation(p3, p1, p2, barycentric);
 	}
 
-	return pickPos; // 삼각형 판별 실패 시 원래 좌표 반환
+	return pickPos; // ?�각???�별 ?�패 ???�래 좌표 반환
 }
 
 bool Terrain::IsPointInTriangle(const Vec3& P, const Vec3& A, const Vec3& B, const Vec3& C, Vec3& outBarycentric)

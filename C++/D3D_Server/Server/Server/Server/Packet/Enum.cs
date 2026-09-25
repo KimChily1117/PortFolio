@@ -31,10 +31,32 @@ namespace Google.Protobuf.Protocol {
             "TEFZRVIQAxIKCgZNSU5JT04QBBIJCgVUT1dFUhAFKmgKEU9CSkVDVF9TVEFU",
             "RV9UWVBFEhoKFk9CSkVDVF9TVEFURV9UWVBFX0lETEUQABIaChZPQkpFQ1Rf",
             "U1RBVEVfVFlQRV9NT1ZFEAESGwoXT0JKRUNUX1NUQVRFX1RZUEVfU0tJTEwQ",
-            "AkIbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29sYgZwcm90bzM="));
+            "AiqqBgoSTU9WRV9SRUpFQ1RfUkVBU09OEhsKF01PVkVfUkVKRUNUX1JFQVNP",
+            "Tl9OT05FEAASIAocTU9WRV9SRUpFQ1RfUkVBU09OX05PX1BMQVlFUhABEh4K",
+            "Gk1PVkVfUkVKRUNUX1JFQVNPTl9OT19ST09NEAISJAogTU9WRV9SRUpFQ1Rf",
+            "UkVBU09OX1JPT01fTUlTTUFUQ0gQAxIrCidNT1ZFX1JFSkVDVF9SRUFTT05f",
+            "SU5WQUxJRF9QTEFZRVJfU1RBVEUQBBInCiNNT1ZFX1JFSkVDVF9SRUFTT05f",
+            "SU5WQUxJRF9TRVFVRU5DRRAFEikKJU1PVkVfUkVKRUNUX1JFQVNPTl9JTlZB",
+            "TElEX0NPT1JESU5BVEUQBhIuCipNT1ZFX1JFSkVDVF9SRUFTT05fTkFWSUdB",
+            "VElPTl9NQVBfTUlTTUFUQ0gQBxIvCitNT1ZFX1JFSkVDVF9SRUFTT05fTkFW",
+            "SUdBVElPTl9IQVNIX01JU01BVENIEAgSMAosTU9WRV9SRUpFQ1RfUkVBU09O",
+            "X09VVFNJREVfTkFWSUdBVElPTl9CT1VORFMQCRIqCiZNT1ZFX1JFSkVDVF9S",
+            "RUFTT05fREVTVElOQVRJT05fQkxPQ0tFRBAKEi4KKk1PVkVfUkVKRUNUX1JF",
+            "QVNPTl9OT19ORUFSQllfV0FMS0FCTEVfQ0VMTBALEisKJ01PVkVfUkVKRUNU",
+            "X1JFQVNPTl9NT1ZFTUVOVF9OT1RfQUxMT1dFRBAMEiMKH01PVkVfUkVKRUNU",
+            "X1JFQVNPTl9TRVJWRVJfRVJST1IQDRIeChpNT1ZFX1JFSkVDVF9SRUFTT05f",
+            "Tk9fUEFUSBAOEjEKLU1PVkVfUkVKRUNUX1JFQVNPTl9QQVRIX1NFQVJDSF9M",
+            "SU1JVF9FWENFRURFRBAPEiQKIE1PVkVfUkVKRUNUX1JFQVNPTl9QQVRIX1RP",
+            "T19MT05HEBASLworTU9WRV9SRUpFQ1RfUkVBU09OX0lOVkFMSURfTkFWSUdB",
+            "VElPTl9TVEFSVBAREiMKH01PVkVfUkVKRUNUX1JFQVNPTl9SQVRFX0xJTUlU",
+            "RUQQEiquAQoXTU9WRU1FTlRfU05BUFNIT1RfU1RBVEUSIwofTU9WRU1FTlRf",
+            "U05BUFNIT1RfU1RBVEVfVU5LTk9XThAAEiIKHk1PVkVNRU5UX1NOQVBTSE9U",
+            "X1NUQVRFX01PVklORxABEiMKH01PVkVNRU5UX1NOQVBTSE9UX1NUQVRFX0FS",
+            "UklWRUQQAhIlCiFNT1ZFTUVOVF9TTkFQU0hPVF9TVEFURV9DQU5DRUxMRUQQ",
+            "A0IbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.PLAYER_CHAMPION_TYPE), typeof(global::Google.Protobuf.Protocol.OBJECT_TYPE), typeof(global::Google.Protobuf.Protocol.OBJECT_STATE_TYPE), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.PLAYER_CHAMPION_TYPE), typeof(global::Google.Protobuf.Protocol.OBJECT_TYPE), typeof(global::Google.Protobuf.Protocol.OBJECT_STATE_TYPE), typeof(global::Google.Protobuf.Protocol.MOVE_REJECT_REASON), typeof(global::Google.Protobuf.Protocol.MOVEMENT_SNAPSHOT_STATE), }, null, null));
     }
     #endregion
 
@@ -74,6 +96,35 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("OBJECT_STATE_TYPE_IDLE")] Idle = 0,
     [pbr::OriginalName("OBJECT_STATE_TYPE_MOVE")] Move = 1,
     [pbr::OriginalName("OBJECT_STATE_TYPE_SKILL")] Skill = 2,
+  }
+
+  public enum MOVE_REJECT_REASON {
+    [pbr::OriginalName("MOVE_REJECT_REASON_NONE")] None = 0,
+    [pbr::OriginalName("MOVE_REJECT_REASON_NO_PLAYER")] NoPlayer = 1,
+    [pbr::OriginalName("MOVE_REJECT_REASON_NO_ROOM")] NoRoom = 2,
+    [pbr::OriginalName("MOVE_REJECT_REASON_ROOM_MISMATCH")] RoomMismatch = 3,
+    [pbr::OriginalName("MOVE_REJECT_REASON_INVALID_PLAYER_STATE")] InvalidPlayerState = 4,
+    [pbr::OriginalName("MOVE_REJECT_REASON_INVALID_SEQUENCE")] InvalidSequence = 5,
+    [pbr::OriginalName("MOVE_REJECT_REASON_INVALID_COORDINATE")] InvalidCoordinate = 6,
+    [pbr::OriginalName("MOVE_REJECT_REASON_NAVIGATION_MAP_MISMATCH")] NavigationMapMismatch = 7,
+    [pbr::OriginalName("MOVE_REJECT_REASON_NAVIGATION_HASH_MISMATCH")] NavigationHashMismatch = 8,
+    [pbr::OriginalName("MOVE_REJECT_REASON_OUTSIDE_NAVIGATION_BOUNDS")] OutsideNavigationBounds = 9,
+    [pbr::OriginalName("MOVE_REJECT_REASON_DESTINATION_BLOCKED")] DestinationBlocked = 10,
+    [pbr::OriginalName("MOVE_REJECT_REASON_NO_NEARBY_WALKABLE_CELL")] NoNearbyWalkableCell = 11,
+    [pbr::OriginalName("MOVE_REJECT_REASON_MOVEMENT_NOT_ALLOWED")] MovementNotAllowed = 12,
+    [pbr::OriginalName("MOVE_REJECT_REASON_SERVER_ERROR")] ServerError = 13,
+    [pbr::OriginalName("MOVE_REJECT_REASON_NO_PATH")] NoPath = 14,
+    [pbr::OriginalName("MOVE_REJECT_REASON_PATH_SEARCH_LIMIT_EXCEEDED")] PathSearchLimitExceeded = 15,
+    [pbr::OriginalName("MOVE_REJECT_REASON_PATH_TOO_LONG")] PathTooLong = 16,
+    [pbr::OriginalName("MOVE_REJECT_REASON_INVALID_NAVIGATION_START")] InvalidNavigationStart = 17,
+    [pbr::OriginalName("MOVE_REJECT_REASON_RATE_LIMITED")] RateLimited = 18,
+  }
+
+  public enum MOVEMENT_SNAPSHOT_STATE {
+    [pbr::OriginalName("MOVEMENT_SNAPSHOT_STATE_UNKNOWN")] Unknown = 0,
+    [pbr::OriginalName("MOVEMENT_SNAPSHOT_STATE_MOVING")] Moving = 1,
+    [pbr::OriginalName("MOVEMENT_SNAPSHOT_STATE_ARRIVED")] Arrived = 2,
+    [pbr::OriginalName("MOVEMENT_SNAPSHOT_STATE_CANCELLED")] Cancelled = 3,
   }
 
   #endregion

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2018"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": false,
+    "types": [],
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "Assets/**/*.ts",
+    "../KimchilySDK/Packages/com.kimchily.typescript/Typings~/kimchily.d.ts"
+  ],
+  "exclude": ["Library", "Temp", "Builds", "WorldBuilds", "Artifacts"]
+}

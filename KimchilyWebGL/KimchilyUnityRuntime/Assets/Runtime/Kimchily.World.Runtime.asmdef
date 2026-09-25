@@ -1,0 +1,6 @@
+{
+  "name": "Kimchily.World.Runtime",
+  "rootNamespace": "Kimchily.World",
+  "references": ["Kimchily.Creator.Runtime"],
+  "autoReferenced": true
+}

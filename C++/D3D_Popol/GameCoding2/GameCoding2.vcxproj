@@ -149,6 +149,7 @@
     <ClInclude Include="EditCameraScript.h" />
     <ClInclude Include="ClientPacketHandler.h" />
     <ClInclude Include="Enum.pb.h" />
+    <ClInclude Include="FloatingDamageController.h" />
     <ClInclude Include="GarenESpell.h" />
     <ClInclude Include="GarenOtherPlayerController.h" />
     <ClInclude Include="GarenPlayerController.h" />
@@ -157,8 +158,15 @@
     <ClInclude Include="GeneralAttack.h" />
     <ClInclude Include="HUDController.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="NavigationGridComponent.h" />
+    <ClInclude Include="NavigationEditorTool.h" />
+    <ClInclude Include="NavigationPaintAlgorithms.h" />
     <ClInclude Include="OtherPlayerController.h" />
     <ClInclude Include="OtherProjectileScript.h" />
+    <ClInclude Include="AnnieQEffect.h" />
+    <ClInclude Include="AnnieWEffect.h" />
+    <ClInclude Include="AnnieSkillTuning.h" />
+    <ClInclude Include="ProjectileVisualPolicy.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="ProjectileScript.h" />
@@ -185,6 +193,7 @@
     <ClCompile Include="Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="FloatingDamageController.cpp" />
     <ClCompile Include="GarenESpell.cpp" />
     <ClCompile Include="GarenOtherPlayerController.cpp" />
     <ClCompile Include="GarenPlayerController.cpp" />
@@ -193,8 +202,13 @@
     <ClCompile Include="GeneralAttack.cpp" />
     <ClCompile Include="HUDController.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NavigationGridComponent.cpp" />
+    <ClCompile Include="NavigationEditorTool.cpp" />
     <ClCompile Include="OtherPlayerController.cpp" />
     <ClCompile Include="OtherProjectileScript.cpp" />
+    <ClCompile Include="AnnieQEffect.cpp" />
+    <ClCompile Include="AnnieWEffect.cpp" />
+    <ClCompile Include="AnnieQSmokeTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -337,6 +351,21 @@
       </EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\AnnieQ.fx">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"></EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\AnnieW.fx">
+      <EntryPointName></EntryPointName>
+      <ShaderModel>5.0</ShaderModel>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\SkillRange.fx">
+      <EntryPointName></EntryPointName>
+      <ShaderModel>5.0</ShaderModel>
+      <ShaderType>Effect</ShaderType>
     </FxCompile>
     <FxCompile Include="..\Shaders\23. RenderDemo.fx">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

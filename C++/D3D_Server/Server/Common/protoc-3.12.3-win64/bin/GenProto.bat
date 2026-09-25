@@ -1,4 +1,4 @@
-protoc.exe --proto_path=./ --csharp_out=./ ./Protocol.proto ./Enum.proto ./Struct.proto
+protoc.exe --experimental_allow_proto3_optional --proto_path=./ --csharp_out=./ ./Protocol.proto ./Enum.proto ./Struct.proto
 
 IF ERRORLEVEL 1 PAUSE
 

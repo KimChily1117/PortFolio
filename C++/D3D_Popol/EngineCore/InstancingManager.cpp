@@ -13,52 +13,56 @@ void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
 {
 	ClearData();
 
-	RenderMeshRenderer(gameObjects);
+	RenderMeshRenderer(gameObjects, false);
 	RenderModelRenderer(gameObjects);
 	RenderAnimRenderer(gameObjects);
 	RenderParticleRenderer(gameObjects);
+	RenderMeshRenderer(gameObjects, true);
+
+	// Passes 14-16 use overlay-only blend/depth/rasterizer state. Effects11 does not
+	// restore the previous pipeline state after a pass, so reset it before the
+	// next camera/frame renders regular world geometry.
+	DC->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+	DC->OMSetDepthStencilState(nullptr, 0);
+	DC->RSSetState(nullptr);
+
+
 }
 
-void InstancingManager::RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameObjects)
+void InstancingManager::RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameObjects, bool overlayOnly)
 {
-	map<InstanceID, vector<shared_ptr<GameObject>>> cache;
+	map<pair<int32, InstanceID>, vector<shared_ptr<GameObject>>> cache;
 
 	for (shared_ptr<GameObject>& gameObject : gameObjects)
 	{
-		if (gameObject->GetMeshRenderer() == nullptr)
+		auto renderer = gameObject->GetMeshRenderer();
+		if (renderer == nullptr)
+			continue;
+		const bool isWorldOverlay = renderer->IsWorldOverlay();
+		if (isWorldOverlay != overlayOnly)
 			continue;
 
-		const InstanceID instanceId = gameObject->GetMeshRenderer()->GetInstanceID();
-		cache[instanceId].push_back(gameObject);
+		const InstanceID instanceId = renderer->GetInstanceID();
+		cache[{ renderer->GetOverlayOrder(), instanceId }].push_back(gameObject);
 	}
 
 	for (auto& pair : cache)
 	{
 		const vector<shared_ptr<GameObject>>& vec = pair.second;
-		/*if (vec.size() == 1)
+		const InstanceID instanceId = pair.first.second;
+
+		for (int32 i = 0; i < vec.size(); i++)
 		{
-			DEBUG_LOG("Render SINGLE : " << vec[0]->_name.c_str());
-			vec[0]->GetMeshRenderer()->RenderSingle();
+			const shared_ptr<GameObject>& gameObject = vec[i];
+			InstancingData data;
+			data.world = gameObject->GetTransform()->GetWorldMatrix();
+			AddData(instanceId, data);
 		}
-		else*/
-		{
-			const InstanceID instanceId = pair.first;
 
-			for (int32 i = 0; i < vec.size(); i++)
-			{
-				const shared_ptr<GameObject>& gameObject = vec[i];
-				InstancingData data;
-				data.world = gameObject->GetTransform()->GetWorldMatrix();
-
-				AddData(instanceId, data);
-			}
-
-			shared_ptr<InstancingBuffer>& buffer = _buffers[instanceId];
-			vec[0]->GetMeshRenderer()->RenderInstancing(buffer);
-		}
+		shared_ptr<InstancingBuffer>& buffer = _buffers[instanceId];
+		vec[0]->GetMeshRenderer()->RenderInstancing(buffer);
 	}
 }
-
 void InstancingManager::RenderModelRenderer(vector<shared_ptr<GameObject>>& gameObjects)
 {
 	map<InstanceID, vector<shared_ptr<GameObject>>> cache;

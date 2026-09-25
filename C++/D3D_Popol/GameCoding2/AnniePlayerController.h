@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "PlayerController.h"
 
 class AnniePlayerController : public PlayerController
@@ -21,6 +21,10 @@ public:
 
 protected:
 	virtual void ProcSkill(int32 skillId) override;
+	virtual void PlayServerSkillResult(int32 skillId, const Vec3& castOrigin, const Vec3& castDirection) override;
+
+private:
+	bool _serverPresentationOnly = false;
 
 };
 

@@ -9,6 +9,8 @@ public:
 public:
 
 	void ReadAssetFile(wstring file);
+	// Headless SCB adapter: bake a static VFX mesh for immutable runtime buffers.
+	static bool ExportScbVfxMesh(const wstring& source, const wstring& destination, bool keepAxes = false);
 	
 	void ExportModelData(wstring savePath);
 	void ExportMaterialData(wstring savePath);

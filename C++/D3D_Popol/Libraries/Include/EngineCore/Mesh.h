@@ -15,6 +15,9 @@ public:
 	void CreateCube();
 	void CreateGrid(int32 sizeX, int32 sizeZ);
 	void CreateSphere();
+	bool LoadVfxMesh(const wstring& path);
+	void CreateDynamic(const vector<VertexTextureNormalTangentData>& vertices, const vector<uint32>& indices);
+	bool UpdateDynamicVertices(const vector<VertexTextureNormalTangentData>& vertices);
 
 	shared_ptr<VertexBuffer> GetVertexBuffer() { return _vertexBuffer; }
 	shared_ptr<IndexBuffer> GetIndexBuffer() { return _indexBuffer; }

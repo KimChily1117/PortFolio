@@ -43,3 +43,6 @@ crashinfo--*
 [Ll]ogs/
 UserSettings/
 sysinfo.txt
+
+# Authored SDK build projects, not generated Unity build output.
+!/KimchilyWebGL/KimchilySDK/Build/

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 enum class KEY_TYPE
 {
@@ -15,8 +15,10 @@ enum class KEY_TYPE
 	Q = 'Q',
 	E = 'E',
 	Z = 'Z',
+	Y = 'Y',
 	C = 'C',
 	R = 'R',
+	F8 = VK_F8,
 
 	KEY_1 = '1',
 	KEY_2 = '2',
@@ -28,7 +30,8 @@ enum class KEY_TYPE
 	ENTER	= VK_RETURN,
 	MINUS = VK_OEM_MINUS,
 	PLUS = VK_OEM_PLUS,
-	ESCAPE = VK_ESCAPE
+	ESCAPE = VK_ESCAPE,
+	CONTROL = VK_CONTROL
 };
 
 enum class KEY_STATE
@@ -54,11 +57,11 @@ public:
 	void Init(HWND hwnd);
 	void Update();
 
-	// ´©¸£°í ÀÖÀ» ¶§
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	bool GetButton(KEY_TYPE key) { return GetState(key) == KEY_STATE::PRESS; }
-	// ¸Ç Ã³À½ ´­·¶À» ¶§
+	// ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
-	// ¸Ç Ã³À½ ´­·¶´Ù ¶ÃÀ» ¶§
+	// ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
 	
 	const POINT& GetMousePos() { return _mousePos; }

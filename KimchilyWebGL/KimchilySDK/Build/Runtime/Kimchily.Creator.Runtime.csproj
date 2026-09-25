@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Kimchily.Creator.Runtime</AssemblyName>
+    <OutputPath>../../Artifacts/Managed/Runtime/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup><Compile Include="../../Packages/com.kimchily.creator/Runtime/**/*.cs" /></ItemGroup>
+</Project>
+

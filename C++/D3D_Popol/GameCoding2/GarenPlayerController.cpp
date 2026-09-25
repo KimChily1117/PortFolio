@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "GarenPlayerController.h"
 #include "ISkill.h"
 #include "GeneralAttack.h"
@@ -12,7 +12,7 @@
 
 void GarenPlayerController::ProcSkill(int32 skillId)
 {
-	if (_isAttackMode)
+	if (IsActionBusy())
 		return;
 
 	shared_ptr<ISkill> skillInstance = nullptr;
@@ -66,6 +66,7 @@ void GarenPlayerController::ProcSkill(int32 skillId)
 	
 	AlignToTarget();
 
+	BeginActionAnimation();
 	auto animator = GetGameObject()->GetModelAnimator();
 	if (animator)
 	{
@@ -74,9 +75,7 @@ void GarenPlayerController::ProcSkill(int32 skillId)
 
 			animator->SetAnimationEndCallback([this]()
 				{
-					_isAttackMode = false;
-					_currentState = PlayerState::IDLE;
-					GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
+					FinishActionAnimation();
 
 					uint64 casterId = _playerInfo->objectid();
 					ClientPacketHandler::g_lastPlayedSkill.erase(casterId);
@@ -90,40 +89,46 @@ void GarenPlayerController::ProcSkill(int32 skillId)
 				});
 	}
 
-		if (skillInstance)
-			skillInstance->Use(GetGameObject(), _target);
+        if (skillInstance)
+            skillInstance->Use(GetGameObject(), _target);
+        else if (skillId == (int)SkillType::WSpell)
+        {
+            Protocol::C_SkillCast packet;
+            packet.set_casterid(_playerInfo->objectid());
+            packet.set_skillid(skillId);
+            NETWORK->SendPacket(ClientPacketHandler::MakeSendBuffer(packet, C_SKILL_CAST));
+        }
 	
 }
 
 void GarenPlayerController::Awake() {}
-void GarenPlayerController::Start() {}
+void GarenPlayerController::Start()
+{
+	Super::Start();
+}
 void GarenPlayerController::LateUpdate() {}
 void GarenPlayerController::FixedUpdate() {}
 
 void GarenPlayerController::Update()
 {
-	Super::Update();
+    Super::Update();
+    if (_isAttackMode && !GetGameObject()->GetModelAnimator() && TIME->GetGameTime() >= _timeToIdle)
+        FinishActionAnimation();
 
-	if (_isAttackMode)
+    if (_eSkillEffect)
 	{
-		// ✅ E 이펙트 Z축 회전
-		if (_eSkillEffect)
+		auto transform = _eSkillEffect->GetTransform();
+		Vec3 effectPosition = GetTransform()->GetPosition();
+		effectPosition.y = 3.25f;
+		transform->SetPosition(effectPosition);
+
+		if (_isAttackMode)
 		{
-			auto transform = _eSkillEffect->GetTransform();
-
-			// ✅ 회전값 누적
-			_zAngle -= XMConvertToRadians(90.f) * DT * 4.f; // 초당 90도 회전
-
-			// ✅ X축 고정, Z축만 누적 회전
-			Vec3 localRot = Vec3(XMConvertToRadians(90.f), 0.f, _zAngle);
-			transform->SetLocalRotation(localRot);
-
-			DEBUG_LOG("ROT? " << localRot.z);
+			_zAngle -= XMConvertToRadians(360.f) * DT;
+			transform->SetLocalRotation(Vec3(XMConvertToRadians(90.f), 0.f, _zAngle));
 		}
-		return;
 	}
 }
-
 void GarenPlayerController::AlignToTarget()
 {
 	if (_target)
@@ -159,7 +164,7 @@ shared_ptr<GameObject> GarenPlayerController::CreateESkillEffect()
 
 	Vec3 pos = GetTransform()->GetPosition();
 
-	pos.y = 3.0f;
+	pos.y = 3.25f;
 
 
 	obj->GetOrAddTransform()->SetPosition(pos);

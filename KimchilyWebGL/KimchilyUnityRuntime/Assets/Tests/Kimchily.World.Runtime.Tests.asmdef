@@ -1,0 +1,5 @@
+{
+  "name": "Kimchily.World.Runtime.Tests",
+  "references": ["Kimchily.World.Runtime", "Kimchily.Creator.Runtime"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

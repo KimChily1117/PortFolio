@@ -219,6 +219,8 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClInclude Include="Technique.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="NavGridAsset.h" />
+    <ClInclude Include="NavGridAssetWriter.h" />
     <ClInclude Include="Tilemap.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="tinyxml2.h" />
@@ -309,6 +311,12 @@ xcopy /Y "$(SolutionDir)EngineCore\*.inl" "$(SolutionDir)Libraries\Include\Engin
     <ClCompile Include="Technique.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="NavGridAssetWriter.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="NavGridAsset.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Tilemap.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="tinyxml2.cpp">

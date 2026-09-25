@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "GarenOtherPlayerController.h"
 #include "ModelAnimator.h"
 #include "ISkill.h"
@@ -30,45 +30,38 @@ void GarenOtherPlayerController::Update()
 {
 	Super::Update();
 
+	if (_eSkillEffect)
+	{
+		auto transform = _eSkillEffect->GetTransform();
+		Vec3 effectPosition = GetTransform()->GetPosition();
+		effectPosition.y = 3.25f;
+		transform->SetPosition(effectPosition);
+		if (_isAttackMode)
+		{
+			_zAngle -= XMConvertToRadians(360.f) * DT;
+			transform->SetLocalRotation(Vec3(XMConvertToRadians(90.f), 0.f, _zAngle));
+		}
+	}
+
 	if (_isAttackMode)
 	{
-		// ✅ Z축 회전 (E 스킬 이펙트)
-		if (_eSkillEffect)
-		{
-			auto transform = _eSkillEffect->GetTransform();
-
-			// ✅ 회전값 누적
-			_zAngle -= XMConvertToRadians(90.f) * DT * 4.f; // 초당 90도 회전
-
-			// ✅ X축 고정, Z축만 누적 회전
-			Vec3 localRot = Vec3(XMConvertToRadians(90.f), 0.f, _zAngle);
-			transform->SetLocalRotation(localRot);
-
-			DEBUG_LOG("ROT? " << localRot.z);
-		}
-
 		if (TIME->GetGameTime() >= _timeToIdle)
 		{
-			_isAttackMode = false;
-			_currentState = PlayerState::IDLE;
-			GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
-
+			FinishActionAnimation();
 			uint64 casterId = _playerInfo->objectid();
 			ClientPacketHandler::g_lastPlayedSkill.erase(casterId);
-
-			// ✅ 이펙트 제거
 			if (_eSkillEffect)
 			{
 				CUR_SCENE->Remove(_eSkillEffect);
 				_eSkillEffect = nullptr;
 			}
-
-			DEBUG_LOG("[Client] ✅ AnnieOtherPlayer → IDLE (timeout)");
 		}
 		return;
 	}
 
-	// 이동 처리
+	if (HasAuthoritativeSnapshotStream())
+		return;
+
 	if (_hasTargetPosition)
 	{
 		if (_currentState != PlayerState::RUN)
@@ -83,7 +76,6 @@ void GarenOtherPlayerController::Update()
 		GetGameObject()->GetModelAnimator()->SetAnimation((int32)PlayerState::IDLE, true);
 	}
 }
-
 void GarenOtherPlayerController::ProcSkill(int32 skillId)
 {
 	if (skillId == (int)SkillType::GeneralAtk)
@@ -110,17 +102,13 @@ void GarenOtherPlayerController::ProcSkill(int32 skillId)
 
 	AlignToTarget();
 
+	BeginActionAnimation();
 	auto animator = GetGameObject()->GetModelAnimator();
 	if (animator)
 	{
 		_isAttackMode = true;
 		animator->SetAnimation((int32)_currentState, false);
 
-		float duration = animator->GetAnimationDuration((int32)_currentState);
-		if (duration <= 0.01f)
-			duration = 1.0f;
-
-		_timeToIdle = TIME->GetGameTime() + duration;
 
 		DEBUG_LOG("[Client] 🎬 AnnieOtherPlayer Skill Played: " << skillId);
 	}
@@ -150,8 +138,7 @@ shared_ptr<GameObject> GarenOtherPlayerController::CreateESkillEffect()
 
 	Vec3 pos = GetTransform()->GetPosition();
 
-	pos.y = 3.0f;
-
+	pos.y = 3.25f;
 
 	obj->GetOrAddTransform()->SetPosition(pos);
 

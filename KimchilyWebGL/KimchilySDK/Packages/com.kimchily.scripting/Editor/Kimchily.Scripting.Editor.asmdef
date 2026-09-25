@@ -1,0 +1,6 @@
+{
+  "name": "Kimchily.Scripting.Editor",
+  "rootNamespace": "Kimchily.Scripting.Editor",
+  "references": ["Kimchily.Scripting.Runtime"],
+  "includePlatforms": ["Editor"]
+}

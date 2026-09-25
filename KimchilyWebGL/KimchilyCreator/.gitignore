@@ -1,0 +1,10 @@
+Library/
+Temp/
+Logs/
+obj/
+UserSettings/
+Artifacts/
+WorldBuilds/
+*.csproj
+*.sln
+*.pidb

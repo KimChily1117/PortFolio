@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "ModelAnimator.h"
 #include "Material.h"
 #include "ModelMesh.h"
@@ -60,10 +60,14 @@ float ModelAnimator::GetAnimationDuration(int animIndex)
 void ModelAnimator::SetAnimation(int32 animIndex, bool loop)
 {
 	TweenDesc& desc = _tweenDesc;
+	const uint32 requestedLoop = loop ? 1u : 0u;
+	if (desc.curr.animIndex == animIndex && desc.curr.loop == requestedLoop)
+		return;
+
 	desc.curr.animIndex = animIndex;
 	desc.curr.currFrame = 0;
 	desc.curr.sumTime = 0;
-	desc.curr.loop = loop ? 1 : 0; // ✅ uint32로 저장 (GPU 호환)
+	desc.curr.loop = requestedLoop;
 	DEBUG_LOG("[Animation] 🎬 즉시 애니메이션 변경: " << animIndex << " (Loop: " << loop << ")");
 }
 

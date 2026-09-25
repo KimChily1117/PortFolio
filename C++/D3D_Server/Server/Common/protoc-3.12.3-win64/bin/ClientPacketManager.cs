@@ -50,7 +50,13 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SDamage, MakePacket<S_Damage>);
 		_handler.Add((ushort)MsgId.SDamage, PacketHandler.S_DamageHandler);		
 		_onRecv.Add((ushort)MsgId.SDead, MakePacket<S_Dead>);
-		_handler.Add((ushort)MsgId.SDead, PacketHandler.S_DeadHandler);
+		_handler.Add((ushort)MsgId.SDead, PacketHandler.S_DeadHandler);		
+		_onRecv.Add((ushort)MsgId.SNavigationInfo, MakePacket<S_NavigationInfo>);
+		_handler.Add((ushort)MsgId.SNavigationInfo, PacketHandler.S_NavigationInfoHandler);		
+		_onRecv.Add((ushort)MsgId.SMoveAccepted, MakePacket<S_MoveAccepted>);
+		_handler.Add((ushort)MsgId.SMoveAccepted, PacketHandler.S_MoveAcceptedHandler);		
+		_onRecv.Add((ushort)MsgId.SMoveRejected, MakePacket<S_MoveRejected>);
+		_handler.Add((ushort)MsgId.SMoveRejected, PacketHandler.S_MoveRejectedHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

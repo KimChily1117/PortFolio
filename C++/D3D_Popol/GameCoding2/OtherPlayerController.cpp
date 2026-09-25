@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "OtherPlayerController.h"
 #include "GameObject.h"
 #include "Transform.h"
@@ -10,9 +10,22 @@ void OtherPlayerController::Awake()
 {
 }
 
+void OtherPlayerController::StopMovementForAction()
+{
+    BasePlayerController::StopMovementForAction();
+    _hasTargetPosition = false;
+    _targetPosition = GetTransform()->GetPosition();
+}
+
 void OtherPlayerController::Update()
 {
-	if (!_hasTargetPosition)
+	BasePlayerController::Update();
+	if (HasAuthoritativeSnapshotStream())
+	{
+		_hasTargetPosition = false;
+		return;
+	}
+	if (IsMovementLocked() || !_hasTargetPosition)
 		return;
 
 	Vec3 currentPosition = GetTransform()->GetPosition();
@@ -38,8 +51,11 @@ void OtherPlayerController::Update()
 		_hasTargetPosition = false;
 		GetTransform()->SetPosition(Vec3(_targetPosition.x, 1.6f, _targetPosition.z));
 
-		_currentState = PlayerState::IDLE;
-		GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
+        if (!_isAttackMode)
+        {
+            _currentState = PlayerState::IDLE;
+            GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
+        }
 	}
 	else
 	{
@@ -53,7 +69,7 @@ void OtherPlayerController::Update()
 		GetTransform()->SetPosition(newPosition);
 
 		// ✅ E 스킬 중엔 애니메이션 변경 X
-		if (!isESkill)
+		if (!_isAttackMode)
 		{
 			_currentState = PlayerState::RUN;
 			GetGameObject()->GetModelAnimator()->GetTweenDesc().curr.animIndex = (int32)_currentState;
@@ -63,6 +79,7 @@ void OtherPlayerController::Update()
 
 void OtherPlayerController::SetTargetPosition(const Vec3& position)
 {
+    if (IsMovementLocked()) return;
 	_targetPosition = position;
 	_hasTargetPosition = true;
 }

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -26,4 +26,8 @@
     <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Content\Navigation\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Resources\TilemapData.txt" Link="Content\Legacy\TilemapData.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

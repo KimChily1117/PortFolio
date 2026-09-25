@@ -1,0 +1,14 @@
+{
+  "navigationMaps": [
+    {
+      "roomId": 0,
+      "sceneId": 0,
+      "navigationMapId": "room-0-nav-v1",
+      "assetPath": "Navigation/room-0-nav-v1.navgrid",
+      "formatVersion": 1,
+      "contentHash": "0eb3670c39ac4e3fd2422b98da07e60f471b40e4a72cd1023e5465eff5b2a9f8",
+      "enabled": true,
+      "required": true
+    }
+  ]
+}

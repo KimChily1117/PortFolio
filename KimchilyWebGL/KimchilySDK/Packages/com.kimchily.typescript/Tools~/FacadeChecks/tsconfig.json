@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "commonjs",
+    "strict": true,
+    "noEmit": true,
+    "types": [],
+    "lib": ["ES2018"]
+  },
+  "files": [
+    "../../Typings~/kimchily.d.ts",
+    "../../Samples~/RotatingObject/WorldBehaviour.ts",
+    "types-positive.ts",
+    "types-negative.ts"
+  ]
+}

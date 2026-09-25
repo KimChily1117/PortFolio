@@ -1,0 +1,14 @@
+{
+  "name": "Kimchily.Creator.Editor.Tests",
+  "references": [
+    "Kimchily.Creator.Runtime",
+    "Kimchily.Creator.Editor",
+    "Kimchily.Creator.TestFixtures"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

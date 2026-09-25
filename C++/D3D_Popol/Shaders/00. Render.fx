@@ -16,7 +16,7 @@ cbuffer BoneBuffer
 
 cbuffer MeshTransformBuffer
 {
-    matrix MeshTransformMatrix; //Ãß°¡µÈ Mesh º¯È¯ Çà·Ä
+    matrix MeshTransformMatrix; //ï¿½ß°ï¿½ï¿½ï¿½ Mesh ï¿½ï¿½È¯ ï¿½ï¿½ï¿?
 };
 
 // ************** MeshRender ****************
@@ -172,7 +172,7 @@ MeshOutput VS_Animation(VertexModel input)
 
     matrix animMatrix = GetAnimationMatrix(input);
 
-    // Bone Animation ÈÄ MeshTransformMatrix Àû¿ë
+    // Bone Animation ï¿½ï¿½ MeshTransformMatrix ï¿½ï¿½ï¿½ï¿½
     matrix finalMatrix = mul(animMatrix, MeshTransformMatrix);
 
     output.position = mul(input.position, finalMatrix);
@@ -207,26 +207,24 @@ MeshOutput VS_Animation_Static(VertexModel input)
 
 
 
-// ************** ParticleRender (Ãß°¡µÊ) ****************
+// ************** ParticleRender (ï¿½ß°ï¿½ï¿½ï¿½) ****************
 
 MeshOutput VS_Billboard(VertexMesh input)
 {
-    MeshOutput output;
-
-    float4 worldPos = mul(float4(0, 0, 0, 1), W); // Áß½É À§Ä¡¸¸ »ç¿ë (È¸Àü/½ºÄÉÀÏ ¾øÀ½)
-
-    // Ä«¸Þ¶ó ¹æÇâ °è»ê
-    float3 camRight = float3(V._11, V._21, V._31);
-    float3 camUp = float3(V._12, V._22, V._32);
-
-    // Quad Áß½É ±âÁØ º¸Á¤ (0.5 ¿ÀÇÁ¼Â ±âÁØ)
-    float3 offset = (input.uv.x - 0.5f) * camRight + (0.5f - input.uv.y) * camUp;
+    MeshOutput output = (MeshOutput)0;
+    // MeshRenderer is instanced, so use the per-object matrix.
+    float4 worldPos = mul(float4(0, 0, 0, 1), input.world);
+    // VInv rows are the camera basis vectors in world space.
+    float3 camRight = normalize(float3(VInv._11, VInv._12, VInv._13));
+    float3 camUp = normalize(float3(VInv._21, VInv._22, VInv._23));
+    float width = length(float3(input.world._11, input.world._12, input.world._13));
+    float height = length(float3(input.world._21, input.world._22, input.world._23));
+    float3 offset = (input.uv.x - 0.5f) * camRight * width
+                  + (0.5f - input.uv.y) * camUp * height;
     float3 finalPos = worldPos.xyz + offset;
-
     output.position = mul(float4(finalPos, 1.0f), VP);
+    output.worldPosition = finalPos;
     output.uv = input.uv;
-
     return output;
 }
-
 #endif

@@ -1,4 +1,4 @@
-﻿using Server.Game.Objects;
+using Server.Game.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,46 +65,40 @@ namespace Server.Game
         public Vector2 _mapSize { private set; get; } // 맵 크기 (X, Z)
         private int _tileSize = 1; // 타일 크기 (기본값 1)
 
-        public void LoadFile(string path)
+        public bool LoadFile(string path)
         {
             try
             {
-                // 🔥 파일이 존재하는지 확인
                 if (!File.Exists(path))
                 {
-                    Console.WriteLine($"[Server] ❌ Tilemap file not found: {path}");
-                    return;
+                    Console.WriteLine($"[Server] Tilemap file not found: {path}");
+                    return false;
                 }
 
-                Console.WriteLine($"[Server] ✅ Loading Tilemap from {path}");
-
-                // 🔥 파일 읽기 (UTF-16 지원)
+                Console.WriteLine($"[Server] Loading Tilemap from {path}");
                 string[] lines = File.ReadAllLines(path, System.Text.Encoding.UTF8);
                 if (lines.Length == 0)
                 {
-                    Console.WriteLine("[Server] ❌ Tilemap file is empty!");
-                    return;
+                    Console.WriteLine("[Server] Tilemap file is empty.");
+                    return false;
                 }
 
-                // 🔥 맵 크기 읽기
                 string[] sizeTokens = lines[0].Split(' ');
                 if (sizeTokens.Length != 2 ||
                     !int.TryParse(sizeTokens[0], out int sizeX) ||
-                    !int.TryParse(sizeTokens[1], out int sizeZ))
+                    !int.TryParse(sizeTokens[1], out int sizeZ) ||
+                    sizeX <= 0 || sizeZ <= 0)
                 {
-                    Console.WriteLine("[Server] ❌ Invalid map size format!");
-                    return;
+                    Console.WriteLine("[Server] Invalid Tilemap size.");
+                    return false;
                 }
 
                 _mapSize = new Vector2(sizeX, sizeZ);
-                _tiles.Clear(); // 기존 타일 초기화
+                _tiles.Clear();
 
-                // 🔥 타일 데이터 파싱
                 for (int i = 1; i < lines.Length; i++)
                 {
-                    string[] tokens = lines[i].Split('\t'); // 탭으로 구분
-
-                    // 데이터 검증 (X, Y, Z, Value, IsWalkable)
+                    string[] tokens = lines[i].Split('\t');
                     if (tokens.Length != 5 ||
                         !int.TryParse(tokens[0], out int x) ||
                         !int.TryParse(tokens[1], out int y) ||
@@ -112,24 +106,31 @@ namespace Server.Game
                         !int.TryParse(tokens[3], out int value) ||
                         !int.TryParse(tokens[4], out int isWalkable))
                     {
-                        Console.WriteLine($"[Server] ⚠️ Invalid tile data: \"{lines[i]}\"");
-                        continue;
+                        Console.WriteLine($"[Server] Invalid Tilemap row {i}.");
+                        return false;
                     }
 
-                    // 🔥 타일 리스트에 추가
-                    Tile tile = new Tile(new Vec3(x, y, z), value, isWalkable == 1);
-                    _tiles.Add(tile);
+                    _tiles.Add(new Tile(new Vec3(x, y, z), value, isWalkable == 1));
                 }
 
-                Console.WriteLine($"[Server] ✅ Tilemap loaded successfully with {_tiles.Count} tiles.");
+                int expectedCount = checked(sizeX * sizeZ);
+                if (_tiles.Count != expectedCount)
+                {
+                    Console.WriteLine($"[Server] Tilemap cell count mismatch: expected {expectedCount}, actual {_tiles.Count}.");
+                    return false;
+                }
+
+                Console.WriteLine($"[Server] Tilemap loaded with {_tiles.Count} cells.");
+                return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Server] ❌ Error loading tilemap: {ex.Message}");
+                Console.WriteLine($"[Server] Error loading Tilemap: {ex.Message}");
+                return false;
             }
         }
 
-        // 🔥 특정 위치에 대한 타일 반환 (없으면 null)
+        // Returns a tile at an exact XZ cell coordinate.
         public Tile GetTileAt(Vec3 position)
         {
             foreach (var tile in _tiles)

@@ -1,0 +1,46 @@
+# Keep the Visual Studio solution despite the parent repository's Unreal rules.
+!*.sln
+
+# Compiler and IDE outputs. Third-party Libraries/Lib/Debug and Common/protoc/bin stay available.
+.vs/
+obj/
+Intermediate/
+__pycache__/
+*.user
+*.suo
+*.pdb
+*.ilk
+*.obj
+*.pch
+*.idb
+*.tlog
+*.log
+*.tmp
+*.pyc
+*.exp
+*.bak
+/x64/
+/AssimpTool/x64/
+/EngineCore/x64/
+/GameCoding2/x64/
+/ServerCore/x64/
+/GameCoding2/Binaries/
+/Libraries/Lib/EngineCore/EngineCore.lib
+/Libraries/Lib/ServerCore/ServerCore.lib
+
+# Runtime DLLs are supplied dependencies; executable/shader outputs are rebuilt.
+!/Binaries/
+/Binaries/*
+!/Binaries/*.dll
+
+# Test results, local patch staging, and old source archives.
+/Tests/*/bin/
+/Tests/*/results/
+/Tests/NavGrid/Results/
+/Tests/NavGrid/Generated/
+/Tests/NavGrid/Output/
+/Tests/NavGrid/csharp-mutations/
+/Tests/NavGrid/csharp-result-v7.json
+/tmp/
+/EngineCore/EngineCore.zip
+/GameCoding2/GameCoding2.zip

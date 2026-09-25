@@ -1,0 +1,43 @@
+{
+  "source": "C:\\Users\\yeop_sun\\Desktop\\Extract\\assets\\characters\\annie\\skins\\base\\particles",
+  "effect": "Annie_Base_W_cas_Right",
+  "converter": "AssimpTool --convert-scb-vfx source output --keep-axes",
+  "files": {
+    "annie_base_flames2.dds": "dcb7be1d6a3666134b475e6ee931729afc4255a001f7883cf0cb9f7f90c83231",
+    "annie_base_fireshapes_00.dds": "5ed525c1fcce0c5ca22410a60fb31aaeba02d999b9294cad6a546bc0cdd62137",
+    "annie_base_w_mask.dds": "18a8c637a56d0390e3722903fb084651c77c281a116a630cc8014134fa358b76",
+    "annie_base_w_erosionpack.dds": "4e22803926d6db09e37f518c277589674ce434fe3e09d8bb1cb9a1c9656a9e99",
+    "annie_base_w_grounddecalfinal.dds": "e9a40a45d37014d22da617f735660991be1d006d1d15dc2a03b5f3b4d72a456f",
+    "annie_base_e_small_mote.dds": "53a72a6fa1ca9784b1120b63c8a9a95bac0270f98e254accf6590784421305b6",
+    "annie_base_w_cone_1.scb": "f727c4f4017a291bf67174c9fca7f1972d9594f94967b3029ddc5e9f22381686",
+    "annie_base_w_cone_1_edge.scb": "a32d3723a5a0b610585712d23615c3672ccae22c3940c0b1cb973a5c13ce6f86",
+    "annie_base_w_cone_1_edge2.scb": "9dde1293f23f0af4a525a4194d94cbcb37423fbe8fa7015532bd6aab7590a442",
+    "annie_base_w_cone_2.scb": "e2046b043b44bffc4413763af4367220cebbb1313f7e69934576993576b68bea"
+  },
+  "meshes": {
+    "annie_base_w_cone_1": {
+      "vertices": 441,
+      "indices": 2400,
+      "bytes": 29024,
+      "sha256": "e049a381fa3fdadcbcf4fbf2c5fb00f2c76916da6b1dd0508337f42fa7e0ef44"
+    },
+    "annie_base_w_cone_1_edge": {
+      "vertices": 105,
+      "indices": 480,
+      "bytes": 6560,
+      "sha256": "cdbac526babd5d050239f0ba0c5e266823cca135b60c9ad90cb2136118cd5e6a"
+    },
+    "annie_base_w_cone_1_edge2": {
+      "vertices": 210,
+      "indices": 1080,
+      "bytes": 13580,
+      "sha256": "f34e4890678a14790c55694b8f97c36214777b4f6f7791806ab39f9698487859"
+    },
+    "annie_base_w_cone_2": {
+      "vertices": 150,
+      "indices": 756,
+      "bytes": 9644,
+      "sha256": "d6369c85ccb3507114ded064ae0c244d43c4553215613aab088015a38f4f13c8"
+    }
+  }
+}

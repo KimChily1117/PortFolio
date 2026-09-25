@@ -1,0 +1,69 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+def withUnity = providers.gradleProperty('withUnity').getOrElse('false').toBoolean()
+
+android {
+    compileSdk 32
+    buildToolsVersion '32.0.0'
+    defaultConfig {
+        applicationId 'com.kimchily.app'
+        minSdk 23
+        targetSdk 32
+        versionCode 1
+        versionName '0.1.0'
+        multiDexEnabled true
+        buildConfigField 'boolean', 'WITH_UNITY', withUnity.toString()
+        if (withUnity) { ndk { abiFilters 'arm64-v8a' } }
+    }
+    sourceSets {
+        main {
+            java.srcDirs += withUnity ? ['src/unity/java'] : ['src/standalone/java']
+            if (withUnity) { res.srcDirs += ['src/unity/res'] }
+            manifest.srcFile withUnity ? 'src/unity/AndroidManifest.xml' : 'src/main/AndroidManifest.xml'
+        }
+    }
+    compileOptions {
+        // Keep Android 6 support while using the corrected ZXing QR detector.
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions { jvmTarget = '11' }
+    if (withUnity) {
+        packagingOptions {
+            jniLibs { useLegacyPackaging = true }
+        }
+        aaptOptions {
+            noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] +
+                unityStreamingAssets.tokenize(', ')
+            ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
+        }
+        bundle {
+            language { enableSplit = false }
+            density { enableSplit = false }
+            abi { enableSplit = true }
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false }
+    }
+}
+
+dependencies {
+    implementation('com.journeyapps:zxing-android-embedded:4.3.0') {
+        exclude group: 'com.google.zxing', module: 'core'
+    }
+    // 3.3.0 misses some valid publisher QR patterns; 3.5.3 fixes their detection.
+    implementation 'com.google.zxing:core:3.5.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation 'androidx.activity:activity:1.2.4'
+    if (withUnity) {
+        implementation project(':unityLibrary')
+        // Unity's exported module does not expose this implementation JAR to Kotlin compilation.
+        compileOnly files(new File(project(':unityLibrary').projectDir, 'libs/unity-classes.jar'))
+    }
+    testImplementation 'junit:junit:4.13.2'
+}

@@ -1,10 +1,20 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "ParticleSystem.h"
 #include "MeshRenderer.h"
 #include "Mesh.h"
 #include "BinaryReader.h"
 #include "FileUtils.h"
 #include "Camera.h"
+
+namespace
+{
+	constexpr UINT MaxSupportedParticleCount = 4096;
+
+	bool IsValidParticleCount(UINT count)
+	{
+		return count > 0 && count <= MaxSupportedParticleCount;
+	}
+}
 
 ParticleSystem::ParticleSystem(wstring file)
 {
@@ -36,7 +46,7 @@ void ParticleSystem::Update()
 	lifeTime += DT;
 	UpdatePhysical();
 	UpdateColor();
-	// quad에 대한 트랜스폼 업데이트 진행
+	// quad�� ���� Ʈ������ ������Ʈ ����
 	if (lifeTime > data.duration)
 	{
 		if (data.isLoop)
@@ -49,19 +59,19 @@ void ParticleSystem::Update()
 
 void ParticleSystem::Render()
 {
-	// 랜더링에 대한 셋팅이 필요함
-	// 매쉬 랜더러의 기능들을 여기다가 정의한다.
+	// �������� ���� ������ �ʿ���
+	// �Ž� �������� ��ɵ��� ����ٰ� �����Ѵ�.
 
 
 
-	// 매쉬 랜더러를 붙이긴해야할거같은데...
-	// 따로 Scene에 올리진않고. 랜더링을 따로 걸꺼니깐.. 
-	// 안에 Data만 가지고온다?
-	// 이게 효율적인가? ==> 아님
-	// 그치만 데이터를 들고있으니간 컴포넌트를 붙인다.
-	// Scene구조가 아닌 따로 Manager를통해 꺼내오기만할것임 -> IMGUI를 생각하면된다.
+	// �Ž� �������� ���̱��ؾ��ҰŰ�����...
+	// ���� Scene�� �ø����ʰ�. �������� ���� �ɲ��ϱ�.. 
+	// �ȿ� Data�� ������´�?
+	// �̰� ȿ�����ΰ�? ==> �ƴ�
+	// ��ġ�� �����͸� ��������ϰ� ������Ʈ�� ���δ�.
+	// Scene������ �ƴ� ���� Manager������ �������⸸�Ұ��� -> IMGUI�� �����ϸ�ȴ�.
 
-	// 결론은 파티클은 게임 엔진 시스템이긴하나 , 서드파티 느낌으로 따로 돌고있을것임 
+	// ����� ��ƼŬ�� ���� ���� �ý����̱��ϳ� , ������Ƽ �������� ���� ������������ 
 
 
 	TransformDesc desc;
@@ -82,15 +92,15 @@ void ParticleSystem::Render()
 	instancingBuffer->PushData();
 
 
-	// 월드(Transform 자체를 업데이트함)
-	// 여기서 TransformDesc 구조체 선언후에 밀어줌
+	// ����(Transform ��ü�� ������Ʈ��)
+	// ���⼭ TransformDesc ����ü �����Ŀ� �о���
 
 
 
 	blendState[1]->SetState();
 	depthState[1]->SetState();	
 	////////////////////////////////////
-	// 랜더링 이제 걸것
+	// ������ ���� �ɰ�
 	_quad->GetMeshRenderer()->GetShader()->DrawIndexedInstanced(0,12, _quad->GetMeshRenderer()->GetMesh()->GetIndexBuffer()->GetCount(), drawCount);
 
 	//DC->DrawIndexedInstanced(6, drawCount, 0, 0, 0);
@@ -102,21 +112,19 @@ void ParticleSystem::Render()
 
 void ParticleSystem::Play(Vec3 pos, Vec3 rot /*= Vec3()*/)
 {
-	initialized = false; // 초기화 명시적으로 Reset
+	initialized = false; // �ʱ�ȭ ��������� Reset
 	isActive = true;
-	// Quad(즉)
+	// Quad(��)
 	_quad->GetOrAddTransform()->SetPosition(pos);
 	_quad->GetOrAddTransform()->SetRotation(rot);
 
-	DEBUG_LOG(L"[Play] SetPos: " << pos.x << " , " << pos.y << " , " << pos.z); // ⬅ 이거 추가
-	DEBUG_LOG(L"[Play] SetRot: " << rot.x  << " , " << rot.y << " , " << rot.z); // ⬅ 이거 추가
 	Init();
 }
 
 void ParticleSystem::Stop()
 {
-	// Todo Stop기능 만들어야함. 근데 뭐.. 정아니면 파괴시키면되니깐.
-	// 이 부분은 한번 고민해봅시다.
+	// Todo Stop��� ��������. �ٵ� ��.. ���ƴϸ� �ı���Ű��Ǵϱ�.
+	// �� �κ��� �ѹ� ����غ��ô�.
 
 	isActive = false;
 
@@ -124,7 +132,7 @@ void ParticleSystem::Stop()
 
 void ParticleSystem::UpdatePhysical()
 {
-	// 쉐이더 입자들에대한 트랜스폼 업데이트
+	// ���̴� ���ڵ鿡���� Ʈ������ ������Ʈ
 
 	drawCount = 0;
 
@@ -154,9 +162,7 @@ void ParticleSystem::UpdatePhysical()
 		drawCount++;
 	}
 
-	instancingBuffer->PushData();
-
-	// 쉐이더 입자들에대한 트랜스폼 업데이트
+	// ���̴� ���ڵ鿡���� Ʈ������ ������Ʈ
 
 	//drawCount = 0;
 	//for (int i = 0; i < data.count; i++)
@@ -173,7 +179,7 @@ void ParticleSystem::UpdatePhysical()
 	//		particleInfos[i].transform._localRotation.y = CUR_SCENE->GetMainCamera()->GetTransform()->_localRotation.y;
 	//	}
 
-	//	// [👀 보간값 t 보정]
+	//	// [?? ������ t ����]
 	//	float denom = max(data.duration - particleInfos[i].startTime, 0.0001f);
 	//	float t = (lifeTime - particleInfos[i].startTime) / denom;
 	//	t = std::clamp(t, 0.0f, 1.0f);
@@ -195,7 +201,7 @@ void ParticleSystem::UpdatePhysical()
 
 void ParticleSystem::UpdateColor()
 {
-	// Mat desc 구조체 만들어서 Update 함
+	// Mat desc ����ü ���� Update ��
 
 	//float t = lifeTime / data.duration;
 
@@ -224,7 +230,7 @@ void ParticleSystem::UpdateColor()
 
 void ParticleSystem::Init()
 {
-	// _quad에 대한 메모리 할당 및 Component 부착 필요함
+	// _quad�� ���� �޸� �Ҵ� �� Component ���� �ʿ���
 
 
 
@@ -236,7 +242,7 @@ void ParticleSystem::Init()
 	lifeTime = 0.0f;
 	drawCount = 0;
 
-	// Particle 기준 위치
+	// Particle ���� ��ġ
 	if (_quad->GetTransform() == nullptr)
 		return;
 	Vec3 originPos = _quad->GetTransform()->GetPosition();
@@ -286,13 +292,13 @@ void ParticleSystem::LoadData(wstring file)
 	{
 		/*
 		
-		기존 코드들
+		���� �ڵ��
 
 		quad = new Quad(Vector2(1, 1));
 		quad->GetMaterial()->SetDiffuseMap(textureFile);
 		quad->GetMaterial()->SetShader(L"Effect/Particle.hlsl");
 		*/
-		// Todo quad 형태의 Mesh Get해서 Mesh에 넣어준다.
+		// Todo quad ������ Mesh Get�ؼ� Mesh�� �־��ش�.
 		_quad = make_shared<GameObject>();
 		_quad->AddComponent(make_shared<MeshRenderer>());
 
@@ -302,16 +308,16 @@ void ParticleSystem::LoadData(wstring file)
 		_quad->GetMeshRenderer()->SetMesh(mesh);
 
 
-		// 필요하다면 Quad mesh이용한 shader pass도 여기서 Setting
+		// �ʿ��ϴٸ� Quad mesh�̿��� shader pass�� ���⼭ Setting
 		_quad->GetMeshRenderer()->SetPass(12);
 
 
-		// 여기서 하는이유? mat이나 이런부분들을 여기서 셋팅해서 tex로 넣어줘야함
+		// ���⼭ �ϴ�����? mat�̳� �̷��κе��� ���⼭ �����ؼ� tex�� �־������
 		{
 			// Setting Matrial	
 			shared_ptr<Material> material = make_shared<Material>();
 
-			// 일단은 사람들이 사용하는 General Shader 사용함
+			// �ϴ��� ������� ����ϴ� General Shader �����
 			material->SetShader(CUR_SCENE->_shader);
 
 
@@ -330,26 +336,26 @@ void ParticleSystem::LoadData(wstring file)
 
 	//ParticleData particleData = {};
 
-	//// Color 이전까지의 데이터만 복사 (startColor 위치까지)
+	//// Color ���������� �����͸� ���� (startColor ��ġ����)
 	//reader->Byte(&particleData, offsetof(ParticleData, startColor));
 
 
-	//// Color(startColor) 개별 파싱
+	//// Color(startColor) ���� �Ľ�
 	//particleData.startColor.x = std::clamp(reader->Float(), 0.0f, 1.0f);
 	//particleData.startColor.y = std::clamp(reader->Float(), 0.0f, 1.0f);
 	//particleData.startColor.z = std::clamp(reader->Float(), 0.0f, 1.0f);
 	//particleData.startColor.w = std::clamp(reader->Float(), 0.0f, 1.0f);
 
-	//// Color(endColor) 개별 파싱
+	//// Color(endColor) ���� �Ľ�
 	//particleData.endColor.x = std::clamp(reader->Float(), 0.0f, 1.0f);
 	//particleData.endColor.y = std::clamp(reader->Float(), 0.0f, 1.0f);
 	//particleData.endColor.z = std::clamp(reader->Float(), 0.0f, 1.0f);
 	//particleData.endColor.w = std::clamp(reader->Float(), 0.0f, 1.0f);
 
-	//// 최종 구조체 저장
+	//// ���� ����ü ����
 	//data = particleData;
 
-	//// 파티클 버퍼 설정
+	//// ��ƼŬ ���� ����
 	//instances.resize(data.count);
 	//particleInfos.resize(data.count);
 
@@ -362,6 +368,32 @@ void ParticleSystem::LoadData(wstring file)
 	particleData.isBillboard = reader->Bool();
 
 	particleData.count = reader->UInt();
+
+	// Older particle assets were written from an ABI-aligned structure:
+	// three bools are followed by one padding byte before the UINT count.
+	// The old field reader treated that padding as part of the count (300 -> 76800),
+	// producing a large collision-time initialization and per-frame update spike.
+	if (!IsValidParticleCount(particleData.count))
+	{
+		uint8 legacyCountHighByte = 0;
+		reader->Byte(&legacyCountHighByte, sizeof(legacyCountHighByte));
+
+		const UINT alignedCount =
+			(particleData.count >> 8) |
+			(static_cast<UINT>(legacyCountHighByte) << 24);
+
+		if (IsValidParticleCount(alignedCount))
+		{
+			particleData.count = alignedCount;
+		}
+		else
+		{
+			DEBUG_LOG(L"[Particle] Invalid particle count in " << file
+				<< L": raw=" << particleData.count
+				<< L", aligned=" << alignedCount);
+			particleData.count = 1;
+		}
+	}
 	particleData.duration = reader->Float();
 
 	particleData.minVelocity.x = reader->Float();
@@ -413,10 +445,10 @@ void ParticleSystem::LoadData(wstring file)
 	particleData.endColor.z = reader->Float();
 	particleData.endColor.w = reader->Float();
 
-	// 구조체 저장
+	// ����ü ����
 	data = particleData;
 
-	// 파티클 버퍼 초기화
+	// ��ƼŬ ���� �ʱ�ȭ
 	instances.resize(data.count);
 	particleInfos.resize(data.count);
 

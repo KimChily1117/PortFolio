@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../tools/Unity.TestReferences.props" />
+  <PropertyGroup>
+    <AssemblyName>Kimchily.CompileTests</AssemblyName>
+    <OutputPath>../../Artifacts/Managed/CompileTests/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Packages/com.kimchily.creator/Tests/**/*.cs" />
+    <Compile Include="../../ValidationProject/Assets/Editor/**/*.cs" />
+    <Compile Include="../../ValidationProject/Assets/Tests/**/*.cs" />
+    <Reference Include="$(UnityEditorRoot)/Data/Managed/UnityEditor/*.dll" />
+    <Reference Include="../../ValidationProject/Assets/Plugins/KimchilyBaseFramework.dll" />
+    <ProjectReference Include="../Runtime/Kimchily.Creator.Runtime.csproj" />
+    <ProjectReference Include="../Editor/Kimchily.Creator.Editor.csproj" />
+  </ItemGroup>
+</Project>

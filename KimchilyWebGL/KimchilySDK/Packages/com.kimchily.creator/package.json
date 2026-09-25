@@ -1,0 +1,22 @@
+{
+  "name": "com.kimchily.creator",
+  "version": "0.1.0",
+  "displayName": "Kimchily Creator SDK",
+  "description": "Coroutine runtime and dependency-based world content authoring foundation.",
+  "unity": "2021.3",
+  "dependencies": {
+    "com.unity.modules.animation": "1.0.0",
+    "com.unity.modules.assetbundle": "1.0.0",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.jsonserialize": "1.0.0"
+  },
+  "samples": [
+    {
+      "displayName": "Coroutine examples",
+      "description": "C# example and Lua/xLua integration template.",
+      "path": "Samples~/Coroutines"
+    }
+  ]
+}

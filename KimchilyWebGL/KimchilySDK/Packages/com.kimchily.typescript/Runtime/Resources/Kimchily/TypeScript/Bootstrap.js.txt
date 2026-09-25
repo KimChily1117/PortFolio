@@ -1,0 +1,243 @@
+(function (host) {
+    "use strict";
+    if (!host || typeof host.call !== "function") throw new TypeError("Kimchily host.call is required");
+
+    const token = {};
+    const gameObjects = new Map();
+    const transforms = new Map();
+    const referenceIds = new WeakMap();
+    const behaviours = new WeakMap();
+    const coroutineHandles = new WeakMap();
+    const eventStates = new WeakMap();
+    let creation = null;
+
+    function finite(value, label) {
+        if (typeof value !== "number" || !Number.isFinite(value)) throw new TypeError(label + " must be finite");
+        return value;
+    }
+    function identifier(value) {
+        if (!Number.isSafeInteger(value) || value < 0) throw new TypeError("Invalid scene reference ID");
+        return value;
+    }
+    function call(operation, id, args) { return host.call(operation, id, args); }
+    function referenceId(reference) {
+        if (!referenceIds.has(reference)) throw new TypeError("Expected a Kimchily scene reference");
+        return referenceIds.get(reference);
+    }
+    function ownerId(instance) {
+        if (!behaviours.has(instance)) throw new TypeError("Expected a runtime-created Kimchily behaviour");
+        return behaviours.get(instance);
+    }
+    function vectorArray(value) {
+        if (!(value instanceof Vector3)) throw new TypeError("Expected Vector3");
+        return [finite(value.x, "x"), finite(value.y, "y"), finite(value.z, "z")];
+    }
+    function fromArray(value) {
+        if (!Array.isArray(value) || value.length !== 3) throw new TypeError("Expected a three-number vector");
+        return new Vector3(value[0], value[1], value[2]);
+    }
+    function space(value) {
+        if (value !== 0 && value !== 1) throw new TypeError("Expected Space.World or Space.Self");
+        return value;
+    }
+
+    class Vector3 {
+        constructor(x = 0, y = 0, z = 0) {
+            this.x = finite(x, "x"); this.y = finite(y, "y"); this.z = finite(z, "z");
+        }
+        get sqrMagnitude() { const v = vectorArray(this); return v[0] * v[0] + v[1] * v[1] + v[2] * v[2]; }
+        get magnitude() { const v = vectorArray(this); return Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]); }
+        get normalized() { const result = this.clone(); result.Normalize(); return result; }
+        static get zero() { return new Vector3(); }
+        static get one() { return new Vector3(1, 1, 1); }
+        static get up() { return new Vector3(0, 1, 0); }
+        static get right() { return new Vector3(1, 0, 0); }
+        static get forward() { return new Vector3(0, 0, 1); }
+        clone() { return fromArray(vectorArray(this)); }
+        add(other) { const a = vectorArray(this), b = vectorArray(other); return new Vector3(a[0] + b[0], a[1] + b[1], a[2] + b[2]); }
+        subtract(other) { const a = vectorArray(this), b = vectorArray(other); return new Vector3(a[0] - b[0], a[1] - b[1], a[2] - b[2]); }
+        multiply(scalar) { const a = vectorArray(this); finite(scalar, "scalar"); return new Vector3(a[0] * scalar, a[1] * scalar, a[2] * scalar); }
+        Normalize() {
+            const length = this.magnitude;
+            if (length > 0.00001) { this.x /= length; this.y /= length; this.z /= length; }
+            else { this.x = 0; this.y = 0; this.z = 0; }
+        }
+        static Distance(a, b) { return a.subtract(b).magnitude; }
+        static Dot(a, b) { const x = vectorArray(a), y = vectorArray(b); return x[0] * y[0] + x[1] * y[1] + x[2] * y[2]; }
+        static Cross(a, b) {
+            const x = vectorArray(a), y = vectorArray(b);
+            return new Vector3(x[1] * y[2] - x[2] * y[1], x[2] * y[0] - x[0] * y[2], x[0] * y[1] - x[1] * y[0]);
+        }
+        static Lerp(a, b, t) { finite(t, "t"); return a.add(b.subtract(a).multiply(Math.max(0, Math.min(1, t)))); }
+    }
+
+    class GameObject {
+        constructor(secret, id) {
+            if (secret !== token) throw new TypeError("GameObjects must be assigned from the scene");
+            referenceIds.set(this, identifier(id));
+        }
+        get name() { return call("gameObject.getName", referenceId(this), []); }
+        set name(value) {
+            if (typeof value !== "string") throw new TypeError("name must be a string");
+            call("gameObject.setName", referenceId(this), [value]);
+        }
+        get activeSelf() { return call("gameObject.getActiveSelf", referenceId(this), []); }
+        get transform() { return transform(referenceId(this)); }
+        SetActive(value) {
+            if (typeof value !== "boolean") throw new TypeError("SetActive requires a boolean");
+            call("gameObject.setActive", referenceId(this), [value]);
+        }
+    }
+    class Transform {
+        constructor(secret, id) {
+            if (secret !== token) throw new TypeError("Transforms must be assigned from the scene");
+            referenceIds.set(this, identifier(id));
+        }
+        get gameObject() { return gameObject(referenceId(this)); }
+        get position() { return fromArray(call("transform.getPosition", referenceId(this), [])); }
+        set position(value) { call("transform.setPosition", referenceId(this), vectorArray(value)); }
+        get localPosition() { return fromArray(call("transform.getLocalPosition", referenceId(this), [])); }
+        set localPosition(value) { call("transform.setLocalPosition", referenceId(this), vectorArray(value)); }
+        get localScale() { return fromArray(call("transform.getLocalScale", referenceId(this), [])); }
+        set localScale(value) { call("transform.setLocalScale", referenceId(this), vectorArray(value)); }
+        get eulerAngles() { return fromArray(call("transform.getEulerAngles", referenceId(this), [])); }
+        set eulerAngles(value) { call("transform.setEulerAngles", referenceId(this), vectorArray(value)); }
+        Translate(x, y, z, relativeTo = 1) {
+            call("transform.translate", referenceId(this), [finite(x, "x"), finite(y, "y"), finite(z, "z"), space(relativeTo)]);
+        }
+        Rotate(x, y, z, relativeTo = 1) {
+            call("transform.rotate", referenceId(this), [finite(x, "x"), finite(y, "y"), finite(z, "z"), space(relativeTo)]);
+        }
+    }
+    function gameObject(id) {
+        identifier(id);
+        if (!gameObjects.has(id)) gameObjects.set(id, new GameObject(token, id));
+        return gameObjects.get(id);
+    }
+    function transform(id) {
+        identifier(id);
+        if (!transforms.has(id)) transforms.set(id, new Transform(token, id));
+        return transforms.get(id);
+    }
+    class Time {
+        constructor() { throw new TypeError("Time is static"); }
+        static get deltaTime() { return call("time.deltaTime", 0, []); }
+    }
+    class Debug {
+        constructor() { throw new TypeError("Debug is static"); }
+        static Log(message) { call("debug.log", 0, [String(message)]); }
+        static LogWarning(message) { call("debug.logWarning", 0, [String(message)]); }
+        static LogError(message) { call("debug.logError", 0, [String(message)]); }
+    }
+    class WaitForSeconds {
+        constructor(seconds) {
+            finite(seconds, "seconds");
+            if (seconds < 0) throw new RangeError("seconds must be nonnegative");
+            this.__kimchilyWait = "seconds";
+            this.seconds = seconds;
+            Object.freeze(this);
+        }
+    }
+    class Coroutine {
+        constructor(secret, id, owner) {
+            if (secret !== token) throw new TypeError("Use StartCoroutine to obtain a Coroutine");
+            if (!Number.isSafeInteger(id) || id < 1) throw new TypeError("Invalid coroutine handle");
+            coroutineHandles.set(this, { id: id, owner: owner });
+            Object.freeze(this);
+        }
+    }
+    class KimchilyScriptBehaviour {
+        constructor() {
+            if (!creation || creation.instance) throw new TypeError("The Kimchily runtime must create behaviours");
+            creation.instance = this;
+            behaviours.set(this, creation.ownerId);
+        }
+        get gameObject() { return gameObject(ownerId(this)); }
+        get transform() { return transform(ownerId(this)); }
+        StartCoroutine(iterator) {
+            const id = ownerId(this);
+            if (!iterator || typeof iterator.next !== "function") throw new TypeError("StartCoroutine requires an iterator");
+            return new Coroutine(token, call("coroutine.start", id, [iterator]), this);
+        }
+        StopCoroutine(handle) {
+            const id = ownerId(this), state = coroutineHandles.get(handle);
+            if (!state || state.owner !== this) throw new TypeError("Coroutine belongs to another behaviour");
+            call("coroutine.stop", id, [state.id]);
+        }
+        StopAllCoroutines() { call("coroutine.stopAll", ownerId(this), []); }
+    }
+
+    class Event {
+        constructor(maxListeners = 64) {
+            if (!Number.isInteger(maxListeners) || maxListeners < 1 || maxListeners > 256)
+                throw new RangeError("Event capacity must be between 1 and 256");
+            eventStates.set(this, { listeners: new Set(), maximum: maxListeners });
+        }
+        get ListenerCount() { return eventStates.get(this).listeners.size; }
+        AddListener(listener) {
+            if (typeof listener !== "function") throw new TypeError("Listener must be a function");
+            const state = eventStates.get(this);
+            if (state.listeners.has(listener)) return;
+            if (state.listeners.size >= state.maximum) throw new RangeError("Event listener capacity reached");
+            state.listeners.add(listener);
+        }
+        RemoveListener(listener) {
+            if (typeof listener !== "function") throw new TypeError("Listener must be a function");
+            eventStates.get(this).listeners.delete(listener);
+        }
+        Invoke(...args) {
+            const snapshot = Array.from(eventStates.get(this).listeners);
+            for (const listener of snapshot) listener(...args);
+        }
+    }
+
+    function create(ctor, owner = 0) {
+        identifier(owner);
+        if (typeof ctor !== "function" || !(ctor.prototype instanceof KimchilyScriptBehaviour))
+            throw new TypeError("Default export must extend KimchilyScriptBehaviour");
+        const previous = creation, current = { ownerId: owner, instance: null };
+        creation = current;
+        try {
+            const instance = new ctor();
+            if (instance !== current.instance) throw new TypeError("Behaviour constructor returned a different object");
+            return instance;
+        } finally { creation = previous; }
+    }
+    const reservedFields = new Set(["__proto__", "prototype", "constructor", "gameObject", "transform",
+        "StartCoroutine", "StopCoroutine", "StopAllCoroutines", "Awake", "OnEnable", "Start", "Update", "OnDisable", "OnDestroy"]);
+    function applyFields(instance, bindings) {
+        ownerId(instance);
+        if (!bindings || typeof bindings !== "object" || Array.isArray(bindings)) throw new TypeError("Expected Inspector bindings");
+        const names = Object.keys(bindings);
+        if (names.length > 128) throw new RangeError("Too many Inspector fields");
+        const converted = [];
+        for (const name of names) {
+            if (!/^[A-Za-z_$][A-Za-z0-9_$]{0,79}$/.test(name) || reservedFields.has(name)) throw new TypeError("Invalid Inspector field: " + name);
+            const binding = bindings[name];
+            if (!binding || typeof binding !== "object") throw new TypeError("Invalid binding: " + name);
+            let value = binding.value;
+            switch (binding.type) {
+                case "GameObject": value = value === null ? null : gameObject(value); break;
+                case "Transform": value = value === null ? null : transform(value); break;
+                case "Vector3": value = fromArray(value); break;
+                case "number": value = finite(value, name); break;
+                case "string": if (typeof value !== "string") throw new TypeError(name + " must be a string"); break;
+                case "boolean": if (typeof value !== "boolean") throw new TypeError(name + " must be boolean"); break;
+                default: throw new TypeError("Unsupported Inspector type: " + binding.type);
+            }
+            converted.push([name, value]);
+        }
+        for (const entry of converted) Object.defineProperty(instance, entry[0], {
+            value: entry[1], writable: true, enumerable: true, configurable: true
+        });
+        return instance;
+    }
+
+    const Space = Object.freeze({ World: 0, Self: 1, 0: "World", 1: "Self" });
+    const modules = Object.freeze({
+        "Kimchily.Script": Object.freeze({ KimchilyScriptBehaviour: KimchilyScriptBehaviour, Coroutine: Coroutine, Event: Event }),
+        "UnityEngine": Object.freeze({ GameObject: GameObject, Transform: Transform, Vector3: Vector3,
+            Time: Time, Debug: Debug, WaitForSeconds: WaitForSeconds, Space: Space })
+    });
+    return Object.freeze({ modules: modules, create: create, applyFields: applyFields });
+})

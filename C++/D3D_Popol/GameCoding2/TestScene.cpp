@@ -24,6 +24,10 @@
 #include "SkillIndicatorController.h"
 #include "CursorController.h"
 #include "ParticleRenderer.h"
+#include "NavigationGridComponent.h"
+#include "NavigationEditorTool.h"
+#include "AnnieQEffect.h"
+#include "AnnieWEffect.h"
 
 
 
@@ -39,10 +43,16 @@ void TestScene::LateUpdate()
 }
 void TestScene::Update()
 {
+	if (_navigationEditor)
+	{
+		_navigationEditor->Update();
+		SetWorldInputBlocked(_navigationEditor->IsActive());
+	}
+
 	Super::Update();
 
 
-	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
+	if (!IsWorldInputBlocked() && !ImGui::GetIO().WantCaptureMouse && INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 	{
 		int32 mouseX = INPUT->GetMousePos().x;
 		int32 mouseY = INPUT->GetMousePos().y;
@@ -81,8 +91,19 @@ void TestScene::Update()
 
 }
 
+void TestScene::GUIRender()
+{
+	Super::GUIRender();
+	if (_navigationEditor)
+	{
+		_navigationEditor->RenderInspector();
+		_navigationEditor->RenderEditorWindow();
+		_navigationEditor->RenderOverlay();
+	}
+}
 void TestScene::InitializeObject()
 {
+	_navigationEditor = make_shared<NavigationEditorTool>();
 	_shader = make_shared<Shader>(L"23. RenderDemo.fx");
 
 	// SFX + BGM
@@ -133,7 +154,11 @@ void TestScene::InitializeObject()
 	}
 
 	// VFX
-	PARTICLE->Add(L"AnnieW", L"..\\Resources\\Particles\\annie_wspell_New.fx", 1);
+	AnnieQEffect::Get(); // Preload DDS, baked mesh, shader and fixed-capacity batches.
+	AnnieWEffect::Get(); // Offline meshes and a bounded pool for server-approved W.
+	PARTICLE->Add(L"ProjectileImpact", L"..\\Resources\\Particles\\Annie_QSpellImpact_V2.fx", 8);
+	PARTICLE->Add(L"ProjectileTrailSparks", L"..\\Resources\\Particles\\Annie_QSpellTrailSparks_V3.fx", 16);
+	PARTICLE->Add(L"ProjectileExplosion", L"..\\Resources\\Particles\\Annie_QSpellExplosion_V4.fx", 8);
 
 	// Main Camera
 	{
@@ -199,7 +224,7 @@ void TestScene::InitializeObject()
 		{
 			shared_ptr<Material> material = make_shared<Material>();
 			material->SetShader(_shader);
-			auto texture = RESOURCES->Load<Texture>(L"Projectile", L"..\\Resources\\Textures\\Annie\\Particles\\fireball.png");
+			auto texture = RESOURCES->Load<Texture>(L"Projectile", L"..\\Resources\\Textures\\Annie\\Particles\\V2\\fireball-core-v2.dds");
 			material->SetDiffuseMap(texture);
 			MaterialDesc& desc = material->GetMaterialDesc();
 			desc.ambient = Vec4(1.f);
@@ -212,7 +237,7 @@ void TestScene::InitializeObject()
 		{
 			shared_ptr<Material> material = make_shared<Material>();
 			material->SetShader(_shader);
-			auto texture = RESOURCES->Load<Texture>(L"Trail", L"..\\Resources\\Textures\\Annie\\Particles\\annie_base_q_mis_trail.png");
+			auto texture = RESOURCES->Load<Texture>(L"Trail", L"..\\Resources\\Textures\\Annie\\Particles\\V2\\fireball-trail-v2.dds");
 			material->SetDiffuseMap(texture);
 			MaterialDesc& desc = material->GetMaterialDesc();
 			desc.ambient = Vec4(1.f);
@@ -285,13 +310,21 @@ void TestScene::InitializeObject()
 	{
 		_cursor = make_shared<GameObject>("Cursor");
 		_cursor->AddComponent(make_shared<Button>());
-		_cursor->GetButton()->Create(Vec2(0, 0), Vec2(75, 75), RESOURCES->Get<Material>(L"hover_precise"));
+		_cursor->GetButton()->Create(Vec2(0, 0), Vec2(37.5f, 37.5f), RESOURCES->Get<Material>(L"hover_precise"));
 		_cursor->GetButton()->SetOrder(10);
 		
 
 		UI->SetCursorControllerGameObject(_cursor);
 
 		CUR_SCENE->Add(_cursor);
+	}
+
+	{
+		auto indicator = make_shared<GameObject>("AnnieSkillRangeIndicator");
+		indicator->GetOrAddTransform();
+		indicator->GetOrAddScript<SkillIndicatorController>();
+		UI->SetSkillIndicatorControllerGameObject(indicator);
+		CUR_SCENE->Add(indicator);
 	}
 
 	{
@@ -449,6 +482,19 @@ void TestScene::InitializeObject()
 
 		obj->GetTerrain()->Create(145, 145, RESOURCES->Get<Material>(L"Veigar"));
 		obj->GetMeshRenderer()->SetPass(3);
+
+		auto navigation = make_shared<NavigationGridComponent>();
+		obj->AddComponent(navigation);
+		std::string navigationError;
+		navigation->LoadSettings("../Resources/Navigation/room-0-nav-v1.navgrid.component.json", navigationError);
+		navigationError.clear();
+		if (!navigation->LoadNavGrid(navigation->GetAssetPath(), navigationError))
+		{
+			navigationError.clear();
+			navigation->CreateGrid(145, 145, 1.0f, Vec3::Zero, navigationError);
+			navigation->SetLastStatus("Room 0 asset was not found; created an unsaved all-Walkable editor grid. " + navigationError);
+		}
+		_navigationEditor->SetTarget(navigation);
 		_terrain = obj;
 		CUR_SCENE->Add(obj);
 	}

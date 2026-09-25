@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -49,6 +49,8 @@ namespace ServerCore
     {
         Socket _socket;
         int _disconnected = 0;
+
+        public bool IsDisconnected => Volatile.Read(ref _disconnected) == 1;
 
         RecvBuffer _recvBuffer = new RecvBuffer(65535);
 

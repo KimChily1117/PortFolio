@@ -4,7 +4,8 @@
 void AnnieRSpell::Use(shared_ptr<GameObject> caster, shared_ptr<GameObject> target)
 {
 	auto playerController = caster->GetScript<PlayerController>();
-	if (!playerController || !target) return;
+	if (!playerController) return;
+    const Vec3 castPosition = target ? target->GetTransform()->GetPosition() : caster->GetTransform()->GetPosition();
 
 	// Animation 처리 부분은 부모인  Champ클래스에서 처리함
 
@@ -14,11 +15,12 @@ void AnnieRSpell::Use(shared_ptr<GameObject> caster, shared_ptr<GameObject> targ
 	skillPacket.set_skillid((int32)SkillType::RSpell); // ✅ 올바른 W 스킬 ID
 
 
-	skillPacket.set_targetid(target->GetScript<BasePlayerController>()->_playerInfo->objectid());
+	if (target && target->GetScript<BasePlayerController>())
+        skillPacket.set_targetid(target->GetScript<BasePlayerController>()->_playerInfo->objectid());
 
-	skillPacket.mutable_targetpos()->set_x(target->GetTransform()->GetPosition().x);
-	skillPacket.mutable_targetpos()->set_y(target->GetTransform()->GetPosition().y);
-	skillPacket.mutable_targetpos()->set_z(target->GetTransform()->GetPosition().z);
+	skillPacket.mutable_targetpos()->set_x(castPosition.x);
+	skillPacket.mutable_targetpos()->set_y(castPosition.y);
+	skillPacket.mutable_targetpos()->set_z(castPosition.z);
 
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(skillPacket, C_SKILL_CAST);
 	NETWORK->SendPacket(sendBuffer);

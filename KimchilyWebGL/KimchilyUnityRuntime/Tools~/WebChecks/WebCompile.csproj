@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../tools/Unity.Build.props" />
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DefineConstants>UNITY_WEBGL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../../KimchilySDK/Packages/com.kimchily.creator/Runtime/**/*.cs" />
+    <Compile Include="../../../KimchilySDK/Packages/com.kimchily.typescript/Runtime/**/*.cs" />
+    <Compile Include="../../Assets/Runtime/*.cs" />
+    <Compile Include="../../Assets/Editor/*.cs" />
+    <Reference Include="$(UnityEditorRoot)/Data/Managed/UnityEngine/*.dll" />
+    <Reference Include="$(UnityEditorRoot)/Data/Managed/UnityEditor/*.dll" />
+    <Reference Include="../../../KimchilySDK/Packages/com.kimchily.typescript/Runtime/Plugins/*.dll" />
+  </ItemGroup>
+</Project>

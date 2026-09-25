@@ -1,7 +1,7 @@
 #pragma once
 
-// ¿©±â´Ù°¡ Proto¿¡ ÀÖ´Â EnumµéÀ» ´Ù½Ã Á¤ÀÇÇÕ´Ï´Ù.
-// C#°ú Åë½ÅÇÏ±â À§ÇÔ
+// ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ Protoï¿½ï¿½ ï¿½Ö´ï¿½ Enumï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+// C#ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 enum Proto
 {
@@ -23,26 +23,36 @@ enum Proto
 	C_ENTER_GAME = 15,
 	S_PROJECTILE_SPAWN = 16,
 	S_PROJECTILE_HIT = 17,
-	S_DAMAGE = 18
+	S_DAMAGE = 18,
+	S_DEAD = 19,
+	S_NAVIGATION_INFO = 20,
+	C_MOVE_REQUEST = 21,
+	S_MOVE_ACCEPTED = 22,
+	S_MOVE_REJECTED = 23,
+	S_MOVEMENT_SNAPSHOT = 24
 };
 
 
 
 
 
-// ÄÚµå ÀÚµ¿È­¸¦ ÇÏ¸é ÁÁÀ»ÅÙµ¥. ±×°Ô ¾î·Æ³×¿ä.
+// ï¿½Úµï¿½ ï¿½Úµï¿½È­ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ùµï¿½. ï¿½×°ï¿½ ï¿½ï¿½Æ³×¿ï¿½.
 class ClientPacketHandler
 {
 public:
 	static void HandlePacket(ServerSessionRef session, BYTE* buffer, int32 len);
 
-	// ¹Þ±â
+	// ï¿½Þ±ï¿½
 	static void Handle_S_TEST(BYTE* buffer, int32 len);
 	static void Handle_S_EnterGame(BYTE* buffer, int32 len);
 	static void Handle_S_MyPlayer(BYTE* buffer, int32 len);
 	static void Handle_S_AddObject(BYTE* buffer, int32 len);
 	static void Handle_S_RemoveObject(BYTE* buffer, int32 len);
 	static void Handle_S_Move(BYTE* buffer, int32 len);
+	static void Handle_S_NavigationInfo(BYTE* buffer, int32 len);
+	static void Handle_S_MoveAccepted(BYTE* buffer, int32 len);
+	static void Handle_S_MoveRejected(BYTE* buffer, int32 len);
+	static void Handle_S_MovementSnapshot(BYTE* buffer, int32 len);
 	static void Handle_S_SkillResult(BYTE* buffer, int32 len);
 	static void Handle_S_ProjectileSpawn(BYTE* buffer, int32 len);
 	static void Handle_S_ProjectileHit(BYTE* buffer, int32 len);

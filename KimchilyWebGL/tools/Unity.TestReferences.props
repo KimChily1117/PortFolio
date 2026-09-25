@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <UnityTestProject Condition="'$(UnityTestProject)' == ''">$(KimchilyWorkspaceRoot)/KimchilySDK/ValidationProject</UnityTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine.TestRunner"><HintPath>$(UnityTestProject)/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath></Reference>
+    <Reference Include="UnityEditor.TestRunner"><HintPath>$(UnityTestProject)/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath></Reference>
+    <KimchilyNUnit Include="$(UnityTestProject)/Library/PackageCache/com.unity.ext.nunit*/**/nunit.framework.dll" />
+    <KimchilyNUnit Include="$(UnityEditorRoot)/Data/Resources/PackageManager/BuiltInPackages/com.unity.ext.nunit/**/nunit.framework.dll" Condition="'@(KimchilyNUnit)' == ''" />
+    <Reference Include="@(KimchilyNUnit)" />
+  </ItemGroup>
+  <Target Name="CheckUnityTestDependencies" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(UnityTestProject)/Library/ScriptAssemblies/UnityEngine.TestRunner.dll')" Text="Import $(UnityTestProject) with the configured Unity Editor before compiling managed tests; its TestRunner assemblies are required." />
+    <Error Condition="'@(KimchilyNUnit)' == ''" Text="NUnit was not resolved in the clone. Import $(UnityTestProject) with Unity to restore its Test Framework dependencies." />
+  </Target>
+</Project>

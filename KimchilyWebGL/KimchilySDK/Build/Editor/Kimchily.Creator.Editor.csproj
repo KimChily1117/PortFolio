@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Kimchily.Creator.Editor</AssemblyName>
+    <OutputPath>../../Artifacts/Managed/Editor/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Packages/com.kimchily.creator/Editor/**/*.cs" />
+    <Reference Include="$(UnityEditorRoot)/Data/Managed/UnityEditor/*.dll" />
+    <ProjectReference Include="../Runtime/Kimchily.Creator.Runtime.csproj" />
+  </ItemGroup>
+</Project>

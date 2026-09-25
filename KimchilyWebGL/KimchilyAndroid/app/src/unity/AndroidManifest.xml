@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="com.kimchily.app">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application android:allowBackup="false" android:label="Kimchily" android:theme="@style/AppTheme" android:usesCleartextTraffic="false">
+        <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop"
+            android:screenOrientation="fullSensor"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="kimchily" android:host="world" />
+            </intent-filter>
+        </activity>
+        <!-- The native app owns the launcher; suppress Unity's exported default launcher. -->
+        <activity android:name="com.unity3d.player.UnityPlayerActivity" tools:node="remove" />
+        <activity android:name=".KimchilyUnityActivity" android:exported="false" android:launchMode="singleTop"
+            android:theme="@style/UnityThemeSelector" android:hardwareAccelerated="false"
+            android:screenOrientation="sensorLandscape" android:resizeableActivity="false"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density">
+            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+            <meta-data android:name="notch_support" android:value="true" />
+        </activity>
+    </application>
+</manifest>

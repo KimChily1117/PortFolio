@@ -1,0 +1,5 @@
+<linker>
+  <!-- The public SDK is callable from interpreted code, not only static C# references. -->
+  <assembly fullname="Kimchily.Creator.Runtime" preserve="all" />
+</linker>
+

@@ -1,0 +1,7 @@
+{
+  "name": "Kimchily.Creator.TestFixtures",
+  "autoReferenced": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

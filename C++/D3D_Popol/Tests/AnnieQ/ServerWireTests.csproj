@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ServerOutput>$(MSBuildThisFileDirectory)..\..\..\D3D_Server\Server\Server\Server\bin\Debug\netcoreapp3.1</ServerOutput>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Server"><HintPath>$(ServerOutput)\Server.dll</HintPath></Reference>
+    <Reference Include="Google.Protobuf"><HintPath>$(ServerOutput)\Google.Protobuf.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>

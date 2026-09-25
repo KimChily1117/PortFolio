@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Server\Server.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Server\Content\Navigation\**\*" Link="Content\Navigation\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Resources\TilemapData.txt" Link="Content\Legacy\TilemapData.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

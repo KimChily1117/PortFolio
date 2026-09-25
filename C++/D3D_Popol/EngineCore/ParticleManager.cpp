@@ -4,7 +4,7 @@
 
 ParticleManager::~ParticleManager()
 {
-	for (auto particles : totalParticle)
+	for (const auto& particles : totalParticle)
 	{
 		for (ParticleSystem* particle : particles.second)
 		{
@@ -15,7 +15,7 @@ ParticleManager::~ParticleManager()
 
 void ParticleManager::Update()
 {
-	for (auto particles : totalParticle)
+	for (const auto& particles : totalParticle)
 	{
 		for (ParticleSystem* particle : particles.second)
 		{
@@ -27,7 +27,7 @@ void ParticleManager::Update()
 
 void ParticleManager::Render()
 {
-	for (auto particles : totalParticle)
+	for (const auto& particles : totalParticle)
 	{
 		for (ParticleSystem* particle : particles.second)
 		{

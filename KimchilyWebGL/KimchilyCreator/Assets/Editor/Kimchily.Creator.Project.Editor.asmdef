@@ -1,0 +1,5 @@
+{
+  "name": "Kimchily.Creator.Project.Editor",
+  "references": ["Kimchily.Creator.Runtime", "Kimchily.Creator.Editor", "Kimchily.Scripting.Runtime", "Kimchily.TypeScript.Runtime"],
+  "includePlatforms": ["Editor"]
+}

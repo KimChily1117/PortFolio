@@ -1,18 +1,36 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "AnnieWSpell.h"
+#include "AnnieSkillTuning.h"
 
 void AnnieWSpell::Use(shared_ptr<GameObject> caster, shared_ptr<GameObject> target)
 {
-	auto playerController = caster->GetScript<PlayerController>();
-	if (!playerController) return;
+    if (!caster)
+        return;
 
-	Protocol::C_SkillCast skillPacket;
-	skillPacket.set_casterid(GAMEMANAGER->_myPlayer->_playerInfo->objectid());
-	skillPacket.set_skillid((int32)SkillType::WSpell); // ✅ 올바른 W 스킬 ID
+    Vec3 targetPosition = caster->GetTransform()->GetPosition() + caster->GetTransform()->GetLook() * AnnieSkillTuning::WRange;
+    if (target)
+        targetPosition = target->GetTransform()->GetPosition();
+    UseAt(caster, targetPosition);
+}
 
-	// ❌ 타겟 관련 정보는 필요 없음
+void AnnieWSpell::UseAt(const shared_ptr<GameObject>& caster, const Vec3& targetPosition)
+{
+    auto playerController = caster ? caster->GetScript<PlayerController>() : nullptr;
+    if (!playerController || playerController->IsActionBusy() || !std::isfinite(targetPosition.x) ||
+        !std::isfinite(targetPosition.y) || !std::isfinite(targetPosition.z))
+        return;
 
-	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(skillPacket, C_SKILL_CAST);
-	NETWORK->SendPacket(sendBuffer);
+    playerController->HoldMovementForSkillRequest();
+    Protocol::C_SkillCast skillPacket;
+    skillPacket.set_casterid(GAMEMANAGER->_myPlayer->_playerInfo->objectid());
+    skillPacket.set_skillid((int32)SkillType::WSpell);
+    skillPacket.set_isareaskill(true);
+    skillPacket.set_arearadius(AnnieSkillTuning::WRange);
+    skillPacket.mutable_targetpos()->set_x(targetPosition.x);
+    skillPacket.mutable_targetpos()->set_y(targetPosition.y);
+    skillPacket.mutable_targetpos()->set_z(targetPosition.z);
+
+    auto sendBuffer = ClientPacketHandler::MakeSendBuffer(skillPacket, C_SKILL_CAST);
+    NETWORK->SendPacket(sendBuffer);
 }
 

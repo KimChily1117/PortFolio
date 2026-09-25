@@ -22,7 +22,7 @@ namespace _pbi = _pb::internal;
 
 namespace Protocol {
 }  // namespace Protocol
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[3];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[5];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Enum_2eproto = nullptr;
 const uint32_t TableStruct_Enum_2eproto::offsets[1] = {};
 static constexpr ::_pbi::MigrationSchema* schemas = nullptr;
@@ -36,12 +36,36 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "LYPLAYER\020\002\022\017\n\013ENEMYPLAYER\020\003\022\n\n\006MINION\020\004\022"
   "\t\n\005TOWER\020\005*h\n\021OBJECT_STATE_TYPE\022\032\n\026OBJEC"
   "T_STATE_TYPE_IDLE\020\000\022\032\n\026OBJECT_STATE_TYPE"
-  "_MOVE\020\001\022\033\n\027OBJECT_STATE_TYPE_SKILL\020\002b\006pr"
-  "oto3"
+  "_MOVE\020\001\022\033\n\027OBJECT_STATE_TYPE_SKILL\020\002*\252\006\n"
+  "\022MOVE_REJECT_REASON\022\033\n\027MOVE_REJECT_REASO"
+  "N_NONE\020\000\022 \n\034MOVE_REJECT_REASON_NO_PLAYER"
+  "\020\001\022\036\n\032MOVE_REJECT_REASON_NO_ROOM\020\002\022$\n MO"
+  "VE_REJECT_REASON_ROOM_MISMATCH\020\003\022+\n\'MOVE"
+  "_REJECT_REASON_INVALID_PLAYER_STATE\020\004\022\'\n"
+  "#MOVE_REJECT_REASON_INVALID_SEQUENCE\020\005\022)"
+  "\n%MOVE_REJECT_REASON_INVALID_COORDINATE\020"
+  "\006\022.\n*MOVE_REJECT_REASON_NAVIGATION_MAP_M"
+  "ISMATCH\020\007\022/\n+MOVE_REJECT_REASON_NAVIGATI"
+  "ON_HASH_MISMATCH\020\010\0220\n,MOVE_REJECT_REASON"
+  "_OUTSIDE_NAVIGATION_BOUNDS\020\t\022*\n&MOVE_REJ"
+  "ECT_REASON_DESTINATION_BLOCKED\020\n\022.\n*MOVE"
+  "_REJECT_REASON_NO_NEARBY_WALKABLE_CELL\020\013"
+  "\022+\n\'MOVE_REJECT_REASON_MOVEMENT_NOT_ALLO"
+  "WED\020\014\022#\n\037MOVE_REJECT_REASON_SERVER_ERROR"
+  "\020\r\022\036\n\032MOVE_REJECT_REASON_NO_PATH\020\016\0221\n-MO"
+  "VE_REJECT_REASON_PATH_SEARCH_LIMIT_EXCEE"
+  "DED\020\017\022$\n MOVE_REJECT_REASON_PATH_TOO_LON"
+  "G\020\020\022/\n+MOVE_REJECT_REASON_INVALID_NAVIGA"
+  "TION_START\020\021\022#\n\037MOVE_REJECT_REASON_RATE_"
+  "LIMITED\020\022*\256\001\n\027MOVEMENT_SNAPSHOT_STATE\022#\n"
+  "\037MOVEMENT_SNAPSHOT_STATE_UNKNOWN\020\000\022\"\n\036MO"
+  "VEMENT_SNAPSHOT_STATE_MOVING\020\001\022#\n\037MOVEME"
+  "NT_SNAPSHOT_STATE_ARRIVED\020\002\022%\n!MOVEMENT_"
+  "SNAPSHOT_STATE_CANCELLED\020\003b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 324, descriptor_table_protodef_Enum_2eproto,
+    false, false, 1314, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -97,6 +121,53 @@ bool OBJECT_STATE_TYPE_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MOVE_REJECT_REASON_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[3];
+}
+bool MOVE_REJECT_REASON_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MOVEMENT_SNAPSHOT_STATE_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[4];
+}
+bool MOVEMENT_SNAPSHOT_STATE_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
       return true;
     default:
       return false;
