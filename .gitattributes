@@ -1,4 +1,2 @@
-# Ignore rules belong in .gitignore, not .gitattributes.
-# Unreal asset LFS rules are maintained in:
-# Unreal Project/Lyra_Clone/LyraClone/.gitattributes
-# Keep those rules so Content and plugin assets work across PCs.
+# Repository-wide Git attributes.
+# Ignore rules belong in .gitignore; project-specific attributes live with each project.

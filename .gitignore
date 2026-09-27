@@ -46,3 +46,6 @@ sysinfo.txt
 
 # Authored SDK build projects, not generated Unity build output.
 !/KimchilyWebGL/KimchilySDK/Build/
+
+# Lyra is maintained in a separate local workspace and source repository.
+/Unreal Project/Lyra_Clone/
