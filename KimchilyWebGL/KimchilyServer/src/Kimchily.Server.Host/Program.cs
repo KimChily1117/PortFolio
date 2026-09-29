@@ -37,7 +37,7 @@ namespace Kimchily.Server.Host
             using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(20));
             try
             {
-                do { rooms.Flush(); } while (await timer.WaitForNextTickAsync(stoppingToken));
+                do { rooms.TryQueueGameTick(); rooms.Flush(); } while (await timer.WaitForNextTickAsync(stoppingToken));
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { }
         }

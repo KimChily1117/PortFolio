@@ -9,6 +9,7 @@ using Kimchily.Server.Core.Jobs;
 
 var checks = new List<string>();
 var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
+var configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
 var evidence = Path.Combine(root, "Artifacts", "checks", DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
 Directory.CreateDirectory(evidence);
 var hostLog = new StringBuilder();
@@ -132,6 +133,8 @@ try
     await Dispatch(smallHub, sole, Join()); Assert(sole.Events.Last().History!.Length == 0, "Removed room retained stale history.");
     Passed("Disconnect removes membership; the last departure removes room state");
 
+    await PortalChecks.Run(Assert, Passed);
+
     // Start only this test's own host on an OS-assigned loopback port.
     var listening = new TaskCompletionSource<Uri>(TaskCreationOptions.RunContinuationsAsynchronously);
     var info = new ProcessStartInfo(Environment.ProcessPath!)
@@ -140,7 +143,7 @@ try
         RedirectStandardOutput = true, RedirectStandardError = true,
         WorkingDirectory = root
     };
-    info.ArgumentList.Add(Path.Combine(root, "src/Kimchily.Server.Host/bin/Release/net10.0/Kimchily.Server.Host.dll"));
+    info.ArgumentList.Add(Path.Combine(root, $"src/Kimchily.Server.Host/bin/{configuration}/net10.0/Kimchily.Server.Host.dll"));
     info.ArgumentList.Add("--urls"); info.ArgumentList.Add("http://127.0.0.1:0");
     info.ArgumentList.Add("--Realtime:AllowedOrigins:0"); info.ArgumentList.Add("http://127.0.0.1:8788");
     host = new Process { StartInfo = info, EnableRaisingEvents = true };
@@ -222,6 +225,7 @@ try
         Assert(response.Code == "RATE_LIMIT", "Connection message flood was not limited.");
     }
     Passed("Connection-wide message floods are bounded independently of chat limits");
+    await PortalChecks.RunWire(wsAddress, Assert, Passed);
 }
 catch (Exception error)
 {

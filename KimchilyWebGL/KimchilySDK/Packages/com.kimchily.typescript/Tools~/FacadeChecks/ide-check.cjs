@@ -8,6 +8,7 @@ const probe = path.join(__dirname, "autocomplete-probe.ts");
 const typings = path.resolve(__dirname, "../../Typings~/kimchily.d.ts");
 const source = `import { KimchilyScriptBehaviour } from "Kimchily.Script";
 import { GameObject, Space } from "UnityEngine";
+import { Room } from "Kimchily.Network";
 export default class AutocompleteScript extends KimchilyScriptBehaviour {
     public speed: number = 45;
     public beacon: GameObject | null = null;
@@ -15,6 +16,7 @@ export default class AutocompleteScript extends KimchilyScriptBehaviour {
         this.transform.Rotate(0, this.speed * deltaTime, 0, Space.World);
         this.speed = this.speed;
         this.beacon?.SetActive(true);
+        const shared = Room.getState();
     }
 }
 `;
@@ -51,6 +53,13 @@ try {
     for (const expected of ["Rotate", "Translate", "position", "localPosition", "localScale", "eulerAngles", "gameObject"])
         assert.ok(transformNames.includes(expected), `Missing Transform completion: ${expected}`);
     assert.ok(!transformNames.includes("GetComponent"), "Unsupported Unity APIs must not be suggested");
+    const roomPosition = source.indexOf("Room.getState") + "Room.".length;
+    const room = service.getCompletionsAtPosition(probe, roomPosition, {});
+    assert.ok(room, "Room. must provide network API completions");
+    const roomNames = room.entries.map(entry => entry.name);
+    for (const expected of ["enableGame", "getState", "startRound", "replay"])
+        assert.ok(roomNames.includes(expected), `Missing Room completion: ${expected}`);
+    assert.ok(!roomNames.includes("send") && !roomNames.includes("connect"), "Raw transport is not an SDK capability");
 
     const memberPosition = source.indexOf("this.speed =") + "this.".length;
     const members = service.getCompletionsAtPosition(probe, memberPosition, {});
@@ -81,6 +90,7 @@ try {
         typescriptVersion: ts.version,
         strictSemanticDiagnostics: diagnostics.length,
         transformCompletions: transformNames,
+        roomCompletions: roomNames,
         scriptCompletions: memberNames,
         rotateQuickInfo: rotateInfo,
         speedQuickInfo: speedInfo,

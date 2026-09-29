@@ -51,6 +51,18 @@ test('type errors include source locations and leave no executable output', () =
   assert.match(out.diagnostics.join('\n'), /Assets\/Main\.ts:.*TS2322/);
 }));
 
+test('network facade import stays external and provides readonly shared game types', () => fixture({
+  'Assets/Main.ts': `import { Room } from 'Kimchily.Network';\n` + entry(`
+    Start(): void { Room.enableGame('chili-portal-v1'); }
+    Update(): void { const room = Room.getState(); this.gameObject.SetActive(room.game?.phase !== 'complete'); }
+  `)
+}, root => {
+  const out = compile(root, 'Assets/Main.ts');
+  assert.equal(out.compiledSuccessfully, true, out.diagnostics.join('\n'));
+  assert.deepEqual(out.modules.map(m => m.id), ['Assets/Main']);
+  assert.match(out.modules[0].source, /require\("Kimchily.Network"\)/);
+}));
+
 test('helper modules do not need a behaviour class', () => fixture({
   'Assets/Helper.ts': 'export function value(): number { return 3; }'
 }, root => { const out = compile(root, 'Assets/Helper.ts'); assert.equal(out.compiledSuccessfully, true); assert.equal(out.className, ''); }));

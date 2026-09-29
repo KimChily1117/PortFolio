@@ -1,7 +1,7 @@
 {
   "name": "Kimchily.TypeScript.Runtime",
   "rootNamespace": "Kimchily.TypeScript",
-  "references": ["Kimchily.Creator.Runtime"],
+  "references": ["Kimchily.Creator.Runtime", "Kimchily.Networking"],
   "overrideReferences": true,
   "precompiledReferences": ["Jint.dll", "Acornima.dll", "System.Runtime.CompilerServices.Unsafe.dll"],
   "autoReferenced": true

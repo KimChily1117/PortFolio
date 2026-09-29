@@ -1,4 +1,4 @@
-# Kimchily Networking 0.2.0
+# Kimchily Networking 0.3.0
 
 KimchilyServer protocol 1의 게스트 방·채팅·캐릭터 동기화 클라이언트입니다.
 Unity 6의 uGUI 2.0.0/TextMeshPro를 사용하며 Creator 콘텐츠 SDK 0.1.0의 버전 계약을 유지합니다.
@@ -48,4 +48,29 @@ Creator의 Play Mode는 editor-preview/v1에 수동 접속하며, 게시된 월�
 기본 개발 주소는 ws://127.0.0.1:8790/ws입니다. WebGL에서는 페이지 호스트를 사용합니다.
 다른 서버 주소는 실행 전 연결 설정 또는 연결 해제 상태의 Unity 패널에서 지정합니다.
 HTTPS 페이지에는 WSS가 필요합니다. LAN 실행·허용 출처 설정은 KimchilyServer/README.md를 참고합니다.
-독립 웹 로비는 유지합니다. TypeScript 네트워크 API와 미니게임의 서버 판정은 다음 단계입니다.
+독립 웹 로비는 유지합니다.
+
+## 칠리 아일랜드 협동 게임
+
+TypeScript SDK 0.2.0에서 `import { Room } from "Kimchily.Network"`로 API를 가져옵니다.
+이 기능은 제작 씬의 TS 스크립트가 `Room.enableGame("chili-portal-v1")`을
+호출한 월드에만 표시됩니다. 아직 접속하지 않았다면 요청을 기억했다가 joined 이후 서버에
+`game/watch`를 보냅니다. 자동 입장으로 게임을 시작하지 않으며, 모두 모인 뒤 Unity HUD의
+시작 버튼으로 현재 1–4명에 맞춘 라운드를 시작합니다. 한 명으로도 시연할 수 있습니다.
+
+고정 프리셋의 발판은 star(-3,0,2), moon(3,0,2), sun(-3,0,6), leaf(3,0,6)이고
+서버가 필요한 발판 수, 점유한 플레이어, 3초 유지 시간과 성공 상태를 결정합니다.
+`active`는 이번 라운드에 필요한 발판, `playerId`는 현재 점유자입니다.
+모든 발판이 3초 동안 채워지면 `complete`가 되며, 명시적으로 다시 준비하기를 누르기 전까지
+성공 상태를 유지합니다. 중도 참가자도 같은 상태를 받습니다.
+플레이어가 줄어들어 필요한 인원보다 적어지면 HUD에서 인원을 다시 맞출 수 있습니다.
+
+TS는 `Room.getState()`로 연결 상태·참가자·공동 게임 상태를 읽고,
+`Room.startRound()` / `Room.replay()`로 서버에 요청합니다. 시각 효과와 모델은 제작 씬의
+TS 스크립트가 상태를 읽어 연출합니다. 임의 TS 코드를 서버에서 실행하는 기능은 아닙니다.
+기존 위치 검증을 통과한 클라이언트 위치로 판정하므로 서버 물리나 완전한 치트 방지와는 다릅니다.
+
+네이티브 C#에서는 보존된 정적 API `CoopPortalApi.EnableGame`, `StartRound`, `Replay`,
+`GetStateJson`을 사용합니다. JSON은 `{connected,selfId,players,game}`이며, 아직 opt-in하지
+않았거나 상태가 도착하지 않았으면 `game:null`입니다. 스냅샷 조회만으로 소켓이나 UI를 만들지
+않습니다. 월드 퇴장 시 opt-in·HUD·게임 상태를 지우며, 재접속 시 최신 서버 상태를 다시 받습니다.

@@ -25,6 +25,8 @@ public sealed record ClientCommand
     public string? Name { get; init; }
     public string? Text { get; init; }
     public PlayerState? State { get; init; }
+    public string? Preset { get; init; }
+    public string? Action { get; init; }
 }
 
 public sealed record RoomKey(string WorldId, string RevisionId, string RoomId);
@@ -32,6 +34,9 @@ public sealed record PlayerState(long Sequence, float X, float Y, float Z, float
 public sealed record PlayerInfo(string PlayerId, string Name, PlayerState? State = null);
 public sealed record ChatMessage(string Id, string PlayerId, string Name, string Text, DateTimeOffset SentAtUtc);
 public sealed record RoomSummary(RoomKey Room, int PlayerCount, int Capacity);
+public sealed record PortalPad(string Id, float X, float Y, float Z, float Radius, bool Active, string? PlayerId);
+public sealed record PortalGameState(string Preset, string Phase, int Round, int RequiredPlayers,
+    int HoldSeconds, int RemainingMs, PortalPad[] Pads, long Version);
 
 public sealed record ServerEvent(string Type)
 {
@@ -42,6 +47,7 @@ public sealed record ServerEvent(string Type)
     public PlayerInfo? Player { get; init; }
     public ChatMessage? Chat { get; init; }
     public ChatMessage[]? History { get; init; }
+    public PortalGameState? Game { get; init; }
     public string? Code { get; init; }
     public string? Message { get; init; }
 }

@@ -204,7 +204,7 @@ namespace Kimchily.TypeScript
 
         private JsValue Require(string requested, string parent)
         {
-            if (requested == "Kimchily.Script" || requested == "UnityEngine")
+            if (requested == "Kimchily.Script" || requested == "UnityEngine" || requested == "Kimchily.Network")
                 return bridge.Get("modules").AsObject().Get(requested);
             string id = ResolveModule(requested, parent);
             if (!sources.TryGetValue(id, out string source))
@@ -259,7 +259,7 @@ namespace Kimchily.TypeScript
             long total = 0;
             foreach (var pair in modules)
             {
-                if (pair.Key == "UnityEngine" || pair.Key == "Kimchily.Script" || ResolveModule(pair.Key, null) != pair.Key)
+                if (pair.Key == "UnityEngine" || pair.Key == "Kimchily.Script" || pair.Key == "Kimchily.Network" || ResolveModule(pair.Key, null) != pair.Key)
                     throw new InvalidOperationException("Invalid or reserved TypeScript module ID: " + pair.Key);
                 if (pair.Value == null || pair.Value.Length > MaximumModuleCharacters) throw new InvalidOperationException("TypeScript module exceeds the source limit.");
                 total += pair.Value.Length;

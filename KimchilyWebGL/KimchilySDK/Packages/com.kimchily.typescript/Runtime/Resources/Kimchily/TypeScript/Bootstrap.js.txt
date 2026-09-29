@@ -191,6 +191,43 @@
         }
     }
 
+    // Networking crosses the host boundary as bounded JSON, never CLR/Unity objects.
+    // Cache identical snapshots; nested values remain frozen detached JavaScript data.
+    let roomJson = null, roomSnapshot = null;
+    function freezeRoomSnapshot(json) {
+        if (typeof json !== "string" || json.length > 65536) throw new RangeError("Room snapshot exceeds the SDK limit");
+        if (json === roomJson) return roomSnapshot;
+        const value = JSON.parse(json);
+        let count = 0;
+        function freeze(value, depth) {
+            if (++count > 256 || depth > 6) throw new RangeError("Room snapshot structure exceeds the SDK limit");
+            if (value === null || typeof value === "boolean") return value;
+            if (typeof value === "string") {
+                if (value.length > 1024) throw new RangeError("Room snapshot text exceeds the SDK limit");
+                return value;
+            }
+            if (typeof value === "number") return finite(value, "Room snapshot number");
+            const keys = Object.keys(value);
+            if (keys.length > (Array.isArray(value) ? 8 : 32)) throw new RangeError("Room snapshot collection exceeds the SDK limit");
+            for (const key of keys) freeze(value[key], depth + 1);
+            return Object.freeze(value);
+        }
+        if (!value || Array.isArray(value) || typeof value !== "object" || typeof value.connected !== "boolean" || !Array.isArray(value.players))
+            throw new TypeError("Invalid room snapshot");
+        const frozen = freeze(value, 0);
+        roomJson = json; roomSnapshot = frozen;
+        return frozen;
+    }
+    const Room = Object.freeze({
+        enableGame(preset) {
+            if (preset !== "chili-portal-v1") throw new TypeError("Unsupported shared game preset");
+            return call("network.enableGame", 0, [preset]);
+        },
+        getState() { return freezeRoomSnapshot(call("network.getState", 0, [])); },
+        startRound() { return call("network.startRound", 0, []); },
+        replay() { return call("network.replay", 0, []); }
+    });
+
     function create(ctor, owner = 0) {
         identifier(owner);
         if (typeof ctor !== "function" || !(ctor.prototype instanceof KimchilyScriptBehaviour))
@@ -237,7 +274,8 @@
     const modules = Object.freeze({
         "Kimchily.Script": Object.freeze({ KimchilyScriptBehaviour: KimchilyScriptBehaviour, Coroutine: Coroutine, Event: Event }),
         "UnityEngine": Object.freeze({ GameObject: GameObject, Transform: Transform, Vector3: Vector3,
-            Time: Time, Debug: Debug, WaitForSeconds: WaitForSeconds, Space: Space })
+            Time: Time, Debug: Debug, WaitForSeconds: WaitForSeconds, Space: Space }),
+        "Kimchily.Network": Object.freeze({ Room: Room })
     });
     return Object.freeze({ modules: modules, create: create, applyFields: applyFields });
 })

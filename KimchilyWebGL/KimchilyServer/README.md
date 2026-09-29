@@ -1,7 +1,8 @@
-# KimchilyServer — C# UGC 방·채팅·캐릭터 서버
+# KimchilyServer — C# UGC 방·채팅·캐릭터·협동 게임 서버
 
 Project Dawn C# 서버의 작업 큐·예약 작업 코드를 재사용한 .NET 10 서버입니다.
 WebSocket으로 같은 방에 입장하고 채팅·캐릭터 위치·애니메이션 상태를 공유합니다.
+칠리 아일랜드 데모의 발판 점유·3초 카운트다운·포털 성공 상태도 서버에서 함께 판정합니다.
 기존 게임 서버, DB, Unity 프로젝트 없이 이 디렉터리만으로 빌드·실행할 수 있습니다.
 
 ## 작업 위치와 SDK
@@ -12,7 +13,7 @@ WebSocket으로 같은 방에 입장하고 채팅·캐릭터 위치·애니메�
 - `global.json`에서 SDK 계열을 고정합니다. 설치 도구는 Microsoft 공식 Windows x64 ZIP의
   SHA-512를 확인하고 이 서버의 `.tools/dotnet-10.0.401`에 설치합니다.
   시스템 PATH와 기존 .NET 3.1/7/8 설치는 변경하지 않습니다.
-- 서버용 .NET SDK를 올리고 Unity에는 별도 `com.kimchily.networking@0.2.0` 패키지를 추가했습니다.
+- 서버용 .NET SDK를 올리고 Unity에는 별도 `com.kimchily.networking@0.3.0` 패키지를 사용합니다.
   기존 Creator SDK 0.1.0과 발행 콘텐츠 버전 계약은 유지합니다.
 
 ## 시작하기
@@ -59,7 +60,7 @@ dotnet src/Kimchily.Server.Host/bin/Release/net10.0/Kimchily.Server.Host.dll --u
 
 | 디렉터리 | 역할 |
 | --- | --- |
-| `src/Kimchily.Server.Core` | 재사용 작업 큐, UGC 방·참가자·채팅 규칙, 통신 계약 |
+| `src/Kimchily.Server.Core` | 재사용 작업 큐, UGC 방·참가자·채팅·협동 퍼즐 규칙, 통신 계약 |
 | `src/Kimchily.Server.Host` | ASP.NET Core WebSocket 접속, 20ms 작업 큐 처리, HTTP 상태 API |
 | `src/Kimchily.Server.Host/wwwroot` | 모바일 폭을 지원하는 매칭 전 로비 채팅 데모 |
 | `tests/Kimchily.Server.Checks` | 핵심 동작과 실제 Kestrel/WebSocket 통합 검사 |
@@ -76,6 +77,25 @@ dotnet src/Kimchily.Server.Host/bin/Release/net10.0/Kimchily.Server.Host.dll --u
 - 명시적 퇴장, 소켓 종료 정리, 마지막 참가자 퇴장 시 빈 방 제거.
 - 잘못된 메시지·필드·통신 버전 검사, 메시지 크기·발송 빈도·송신 큐 제한.
 - `/health`, `/api/rooms`, 같은 출처 또는 명시적으로 허용한 WebGL 출처를 위한 `/ws`.
+- 명시적으로 활성화하는 `chili-portal-v1` 협동 퍼즐: 시작 시 요구 인원 1~4명 고정,
+  위치 기반 발판 점유, 연속 3초 유지, 영구 성공·늦은 입장 스냅샷·명시적 재도전.
+
+## 협동 포털 데모
+
+칠리 아일랜드 게시 월드의 TS 스크립트가 `watch`로 프리셋을 활성화합니다. 친구가
+들어온 뒤 Unity 화면의 시작 버튼을 누르면 현재 방 인원에 맞춰 첫 1~4개 발판이 활성화됩니다.
+각 발판에 서로 다른 사람이 올라가 3초를 유지하면 모두의 화면에서 포털이 열립니다.
+혼자서는 별 발판 하나로 완료할 수 있습니다. 실행 중 인원이 줄면 재도전하여 다시 시작합니다.
+
+서버는 이미 검증한 위치·접지 상태를 바탕으로 점유와 시간을 계산하며, 1.2초 동안 위치
+수신이 끊긴 점유도 자체 타이머로 해제합니다. 성공은 재도전 또는 빈 방 제거까지 유지합니다.
+클라이언트 위치 자체는 여전히 로컬 시뮬레이션입니다. 서버 지형 충돌이나 계정 인증은 없습니다.
+
+현재 프리셋의 발판 좌표와 3초 규칙은 서버에 등록된 고정값입니다. TS는 활성화·상태 조회·
+시작/재도전과 연출에 사용하며 임의 서버 코드를 업로드하거나 규칙 수치를 덮어쓰지 않습니다.
+TypeScript SDK 0.2.0의 사용 형태는 `import { Room } from "Kimchily.Network"`이며,
+`Room.enableGame("chili-portal-v1")`, `getState()`, `startRound()`, `replay()`를 제공합니다.
+정확한 명령·필드·발판 위치는 [통신 규격](docs/protocol.md#칠리-아일랜드-협동-포털)을 참고합니다.
 
 ## Unity 인게임 채팅과 캐릭터
 
@@ -114,9 +134,9 @@ Set-Location 'E:\task\KimchilyWebGL\KimchilyUnityRuntime'
 
 ## 이번 단계의 범위
 
-인게임 패널과 웹 로비 모두 **게스트 채팅 데모**입니다. 닉네임은 계정 인증이 아니며,
+인게임 패널·웹 로비·협동 퍼즐 모두 **게스트 데모**입니다. 닉네임은 계정 인증이 아니며,
 월드 ID도 게시 서버에서 존재 여부를 검증하지 않습니다. 초대 주소는 접근 권한 토큰이 아닙니다.
-서버 재시작이나 방 소멸 시 참가자·채팅 기록은 사라집니다. 연결이 끊기면 다시 입장하여
+서버 재시작이나 방 소멸 시 참가자·채팅·게임 상태는 사라집니다. 연결이 끊기면 다시 입장하여
 새 참가자 ID와 현재 스냅샷을 받습니다. 기존 ID를 유지하는 자동 재접속은 아직 없습니다.
 
 기본 실행은 PC 전용 HTTP/WS입니다. 휴대폰 LAN 시연은 명시적으로 켭니다.
@@ -125,8 +145,8 @@ Set-Location 'E:\task\KimchilyWebGL\KimchilyUnityRuntime'
 Origin 검사는 인증을 대신하지 않습니다. Origin이 없는 비브라우저 테스트 클라이언트도 지원합니다.
 
 위치는 클라이언트가 계산하며 서버는 유효성 검사를 거쳐 중계합니다. 서버 물리·충돌 판정이나
-완전한 부정행위 방지 기능은 아닙니다. `Kimchily.Network` TypeScript API, 서버 스크립트
-실행과 미니게임 판정은 다음 단계입니다. 원래의 게임 서버 실행 파일 전체를
+완전한 부정행위 방지 기능은 아닙니다. 현재 미니게임 판정은 등록된 포털 프리셋에 한정하며,
+임의 서버 스크립트 실행은 지원하지 않습니다. 원래의 게임 서버 실행 파일 전체를
 옮긴 것이 아니므로 기존 던전·전투·로그인·DB 기능을 제공한다고 해석해서는 안 됩니다.
 
 ## 검증
@@ -136,4 +156,5 @@ Origin 검사는 인증을 대신하지 않습니다. Origin이 없는 비브라
 자동 검사와 브라우저 검증 결과는 [1단계 보고서](../docs/reports/2026-09-29-csharp-realtime-foundation.md)에 기록합니다.
 
 Unity 확장 검증은 [2단계 보고서](../docs/reports/2026-09-29-unity-multiplayer-chat.md)에 기록합니다.
-다음 구현 순서는 **TypeScript의 Room/Players API → 협동 발판 미니게임**입니다.
+협동 퍼즐 검사는 한 명/여러 명, 중도 입퇴장, 만료된 위치, 카운트다운 초기화, 재도전,
+게임 조작 제한과 실제 WebSocket 연결에서 동일 승리 상태 수신까지 포함합니다.

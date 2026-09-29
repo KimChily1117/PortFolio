@@ -113,6 +113,25 @@ namespace Kimchily.TypeScript.Tests
         }
 
         [UnityTest]
+        public IEnumerator NetworkSnapshotUsesTheClosedModuleAndDetachedJavaScriptValues()
+        {
+            var behaviour = Make(@"Start(){
+                const {Room}=require('Kimchily.Network');
+                const state=Room.getState();
+                if(typeof state.connected!=='boolean'||!Array.isArray(state.players)||!Object.isFrozen(state.players)) throw new Error('Invalid room facade');
+                if(Room.connect!==undefined||Room.send!==undefined||state.GetType!==undefined) throw new Error('Unexpected network capability');
+                let rejected=false; try {Room.enableGame('arbitrary-code');}catch(e){rejected=true;}
+                if(!rejected) throw new Error('Unknown preset accepted');
+                this.gameObject.name='network-ready';
+            }");
+            behaviour.gameObject.SetActive(true);
+            yield return null;
+            Assert.IsTrue(behaviour.HasStarted);
+            Assert.IsFalse(behaviour.IsFaulted, behaviour.LastError);
+            Assert.AreEqual("network-ready", behaviour.name);
+        }
+
+        [UnityTest]
         public IEnumerator FailedStartIsReportedAndNextBehaviourStillRuns()
         {
             var bad=Make("Start(){throw new Error('intentional start fault');}");

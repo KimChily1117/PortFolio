@@ -30,6 +30,8 @@ internal static class Program
                 var values = args[2].AsObject();
                 switch (op)
                 {
+                    case "network.getState": return "{\"connected\":true,\"selfId\":\"p1\",\"players\":[{\"playerId\":\"p1\",\"name\":\"Chili\",\"state\":null}],\"game\":null}";
+                    case "network.enableGame": case "network.startRound": case "network.replay": return true;
                     case "debug.log": Logs.Add(values.Get("0").AsString()); return JsValue.Undefined;
                     case "coroutine.start": Generators.Add(values.Get("0")); return Generators.Count;
                     case "time.deltaTime": return 0.25;
@@ -80,6 +82,15 @@ internal static class Program
         });
         Case("bundled relative imports and default export", () => {
             var host=new Host(); using var vm=Create("const helper=require('./Helper'); exports.default=class extends KimchilyScriptBehaviour {Start(){Debug.Log(helper.value);}};",host,extra:new Dictionary<string,string>{{"Assets/Scripts/Helper","exports.value='helper';"}}); vm.Invoke("Start"); Check(host.Logs[0]=="helper","relative import");
+        });
+        Case("network snapshot is a frozen JSON graph in the real interpreter", () => {
+            var host = new Host();
+            using var vm = Create("const {Room}=require('Kimchily.Network'); exports.default=class extends KimchilyScriptBehaviour {Start(){Room.enableGame('chili-portal-v1'); const a=Room.getState(); if(!Object.isFrozen(a.players[0])||Room.getState()!==a||a.players[0].GetType!==undefined) throw new Error('Unsafe snapshot'); let rejected=false; try{a.players[0].name='Fake';}catch(e){rejected=true;} if(!rejected)throw new Error('Writable snapshot'); Debug.Log(a.players[0].name);}};", host);
+            vm.Invoke("Start");
+            Check(host.Logs[0] == "Chili", "Detached immutable network value");
+        });
+        Case("bundled source cannot shadow the network module", () => {
+            Reject(() => TypeScriptVm.ValidateModules(new Dictionary<string, string> { { "Kimchily.Network", "exports.Room={};" } }));
         });
         Case("Inspector override leaves other initializers", () => {
             var host=new Host(); using var vm=Create("exports.default=class extends KimchilyScriptBehaviour {constructor(){super();this.speed=2;this.label='initial';}Start(){Debug.Log(this.speed+':'+this.label);}};",host,fields:engine=>{var all=new JsObject(engine);var b=new JsObject(engine);b.Set("type","number");b.Set("value",7);all.Set("speed",b);return all;}); vm.Invoke("Start"); Check(host.Logs[0]=="7:initial","field initializer");

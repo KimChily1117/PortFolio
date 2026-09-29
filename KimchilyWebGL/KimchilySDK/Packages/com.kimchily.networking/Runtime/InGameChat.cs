@@ -17,6 +17,7 @@ namespace Kimchily.Networking
         public event Action Changed;
         public event Action<ChatEvent> ServerEvent;
         public NetworkAvatars Avatars { get; private set; }
+        public CoopPortalClient Portal { get; private set; }
         public KimchilyMobilePlayer LocalPlayer { get; private set; }
         readonly ConcurrentQueue<ChatWireEvent> incoming = new ConcurrentQueue<ChatWireEvent>();
         readonly List<KimchilyMobileControls> pausedControls = new List<KimchilyMobileControls>();
@@ -48,6 +49,7 @@ namespace Kimchily.Networking
             View.worldId = "lobby"; View.revisionId = "v1"; View.settings.name = "";
             gameObject.AddComponent<UnityChatPanel>().Initialize(this);
             Avatars = gameObject.AddComponent<NetworkAvatars>(); Avatars.Initialize(this);
+            Portal = gameObject.AddComponent<CoopPortalClient>(); Portal.Initialize(this);
 #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLInput.captureAllKeyboardInput = false;
             KimchilyChat_Create(gameObject.name);
@@ -69,6 +71,7 @@ namespace Kimchily.Networking
         public void EnterWorld(Scene scene, string worldId, string revisionId)
         {
             SetContext(worldId, revisionId);
+            Portal.EnterWorld(worldId, revisionId);
             LocalPlayer = KimchilyMobilePlayerBootstrap.EnsureForScene(scene);
             Avatars.Bind(LocalPlayer); ApplyInputPause();
             if (configured) Connect(JsonUtility.ToJson(View.settings));
@@ -76,7 +79,7 @@ namespace Kimchily.Networking
         }
         public void ExitWorld()
         {
-            Disconnect(""); Avatars.Clear(); LocalPlayer = null;
+            Portal.ResetWorld(); Disconnect(""); Avatars.Clear(); LocalPlayer = null;
             SetExpanded("false"); SetContext("lobby", "v1");
         }
         public void SetContext(string worldId, string revisionId)
@@ -140,6 +143,12 @@ namespace Kimchily.Networking
             if (!View.joined || !ChatValidation.IsText(text, 300)) return;
             Send(new ChatCommand { type = "chat", text = text });
         }
+        internal bool SendGameCommand(string preset, string action)
+        {
+            if (!View.joined || preset != CoopPortalApi.Preset || (action != "watch" && action != "start" && action != "reset")) return false;
+            Send(new ChatCommand { type = "game", preset = preset, action = action });
+            return true;
+        }
         void Send(ChatCommand command)
         {
             string json = JsonUtility.ToJson(command);
@@ -200,7 +209,9 @@ namespace Kimchily.Networking
                 case "playerLeft": if (message.player != null) players.RemoveAll(p => p.playerId == message.player.playerId); break;
                 case "state":
                     if (message.player != null) { int index = players.FindIndex(p => p.playerId == message.player.playerId); if (index >= 0) players[index] = message.player; }
+                    View.players = players.ToArray();
                     ServerEvent?.Invoke(message); return;
+                case "game": ServerEvent?.Invoke(message); return;
                 case "chat": if (message.chat != null) { lines.Add(message.chat); if (lines.Count > 100) lines.RemoveAt(0); } break;
                 case "error": if (!View.joined) Disconnect(""); View.status = message.message; break;
             }

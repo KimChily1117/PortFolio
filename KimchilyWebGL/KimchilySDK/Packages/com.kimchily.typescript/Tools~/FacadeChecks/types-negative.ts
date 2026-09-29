@@ -1,10 +1,21 @@
 import { Coroutine, Event, KimchilyScriptBehaviour } from "Kimchily.Script";
 import { GameObject, Vector3, WaitForSeconds } from "UnityEngine";
-// @ts-expect-error Networking is not part of this SDK facade.
-import { Room } from "Kimchily.Script";
+import { Room } from "Kimchily.Network";
 
 export default class InvalidUsage extends KimchilyScriptBehaviour {
     Start(): void {
+        // @ts-expect-error Only a registered server preset can be enabled.
+        Room.enableGame("upload-arbitrary-server-code");
+        // @ts-expect-error Room identity and transport are host-owned.
+        Room.connect("ws://somewhere.invalid/ws");
+        // @ts-expect-error No raw network message capability is exposed.
+        Room.send({ type: "state", x: 99 });
+        // @ts-expect-error Snapshots cannot overwrite server-owned state.
+        Room.getState().game!.phase = "complete";
+        // @ts-expect-error Player snapshots are deeply readonly.
+        Room.getState().players[0].state!.x = 99;
+        // @ts-expect-error Room snapshots cannot add identities.
+        Room.getState().players.push({ playerId: "fake", name: "fake", state: null });
         // @ts-expect-error Scene references cannot be directly constructed.
         new GameObject();
         // @ts-expect-error Handles can only come from StartCoroutine.

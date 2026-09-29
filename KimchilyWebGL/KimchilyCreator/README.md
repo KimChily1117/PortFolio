@@ -1,12 +1,18 @@
 # Kimchily Creator — 모델·TypeScript·월드 게시
 
-Unity에서 모델과 TypeScript 동작을 제작하고 Android 콘텐츠로 게시하는 프로젝트다. `.ts`는 공식 TypeScript 컴파일러로 검사한 뒤 JavaScript 모듈을 담은 Unity 자산으로 임포트하며, 앱에 포함된 Jint 실행기가 동작을 실행한다. 제작 코드는 [Character.ts](Assets/World/Character.ts)와 상대 경로로 가져오는 [Motion.ts](Assets/World/Motion.ts)를 기준으로 한다. 기존 Lua 패키지와 콘텐츠는 호환성 유지를 위해 남겨둔다.
+Unity에서 모델과 TypeScript 동작을 제작하고 WebGL 콘텐츠로 게시하는 프로젝트다. `.ts`는 공식 TypeScript 컴파일러로 검사한 뒤 JavaScript 모듈을 담은 Unity 자산으로 임포트하며, 공통 실행기에 포함된 Jint가 동작을 실행한다. 기본 예제는 [Character.ts](Assets/World/Character.ts)와 [Motion.ts](Assets/World/Motion.ts), 협동 게임 예제는 [PortalGarden.ts](Assets/Demos/ChiliIsland/Scripts/PortalGarden.ts)다. 기존 Android 절차와 Lua 콘텐츠는 이력·호환성 용도로 보존한다.
 
 현재 WebGL 작업본은 Unity **6000.3.24f1**, **WebGL Build Support**, **Built-in Render Pipeline**을 사용한다. 아래 Android 실기기 기록은 이전 기준본의 검증 이력이다. 이 폴더는 기존 `UnityKimchilyCreator`와 별도로 만든 제작 프로젝트이며, 실행 앱은 [KimchilyAndroid](../KimchilyAndroid/README.md), 게시 서버는 [KimchilyPublish](../KimchilyPublish/README.md)다.
 
 TypeScript 컴파일·API 계약·자동완성과 Unity 2022.3.16f1의 **PlayMode 54개·EditMode 12개** 검사가 통과했다. ARM64 IL2CPP 앱을 **SM-G955N / Android 9**에 설치하고 TypeScript 게시 월드를 실행했다. `speed` 100→140, `blinkSeconds` 0.3→0.5로 바꾼 [revision 2](http://192.168.0.4:8787/w/my-first-world/20260918T182013596Z-1533bb5e)도 **APK 재설치 없이 같은 프로세스**에서 실행했다. FBX 회전·이동, generator의 beacon 활성/비활성 전환, 두 월드의 퇴장 후 홈 복귀·임시 다운로드 정리와 새 링크 재입장을 확인했다. 이번 QR은 실제 ZXing 해독과 같은 링크의 앱 입장으로 검사했으며 물리 카메라 촬영은 포함하지 않았다. APK·로그·화면 증거와 검사 범위는 [TypeScript 구현 기록](../docs/reports/2026-09-19-typescript-runtime.md)에 있다. 기존 Lua의 결과는 [이름 변경 기록](../docs/reports/kimchily-rebrand-2026-09-18.md)으로 보존한다. TypeScript 최초 도입에는 새 실행기를 포함한 APK가 필요하다.
 
-## 빠르게 시작하기
+## 칠리 아일랜드 제작과 시연
+
+`Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity`를 열면 직접 생성한 메시 프리팹 14개로 구성한 협동 포털 월드를 편집할 수 있다. 기존 `MyWorld.unity`와 분리된 씬이며, 소품의 OBJ/MTL은 `Assets/Demos/ChiliIsland/Models`에 있다. 생성기는 **Kimchily → Demos → Generate Chili Island**에 있다. 재생성하면 생성된 데모 자산을 갱신하므로 수작업 수정본은 별도 보관한다.
+
+TypeScript SDK **0.2.0**의 `import { Room } from "Kimchily.Network"`와 Networking SDK **0.3.0**을 사용한다. `PortalGarden.ts`는 발판 불빛·포털·성공 연출을 담당하며, C# 서버의 `chili-portal-v1`이 점유와 3초 유지·성공을 판정한다. Inspector의 `pulseSpeed`·`celebrationScale`이나 모델·재질을 수정하고 Web 대상으로 다시 게시해 연출 변경을 시연한다. 발판 좌표와 서버 규칙은 TS 필드로 덮어쓰지 않는다. [시연 순서·검증 범위](../docs/multiplayer-demo.md)
+
+## 기존 Android 기준본 빠르게 시작하기
 
 1. Unity Hub에서 이 폴더를 연다. Windows에서는 TypeScript 패키지가 최초 1회 호환 Node와 고정된 컴파일러를 자동 설치하고 `.ts` 자산을 다시 임포트한다. 준비 완료를 기다린 뒤 `Assets/World/MyWorld.unity`를 연다. WebGL 작업은 [WebGL 제작·게시 가이드](../docs/webgl-guide.md)를 따르고, 아래 Android 절차를 따를 때는 Build Settings의 **Android → Switch Platform**을 적용한다. 처음 만드는 샘플은 **Kimchily → Create Starter World**, 기존 Lua 샘플 전환은 **Kimchily → Migrate Starter World to TypeScript**를 사용한다. 전환 도구는 원본 씬을 `Artifacts/typescript-migration`에 보관한다.
 2. `My TypeScript Character`의 **Kimchily TypeScript Behaviour**에 `Assets/World/Character.ts`를 연결한다. `beacon`의 Inspector override를 켜고 씬의 beacon 오브젝트를 지정한다. 현재 revision 2의 `speed`와 `blinkSeconds`는 override를 끄면 클래스 기본값 140·0.5를 사용한다. VS Code에서 이 프로젝트 폴더를 열어 스크립트를 편집하고, Unity의 컴파일 오류와 Play 동작을 확인한 뒤 저장한다.
@@ -116,4 +122,4 @@ Samsung **SM-G955N**에서 설치한 Unity 포함 APK를 유지한 채 다음 �
 
 ## 닉네임과 멀티플레이 채팅
 
-홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.2.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.
+홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.3.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. 협동 게임 HUD는 TS가 `Room.enableGame("chili-portal-v1")`을 호출한 월드에만 표시됩니다. [연결 설정](../KimchilyServer/README.md)과 [채팅 검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.

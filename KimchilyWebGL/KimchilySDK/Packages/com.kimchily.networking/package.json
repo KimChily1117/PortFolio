@@ -1,8 +1,8 @@
 {
   "name": "com.kimchily.networking",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "displayName": "Kimchily Networking SDK",
-  "description": "Unity TMP chat, character speech bubbles and multiplayer avatar synchronization using the Kimchily C# realtime server.",
+  "description": "Unity TMP chat, synchronized avatars and a server-driven cooperative portal game with a portable TypeScript-facing room API.",
   "unity": "6000.0",
   "dependencies": { "com.kimchily.creator": "0.1.0", "com.unity.ugui": "2.0.0" }
 }

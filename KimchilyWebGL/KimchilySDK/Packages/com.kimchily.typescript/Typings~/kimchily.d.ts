@@ -1,4 +1,61 @@
 /** Supported Kimchily world APIs. These declarations describe the bundled facade, not the full Unity API. */
+declare module "Kimchily.Network" {
+    /** Detached data from the latest validated server pose; no native Transform access. */
+    export interface PlayerPose {
+        readonly sequence: number;
+        readonly x: number;
+        readonly y: number;
+        readonly z: number;
+        readonly yaw: number;
+        readonly speed: number;
+        readonly verticalVelocity: number;
+        readonly grounded: boolean;
+    }
+    export interface RoomPlayer {
+        readonly playerId: string;
+        readonly name: string;
+        readonly state: PlayerPose | null;
+    }
+    export interface PortalPad {
+        readonly id: string;
+        readonly x: number;
+        readonly y: number;
+        readonly z: number;
+        readonly radius: number;
+        /** Whether this pad is required in the current round. */
+        readonly active: boolean;
+        /** Occupant assigned by the server; null or empty when unoccupied. */
+        readonly playerId: string | null;
+    }
+    export interface PortalGameState {
+        readonly preset: "chili-portal-v1";
+        readonly phase: "waiting" | "playing" | "holding" | "complete";
+        readonly round: number;
+        readonly requiredPlayers: number;
+        readonly holdSeconds: number;
+        readonly remainingMs: number;
+        readonly pads: ReadonlyArray<PortalPad>;
+        readonly version: number;
+    }
+    export interface RoomState {
+        readonly connected: boolean;
+        readonly selfId: string | null;
+        readonly players: ReadonlyArray<RoomPlayer>;
+        readonly game: PortalGameState | null;
+    }
+    /** Opt-in shared game preset. Transport, identity, endpoints and raw messages are host-owned. */
+    export const Room: {
+        /** Enables the native game HUD and watches this preset. Queues until joined; does not start a round. */
+        enableGame(preset: "chili-portal-v1"): boolean;
+        /** Latest room snapshot, deeply frozen. Call from Update; no callbacks or network request are created. */
+        getState(): RoomState;
+        /** Requests a start using the current participant count. True means accepted for sending, not server success. */
+        startRound(): boolean;
+        /** Requests a return to waiting. Another explicit start begins the next round. */
+        replay(): boolean;
+    };
+}
+
 declare module "UnityEngine" {
     /** Rotation/translation coordinate system. */
     export enum Space { World = 0, Self = 1 }

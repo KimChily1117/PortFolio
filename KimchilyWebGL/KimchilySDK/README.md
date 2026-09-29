@@ -1,24 +1,28 @@
 **Kimchily Creator SDK — TypeScript 제작과 Unity 월드 실행**
 
-현재 제작 흐름은 [KimchilyCreator](../KimchilyCreator/README.md)의 `.ts` 클래스·모델 → 타입 검사 및 JavaScript 모듈 임포트 → Build & Publish → QR/링크 → 네이티브 Android 앱과 Unity 실행기다. TypeScript 5.9.3과 `.d.ts`로 타입 제안을 제공하고, 플레이어에서는 Jint가 생성된 JavaScript를 실행한다. Lua 코드를 생성하는 방식이 아니다.
+현재 WebGL 제작 흐름은 [KimchilyCreator](../KimchilyCreator/README.md)의 `.ts` 클래스·모델 → 타입 검사 및 JavaScript 모듈 임포트 → Build & Publish → QR/링크 → 브라우저의 공통 Unity 실행기다. TypeScript 5.9.3과 `.d.ts`로 타입 제안을 제공하고, 플레이어에서는 Jint가 생성된 JavaScript를 실행한다. Lua 코드를 생성하는 방식이 아니다.
 
-앱 구성은 **별도 네이티브 Android 앱에서 필요할 때 Unity 월드를 전체 화면으로 실행**하는 방식이다. 게시 서버는 [KimchilyPublish](../KimchilyPublish/README.md), 호스트 앱은 [KimchilyAndroid](../KimchilyAndroid/README.md), 실행기는 [KimchilyUnityRuntime](../KimchilyUnityRuntime/README.md)다. 기존 MoonSharp Lua 패키지는 호환성 유지를 위해 남겨둔다.
+게시 서버는 [KimchilyPublish](../KimchilyPublish/README.md), 실행기는 [KimchilyUnityRuntime](../KimchilyUnityRuntime/README.md)다. 기존 [네이티브 Android 호스트](../KimchilyAndroid/README.md)와 MoonSharp Lua 패키지는 보존한다. 이 복제본의 최신 SDK는 Unity 6/WebGL 기준이며, 과거 Android 검증과 구분한다.
 
 | 소스 UPM 패키지 | 역할 |
 |---|---|
-| `com.kimchily.creator` | 코루틴 스케줄러, 씬 의존성 수집, 콘텐츠 빌드·게시·다운로드 검증 |
-| `com.kimchily.typescript` | `.ts` importer, 타입 선언, Inspector 공개 필드, 제한된 Unity API, Jint 실행기 |
+| `com.kimchily.creator` 0.1.0 | 코루틴 스케줄러, 씬 의존성 수집, 콘텐츠 빌드·게시·다운로드 검증 |
+| `com.kimchily.typescript` 0.2.0 | `.ts` importer, 타입 선언, Inspector 공개 필드, 제한된 Unity API·Room API, Jint 실행기 |
+| `com.kimchily.networking` 0.3.0 | 자동 입장, TMP 채팅·말풍선, 원격 캐릭터, 협동 포털 HUD·게임 상태 |
 | `com.kimchily.scripting` | 기존 MoonSharp Lua Behaviour와 API 호환 경로 |
 
 시작 예제는 [Character.ts](../KimchilyCreator/Assets/World/Character.ts)다. `public beacon`, `speed`, `blinkSeconds`가 Inspector 대상이고 private `Map`은 내부 상태다. **Kimchily → TypeScript → Configure Type Completion** 메뉴와 제작 프로젝트의 VS Code 설정을 사용한다. 구현·설정·API 표·검증 상태는 [2026-09-19 TypeScript 기록](../docs/reports/2026-09-19-typescript-runtime.md)에 정리했다.
 
-TypeScript 컴파일러 **19개**, Jint VM **22개**, JS facade **17개**, strict 타입 정상/오류 사례와 실제 LanguageService 자동완성을 확인했다. Unity PlayMode **54개**·EditMode **12개**, Creator 씬 전환·Android 콘텐츠 빌드·게시, ARM64 IL2CPP 통합 APK 빌드도 통과했다. **SM-G955N / Android 9**에서 TypeScript revision 1→2를 APK 재설치 없이 같은 프로세스로 실행했으며 FBX 회전·이동·generator beacon 전환·퇴장 후 홈/캐시 정리·새 링크 재입장을 확인했다. 실제 ZXing QR 해독은 통과했고 이번 TypeScript QR의 물리 카메라 촬영은 수행하지 않았다. APK SHA·로그·화면과 검사 범위는 [TypeScript 검증 기록](../docs/reports/2026-09-19-typescript-runtime.md)에 있다. 아래 2026-09-18 xLua/Windows·Lua/Android 결과를 이번 TypeScript 검증으로 합산하지 않는다.
+2026-09-29 협동 포털 확장에서는 TypeScript 컴파일러 **20개**, Jint VM **32개**, JS facade **20개**, strict 타입 정상/오류 사례와 실제 LanguageService 자동완성이 통과했다. 통합 Unity PlayMode **115개**와 C# 서버 검사 **40개**도 통과했다. 게임 시연과 역할 분리는 [협동 데모 안내](../docs/multiplayer-demo.md)를 참고한다.
+
+2026-09-19의 기존 TypeScript 0.1.0은 Unity PlayMode **54개**·EditMode **12개**, ARM64 IL2CPP 앱 빌드와 **SM-G955N / Android 9**에서 revision 1→2 재게시를 검증했다. 당시 APK·로그·QR 검사 범위는 [TypeScript 검증 기록](../docs/reports/2026-09-19-typescript-runtime.md)에 보존한다. 이 과거 결과는 최신 Unity 6 네트워크 SDK의 Android 실기기 검증을 뜻하지 않는다.
 
 **현재 구현**
 
 - 실제 TypeScript 5.9.3 strict 검사, ES2018 CommonJS 출력, 상대 `.ts` 모듈과 source map 임포트.
 - `.d.ts` 타입 제안과 공개 number/string/boolean/GameObject/Transform/Vector3 Inspector override.
 - Jint 기반 Behaviour lifecycle, 소유 객체·명시 참조만 전달하는 Unity API, generator 코루틴, 로컬 typed Event.
+- `import { Room } from "Kimchily.Network"`: `enableGame`, `getState`, `startRound`, `replay`. C# 고정 프리셋의 상태를 동결된 복사본으로 읽고 TS가 연출한다. 임의 소켓·메시지·서버 코드 실행은 제공하지 않는다.
 - Coroutine 시작/취소/owner별 취소, 중첩 IEnumerator, Unity yield 전달, 예외 수집 및 Dispose.
 - 스케줄러 비활성화/파괴, owner 파괴 시 작업 정리.
 - Lua처럼 취소 시 함수 뒤쪽을 실행하지 않는 어댑터를 위한 명시적 cleanup 콜백.
@@ -128,4 +132,4 @@ Unity 라이선스가 활성화된 상태에서 실행한다. 스크립트는 FB
 
 **다음 구현 경계**
 
-새 제작·게시·다운로드·QR 경로는 별도 KimchilyCreator/KimchilyPublish/KimchilyAndroid/KimchilyUnityRuntime에 구현했다. 기존 World 앱의 Play 버튼과 구형 manifest는 그대로 유지한다. TypeScript 실행기 도입 시 앱에 새 Runtime·Jint와 의존성을 포함해야 하며, 이후 설치된 API 범위의 스크립트와 모델 변경은 콘텐츠로 게시한다. 로그인·클라우드 운영·제작자 권한·영구 캐시·멀티플레이·아바타/캐릭터 제어 API는 후속 범위다.
+새 제작·게시·다운로드·QR 경로는 별도 KimchilyCreator/KimchilyPublish/KimchilyAndroid/KimchilyUnityRuntime에 구현했다. 기존 World 앱의 Play 버튼과 구형 manifest는 그대로 유지한다. TypeScript 실행기나 Room API를 새로 도입할 때는 공통 실행기를 갱신하고, 이후 설치된 API 범위의 스크립트와 모델 변경은 콘텐츠로 게시한다. 게스트 멀티플레이와 고정 포털 프리셋은 구현했으며 로그인·클라우드 운영·제작자 권한·영구 캐시·범용 서버 규칙 업로드는 후속 범위다.

@@ -1,6 +1,6 @@
 # WebGL 월드 제작·게시 가이드
 
-이 가이드는 **`E:\GItHub\PortFolio\KimchilyWebGL` 클론**에서 Unity 6으로 월드를 만들고, QR을 통해 브라우저로 접속하는 절차다. 원본 **`E:\task\Unity_Project`는 Unity 2022.3 Android 기준으로 유지**한다. 두 폴더의 프로젝트·SDK·게시 저장소를 섞지 않는다.
+이 가이드는 **`E:\task\KimchilyWebGL` 클론**에서 Unity 6으로 월드를 만들고, QR을 통해 브라우저로 접속하는 절차다. 원본 **`E:\task\Unity_Project`는 Unity 2022.3 Android 기준으로 유지**한다. 두 폴더의 프로젝트·SDK·게시 저장소를 섞지 않는다. 수정·검증은 Task 폴더에서 수행하고, 완료한 변경만 `E:\GItHub\PortFolio\KimchilyWebGL`의 Git 관리본에 반영·병합·커밋한다.
 
 현재 Web 실행기·월드 번들 빌드와 서버 게시, PC Chrome에서 TypeScript·코루틴·월드 입장·이동·점프·재입장을 확인했다. Chrome 터치 에뮬레이션에서도 조이스틱의 걷기·달리기와 점프를 확인했다. **2026-09-20 사용자에게 iPhone 실기기에서도 정상 실행된다는 확인을 받았다.** 상세 결과와 확인 범위는 [전환 검증 보고서](reports/2026-09-20-webgl-clone-validation.md)를 확인한다.
 
@@ -8,16 +8,22 @@
 
 | 용도 | 경로 |
 |---|---|
-| 월드·모델·애니메이션 제작 | `E:\GItHub\PortFolio\KimchilyWebGL\KimchilyCreator` |
-| 브라우저에서 월드를 실행하는 공통 플레이어 | `E:\GItHub\PortFolio\KimchilyWebGL\KimchilyUnityRuntime` |
-| 공통 SDK | `E:\GItHub\PortFolio\KimchilyWebGL\KimchilySDK` |
-| 클론 게시 서버 | `E:\GItHub\PortFolio\KimchilyWebGL\KimchilyPublish` |
+| 월드·모델·애니메이션 제작 | `E:\task\KimchilyWebGL\KimchilyCreator` |
+| 브라우저에서 월드를 실행하는 공통 플레이어 | `E:\task\KimchilyWebGL\KimchilyUnityRuntime` |
+| 공통 SDK | `E:\task\KimchilyWebGL\KimchilySDK` |
+| 클론 게시 서버 | `E:\task\KimchilyWebGL\KimchilyPublish` |
 
 Unity Hub의 **Projects → Add → Add project from disk**에서 **KimchilyCreator 폴더**를 추가한다. 상위 `KimchilyWebGL` 폴더를 Unity 프로젝트로 추가하는 것은 아니다. 열 때 Editor를 **6000.3.24f1**로 선택한다. 설치된 Editor는 `E:\UnityEngineCore\6000.3.24f1\Editor\Unity.exe`이고 **Web Build Support** 모듈이 필요하다.
 
 평소 제작할 때는 Creator만 열면 된다. Runtime은 공통 웹 실행기를 빌드하거나 실행기 코드를 수정할 때 사용한다. Hub에서 원본과 클론을 구분할 때 프로젝트 이름뿐 아니라 **경로**를 확인한다. `.meta` 파일과 SDK의 상대 폴더 배치는 유지한다.
 
 Windows 새 PC에서 처음 열면 TypeScript 패키지가 호환 Node 실행 환경과 TypeScript 5.9.3 컴파일러를 백그라운드로 자동 설치한다. 최초 설치에는 인터넷 연결이 필요하며, 완료하면 `.ts` 자산을 다시 임포트한다. Console에서 준비 완료를 확인한 뒤 빌드한다. 실패했을 때는 **Kimchily → TypeScript → Install or Repair Compiler**로 재시도한다. 시스템 Node 설치나 수동 `npm ci`는 필요하지 않으며, 설치 파일은 패키지의 `Tools~/Compiler/.tools`와 `node_modules`에 보관한다.
+
+## 협동 포털 데모 열기
+
+[칠리 아일랜드](multiplayer-demo.md)는 `KimchilyCreator/Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity`의 전용 씬이다. 직접 생성한 14개 환경·소품 프리팹과 OBJ/MTL, `PortalGarden.ts`를 포함하며 기존 `MyWorld.unity`와 분리한다.
+
+TypeScript SDK **0.2.0**, Networking SDK **0.3.0**을 포함한 실행기가 필요하다. TS는 `Room.enableGame("chili-portal-v1")`로 서버 프리셋에 참여하고, `Room.getState()`를 읽어 불빛·포털을 연출한다. C# 서버가 발판 좌표·점유·3초 유지·성공을 판정한다. 처음에는 아래 공통 실행기 빌드를 한 번 수행하고, 이후 모델·재질·지원 API 안의 TS 연출은 새 월드 버전으로 게시한다.
 
 ## 2. 공통 웹 실행기를 준비하기
 
@@ -26,7 +32,7 @@ Windows 새 PC에서 처음 열면 TypeScript 패키지가 호환 Node 실행 �
 PowerShell에서:
 
 ```powershell
-Set-Location 'E:\GItHub\PortFolio\KimchilyWebGL'
+Set-Location 'E:\task\KimchilyWebGL'
 powershell -NoProfile -ExecutionPolicy Bypass -File .\KimchilyUnityRuntime\tools\export_webgl.ps1
 ```
 
@@ -38,7 +44,7 @@ Runtime을 직접 열었다면 **File → Build Profiles**에서 **Web**으로 �
 
 ## 3. 게시 서버 켜기
 
-Creator의 **Kimchily → Publish World** 창에서 **서버 켜기 · 연결**을 누르는 방법이 가장 간단하다. **서버 폴더 선택**이 필요하면 반드시 클론의 `E:\GItHub\PortFolio\KimchilyWebGL\KimchilyPublish`를 선택한다. 연결되면 PC 주소와 게시 인증 토큰이 자동으로 입력된다.
+Creator의 **Kimchily → Publish World** 창에서 **서버 켜기 · 연결**을 누르는 방법이 가장 간단하다. **서버 폴더 선택**이 필요하면 반드시 클론의 `E:\task\KimchilyWebGL\KimchilyPublish`를 선택한다. 연결되면 PC 주소와 게시 인증 토큰이 자동으로 입력된다.
 
 PowerShell에서도 같은 서버를 관리할 수 있다. 아래 명령은 클론 루트에서 실행한다.
 
@@ -135,6 +141,6 @@ CLI 게시 응답은 `KimchilyCreator\Artifacts\publish-result.json`에 저장�
 | PC에서는 열리고 iPhone에서는 접속 불가 | QR의 LAN 주소, 같은 네트워크, 서버 상태, 방화벽·기기 격리 |
 | 월드 시작 후 오류 | 페이지 오류 문구와 브라우저 콘솔, Web 실행기/번들의 Unity·SDK 버전, 최신 공통 실행기를 빌드했는지 확인 |
 | 모델·애니메이션이 예전 상태 | 최신 씬 저장 후 Build & Publish했는지, 새 revision QR인지 |
-| 원본 프로젝트나 서버가 선택됨 | 경로가 `E:\GItHub\PortFolio\KimchilyWebGL`인지, 게시 포트가 8788인지 |
+| 원본 프로젝트나 서버가 선택됨 | 경로가 `E:\task\KimchilyWebGL`인지, 게시 포트가 8788인지 |
 
 서버 세부 옵션과 로그 위치는 [게시 서버 안내](../KimchilyPublish/README.md), 원본 보존 검사는 [공통 개발 도구 안내](../tools/README.md)를 참고한다.

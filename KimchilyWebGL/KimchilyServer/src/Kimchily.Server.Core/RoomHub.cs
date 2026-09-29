@@ -13,6 +13,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
     private readonly Func<long> _clock = clock ?? (() => Environment.TickCount64);
     private readonly Dictionary<RoomKey, Room> _rooms = [];
     private readonly Dictionary<string, (Room Room, Member Member)> _members = [];
+    private long _nextGameTickAt;
 
     public Task HandleAsync(IRoomPeer peer, ClientCommand command) => InvokeAsync(() =>
     {
@@ -22,6 +23,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
             case "join": Join(peer, command); break;
             case "chat": Chat(peer, command.Text); break;
             case "state": UpdateState(peer, command.State); break;
+            case "game": Game(peer, command); break;
             case "leave": Leave(peer, acknowledge: true); break;
             case "ping": peer.Send(new ServerEvent("pong")); break;
             default: Error(peer, "UNKNOWN_MESSAGE", "지원하지 않는 메시지입니다."); break;
@@ -33,6 +35,15 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
 
     public Task<RoomSummary[]> SnapshotAsync() => InvokeAsync(() => _rooms.Values
         .Select(room => new RoomSummary(room.Key, room.Members.Count, RoomCapacity)).ToArray());
+
+    // The host queues this on its existing room pump. All game state still runs under the same serializer.
+    public bool TryQueueGameTick() => TryPush(() =>
+    {
+        var now = _clock();
+        if (now < _nextGameTickAt) return;
+        _nextGameTickAt = now + 100;
+        foreach (var room in _rooms.Values) RefreshGame(room, now);
+    });
 
     private void Join(IRoomPeer peer, ClientCommand command)
     {
@@ -52,13 +63,15 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         var member = new Member(peer, new PlayerInfo(peer.Id, name!));
         room.Members.Add(peer.Id, member);
         _members.Add(peer.Id, (room, member));
+        var gameChanged = room.Game?.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), _clock()) == true;
         peer.Send(new ServerEvent("joined")
         {
             Room = key, SelfId = peer.Id,
             Players = room.Members.Values.Select(value => value.Player).ToArray(),
-            History = room.History.ToArray()
+            History = room.History.ToArray(), Game = room.Game?.State
         });
         Broadcast(room, new ServerEvent("playerJoined") { Player = member.Player }, except: peer.Id);
+        if (gameChanged) Broadcast(room, new ServerEvent("game") { Game = room.Game!.State }, except: peer.Id);
     }
 
     private void Chat(IRoomPeer peer, string? rawText)
@@ -85,6 +98,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
             membership.Room.Members.Remove(peer.Id);
             Broadcast(membership.Room, new ServerEvent("playerLeft") { Player = membership.Member.Player });
             if (membership.Room.Members.Count == 0) _rooms.Remove(membership.Room.Key);
+            else RefreshGame(membership.Room, _clock());
         }
         if (acknowledge) peer.Send(new ServerEvent("left"));
     }
@@ -115,6 +129,41 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         member.LastStateAt = now;
         member.Player = member.Player with { State = state };
         Broadcast(membership.Room, new ServerEvent("state") { Player = member.Player }, except: peer.Id);
+        RefreshGame(membership.Room, now);
+    }
+
+    private void Game(IRoomPeer peer, ClientCommand command)
+    {
+        if (!_members.TryGetValue(peer.Id, out var membership))
+        { Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요."); return; }
+        if (command.Preset != PortalPuzzle.Preset || command.Action is not ("watch" or "start" or "reset"))
+        { Error(peer, "INVALID_GAME", "지원하는 게임 규칙과 명령을 확인해 주세요."); return; }
+        var room = membership.Room;
+        var now = _clock();
+        if (command.Action != "watch")
+        {
+            var times = membership.Member.GameTimes;
+            while (times.TryPeek(out var timestamp) && now - timestamp >= 5000) times.Dequeue();
+            if (times.Count >= 4) { Error(peer, "GAME_RATE_LIMIT", "게임 조작이 너무 빠릅니다. 잠시 후 다시 시도해 주세요."); return; }
+            times.Enqueue(now);
+        }
+        var created = room.Game is null;
+        room.Game ??= new PortalPuzzle();
+        var changed = room.Game.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), now);
+        if (command.Action != "watch")
+        {
+            changed |= command.Action == "start" ? room.Game.Start(room.Members.Count) : room.Game.Reset();
+            changed |= room.Game.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), now);
+        }
+        var snapshot = new ServerEvent("game") { Game = room.Game.State };
+        if (created || changed) Broadcast(room, snapshot);
+        else peer.Send(snapshot);
+    }
+
+    private static void RefreshGame(Room room, long now)
+    {
+        if (room.Game?.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), now) == true)
+            Broadcast(room, new ServerEvent("game") { Game = room.Game.State });
     }
 
     private static void Broadcast(Room room, ServerEvent message, string? except = null)
@@ -136,6 +185,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         public RoomKey Key { get; } = key;
         public Dictionary<string, Member> Members { get; } = [];
         public Queue<ChatMessage> History { get; } = [];
+        public PortalPuzzle? Game { get; set; }
     }
 
     private sealed class Member(IRoomPeer peer, PlayerInfo player)
@@ -145,5 +195,6 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         public PlayerState? Spawn { get; set; }
         public long LastStateAt { get; set; }
         public Queue<long> ChatTimes { get; } = [];
+        public Queue<long> GameTimes { get; } = [];
     }
 }

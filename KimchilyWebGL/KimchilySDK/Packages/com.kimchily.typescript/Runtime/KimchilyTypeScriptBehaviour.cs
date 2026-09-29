@@ -196,6 +196,22 @@ namespace Kimchily.TypeScript
                 throw new InvalidOperationException("Object reference is outside this behaviour's capabilities.");
             int id = (int)rawId;
             ObjectInstance args = call[2].AsObject();
+            if (op == "network.enableGame")
+            {
+                JsValue preset = args.Get("0");
+                if (!preset.IsString() || preset.AsString() != "chili-portal-v1")
+                    throw new InvalidOperationException("Unsupported shared game preset.");
+                return Kimchily.Networking.CoopPortalApi.EnableGame(preset.AsString());
+            }
+            if (op == "network.startRound") return Kimchily.Networking.CoopPortalApi.StartRound();
+            if (op == "network.replay") return Kimchily.Networking.CoopPortalApi.Replay();
+            if (op == "network.getState")
+            {
+                string snapshot = Kimchily.Networking.CoopPortalApi.GetStateJson();
+                if (snapshot == null || snapshot.Length > 65536)
+                    throw new InvalidOperationException("Room snapshot exceeds the SDK limit.");
+                return snapshot;
+            }
             if (op == "time.deltaTime") return Time.deltaTime;
             if (op == "debug.log" || op == "debug.logWarning" || op == "debug.logError")
             {

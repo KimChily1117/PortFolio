@@ -1,5 +1,6 @@
 import { Coroutine, Event, KimchilyScriptBehaviour } from "Kimchily.Script";
 import { GameObject, Transform, Vector3, WaitForSeconds, Time, Debug, Space } from "UnityEngine";
+import { Room, RoomState } from "Kimchily.Network";
 
 export default class TypeContract extends KimchilyScriptBehaviour {
     public target: GameObject | null = null;
@@ -14,7 +15,15 @@ export default class TypeContract extends KimchilyScriptBehaviour {
         this.changed.Invoke(this.gameObject, this.objects.size);
         this.handle = this.StartCoroutine(this.routine());
     }
-    Start(): void { this.gameObject.name = "TypeContract"; }
+    Start(): void {
+        this.gameObject.name = "TypeContract";
+        Room.enableGame("chili-portal-v1");
+        const state: RoomState = Room.getState();
+        if (state.connected && state.game?.phase === "waiting") Room.startRound();
+        if (state.game?.phase === "complete") Room.replay();
+        const occupant: string | null | undefined = state.game?.pads[0]?.playerId;
+        Debug.Log(occupant);
+    }
     Update(dt: number): void {
         this.transform.Rotate(0, Time.deltaTime * 45, 0, Space.Self);
         this.transform.Translate(0, dt, 0, Space.World);

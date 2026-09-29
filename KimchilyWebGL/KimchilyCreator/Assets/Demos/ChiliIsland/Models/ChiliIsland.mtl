@@ -1,0 +1,105 @@
+# Original Kimchily color palette
+newmtl Cream
+Kd 0.956863 0.909804 0.792157
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Sand
+Kd 0.847059 0.74902 0.627451
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Rock
+Kd 0.552941 0.607843 0.603922
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl RockLight
+Kd 0.713726 0.776471 0.741177
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Grass
+Kd 0.607843 0.8 0.67451
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Rim
+Kd 0.741177 0.882353 0.737255
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Mint
+Kd 0.447059 0.776471 0.682353
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl MintLight
+Kd 0.721569 0.894118 0.756863
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Pine
+Kd 0.243137 0.521569 0.498039
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Trunk
+Kd 0.678431 0.501961 0.392157
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Teal
+Kd 0.152941 0.427451 0.454902
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Deep
+Kd 0.086275 0.286275 0.329412
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Gold
+Kd 0.905882 0.72549 0.411765
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Coral
+Kd 0.933333 0.65098 0.560784
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Lilac
+Kd 0.705882 0.647059 0.823529
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Butter
+Kd 0.937255 0.854902 0.572549
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl White
+Kd 0.980392 0.964706 0.909804
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Glow
+Kd 0.74902 1 0.941177
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Pink
+Kd 0.92549 0.717647 0.701961
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl Petal
+Kd 0.952941 0.878431 0.788235
+Ka 0.2 0.2 0.2
+Ns 12
+
+newmtl PortalLight
+Kd 0.556863 0.909804 0.831373
+Ka 0.2 0.2 0.2
+Ns 12

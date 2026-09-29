@@ -45,11 +45,12 @@ speed는 [0,25], verticalVelocity는 ±100 범위의 유한수여야 합니다.
 | type | 필드와 의미 |
 | --- | --- |
 | `hello` | 연결 직후 `selfId`. 아직 방에 들어간 상태가 아님 |
-| `joined` | `selfId`, `room`, `players`, `history`. 자신을 포함한 전체 참가자와 최근 채팅 |
+| `joined` | `selfId`, `room`, `players`, `history`, 선택적 `game`. 자신을 포함한 전체 참가자와 최근 채팅·게임 상태 |
 | `playerJoined` | `player: {playerId, name}`. 기존 참가자에게만 전달 |
 | `playerLeft` | `player: {playerId, name}` |
 | `chat` | `chat: {id, playerId, name, text, sentAtUtc}`. 보낸 사람을 포함해 방 전체 전달 |
 | `state` | `player: {playerId, name, state}`. 같은 방의 다른 참가자에게 최신 캐릭터 상태 전달 |
+| `game` | `game` 포털 퍼즐 스냅샷. 발판 점유·진행 단계·남은 시간·승리 상태 |
 | `left` | 자신의 퇴장 확인. 소켓은 계속 열려 있어 재입장 가능 |
 | `pong` | ping 응답 |
 | `error` | `code`, 사용자에게 표시할 `message` |
@@ -60,6 +61,70 @@ joined 스냅샷에는 기존 참가자의 최신 state가 포함됩니다. play
 시간은 UTC ISO 8601입니다. 같은 소켓에는 하나의 송신 루프만 쓰며, 방 작업은 순서대로 실행합니다.
 서로 다른 연결에서 동시에 보낸 메시지의 처리 순서는 서버가 받은 순서로 결정합니다.
 채팅 ID는 중복 표시 방지를 위한 식별자로 활용할 수 있지만, 현재 재전송/전달 보장 프로토콜은 없습니다.
+
+## 칠리 아일랜드 협동 포털
+
+등록된 프리셋 `chili-portal-v1`만 지원합니다. 일반 채팅 방에는 게임이 자동 생성되지 않습니다.
+게시 월드의 TS/Unity 연동이 입장 후 `watch`를 보내면 대기 상태를 만들거나 최신 상태를 받습니다.
+친구가 모인 다음 사용자가 시작을 눌러 `start`를 보내고, 재도전은 `reset` 뒤 다시 시작합니다.
+
+```json
+{"protocolVersion":1,"type":"game","preset":"chili-portal-v1","action":"watch"}
+{"protocolVersion":1,"type":"game","preset":"chili-portal-v1","action":"start"}
+{"protocolVersion":1,"type":"game","preset":"chili-portal-v1","action":"reset"}
+```
+
+`start` 시 현재 방 인원수를 1~4 범위로 제한하여 `requiredPlayers`로 고정합니다.
+첫 N개 발판을 각각 다른 사람이 밟아야 합니다. 중간 입퇴장은 진행 중인 요구 인원을
+바꾸지 않습니다. 인원이 줄어 완료할 수 없으면 재도전하여 새 인원으로 다시 시작합니다.
+대기 중에는 현재 인원에 맞춰 필요한 발판을 미리 표시합니다. 5~8명 방도 발판은 최대 4개입니다.
+웹 로비에서 같은 방에 들어온 사용자도 방 인원에 포함됩니다.
+
+| 순서 / id | 중심 위치 (x,y,z) | 반경 |
+| --- | --- | --- |
+| 1 / `star` | (-3,0,2) | 1.1m |
+| 2 / `moon` | (3,0,2) | 1.1m |
+| 3 / `sun` | (-3,0,6) | 1.1m |
+| 4 / `leaf` | (3,0,6) | 1.1m |
+
+서버는 최신 승인된 플레이어 위치를 사용합니다. 수평 반경 안, 발판 높이 ±1.5m,
+`grounded:true`, 수신 후 1,200ms 이내 조건을 모두 만족해야 점유합니다.
+한 플레이어는 한 발판만 점유합니다. 같은 발판에 여러 명이 있으면 playerId 순으로 결정합니다.
+점유자가 바뀌어도 모든 활성 발판이 계속 채워져 있으면 진행을 유지합니다.
+
+모든 발판을 연속 3초 점유하면 `complete`가 됩니다. 도중에 비거나 위치가 만료되면
+남은 시간을 3초로 초기화합니다. 서버의 100ms 게임 검사로 통신이 끊긴 점유도 해제합니다.
+성공한 발판 상태와 포털은 이동·퇴장 이후에도 유지되며, `reset` 또는 마지막 퇴장만 초기화합니다.
+남은 시간은 서버가 계산하여 100ms 단위로 올림해 전달합니다. 클라이언트가 승리를 선언하지 않습니다.
+
+```json
+{
+  "protocolVersion":1,
+  "type":"game",
+  "game":{
+    "preset":"chili-portal-v1","phase":"holding","round":1,
+    "requiredPlayers":1,"holdSeconds":3,"remainingMs":2700,"version":8,
+    "pads":[
+      {"id":"star","x":-3,"y":0,"z":2,"radius":1.1,"active":true,"playerId":"connection-id"},
+      {"id":"moon","x":3,"y":0,"z":2,"radius":1.1,"active":false},
+      {"id":"sun","x":-3,"y":0,"z":6,"radius":1.1,"active":false},
+      {"id":"leaf","x":3,"y":0,"z":6,"radius":1.1,"active":false}
+    ]
+  }
+}
+```
+
+phase는 `waiting`, `playing`, `holding`, `complete` 중 하나입니다. `round`는 0부터
+시작하여 실제 새 게임 시작 때 증가합니다. `version`은 같은 방의 스냅샷 변경 때 증가하며
+클라이언트는 이전/동일 버전을 무시할 수 있습니다. `watch` 재요청은 상태가 변하지 않으면
+요청자에게만 같은 버전의 스냅샷을 반환합니다. 늦은 입장의 `joined.game`도 같은 구조입니다.
+
+방 참가자 누구나 시작·재도전을 할 수 있습니다. `start`/`reset`은 참가자당 최근 5초에
+최대 4회이며 초과 시 `GAME_RATE_LIMIT`입니다. 미등록 preset/action은 `INVALID_GAME`입니다.
+인원수·좌표·유지 시간·승리 결과 등의 클라이언트 지정 필드는 받지 않습니다.
+위치는 여전히 클라이언트 시뮬레이션입니다. 이 판정은 공유 게임 상태를 일관되게 만드는
+데모 규칙이며, 서버 물리나 부정행위 방지 인증을 제공하지 않습니다. TS는 프리셋을 선택하고
+상태로 연출하며 서버 규칙 수치를 임의로 수정하지 않습니다.
 
 ## 제한과 오류
 

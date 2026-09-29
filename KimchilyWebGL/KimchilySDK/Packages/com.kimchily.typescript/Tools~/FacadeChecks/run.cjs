@@ -16,6 +16,7 @@ function setup() {
     }]));
     let nextRoutine = 1;
     let deltaTime = 0.016;
+    let roomStateJson = JSON.stringify({ connected: false, selfId: null, players: [], game: null });
     const host = { call(op, id, args) {
         assert.equal(arguments.length, 3);
         assert.equal(typeof op, "string");
@@ -23,6 +24,8 @@ function setup() {
         assert.ok(Array.isArray(args), "Host arguments are a JavaScript array");
         calls.push({ op, id, args });
         if (op === "time.deltaTime") return deltaTime;
+        if (op === "network.getState") return roomStateJson;
+        if (["network.enableGame", "network.startRound", "network.replay"].includes(op)) return true;
         if (op.startsWith("debug.")) return;
         if (op === "coroutine.start") { const handle = nextRoutine++; routines.set(handle, args[0]); return handle; }
         if (op === "coroutine.stop") { routines.delete(args[0]); return; }
@@ -49,7 +52,8 @@ function setup() {
     const api = factory(host);
     const script = api.modules["Kimchily.Script"], unity = api.modules.UnityEngine;
     class Behaviour extends script.KimchilyScriptBehaviour {}
-    return { ...script, ...unity, api, calls, routines, objects, Behaviour,
+    return { ...script, ...unity, ...api.modules["Kimchily.Network"], api, calls, routines, objects, Behaviour,
+        setRoom: value => { roomStateJson = JSON.stringify(value); }, setRoomJson: value => { roomStateJson = value; },
         owner: api.create(Behaviour), setDelta: value => { deltaTime = value; } };
 }
 function test(name, body) {
@@ -59,7 +63,7 @@ function test(name, body) {
 
 test("exports only supported modules and keeps owner identity stable", () => {
     const c = setup();
-    assert.deepEqual(Object.keys(c.api.modules), ["Kimchily.Script", "UnityEngine"]);
+    assert.deepEqual(Object.keys(c.api.modules), ["Kimchily.Script", "UnityEngine", "Kimchily.Network"]);
     assert.equal(c.owner.gameObject.transform, c.owner.transform);
     assert.equal(c.owner.transform.gameObject, c.owner.gameObject);
     assert.equal(c.owner.gameObject.name, "Object0");
@@ -242,6 +246,56 @@ test("Time reads current frame values and Debug forwards only strings", () => {
         { op: "debug.logWarning", id: 0, args: ["12"] },
         { op: "debug.logError", id: 0, args: ["null"] }
     ]);
+});
+
+test("network commands expose only the explicit preset and bounded host operations", () => {
+    const c = setup();
+    assert.throws(() => c.Room.enableGame("custom-code"), /Unsupported shared game preset/);
+    assert.equal(c.calls.length, 0);
+    assert.equal(c.Room.enableGame("chili-portal-v1"), true);
+    assert.equal(c.Room.startRound(), true);
+    assert.equal(c.Room.replay(), true);
+    assert.deepEqual(plain(c.calls), [
+        { op: "network.enableGame", id: 0, args: ["chili-portal-v1"] },
+        { op: "network.startRound", id: 0, args: [] },
+        { op: "network.replay", id: 0, args: [] }
+    ]);
+    assert.equal(c.Room.send, undefined);
+    assert.equal(c.Room.connect, undefined);
+});
+
+test("room snapshot is detached, deeply frozen and refreshed only when host data changes", () => {
+    const c = setup();
+    const server = { connected: true, selfId: "p1", players: [{ playerId: "p1", name: "고추", state: { sequence: 1, x: 3 } }],
+        game: { preset: "chili-portal-v1", phase: "playing", pads: [{ id: "star", active: true, playerId: null }] } };
+    c.setRoom(server);
+    const first = c.Room.getState();
+    assert.equal(first.players[0].name, "고추");
+    assert.ok(Object.isFrozen(first) && Object.isFrozen(first.players[0].state) && Object.isFrozen(first.game.pads));
+    assert.throws(() => { first.game.phase = "complete"; }, TypeError);
+    assert.throws(() => { first.players[0].state.x = 99; }, TypeError);
+    assert.equal(c.Room.getState(), first);
+    server.game.phase = "complete";
+    assert.equal(first.game.phase, "playing");
+    c.setRoom(server);
+    assert.equal(c.Room.getState().game.phase, "complete");
+    assert.notEqual(c.Room.getState(), first);
+});
+
+test("room snapshot rejects oversized or malformed data before exposing it", () => {
+    const c = setup();
+    c.setRoomJson(" ".repeat(65537));
+    assert.throws(() => c.Room.getState(), /SDK limit/);
+    c.setRoom({ connected: false, players: Array(9).fill(null), game: null });
+    assert.throws(() => c.Room.getState(), /collection/);
+    c.setRoom({ connected: false, players: [{ name: "x".repeat(1025) }], game: null });
+    assert.throws(() => c.Room.getState(), /text/);
+    c.setRoom({ connected: false, players: [], game: { a: { b: { c: { d: { e: { f: 1 } } } } } } });
+    assert.throws(() => c.Room.getState(), /structure/);
+    c.setRoom({ connected: false });
+    assert.throws(() => c.Room.getState(), /Invalid room snapshot/);
+    c.setRoom({ connected: false, selfId: null, players: [], game: null });
+    assert.equal(c.Room.getState().game, null);
 });
 
 console.log(`Facade checks: ${passed} passed, ${failed} failed`);

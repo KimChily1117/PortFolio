@@ -1,4 +1,4 @@
-**Kimchily Unity World 실행기 — Android 호스트 통합용**
+**Kimchily Unity World 실행기 — WebGL 공통 플레이어와 기존 Android 호스트**
 
 현재 WebGL 실행기는 Unity 6000.3.24f1을 사용한다. 아래 Unity 2022.3.16f1/Android 검증 내용은 이전 기준본의 이력이다. 네이티브 앱 프로젝트는 [KimchilyAndroid](../KimchilyAndroid/README.md)이며, 원래 `UnityKimchilyWorld`를 직접 업그레이드하거나 교체하지 않았다.
 
@@ -41,7 +41,7 @@ Editor에서도 `Kimchily > Android > Prepare Sample Scenes`와 `Export Unity Li
 
 월드가 준비되면 제작자가 배치한 KimchilyMobilePlayer를 사용하고, 없으면 기본 플레이어를 생성한다. 가로·세로 선택은 네이티브 앱이 관리한다. [사용 안내](../docs/mobile-world-guide.md)와 [검증 기록](../docs/reports/2026-09-19-mobile-controls-server.md)을 참고한다.
 
-`Assets/link.xml`에는 기존 SDK·MoonSharp 외에 `Kimchily.TypeScript.Runtime`, `Jint`, `Acornima`, `System.Runtime.CompilerServices.Unsafe` 보존 설정이 필요하다. 패키지의 `Runtime/TypeScriptPreservation.xml.txt`가 병합용 템플릿이다. 패키지 내부 파일만으로 IL2CPP 보존을 완료했다고 간주하지 않는다. 실제 export·통합 빌드·기기 실행으로 확인한다.
+`Assets/link.xml`에는 기존 SDK·MoonSharp 외에 `Kimchily.TypeScript.Runtime`, `Kimchily.Networking`, `Jint`, `Acornima`, `System.Runtime.CompilerServices.Unsafe`와 TMP/uGUI 보존 설정이 필요하다. TypeScript 패키지의 `Runtime/TypeScriptPreservation.xml.txt`는 스크립트·네트워킹 병합용 템플릿이다. 패키지 내부 파일만으로 IL2CPP 보존을 완료했다고 간주하지 않는다. 실제 export·통합 빌드·기기 실행으로 확인한다.
 
 원본 모델의 위치는 `UnityKimchilyWorld/Assets/KimchilyCreatorTool/CharactorResources/Blink/Art/Characters/LowPoly/FREE_HumanLowPoly/Meshes_Humans/HumanMale_Character.fbx`다. 모델이 없는 다른 환경에서는 준비 단계가 명시적으로 실패한다. 이 샘플 모델을 SDK UPM 자체에 넣지는 않았다.
 
@@ -67,4 +67,8 @@ PlayMode 테스트는 기존 브리지·SDK Coroutine/manifest·Lua·다운로�
 
 ## 닉네임과 멀티플레이 채팅
 
-홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.2.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.
+홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.3.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [채팅 검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.
+
+TypeScript SDK 0.2.0의 `Kimchily.Network` 모듈은 정적 C# API `CoopPortalApi`로 연결되며, 동결된 `{connected,selfId,players,game}` 복사본과 프리셋 활성화·시작·재도전 요청만 노출합니다. `Room.enableGame("chili-portal-v1")`을 호출한 씬에 게임 HUD를 표시하고 서버가 확정한 발판·카운트다운·성공 상태를 전달합니다. 월드 퇴장 시 opt-in과 게임 상태를 정리합니다. 새로운 API를 처음 사용할 때는 공통 WebGL 실행기를 다시 빌드해야 합니다. [협동 데모 안내](../docs/multiplayer-demo.md)
+
+2026-09-29 협동 게임 통합 후 Unity PlayMode **115개**가 통과했습니다. 위의 과거 Android 결과와 구분하며, 이번 게임의 휴대전화 실기기 검증으로 합산하지 않습니다.

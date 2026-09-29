@@ -13,5 +13,6 @@
     <Reference Include="Acornima"><HintPath>../../Runtime/Plugins/Acornima.dll</HintPath></Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe"><HintPath>../../Runtime/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath></Reference>
     <Reference Include="Kimchily.Creator.Runtime"><HintPath>../../../../Artifacts/Managed/Runtime/Kimchily.Creator.Runtime.dll</HintPath></Reference>
+    <Reference Include="Kimchily.Networking"><HintPath>../../../../../KimchilyUnityRuntime/Library/ScriptAssemblies/Kimchily.Networking.dll</HintPath></Reference>
   </ItemGroup>
 </Project>
