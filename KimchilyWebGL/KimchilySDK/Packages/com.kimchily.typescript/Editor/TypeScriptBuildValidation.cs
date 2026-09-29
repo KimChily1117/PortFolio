@@ -30,7 +30,7 @@ namespace Kimchily.TypeScript.Editor
             UpdateToolDependency();
         }
 
-        static void UpdateToolDependency()
+        internal static void UpdateToolDependency()
         {
             if (AssetDatabase.IsAssetImportWorkerProcess()) return;
             try

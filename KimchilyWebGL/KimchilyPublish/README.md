@@ -6,7 +6,7 @@ Android 및 WebGL 월드 빌드 폴더를 검증해 불변 revision URL과 실�
 
 ## 설치와 실행
 
-Python 3.10 이상이 필요합니다. 저장소 루트에서:
+Python 3.10 이상이 필요합니다. `KimchilyWebGL` 폴더에서:
 
 ```powershell
 KimchilyPublish\tools\install.ps1
@@ -15,6 +15,10 @@ KimchilyPublish\tools\status.ps1
 # 종료할 때
 KimchilyPublish\tools\stop.ps1
 ```
+
+새 PC에 저장소를 내려받았다면 `install.ps1`을 먼저 실행하세요. QR 생성에 필요한 `qrcode`와 `Pillow`를 이 프로젝트의 `.deps`에 설치합니다. `.deps`는 Git에 포함되지 않으므로 데스크톱에서 설치했어도 랩탑에서 다시 설치해야 합니다. Unity의 **서버 켜기 · 연결**은 패키지를 설치하지 않습니다.
+
+시작 도구는 Python 버전과 QR 패키지를 먼저 검사해 누락 또는 로딩 실패 시 설치 명령을 안내합니다. 서버가 시작 도중 종료되면 `.local/server-error.log`에서 실제 원인을 확인하세요. 이전 버전의 `Publisher exited before becoming ready ... WinError 10013` 안내는 모든 조기 종료에 표시되었으므로, 이 문구만으로 포트 충돌이라고 판단할 수 없습니다. 로그의 `ModuleNotFoundError: No module named 'qrcode'`는 `install.ps1` 실행으로 해결합니다.
 
 기본 실행은 **활성 Wi-Fi/Ethernet의 LAN IPv4를 찾아 `0.0.0.0:8788`에 바인딩**합니다. PC/Unity용 `Local URL`과 휴대전화/QR용 `Phone/public URL`을 구분해 출력합니다. 활성 물리 인터페이스에서 기본 경로가 있는 주소를 우선하고, route metric + interface metric이 가장 낮은 경로를 선택합니다. VPN·터널·loopback·link-local·가상 어댑터는 자동 선택에서 제외합니다. 우선순위가 같은 주소가 여러 개이거나 기본 경로 없이 후보가 여러 개면 후보를 표시하고 `-LanAddress` 선택을 요구합니다. 자동 선택할 주소가 없으면 오류를 알립니다.
 

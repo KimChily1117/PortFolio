@@ -8,7 +8,7 @@ TypeScript 컴파일·API 계약·자동완성과 Unity 2022.3.16f1의 **PlayMod
 
 ## 빠르게 시작하기
 
-1. 아래 명령으로 고정된 컴파일러를 준비한 뒤 Unity Hub에서 이 폴더를 연다. `Assets/World/MyWorld.unity`를 열고 Build Settings의 **Android → Switch Platform**을 적용한다. 처음 만드는 샘플은 **Kimchily → Create Starter World**, 기존 Lua 샘플 전환은 **Kimchily → Migrate Starter World to TypeScript**를 사용한다. 전환 도구는 원본 씬을 `Artifacts/typescript-migration`에 보관한다.
+1. Unity Hub에서 이 폴더를 연다. Windows에서는 TypeScript 패키지가 최초 1회 호환 Node와 고정된 컴파일러를 자동 설치하고 `.ts` 자산을 다시 임포트한다. 준비 완료를 기다린 뒤 `Assets/World/MyWorld.unity`를 연다. WebGL 작업은 [WebGL 제작·게시 가이드](../docs/webgl-guide.md)를 따르고, 아래 Android 절차를 따를 때는 Build Settings의 **Android → Switch Platform**을 적용한다. 처음 만드는 샘플은 **Kimchily → Create Starter World**, 기존 Lua 샘플 전환은 **Kimchily → Migrate Starter World to TypeScript**를 사용한다. 전환 도구는 원본 씬을 `Artifacts/typescript-migration`에 보관한다.
 2. `My TypeScript Character`의 **Kimchily TypeScript Behaviour**에 `Assets/World/Character.ts`를 연결한다. `beacon`의 Inspector override를 켜고 씬의 beacon 오브젝트를 지정한다. 현재 revision 2의 `speed`와 `blinkSeconds`는 override를 끄면 클래스 기본값 140·0.5를 사용한다. VS Code에서 이 프로젝트 폴더를 열어 스크립트를 편집하고, Unity의 컴파일 오류와 Play 동작을 확인한 뒤 저장한다.
 3. PC와 휴대폰을 같은 Wi-Fi에 연결하고 `Kimchily → Publish World`의 **서버 켜기 · 연결**을 누른다. LAN 주소와 게시 토큰이 자동으로 연결된다. 같은 창의 **상태 확인**, **서버 끄기**로 관리한다. [서버·모바일 월드 사용 안내](../docs/mobile-world-guide.md)에 명령줄 방식도 정리되어 있다.
 4. World ID와 Entry Scene을 지정하고 Build Target을 **Android**로 설정한다. 다른 서버를 수동 연결할 때만 Server URL과 해당 서버의 Publisher Token을 입력한다. URL을 바꾸면 기존 토큰은 비워진다. 토큰은 Editor 세션 메모리에만 보관된다.
@@ -17,9 +17,11 @@ TypeScript 컴파일·API 계약·자동완성과 Unity 2022.3.16f1의 **PlayMod
 7. 월드의 **나가기** 또는 Android 뒤로가기로 네이티브 홈에 돌아온다. 모델이나 TypeScript를 수정하고 다시 게시하면 새 revision과 링크가 만들어진다. 해당 TypeScript 실행기와 SDK가 포함된 APK에서는 지원 API 안의 후속 콘텐츠 변경을 새 게시본으로 전달할 수 있다.
 
 ```powershell
-# 워크스페이스 루트에서 최초 한 번; lockfile의 TypeScript 5.9.3을 설치한다.
-npm.cmd ci --prefix KimchilySDK/Packages/com.kimchily.typescript/Tools~/Compiler --ignore-scripts --no-audit --no-fund
+# Unity를 열기 전에 명령으로 준비하려는 경우; KimchilyWebGL 폴더에서 실행한다.
+powershell -NoProfile -ExecutionPolicy Bypass -File KimchilySDK/Packages/com.kimchily.typescript/Tools~/Compiler/install.ps1
 ```
+
+자동 설치가 실패하면 Console의 원인을 확인한 뒤 **Kimchily → TypeScript → Install or Repair Compiler**로 재시도한다. 최초 설치는 인터넷 연결이 필요하며 시스템 Node/PATH를 변경하지 않는다.
 
 **Server URL과 public-base-url은 역할이 다르다.** 전자는 Editor의 업로드 주소이고, 후자는 QR·앱 링크에 기록되어 휴대전화가 사용하는 주소다. 일반 LAN 연결에서 후자를 `127.0.0.1`로 설정하면 휴대전화 자신을 가리키게 된다. USB 연결은 게시 서버 문서의 `adb reverse` 구성이 별도로 필요하다.
 

@@ -30,7 +30,7 @@ try {
             throw 'A registered publisher is running with different BindAddress, Port or PublicBaseUrl. Requested settings were not applied. Stop it explicitly before changing them.'
         }
         $process = Get-Process -Id $state.pid -ErrorAction Stop
-        Wait-PublisherReady $process $state.localUrl $Port
+        Wait-PublisherReady $process $state.localUrl $context
         $state = Get-PublisherState $context
         $state.message = 'Publisher already ready; reusing the registered process without starting another.'
         Save-PublisherState $context $state
@@ -41,6 +41,7 @@ try {
         if (Test-PublisherHealth (Get-PublisherLocalUrl $BindAddress $Port)) { throw 'An unregistered publisher responds on the requested port. No duplicate was started.' }
         New-Item -ItemType Directory -Force -Path $context.stateDirectory | Out-Null
         $pythonPath = (Get-Command python -ErrorAction Stop).Source
+        Assert-PublisherPythonDependencies $context $pythonPath
         $arguments = @('-u', ('"' + $context.launcherPath + '"'), ('"' + $context.serverPath + '"'), '--host', $BindAddress, '--port', "$Port", '--public-base-url', $PublicBaseUrl,
             '--data-dir', ('"' + $context.stateDirectory + '"'))
         # WMI creates an independent hidden process. Start-Process can pass the caller's
@@ -51,7 +52,8 @@ try {
             CurrentDirectory = $context.projectRoot; ProcessStartupInformation = $startup
         } -ErrorAction Stop
         if ($created.ReturnValue -ne 0) { throw "Windows could not start the publisher (WMI code $($created.ReturnValue))." }
-        $process = Get-Process -Id $created.ProcessId -ErrorAction Stop
+        $process = Get-Process -Id $created.ProcessId -ErrorAction SilentlyContinue
+        if (!$process) { throw (Get-PublisherStartupFailureMessage $context) }
         # Register ownership before waiting, so a slow/unhealthy child can be inspected and stopped safely.
         $process.Id | Set-Content -LiteralPath $context.pidPath
         $identity = Get-CimInstance Win32_Process -Filter "ProcessId=$($process.Id)" -ErrorAction Stop
@@ -59,7 +61,7 @@ try {
         $state.pid = $process.Id; $state.status = 'unhealthy'; $state.message = 'Publisher is starting; health is not verified yet.'
         if ($identity) { $state.processStartTimeUtc = $identity.CreationDate.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ss.ffffffZ'); $state.processVerified = $true }
         Save-PublisherState $context $state
-        Wait-PublisherReady $process $state.localUrl $Port
+        Wait-PublisherReady $process $state.localUrl $context
         $state = Get-PublisherState $context
         if ($state.status -ne 'running') { throw $state.message }
         Save-PublisherState $context $state

@@ -1,14 +1,37 @@
 # Local TypeScript compiler
 
-Requires Node.js (tested with 18.14.0). Install the exact, lockfile-verified dependency:
+On Windows, opening the Unity package automatically prepares a private Node.js
+24.21.0 runtime and the lockfile-verified TypeScript 5.9.3 compiler in this folder.
+The first setup requires internet access. It runs in the background; Unity imports
+the `.ts` assets again when setup completes. It does not change system Node or PATH.
+
+Use **Kimchily > TypeScript > Install or Repair Compiler** to retry a failed setup.
+The Unity Console reports setup progress and failures. The downloaded runtime is
+under `.tools/`, dependencies are under `node_modules/`, and both are excluded from
+Git. A new PC prepares its own copies. An already prepared installation is reused.
+
+To prepare the same toolchain before a Windows batch build:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+The installer verifies the pinned Node archive's SHA-256 and installs TypeScript
+with `npm ci --ignore-scripts --no-audit --no-fund`. It only marks setup complete
+after both versions load successfully. Failed setup can be retried; it does not
+silently use Unity's older bundled Node runtime.
+
+For a manual installation on another platform, use a compatible Node.js runtime
+(18 or newer) and install the exact, lockfile-verified dependency:
 
 ```powershell
 npm ci --ignore-scripts --no-audit --no-fund
 npm test
 ```
 
-No compiler is downloaded automatically when Unity imports an asset. Set `KIMCHILY_NODE_PATH`
-if Node is installed outside the system path and `C:\Program Files\nodejs`.
+Set `KIMCHILY_NODE_PATH` to override the runtime explicitly. Otherwise Unity uses
+the package's prepared runtime, then the existing system Node installation.
+Asset import worker processes do not install or download the compiler themselves.
 
 ```powershell
 node compile.cjs --project-root E:/work/KimchilyCreator --entry Assets/World/Character.ts --output E:/work/KimchilyCreator/Library/KimchilyTypeScript/result.json

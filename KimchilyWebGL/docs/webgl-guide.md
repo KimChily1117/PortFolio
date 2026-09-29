@@ -17,6 +17,8 @@ Unity Hub의 **Projects → Add → Add project from disk**에서 **KimchilyCrea
 
 평소 제작할 때는 Creator만 열면 된다. Runtime은 공통 웹 실행기를 빌드하거나 실행기 코드를 수정할 때 사용한다. Hub에서 원본과 클론을 구분할 때 프로젝트 이름뿐 아니라 **경로**를 확인한다. `.meta` 파일과 SDK의 상대 폴더 배치는 유지한다.
 
+Windows 새 PC에서 처음 열면 TypeScript 패키지가 호환 Node 실행 환경과 TypeScript 5.9.3 컴파일러를 백그라운드로 자동 설치한다. 최초 설치에는 인터넷 연결이 필요하며, 완료하면 `.ts` 자산을 다시 임포트한다. Console에서 준비 완료를 확인한 뒤 빌드한다. 실패했을 때는 **Kimchily → TypeScript → Install or Repair Compiler**로 재시도한다. 시스템 Node 설치나 수동 `npm ci`는 필요하지 않으며, 설치 파일은 패키지의 `Tools~/Compiler/.tools`와 `node_modules`에 보관한다.
+
 ## 2. 공통 웹 실행기를 준비하기
 
 새 환경에서는 최초 1회, 이후에는 SDK·브라우저 실행기·템플릿 코드를 바꿨을 때 다시 빌드한다. 모델 배치나 기존 TypeScript API를 사용하는 월드 수정만으로 매번 실행기를 다시 빌드할 필요는 없다.
@@ -126,6 +128,8 @@ CLI 게시 응답은 `KimchilyCreator\Artifacts\publish-result.json`에 저장�
 | 증상 | 먼저 확인할 것 |
 |---|---|
 | Web 플랫폼을 선택할 수 없음 | Unity 6000.3.24f1의 Web Build Support 설치 여부 |
+| `TypeScript compiler is not installed` 또는 컴파일러 준비 실패 | 최초 자동 설치 완료를 기다린 뒤 다시 Validate. 실패 시 Console 안내 확인 후 **Kimchily → TypeScript → Install or Repair Compiler** 실행. 인터넷 연결과 패키지 폴더 쓰기 권한 필요 |
+| 새 PC에서 게시 서버가 시작되지 않음 / `No module named 'qrcode'` | `KimchilyWebGL` 폴더에서 `KimchilyPublish\tools\install.ps1` 실행. `.deps`는 Git에 포함되지 않아 PC마다 설치 필요. 실제 오류는 `.local/server-error.log`에서 확인하며, 이전 버전의 `WinError 10013` 안내만으로 포트 문제라고 판단하지 않음 |
 | 게시 버튼이 비활성화 | Play 종료, 서버 연결, Build Profiles의 Web와 게시 창의 WebGL 일치 |
 | 게시됐는데 `WEB_PLAYER_MISSING` | 공통 실행기 `Builds/WebGL/index.html`이 있는지, Runtime 빌드가 완료됐는지 |
 | PC에서는 열리고 iPhone에서는 접속 불가 | QR의 LAN 주소, 같은 네트워크, 서버 상태, 방화벽·기기 격리 |

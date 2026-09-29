@@ -20,6 +20,10 @@ function Expect-Failure([scriptblock]$Action, [string]$Name) {
     try { $null = & $Action } catch { $failed = $true }
     Assert-Check $failed $Name
 }
+function Get-FailureMessage([scriptblock]$Action) {
+    try { $null = & $Action } catch { return $_.Exception.Message }
+    throw 'Expected the action to fail.'
+}
 function Invoke-Management([string]$Tool, [string[]]$Options = @(), [int]$ExpectedExit = 0, [string]$State = $testContext.stateDirectory) {
     $output = @(& $shell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "$Tool.ps1") -StateDirectory $State -Json @Options)
     $resultCode = $LASTEXITCODE
@@ -46,6 +50,39 @@ try {
     Expect-Failure { Select-PublisherLanAddress @() } 'Missing LAN address is an actionable error'
     Expect-Failure { ConvertTo-PublisherOrigin 'http://user:secret@example.com' } 'Credential-bearing public URL is rejected'
     Expect-Failure { ConvertTo-PublisherOrigin 'http://example.com/worlds' } 'Public URL path is rejected'
+
+    # A clean interpreter reproduces a new laptop without changing installed packages.
+    $pythonPath = (Get-Command python -ErrorAction Stop).Source
+    $cleanPythonRoot = Join-Path $testRoot 'clean python'
+    & $pythonPath -m venv --without-pip $cleanPythonRoot
+    if ($LASTEXITCODE -ne 0) { throw 'Could not create the isolated dependency-check interpreter.' }
+    $cleanPython = Join-Path $cleanPythonRoot 'Scripts\python.exe'
+    $probeContext = [pscustomobject]@{ projectRoot = Join-Path $testRoot "dependency probe's project" }
+    $probeDependencies = Join-Path $probeContext.projectRoot '.deps'
+    New-Item -ItemType Directory -Force -Path $probeDependencies | Out-Null
+    $missingQr = Get-FailureMessage { Assert-PublisherPythonDependencies $probeContext $cleanPython }
+    Assert-Check ($missingQr -match 'qrcode' -and $missingQr -match '-m pip install --target' -and
+        $missingQr.Contains($cleanPython) -and $missingQr.Contains("dependency probe''s project") -and
+        $missingQr -notmatch '10013|occupied') 'Missing qrcode reports the selected interpreter and a quoted install command, not a port error'
+    [IO.File]::WriteAllText((Join-Path $probeDependencies 'qrcode.py'), '# import fixture')
+    $missingPillow = Get-FailureMessage { Assert-PublisherPythonDependencies $probeContext $cleanPython }
+    Assert-Check ($missingPillow -match 'Pillow \(PIL.Image\)') 'Missing Pillow is diagnosed after the project-local qrcode import succeeds'
+    New-Item -ItemType Directory -Force -Path (Join-Path $probeDependencies 'PIL') | Out-Null
+    [IO.File]::WriteAllText((Join-Path $probeDependencies 'PIL\__init__.py'), '')
+    [IO.File]::WriteAllText((Join-Path $probeDependencies 'PIL\Image.py'), '# import fixture')
+    Assert-PublisherPythonDependencies $probeContext $cleanPython
+    Assert-Check $true 'Dependency checks use the project-local .deps directory with spaces and apostrophes'
+
+    $exitInfo = [Diagnostics.ProcessStartInfo]::new($cleanPython, '-c "raise SystemExit(23)"')
+    $exitInfo.UseShellExecute = $false; $exitInfo.CreateNoWindow = $true; $exitInfo.WindowStyle = 'Hidden'
+    $exited = [Diagnostics.Process]::Start($exitInfo)
+    try {
+        if (!$exited.WaitForExit(10000)) { throw 'The startup-failure test process did not exit.' }
+        $startupFailure = Get-FailureMessage { Wait-PublisherReady $exited 'http://127.0.0.1:1' $testContext }
+        Assert-Check ($startupFailure.Contains($testContext.stderrLog) -and $startupFailure -match 'exited before becoming ready' -and
+            $startupFailure -notmatch '10013|occupied') 'An exited publisher points to its error log without assuming a port conflict'
+    }
+    finally { $exited.Dispose() }
 
     $listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback, 0)
     $listener.Start()

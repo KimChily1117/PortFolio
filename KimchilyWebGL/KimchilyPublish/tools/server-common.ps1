@@ -173,11 +173,48 @@ function Save-PublisherState($Context, $State) {
     Move-Item -LiteralPath $temporary -Destination $Context.connectionPath -Force
 }
 
-function Wait-PublisherReady($Process, [string]$LocalUrl, [int]$Port) {
+function Assert-PublisherPythonDependencies($Context, [string]$PythonPath) {
+    # Use the same interpreter and project-local dependency path as server.py.
+    # Return only known diagnostics; arbitrary interpreter output must not pollute JSON responses.
+    $probe = @'
+import sys
+if sys.version_info < (3, 10):
+    sys.exit(10)
+sys.path.insert(0, sys.argv[1])
+try:
+    import qrcode
+except Exception:
+    sys.exit(11)
+try:
+    from PIL import Image
+except Exception:
+    sys.exit(12)
+'@
+    $dependencyDirectory = Join-Path $Context.projectRoot '.deps'
+    $probeExitCode = -1
+    try {
+        $null = & $PythonPath -c $probe $dependencyDirectory 2>&1
+        $probeExitCode = $LASTEXITCODE
+    }
+    catch { $probeExitCode = -1 }
+    if ($probeExitCode -eq 0) { return }
+    if ($probeExitCode -eq 10) { throw "Publisher requires Python 3.10 or newer. Selected interpreter: $PythonPath" }
+    if ($probeExitCode -notin @(11, 12)) { throw "Could not check publisher dependencies with Python: $PythonPath. Verify that this interpreter starts successfully." }
+    $package = if ($probeExitCode -eq 11) { 'qrcode' } else { 'Pillow (PIL.Image)' }
+    $requirements = Join-Path $Context.projectRoot 'requirements.txt'
+    $install = "& '$($PythonPath.Replace("'", "''"))' -m pip install --target '$($dependencyDirectory.Replace("'", "''"))' -r '$($requirements.Replace("'", "''"))'"
+    throw "Publisher Python dependency $package is missing or could not be imported. Install this project's dependencies with: $install"
+}
+
+function Get-PublisherStartupFailureMessage($Context) {
+    "Publisher exited before becoming ready. Check the startup error log: $($Context.stderrLog)"
+}
+
+function Wait-PublisherReady($Process, [string]$LocalUrl, $Context) {
     $timer = [Diagnostics.Stopwatch]::StartNew()
     while ($timer.ElapsedMilliseconds -lt 10000) {
         $Process.Refresh()
-        if ($Process.HasExited) { throw "Publisher exited before becoming ready. Port $Port may be occupied or blocked/reserved by Windows (WinError 10013)." }
+        if ($Process.HasExited) { throw (Get-PublisherStartupFailureMessage $Context) }
         $remaining = [int](10000 - $timer.ElapsedMilliseconds)
         if ($remaining -le 0) { break }
         if (Test-PublisherHealth $LocalUrl ([Math]::Min(500, $remaining))) {
