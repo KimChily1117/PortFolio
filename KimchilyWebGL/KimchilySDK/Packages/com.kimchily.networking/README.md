@@ -1,4 +1,4 @@
-# Kimchily Networking 0.3.0
+# Kimchily Networking 0.4.0
 
 KimchilyServer protocol 1의 게스트 방·채팅·캐릭터 동기화 클라이언트입니다.
 Unity 6의 uGUI 2.0.0/TextMeshPro를 사용하며 Creator 콘텐츠 SDK 0.1.0의 버전 계약을 유지합니다.
@@ -50,27 +50,68 @@ Creator의 Play Mode는 editor-preview/v1에 수동 접속하며, 게시된 월�
 HTTPS 페이지에는 WSS가 필요합니다. LAN 실행·허용 출처 설정은 KimchilyServer/README.md를 참고합니다.
 독립 웹 로비는 유지합니다.
 
-## 칠리 아일랜드 협동 게임
+## 범용 스크립트 게임 통신
 
-TypeScript SDK 0.2.0에서 `import { Room } from "Kimchily.Network"`로 API를 가져옵니다.
-이 기능은 제작 씬의 TS 스크립트가 `Room.enableGame("chili-portal-v1")`을
-호출한 월드에만 표시됩니다. 아직 접속하지 않았다면 요청을 기억했다가 joined 이후 서버에
-`game/watch`를 보냅니다. 자동 입장으로 게임을 시작하지 않으며, 모두 모인 뒤 Unity HUD의
-시작 버튼으로 현재 1–4명에 맞춘 라운드를 시작합니다. 한 명으로도 시연할 수 있습니다.
+Networking SDK는 발판 개수, 점유 판정, 유지 시간, 승리 조건을 모릅니다.
+C#은 소켓·방·플레이어 동기화와 스크립트 신원·메시지 한도·수명만 담당하고,
+게임 규칙은 서버에서 실행되는 TypeScript 모듈, 게임 연출·문구는 제작 씬의 TypeScript가 담당합니다.
 
-고정 프리셋의 발판은 star(-3,0,2), moon(3,0,2), sun(-3,0,6), leaf(3,0,6)이고
-서버가 필요한 발판 수, 점유한 플레이어, 3초 유지 시간과 성공 상태를 결정합니다.
-`active`는 이번 라운드에 필요한 발판, `playerId`는 현재 점유자입니다.
-모든 발판이 3초 동안 채워지면 `complete`가 되며, 명시적으로 다시 준비하기를 누르기 전까지
-성공 상태를 유지합니다. 중도 참가자도 같은 상태를 받습니다.
-플레이어가 줄어들어 필요한 인원보다 적어지면 HUD에서 인원을 다시 맞출 수 있습니다.
+제작 씬은 `Room.useGame(scriptId, scriptHash)`로 실행할 서버 스크립트를 지정합니다.
+ID는 영문·숫자·하이픈·밑줄 1–80자이며 해시는 소문자 16진수 64자리 SHA-256입니다.
+동일한 방에서 다른 스크립트 신원이나 해시로 조용히 전환하지 않습니다.
+해시로 고정된 서버 스크립트와 게시 콘텐츠가 같은 규칙 버전을 사용하는지 확인해야 합니다.
 
-TS는 `Room.getState()`로 연결 상태·참가자·공동 게임 상태를 읽고,
-`Room.startRound()` / `Room.replay()`로 서버에 요청합니다. 시각 효과와 모델은 제작 씬의
-TS 스크립트가 상태를 읽어 연출합니다. 임의 TS 코드를 서버에서 실행하는 기능은 아닙니다.
-기존 위치 검증을 통과한 클라이언트 위치로 판정하므로 서버 물리나 완전한 치트 방지와는 다릅니다.
+입장 전 호출은 보관했다가 joined 이후 `game/watch`를 보냅니다. UI는 자동으로 만들지 않습니다.
+사용자 입력은 `Room.sendAction(action, payload)`로 요청하고, 허용 여부와 상태 변화는 서버 TS가
+결정합니다. C#에 특정 게임의 시작/재시작 분기나 상태 이름이 없습니다. 조회는
+`Room.getState()`를 사용합니다. 받은 상태는 클라이언트 예측 결과로 덮어쓰지 않습니다.
 
-네이티브 C#에서는 보존된 정적 API `CoopPortalApi.EnableGame`, `StartRound`, `Replay`,
-`GetStateJson`을 사용합니다. JSON은 `{connected,selfId,players,game}`이며, 아직 opt-in하지
-않았거나 상태가 도착하지 않았으면 `game:null`입니다. 스냅샷 조회만으로 소켓이나 UI를 만들지
-않습니다. 월드 퇴장 시 opt-in·HUD·게임 상태를 지우며, 재접속 시 최신 서버 상태를 다시 받습니다.
+C# 브리지의 정확한 표면은 `ScriptRoomApi.UseGame`, `SendAction`, `GetStateJson`입니다.
+원시 JSON은 `{connected,selfId,players,game}`이며 game은
+`{scriptId,scriptHash,version,stateJson}` 또는 null입니다. stateJson 내부 스키마는 게임 TS의
+계약입니다. Unity 클라이언트는 다른 신원/해시 및 현재 연결에서 이미 받은 이하 버전을 버립니다.
+연결 종료 시 상태를 비우고, 새 joined 스냅샷은 이전 소켓의 버전과 비교하지 않습니다.
+월드 퇴장 시 구독 자체도 초기화합니다.
+
+범용 경계는 다음과 같습니다.
+
+- 액션 ID: 영문·숫자·하이픈·밑줄 1–80자.
+- 액션 payload JSON: 최대 1,024자 및 UTF-8 1,024바이트.
+- 최종 직렬화된 game 명령: JSON 이스케이프까지 포함해 UTF-8 4,096바이트 이하.
+- 상태 JSON: 최대 16,384자 및 UTF-8 16,384바이트.
+- 사용자 액션: 0.6초당 하나. 재접속 watch는 이 입력 제한과 별도로 처리합니다.
+
+이 한도는 네트워크/VM 자원 보호 장치입니다. 점수, 시간, 좌표 등의 게임별 검증은 서버 TS의
+책임입니다. 기존 이동은 클라이언트 물리와 서버 범위 검증을 사용하므로 서버 물리나 완전한
+부정행위 방지 기능을 의미하지 않습니다.
+
+## TypeScript가 작성하는 Unity HUD
+
+`Kimchily.UI` 모듈의 `Hud.showPanel(model)`, `Hud.takeAction()`, `Hud.hide()`를 사용합니다.
+모델은 eyebrow/title/body/progress/accent와 선택적인 action(id/label/enabled)으로 구성됩니다.
+문구, 색상, 진행률 계산, 액션 ID의 의미는 모두 제작 TS에 있습니다.
+
+C# `WorldHudPanel`은 모델을 검증하고 현재 TMP 레이아웃에 표시할 뿐 서버에 명령을 보내지 않습니다.
+화면 중앙의 캐릭터 말풍선을 가리지 않도록 데스크톱에서는 좌측 상단에 놓으며, 모바일 버튼은
+조이스틱과 점프 영역을 피합니다. body는 짧은 두 줄 안내에 맞춰 작성하고, 긴 내용은 생략 표시됩니다.
+모든 텍스트는 richText=false로 처리합니다. 사용자가 보낸 마크업을 실행하거나 스타일로 해석하지 않습니다.
+
+각 TS Behaviour는 자기 패널을 소유합니다. 버튼은 그 소유자에게만 한 개의 액션 ID를 남기며,
+`takeAction`으로 한 번 소비하면 사라집니다. 패널 설정 변경·숨김·비활성화는 대기 입력을 지웁니다.
+따라서 TS Update에서는 먼저 입력을 소비하고 새 상태에 맞춰 패널을 갱신하는 순서를 권장합니다.
+Unity 버튼이 VM 콜백을 직접 재진입시키지 않는 구조입니다.
+
+호스트는 TS가 비활성화·재로드·예외·파괴될 때 패널을 직접 정리합니다.
+정리는 스크립트의 OnDisable/OnDestroy가 성공했는지에 의존하지 않습니다.
+
+패널 문자열 한도는 eyebrow 48, title 96, body 1,200, action label 48자입니다.
+action ID는 1–80자이며 progress는 유한한 0–1, accent는 #RRGGBB입니다.
+일반 제어 문자는 거부하고 줄바꿈·탭은 허용합니다. C# 입력 JSON은 4,096자/UTF-8 8,192바이트 이하입니다.
+이 한도는 렌더러 보호를 위한 최대치이며 실제 한 화면에 표시할 문구 길이를 보장하지 않습니다.
+
+## 검증에서 확인하는 책임 경계
+
+Networking 테스트는 특정 게임의 성공 조건을 다시 구현하지 않습니다.
+스크립트 신원·UTF-8 한도·버전 순서, 입장 전 구독/재접속/퇴장, UI 미생성 조회,
+HUD 입력 검증·소유자 격리·입력 소비·정리, 모바일 컨트롤과 말풍선 레이아웃을 검증합니다.
+게임 규칙 테스트는 해당 서버 TypeScript 모듈과 함께 관리합니다.

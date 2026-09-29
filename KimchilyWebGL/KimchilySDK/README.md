@@ -7,8 +7,8 @@
 | 소스 UPM 패키지 | 역할 |
 |---|---|
 | `com.kimchily.creator` 0.1.0 | 코루틴 스케줄러, 씬 의존성 수집, 콘텐츠 빌드·게시·다운로드 검증 |
-| `com.kimchily.typescript` 0.2.0 | `.ts` importer, 타입 선언, Inspector 공개 필드, 제한된 Unity API·Room API, Jint 실행기 |
-| `com.kimchily.networking` 0.3.0 | 자동 입장, TMP 채팅·말풍선, 원격 캐릭터, 협동 포털 HUD·게임 상태 |
+| `com.kimchily.typescript` 0.3.0 | `.ts` importer, 타입 선언, Inspector 공개 필드, 제한된 Unity API·Room API, Jint 실행기 |
+| `com.kimchily.networking` 0.4.0 | 자동 입장, TMP 채팅·말풍선, 원격 캐릭터, 범용 TS HUD·규칙 식별·게임 스냅샷 |
 | `com.kimchily.scripting` | 기존 MoonSharp Lua Behaviour와 API 호환 경로 |
 
 시작 예제는 [Character.ts](../KimchilyCreator/Assets/World/Character.ts)다. `public beacon`, `speed`, `blinkSeconds`가 Inspector 대상이고 private `Map`은 내부 상태다. **Kimchily → TypeScript → Configure Type Completion** 메뉴와 제작 프로젝트의 VS Code 설정을 사용한다. 구현·설정·API 표·검증 상태는 [2026-09-19 TypeScript 기록](../docs/reports/2026-09-19-typescript-runtime.md)에 정리했다.
@@ -22,7 +22,7 @@
 - 실제 TypeScript 5.9.3 strict 검사, ES2018 CommonJS 출력, 상대 `.ts` 모듈과 source map 임포트.
 - `.d.ts` 타입 제안과 공개 number/string/boolean/GameObject/Transform/Vector3 Inspector override.
 - Jint 기반 Behaviour lifecycle, 소유 객체·명시 참조만 전달하는 Unity API, generator 코루틴, 로컬 typed Event.
-- `import { Room } from "Kimchily.Network"`: `enableGame`, `getState`, `startRound`, `replay`. C# 고정 프리셋의 상태를 동결된 복사본으로 읽고 TS가 연출한다. 임의 소켓·메시지·서버 코드 실행은 제공하지 않는다.
+- `import { Room } from "Kimchily.Network"`: `useGame(id, hash)`, `getState<T>()`, `sendAction(action, payload?)`. 서버의 승인된 TS 규칙을 구독하고 읽기 전용 상태를 받는다. `import { Hud } from "Kimchily.UI"`는 UI 문구·버튼·입력 회수를 제공한다. [판정·동기화 설계](../docs/portfolio-typescript-multiplayer.md)
 - Coroutine 시작/취소/owner별 취소, 중첩 IEnumerator, Unity yield 전달, 예외 수집 및 Dispose.
 - 스케줄러 비활성화/파괴, owner 파괴 시 작업 정리.
 - Lua처럼 취소 시 함수 뒤쪽을 실행하지 않는 어댑터를 위한 명시적 cleanup 콜백.
@@ -132,4 +132,4 @@ Unity 라이선스가 활성화된 상태에서 실행한다. 스크립트는 FB
 
 **다음 구현 경계**
 
-새 제작·게시·다운로드·QR 경로는 별도 KimchilyCreator/KimchilyPublish/KimchilyAndroid/KimchilyUnityRuntime에 구현했다. 기존 World 앱의 Play 버튼과 구형 manifest는 그대로 유지한다. TypeScript 실행기나 Room API를 새로 도입할 때는 공통 실행기를 갱신하고, 이후 설치된 API 범위의 스크립트와 모델 변경은 콘텐츠로 게시한다. 게스트 멀티플레이와 고정 포털 프리셋은 구현했으며 로그인·클라우드 운영·제작자 권한·영구 캐시·범용 서버 규칙 업로드는 후속 범위다.
+새 제작·게시·다운로드·QR 경로는 별도 KimchilyCreator/KimchilyPublish/KimchilyAndroid/KimchilyUnityRuntime에 구현했다. 기존 World 앱의 Play 버튼과 구형 manifest는 그대로 유지한다. TypeScript 실행기나 Room API를 새로 도입할 때는 공통 실행기를 갱신하고, 이후 설치된 API 범위의 스크립트와 모델 변경은 콘텐츠로 게시한다. 게스트 멀티플레이와 승인된 TS 서버 규칙 호스트는 구현했으며 로그인·클라우드 운영·제작자 권한·영구 캐시·원격 규칙 업로드/검수는 후속 범위다.

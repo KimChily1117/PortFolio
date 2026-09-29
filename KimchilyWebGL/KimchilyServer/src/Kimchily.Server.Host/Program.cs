@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     WebRootPath = Path.Combine(AppContext.BaseDirectory, "wwwroot")
 });
 if (string.IsNullOrEmpty(builder.Configuration["urls"])) builder.WebHost.UseUrls("http://127.0.0.1:8790");
+// 개발 실행은 run.ps1이 원본 games 폴더를 지정한다. 해시 파일 추가만으로 새 월드 규칙을 제공할 수 있다.
+builder.Services.AddSingleton(new ApprovedScriptCatalog(builder.Configuration["Realtime:ScriptsRoot"]
+    ?? Path.Combine(AppContext.BaseDirectory, "games")));
 builder.Services.AddSingleton<RoomHub>();
 builder.Services.AddHostedService<RoomPump>();
 builder.Services.AddSingleton<SocketEndpoint>();

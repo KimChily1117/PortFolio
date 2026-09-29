@@ -17,6 +17,7 @@ function setup() {
     let nextRoutine = 1;
     let deltaTime = 0.016;
     let roomStateJson = JSON.stringify({ connected: false, selfId: null, players: [], game: null });
+    let panel = null, action = null;
     const host = { call(op, id, args) {
         assert.equal(arguments.length, 3);
         assert.equal(typeof op, "string");
@@ -25,7 +26,10 @@ function setup() {
         calls.push({ op, id, args });
         if (op === "time.deltaTime") return deltaTime;
         if (op === "network.getState") return roomStateJson;
-        if (["network.enableGame", "network.startRound", "network.replay"].includes(op)) return true;
+        if (["network.useGame", "network.sendAction"].includes(op)) return true;
+        if (op === "hud.showPanel") { panel = JSON.parse(args[0]); return; }
+        if (op === "hud.takeAction") { const next = action; action = null; return next; }
+        if (op === "hud.hide") { panel = null; action = null; return; }
         if (op.startsWith("debug.")) return;
         if (op === "coroutine.start") { const handle = nextRoutine++; routines.set(handle, args[0]); return handle; }
         if (op === "coroutine.stop") { routines.delete(args[0]); return; }
@@ -48,11 +52,14 @@ function setup() {
             }
         }
     }};
-    const factory = vm.runInNewContext(source, {}, { timeout: 1000 });
+    const context = vm.createContext({});
+    const factory = vm.runInContext(source, context, { timeout: 1000 });
     const api = factory(host);
     const script = api.modules["Kimchily.Script"], unity = api.modules.UnityEngine;
     class Behaviour extends script.KimchilyScriptBehaviour {}
-    return { ...script, ...unity, ...api.modules["Kimchily.Network"], api, calls, routines, objects, Behaviour,
+    return { ...script, ...unity, ...api.modules["Kimchily.Network"], ...api.modules["Kimchily.UI"], api, calls, routines, objects, Behaviour,
+        value: value => vm.runInContext("JSON.parse(" + JSON.stringify(JSON.stringify(value)) + ")", context),
+        evaluate: code => vm.runInContext(code, context), getPanel: () => panel, queueAction: value => { action = value; },
         setRoom: value => { roomStateJson = JSON.stringify(value); }, setRoomJson: value => { roomStateJson = value; },
         owner: api.create(Behaviour), setDelta: value => { deltaTime = value; } };
 }
@@ -63,7 +70,7 @@ function test(name, body) {
 
 test("exports only supported modules and keeps owner identity stable", () => {
     const c = setup();
-    assert.deepEqual(Object.keys(c.api.modules), ["Kimchily.Script", "UnityEngine", "Kimchily.Network"]);
+    assert.deepEqual(Object.keys(c.api.modules), ["Kimchily.Script", "UnityEngine", "Kimchily.Network", "Kimchily.UI"]);
     assert.equal(c.owner.gameObject.transform, c.owner.transform);
     assert.equal(c.owner.transform.gameObject, c.owner.gameObject);
     assert.equal(c.owner.gameObject.name, "Object0");
@@ -248,55 +255,117 @@ test("Time reads current frame values and Debug forwards only strings", () => {
     ]);
 });
 
-test("network commands expose only the explicit preset and bounded host operations", () => {
+const hash = "a".repeat(64);
+test("network commands select registered script identity and JSON actions only", () => {
     const c = setup();
-    assert.throws(() => c.Room.enableGame("custom-code"), /Unsupported shared game preset/);
+    assert.throws(() => c.Room.useGame("../arbitrary-code", hash), /identifier/);
+    assert.throws(() => c.Room.useGame("portal", "wrong"), /SHA-256/);
+    assert.throws(() => c.Room.sendAction("bad action"), /identifier/);
     assert.equal(c.calls.length, 0);
-    assert.equal(c.Room.enableGame("chili-portal-v1"), true);
-    assert.equal(c.Room.startRound(), true);
-    assert.equal(c.Room.replay(), true);
+    assert.equal(c.Room.useGame("portal", hash), true);
+    assert.equal(c.Room.sendAction("start", c.value({ mode: "cooperative" })), true);
+    assert.equal(c.Room.sendAction("reset"), true);
     assert.deepEqual(plain(c.calls), [
-        { op: "network.enableGame", id: 0, args: ["chili-portal-v1"] },
-        { op: "network.startRound", id: 0, args: [] },
-        { op: "network.replay", id: 0, args: [] }
+        { op: "network.useGame", id: 0, args: ["portal", hash] },
+        { op: "network.sendAction", id: 0, args: ["start", '{"mode":"cooperative"}'] },
+        { op: "network.sendAction", id: 0, args: ["reset", "null"] }
     ]);
-    assert.equal(c.Room.send, undefined);
-    assert.equal(c.Room.connect, undefined);
+    for (const old of ["send", "connect", "enableGame", "startRound", "replay"]) assert.equal(c.Room[old], undefined);
 });
 
-test("room snapshot is detached, deeply frozen and refreshed only when host data changes", () => {
+test("actions reject accessors, scene references, cycles and excessive UTF-8 before reaching the host", () => {
+    const c = setup(), calls = c.calls.length;
+    assert.throws(() => c.Room.sendAction("start", c.owner.gameObject), /plain JSON objects/);
+    assert.throws(() => c.Room.sendAction("start", c.evaluate("({get value(){throw new Error('getter executed')}})")), /accessors/);
+    assert.throws(() => c.Room.sendAction("start", c.evaluate("({toJSON(){throw new Error('toJSON executed')}})")), /plain JSON values/);
+    assert.throws(() => c.Room.sendAction("start", c.evaluate("(()=>{const x={};x.x=x;return x;})()")), /Cyclic/);
+    assert.throws(() => c.Room.sendAction("start", "한".repeat(342)), /SDK limit/);
+    assert.throws(() => c.Room.sendAction("start", "🌶".repeat(256)), /SDK limit/);
+    assert.throws(() => c.Room.sendAction("start", c.evaluate("({value:Infinity})")), /finite/);
+    assert.equal(c.calls.length, calls);
+    c.Room.sendAction("start", "a".repeat(1022));
+    assert.equal(Buffer.byteLength(c.calls.at(-1).args[1]), 1024);
+});
+
+test("room stateJson becomes typed detached deeply frozen data and identical snapshots are cached", () => {
     const c = setup();
+    const state = { phase: "playing", pads: [{ id: "star", active: true, playerId: null }] };
     const server = { connected: true, selfId: "p1", players: [{ playerId: "p1", name: "고추", state: { sequence: 1, x: 3 } }],
-        game: { preset: "chili-portal-v1", phase: "playing", pads: [{ id: "star", active: true, playerId: null }] } };
+        game: { scriptId: "portal", scriptHash: hash, version: 2, stateJson: JSON.stringify(state) } };
     c.setRoom(server);
     const first = c.Room.getState();
     assert.equal(first.players[0].name, "고추");
-    assert.ok(Object.isFrozen(first) && Object.isFrozen(first.players[0].state) && Object.isFrozen(first.game.pads));
-    assert.throws(() => { first.game.phase = "complete"; }, TypeError);
+    assert.equal(first.game.state.phase, "playing");
+    assert.equal(first.game.stateJson, undefined);
+    assert.ok(Object.isFrozen(first) && Object.isFrozen(first.players[0].state) && Object.isFrozen(first.game.state.pads));
+    assert.throws(() => { first.game.state.phase = "complete"; }, TypeError);
     assert.throws(() => { first.players[0].state.x = 99; }, TypeError);
     assert.equal(c.Room.getState(), first);
-    server.game.phase = "complete";
-    assert.equal(first.game.phase, "playing");
+    state.phase = "complete";
+    assert.equal(first.game.state.phase, "playing");
+    server.game.stateJson = JSON.stringify(state);
+    server.game.version++;
     c.setRoom(server);
-    assert.equal(c.Room.getState().game.phase, "complete");
+    assert.equal(c.Room.getState().game.state.phase, "complete");
     assert.notEqual(c.Room.getState(), first);
 });
 
-test("room snapshot rejects oversized or malformed data before exposing it", () => {
+test("room snapshot rejects oversize graph and invalid game envelopes", () => {
     const c = setup();
     c.setRoomJson(" ".repeat(65537));
     assert.throws(() => c.Room.getState(), /SDK limit/);
     c.setRoom({ connected: false, players: Array(9).fill(null), game: null });
-    assert.throws(() => c.Room.getState(), /collection/);
-    c.setRoom({ connected: false, players: [{ name: "x".repeat(1025) }], game: null });
-    assert.throws(() => c.Room.getState(), /text/);
-    c.setRoom({ connected: false, players: [], game: { a: { b: { c: { d: { e: { f: 1 } } } } } } });
-    assert.throws(() => c.Room.getState(), /structure/);
-    c.setRoom({ connected: false });
     assert.throws(() => c.Room.getState(), /Invalid room snapshot/);
+    const room = { connected: true, players: [], selfId: "", game: { scriptId: "portal", scriptHash: hash, version: 1, stateJson: "[]" } };
+    c.setRoom(room);
+    assert.throws(() => c.Room.getState(), /JSON object/);
+    room.game.stateJson = JSON.stringify({ x: "한".repeat(6000) }); c.setRoom(room);
+    assert.throws(() => c.Room.getState(), /Invalid game snapshot/);
+    room.game.stateJson = JSON.stringify({ x: Array(1024).fill(0) }); c.setRoom(room);
+    assert.throws(() => c.Room.getState(), /structure/);
+    room.game.stateJson = "{}"; room.game.version = -1; c.setRoom(room);
+    assert.throws(() => c.Room.getState(), /Invalid game snapshot/);
     c.setRoom({ connected: false, selfId: null, players: [], game: null });
     assert.equal(c.Room.getState().game, null);
 });
 
-console.log(`Facade checks: ${passed} passed, ${failed} failed`);
+test("HUD marshals a plain card and receives queued IDs without callbacks", () => {
+    const c = setup();
+    c.Hud.showPanel(c.evaluate("({eyebrow:'',title:'Connecting',body:'',action:undefined,progress:undefined,accent:undefined})"));
+    assert.equal(c.getPanel().action, null);
+    assert.equal(c.getPanel().progress, 0);
+    c.Hud.showPanel(c.value({ eyebrow: "칠리 섬", title: "함께 시작해요", body: "발판을 나눠 밟아요.\n준비되면 시작!", action: { id: "start", label: "시작" } }));
+    assert.deepEqual(c.getPanel(), { eyebrow: "칠리 섬", title: "함께 시작해요", body: "발판을 나눠 밟아요.\n준비되면 시작!", progress: 0, accent: "#72C6AE", action: { id: "start", label: "시작", enabled: true } });
+    assert.equal(c.Hud.takeAction(), null);
+    c.queueAction("start");
+    assert.equal(c.Hud.takeAction(), "start");
+    assert.equal(c.Hud.takeAction(), null);
+    c.queueAction("start"); c.Hud.hide();
+    assert.equal(c.getPanel(), null);
+    assert.equal(c.Hud.takeAction(), null);
+});
+
+test("maximum legal server state remains valid with eight room players", () => {
+    const c = setup();
+    c.setRoom({ connected: true, selfId: "p0", players: Array.from({ length: 8 }, (_, i) => ({ playerId: "p" + i, name: "Player", state: { sequence: 1, x: 0, y: 0, z: 0, yaw: 0, speed: 0, verticalVelocity: 0, grounded: true } })),
+        game: { scriptId: "game", scriptHash: hash, version: 1, stateJson: JSON.stringify({ values: Array(1022).fill(0) }) } });
+    const value = c.Room.getState();
+    assert.equal(value.players.length, 8);
+    assert.equal(value.game.state.values.length, 1022);
+    assert.ok(Object.isFrozen(value.game.state.values));
+});
+
+test("HUD rejects callbacks, getters, unknown properties and malformed display values", () => {
+    const c = setup();
+    const card = { eyebrow: "", title: "Ready", body: "" };
+    assert.throws(() => c.Hud.showPanel(c.evaluate("({eyebrow:'',title:'Hi',body:'',action:{id:'start',label:'Go',callback(){}}})")), /plain JSON values/);
+    assert.throws(() => c.Hud.showPanel(c.evaluate("({eyebrow:'',get title(){throw new Error('getter executed')},body:''})")), /accessors/);
+    assert.throws(() => c.Hud.showPanel(c.evaluate("({eyebrow:'',title:'Ready',body:'',unknown:undefined})")), /plain JSON values/);
+    for (const extra of [{ progress: Infinity }, { progress: -1 }, { accent: "red" }, { title: "" }, { body: "x".repeat(1201) }, { arbitrary: true }, { action: { id: "start", label: "" } }, { action: { id: "start", label: "Go", enabled: 1 } }]) {
+        assert.throws(() => c.Hud.showPanel(c.value({ ...card, ...extra })));
+    }
+    assert.equal(c.calls.length, 0, "Malformed DTOs never mutate Unity UI");
+});
+
+console.log("Facade checks: " + passed + " passed, " + failed + " failed");
 if (failed) process.exitCode = 1;

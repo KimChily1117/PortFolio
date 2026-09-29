@@ -10,7 +10,7 @@ TypeScript 컴파일·API 계약·자동완성과 Unity 2022.3.16f1의 **PlayMod
 
 `Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity`를 열면 직접 생성한 메시 프리팹 14개로 구성한 협동 포털 월드를 편집할 수 있다. 기존 `MyWorld.unity`와 분리된 씬이며, 소품의 OBJ/MTL은 `Assets/Demos/ChiliIsland/Models`에 있다. 생성기는 **Kimchily → Demos → Generate Chili Island**에 있다. 재생성하면 생성된 데모 자산을 갱신하므로 수작업 수정본은 별도 보관한다.
 
-TypeScript SDK **0.2.0**의 `import { Room } from "Kimchily.Network"`와 Networking SDK **0.3.0**을 사용한다. `PortalGarden.ts`는 발판 불빛·포털·성공 연출을 담당하며, C# 서버의 `chili-portal-v1`이 점유와 3초 유지·성공을 판정한다. Inspector의 `pulseSpeed`·`celebrationScale`이나 모델·재질을 수정하고 Web 대상으로 다시 게시해 연출 변경을 시연한다. 발판 좌표와 서버 규칙은 TS 필드로 덮어쓰지 않는다. [시연 순서·검증 범위](../docs/multiplayer-demo.md)
+TypeScript SDK **0.3.0**, Networking SDK **0.4.0**을 사용한다. 서버 규칙은 [PortalRules.ts](ServerScripts/chili-portal/PortalRules.ts), 클라이언트 UI·버튼·연출은 [PortalGarden.ts](Assets/Demos/ChiliIsland/Scripts/PortalGarden.ts)에 있다. `Room.useGame(id, hash)`로 승인된 서버 규칙을 연결하고, `Hud.showPanel`로 안내와 버튼을 작성한다. `tools/build_chili_island.ps1 -Publish`는 서버 TS 컴파일·등록과 Unity 콘텐츠 게시를 순서대로 수행한다. [상세 구조·포트폴리오 문서](../docs/portfolio-typescript-multiplayer.md)
 
 ## 기존 Android 기준본 빠르게 시작하기
 
@@ -122,4 +122,4 @@ Samsung **SM-G955N**에서 설치한 Unity 포함 APK를 유지한 채 다음 �
 
 ## 닉네임과 멀티플레이 채팅
 
-홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.3.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. 협동 게임 HUD는 TS가 `Room.enableGame("chili-portal-v1")`을 호출한 월드에만 표시됩니다. [연결 설정](../KimchilyServer/README.md)과 [채팅 검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.
+홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.4.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. 게임 HUD는 각 TS Behaviour가 `Hud.showPanel`을 호출해 작성하며, Behaviour의 수명에 맞춰 정리됩니다. [연결 설정](../KimchilyServer/README.md)과 [채팅 검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.

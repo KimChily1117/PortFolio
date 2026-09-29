@@ -19,6 +19,11 @@ $sceneRelative = 'Assets\Demos\ChiliIsland\Scenes\ChiliIsland.unity'
 $needsArt = $RegenerateArt -or !(Test-Path -LiteralPath (Join-Path $creatorRoot $sceneRelative))
 Assert-KimchilyUnityProject -ProjectPath $creatorRoot
 
+# 제작자의 서버 TS를 먼저 빌드한다. 결과는 승인된 서버 번들과 클라이언트의 규칙 해시다.
+# 이 단계에서 실패하면 Unity 콘텐츠를 게시하지 않아 서로 다른 규칙의 배포를 막는다.
+& (Join-Path $workspaceRoot 'KimchilyServer\tools\compile-script.ps1')
+if (-not $?) { throw 'Server TypeScript compilation failed before the Unity build.' }
+
 function Assert-ChiliCloneRoute {
     # Do not follow a linked output directory into another project.
     $cursorPath = $cloneRoot

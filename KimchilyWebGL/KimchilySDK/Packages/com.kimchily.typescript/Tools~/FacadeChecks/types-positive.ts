@@ -1,6 +1,9 @@
 import { Coroutine, Event, KimchilyScriptBehaviour } from "Kimchily.Script";
 import { GameObject, Transform, Vector3, WaitForSeconds, Time, Debug, Space } from "UnityEngine";
-import { Room, RoomState } from "Kimchily.Network";
+import { Room, RoomSnapshot } from "Kimchily.Network";
+import { Hud } from "Kimchily.UI";
+
+interface DemoState { phase: string; pads: { playerId: string | null }[]; }
 
 export default class TypeContract extends KimchilyScriptBehaviour {
     public target: GameObject | null = null;
@@ -17,11 +20,12 @@ export default class TypeContract extends KimchilyScriptBehaviour {
     }
     Start(): void {
         this.gameObject.name = "TypeContract";
-        Room.enableGame("chili-portal-v1");
-        const state: RoomState = Room.getState();
-        if (state.connected && state.game?.phase === "waiting") Room.startRound();
-        if (state.game?.phase === "complete") Room.replay();
-        const occupant: string | null | undefined = state.game?.pads[0]?.playerId;
+        Room.useGame("portal", "a".repeat(64));
+        const state: RoomSnapshot<DemoState> = Room.getState<DemoState>();
+        Hud.showPanel({ eyebrow: "Demo", title: "Ready", body: "Join your friends", action: { id: "start", label: "Start" } });
+        const action: string | null = Hud.takeAction();
+        if (action) Room.sendAction(action, { source: "hud" });
+        const occupant: string | null | undefined = state.game?.state.pads[0]?.playerId;
         Debug.Log(occupant);
     }
     Update(dt: number): void {
@@ -32,7 +36,7 @@ export default class TypeContract extends KimchilyScriptBehaviour {
         this.transform.localScale = Vector3.Lerp(Vector3.one, new Vector3(2, 2, 2), 0.5);
         this.targetTransform?.gameObject.SetActive(true);
     }
-    OnDisable(): void { if (this.handle) this.StopCoroutine(this.handle); }
+    OnDisable(): void { Hud.hide(); if (this.handle) this.StopCoroutine(this.handle); }
     OnDestroy(): void { this.StopAllCoroutines(); }
     private *routine(): Generator<WaitForSeconds | null | undefined, void, unknown> {
         yield new WaitForSeconds(0.5);

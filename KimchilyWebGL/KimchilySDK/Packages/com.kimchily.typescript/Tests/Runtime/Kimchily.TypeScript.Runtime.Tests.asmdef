@@ -1,5 +1,5 @@
 {
   "name": "Kimchily.TypeScript.Runtime.Tests",
-  "references": ["Kimchily.TypeScript.Runtime", "Kimchily.Creator.Runtime"],
+  "references": ["Kimchily.TypeScript.Runtime", "Kimchily.Creator.Runtime", "Kimchily.Networking", "Unity.ugui"],
   "optionalUnityReferences": ["TestAssemblies"]
 }

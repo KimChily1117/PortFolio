@@ -8,9 +8,9 @@ node 'KimchilySDK/Packages/com.kimchily.typescript/Tools~/Compiler/node_modules/
 node 'KimchilySDK/Packages/com.kimchily.typescript/Tools~/FacadeChecks/ide-check.cjs'
 ```
 
-The 20 Node checks evaluate the actual bundled bootstrap with a scene-host stub. They verify reference identity, constructor owner access, invalid constructors, value-copy vectors, actual host operation names/arguments, Inspector bindings, handle ownership, coroutine generators, local event limits/snapshots, logging, explicit network commands and frozen bounded room snapshots. They do not replace Jint, Unity lifecycle, IL2CPP, or device tests.
+The 24 Node checks evaluate the actual bundled bootstrap with a scene-host stub. They verify reference identity, constructor owner access, invalid constructors, value-copy vectors, actual host operation names/arguments, Inspector bindings, handle ownership, coroutine generators, local event limits/snapshots, logging, generic script identity/actions, frozen stateJson snapshots, UTF-8 and plain-JSON boundaries, maximum server state with eight players, HUD DTO validation and queued button IDs. They do not replace Jint, Unity lifecycle, IL2CPP, or device tests.
 
-The strict TypeScript check includes the shipped sample, valid API usage, and negative assertions using `@ts-expect-error`, including readonly nested network data and forbidden raw transport calls. Missing expected errors fail compilation. The IDE check invokes TypeScript 5.9.3's real LanguageService and verifies `this.transform.` and `Room.` completions, script public-field completions, nullable references, typed parameters, and JSDoc. It saves `Artifacts/ide-check.json`; it does not require a running code editor.
+The strict TypeScript check includes the shipped sample, valid API usage, and negative assertions using `@ts-expect-error`, including readonly nested network data, forbidden raw transport calls, removed fixed-game APIs and callback-free HUD data. Missing expected errors fail compilation. The IDE check invokes TypeScript 5.9.3's real LanguageService and verifies `this.transform.`, `Room.` and `Hud.` completions, script public-field completions, nullable references, typed parameters, and JSDoc. It saves `Artifacts/ide-check.json`; it does not require a running code editor.
 
 ## Runtime boundary
 
@@ -30,9 +30,12 @@ The host returns only JavaScript primitives/objects. Scene wrappers use opaque I
 | `coroutine.start` | `[iterator]`, owner ID | positive integer handle |
 | `coroutine.stop` | `[handle]`, owner ID | unused |
 | `coroutine.stopAll` | `[]`, owner ID | unused |
-| `network.enableGame` | `["chili-portal-v1"]`, ID 0 | boolean, opt-in accepted |
-| `network.startRound` / `network.replay` | `[]`, ID 0 | boolean, request accepted for sending |
+| `network.useGame` | `[scriptId, sha256]`, ID 0 | boolean, registered script request accepted |
+| `network.sendAction` | `[action, payloadJson]`, ID 0 | boolean, request accepted for sending |
 | `network.getState` | `[]`, ID 0 | bounded JSON string, parsed/frozen by the facade |
+| `hud.showPanel` | `[panelJson]`, ID 0 | unused, owner-scoped TMP display |
+| `hud.takeAction` | `[]`, ID 0 | button ID string or null, consumed once |
+| `hud.hide` | `[]`, ID 0 | unused, hides display and clears pending input |
 
 Inspector bindings are an object keyed by field name, each value `{type, value}`. Types are `GameObject`, `Transform`, `Vector3`, `number`, `string`, and `boolean`; scene references accept an ID or null, and Vector3 accepts `[x,y,z]`. Names are ASCII identifiers up to 80 characters. Up to 128 bindings are accepted. Prototype names, owner accessors, coroutine APIs, and lifecycle names are reserved. Conversion is validated before values are assigned.
 

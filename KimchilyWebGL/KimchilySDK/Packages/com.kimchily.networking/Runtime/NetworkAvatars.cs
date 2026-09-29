@@ -7,6 +7,11 @@ using UnityEngine.SceneManagement;
 
 namespace Kimchily.Networking
 {
+    /// <summary>
+    /// 방의 서버 playerId를 현재 Unity 씬의 시각 객체에 연결한다.
+    /// 닉네임은 중복될 수 있으므로 객체 식별이나 말풍선 수신 대상을 정하는 키로 사용하지 않는다.
+    /// 게임별 판정은 여기서 하지 않는다. 같은 아바타/채팅 표현을 여러 UGC 게임에서 재사용한다.
+    /// </summary>
     public sealed class NetworkAvatars : MonoBehaviour
     {
         readonly Dictionary<string, RemoteAvatar> remotes = new Dictionary<string, RemoteAvatar>();
@@ -34,12 +39,15 @@ namespace Kimchily.Networking
             { if (leaving != null) Destroy(leaving.gameObject); remotes.Remove(message.player.playerId); }
             else if (message.type == "chat" && message.chat != null)
             {
+                // 실시간 chat만 말풍선으로 보낸다. joined의 과거 대화는 채팅 패널 이력으로만 남는다.
                 if (message.chat.playerId == chat.View.selfId) localSpeech?.Say(message.chat.text);
                 else if (remotes.TryGetValue(message.chat.playerId, out var remote)) remote.Speech?.Say(message.chat.text);
             }
         }
         void SpreadInitialSpawn()
         {
+            // 두 번째 참가자부터 서로 겹치지 않는 주변 바닥을 찾는다. 첫 위치 전송 전에만 실행해
+            // 서버가 기억할 최초 스폰과 로컬 낙하 리스폰 위치가 같은 지점이 되도록 한다.
             if (chat.View.players.Length < 2) return;
             Vector3 start = local.transform.position;
             var physics = local.gameObject.scene.GetPhysicsScene();
@@ -64,6 +72,7 @@ namespace Kimchily.Networking
             if (!remotes.TryGetValue(player.playerId, out var avatar))
             {
                 var root = new GameObject("Remote Player · " + player.name);
+                // 원격 객체도 월드 씬에 귀속시켜 씬 퇴장 시 Unity가 함께 정리할 수 있게 한다.
                 root.SetActive(false); SceneManager.MoveGameObjectToScene(root, local.gameObject.scene);
                 avatar = root.AddComponent<RemoteAvatar>();
                 avatar.Initialize(local, player.name); remotes.Add(player.playerId, avatar);
@@ -99,7 +108,8 @@ namespace Kimchily.Networking
             source = local;
             if (local.VisualRoot != null)
             {
-                // Clone visual hierarchy only; never clone local movement, camera or input.
+                // 로컬의 시각 모델만 복제한다. 이동 컨트롤러·입력·카메라까지 복제하면 한 기기에서
+                // 여러 캐릭터가 같은 입력을 받거나 카메라가 경쟁하므로 사용자 Behaviour도 제거한다.
                 visual = Instantiate(local.VisualRoot.gameObject, transform, false);
                 visual.name = "Remote Visual"; visual.SetActive(false);
                 foreach (var behaviour in visual.GetComponentsInChildren<MonoBehaviour>(true)) { behaviour.enabled = false; Destroy(behaviour); }
@@ -113,7 +123,8 @@ namespace Kimchily.Networking
         }
         IEnumerator Start()
         {
-            // Let removed authored behaviours finish destruction while the clone is inactive.
+            // Destroy는 프레임 끝에 적용된다. 비활성 상태로 한 프레임 기다려 제거 대상 스크립트가
+            // 다시 활성화되지 않게 한다. 첫 위치가 오기 전에는 원점에 캐릭터를 노출하지 않는다.
             yield return null;
             ready = true;
             if (target != null) ActivateVisual();
@@ -128,6 +139,8 @@ namespace Kimchily.Networking
         }
         public void Apply(ChatPose pose)
         {
+            // 서버에서 검증한 순서 번호도 클라이언트에서 다시 확인한다. 오래된 샘플을 적용하면
+            // 이미 이동한 캐릭터가 뒤로 되감기는 현상이 생긴다. 게임 상태 version과는 별개 번호다.
             if (pose == null || pose.sequence <= LastSequence) return;
             bool first = target == null;
             target = pose; LastSequence = pose.sequence; lastSample = Time.unscaledTime;
@@ -138,9 +151,12 @@ namespace Kimchily.Networking
         void Update()
         {
             if (target == null) return;
+            // 네트워크는 약 10 Hz, 렌더링은 매 프레임이다. 지수 보간으로 목표 위치에 부드럽게
+            // 가까워지되 미래 위치를 예측하지 않는다. 따라서 이 시각 위치를 서버 판정에 재사용하지 않는다.
             float dt = Time.unscaledDeltaTime, factor = 1 - Mathf.Exp(-15 * dt);
             transform.position = Vector3.Lerp(transform.position, new Vector3(target.x, target.y, target.z), factor);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, target.yaw, 0), factor);
+            // 샘플이 1초 이상 멎으면 걷기 애니메이션을 멈춘다. 서버의 발판 신선도 판정과 별개인 표현 정책이다.
             animation?.Tick(Time.unscaledTime - lastSample > 1 ? 0 : target.speed, target.grounded, target.verticalVelocity, dt);
         }
         void OnDestroy() { animation?.Dispose(); }
@@ -155,6 +171,8 @@ namespace Kimchily.Networking
         float expires;
         public static PlayerSpeech Create(Transform target, string name, System.Func<Camera> camera)
         {
+            // DOM 오버레이가 아니라 캐릭터 자식의 World Space Canvas/TMP다.
+            // 공통 Label helper가 richText를 끄므로 채팅에 들어온 태그도 그대로 글자로 표시한다.
             var rect = UnityChatPanel.Node("Nickname and Speech Bubble", target);
             rect.localPosition = new Vector3(0, 2.05f, 0); rect.localScale = Vector3.one * .006f;
             rect.sizeDelta = new Vector2(300, 170); rect.pivot = new Vector2(.5f, 0);
@@ -170,10 +188,12 @@ namespace Kimchily.Networking
             instance.bubble = panel.gameObject; instance.bubble.SetActive(false); return instance;
         }
         public void SetName(string name) { nameLabel.text = name; }
+        // 새 메시지는 이전 말풍선을 대체하고 표시 시간을 갱신한다. 게임 시간 배율과 무관하게 약 6초 유지한다.
         public void Say(string text) { speech.text = text; expires = Time.unscaledTime + 6; bubble.SetActive(true); }
         public void HideSpeech() { if (bubble != null) bubble.SetActive(false); if (speech != null) speech.text = ""; }
         void LateUpdate()
         {
+            // 각 기기의 관찰 카메라를 향하게 한다. 이 회전은 UI 표현이므로 네트워크로 동기화하지 않는다.
             Camera camera = viewCamera?.Invoke(); if (camera == null) camera = Camera.main;
             if (camera != null) transform.rotation = camera.transform.rotation;
             if (bubble.activeSelf && Time.unscaledTime >= expires) HideSpeech();

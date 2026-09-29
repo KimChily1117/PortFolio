@@ -1,6 +1,9 @@
-/** Supported Kimchily world APIs. These declarations describe the bundled facade, not the full Unity API. */
+/** 설치된 SDK의 제한된 API다. 임의 Unity/CLR/브라우저 객체는 노출하지 않는다. */
 declare module "Kimchily.Network" {
-    /** Detached data from the latest validated server pose; no native Transform access. */
+    export type JsonValue = null | boolean | number | string | ReadonlyArray<JsonValue> | { readonly [key: string]: JsonValue };
+    export type DeepReadonly<T> = T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepReadonly<U>>
+        : T extends object ? { readonly [K in keyof T]: DeepReadonly<T[K]> } : T;
+    /** 검증된 최근 위치의 복사본이며 native Transform 참조가 아니다. */
     export interface PlayerPose {
         readonly sequence: number;
         readonly x: number;
@@ -16,43 +19,56 @@ declare module "Kimchily.Network" {
         readonly name: string;
         readonly state: PlayerPose | null;
     }
-    export interface PortalPad {
-        readonly id: string;
-        readonly x: number;
-        readonly y: number;
-        readonly z: number;
-        readonly radius: number;
-        /** Whether this pad is required in the current round. */
-        readonly active: boolean;
-        /** Occupant assigned by the server; null or empty when unoccupied. */
-        readonly playerId: string | null;
-    }
-    export interface PortalGameState {
-        readonly preset: "chili-portal-v1";
-        readonly phase: "waiting" | "playing" | "holding" | "complete";
-        readonly round: number;
-        readonly requiredPlayers: number;
-        readonly holdSeconds: number;
-        readonly remainingMs: number;
-        readonly pads: ReadonlyArray<PortalPad>;
+    export interface GameSnapshot<T = unknown> {
+        readonly scriptId: string;
+        readonly scriptHash: string;
         readonly version: number;
+        readonly state: DeepReadonly<T>;
     }
-    export interface RoomState {
+    export interface RoomSnapshot<T = unknown> {
         readonly connected: boolean;
         readonly selfId: string | null;
         readonly players: ReadonlyArray<RoomPlayer>;
-        readonly game: PortalGameState | null;
+        readonly game: GameSnapshot<T> | null;
     }
-    /** Opt-in shared game preset. Transport, identity, endpoints and raw messages are host-owned. */
+    /** C#는 연결·동기화만 담당한다. 게임 규칙은 서버에 등록된 TS가 판정한다. */
     export const Room: {
-        /** Enables the native game HUD and watches this preset. Queues until joined; does not start a round. */
-        enableGame(preset: "chili-portal-v1"): boolean;
-        /** Latest room snapshot, deeply frozen. Call from Update; no callbacks or network request are created. */
-        getState(): RoomState;
-        /** Requests a start using the current participant count. True means accepted for sending, not server success. */
-        startRound(): boolean;
-        /** Requests a return to waiting. Another explicit start begins the next round. */
-        replay(): boolean;
+        /** 등록된 서버 스크립트와 정확한 SHA-256에 참여한다. 입장 중이면 요청을 기억한다. */
+        useGame(scriptId: string, scriptHash: string): boolean;
+        /** JSON 스냅샷의 동결된 복사본. T는 제작자의 타입이며 런타임 스키마 검증을 대신하지 않는다. */
+        getState<T = unknown>(): RoomSnapshot<T>;
+        /** UTF-8 1,024바이트 이하 JSON 값만 전송한다. true는 접수 여부이며 게임 성공 판정이 아니다. */
+        sendAction(action: string, payload?: JsonValue): boolean;
+    };
+}
+
+declare module "Kimchily.UI" {
+    export interface HudAction {
+        /** ASCII 영문/숫자/_/- 1..80자. 클릭하면 이 ID만 큐에 들어간다. */
+        readonly id: string;
+        readonly label: string;
+        readonly enabled?: boolean;
+    }
+    export interface HudPanel {
+        /** 최대 48자. 빈 문자열 허용. */
+        readonly eyebrow: string;
+        /** 최대 96자이며 비어 있을 수 없다. */
+        readonly title: string;
+        /** 최대 1,200자. 긴 본문은 실제 화면에서 말줄임 표시된다. */
+        readonly body: string;
+        /** 0..1, 기본값 0. */
+        readonly progress?: number;
+        /** #RRGGBB, 기본값 #72C6AE. */
+        readonly accent?: string;
+        readonly action?: HudAction | null;
+    }
+    /** 이 Behaviour가 소유하는 Unity TMP HUD. 비활성화·오류·재로드·파괴 때 화면과 입력을 정리한다. */
+    export const Hud: {
+        /** JSON 형태의 표시 데이터만 허용한다. callback, getter, Unity 참조를 전달하지 않는다. */
+        showPanel(panel: HudPanel): void;
+        /** 다음 Update에서 버튼 ID를 한 번 꺼낸다. 대기 입력이 없으면 null. */
+        takeAction(): string | null;
+        hide(): void;
     };
 }
 

@@ -14,7 +14,11 @@ using UnityEngine.Rendering;
 
 namespace Kimchily.Creator.Project
 {
-    /// <summary>Original geometry for the Chili Island diorama. No downloaded 3D models.</summary>
+    /// <summary>
+    /// 에디터에서 원본 메시·재질·프리팹을 제작하는 도구다. 플레이 중에는 실행하지 않는다.
+    /// 게임 판정은 ServerScripts의 TS, 클라이언트 UI·연출은 PortalGarden.ts가 담당한다.
+    /// 여기의 C#은 콘텐츠 제작을 위한 기반 기능이며 서버의 승리 조건과는 관계없다.
+    /// </summary>
     public static class ChiliIslandArt
     {
         public const string Root = "Assets/Demos/ChiliIsland";
@@ -28,6 +32,8 @@ namespace Kimchily.Creator.Project
         [MenuItem("Kimchily/Demos/Generate Chili Island")]
         public static void Generate()
         {
+            // Unity의 Mesh/AssetDatabase API로 저장 가능한 자산을 만든다.
+            // 생성된 메시를 씬에서 직접 편집해도 되며, 게임 로직은 이 생성기를 호출하지 않는다.
             if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
             if (File.Exists(ScenePath) && !Application.isBatchMode &&
                 !EditorUtility.DisplayDialog("Chili Island", "Regenerate the generated demo scene? Existing MyWorld is untouched.", "Regenerate", "Cancel")) return;
@@ -121,6 +127,7 @@ namespace Kimchily.Creator.Project
         static TypeScriptFieldBinding Binding(string name, GameObject value) => new TypeScriptFieldBinding { name=name, kind="GameObject", useOverride=true, gameObjectValue=value };
         public static void BuildWorld()
         {
+            // 메시와 컴파일된 TS 자산을 WebGL용 콘텐츠로 묶는다. 실행기 전체 재빌드와는 별도다.
             if(!File.Exists(ScenePath)) throw new InvalidOperationException("Generate the art scene first.");
             var result=WorldContentBuilder.Build(new WorldBuildRequest { worldId="chili-island", entryScene=ScenePath, scenes=new[]{ScenePath}, target=BuildTarget.WebGL, requirePortableScripts=true, outputRoot=System.IO.Path.GetFullPath("WorldBuilds") });
             Directory.CreateDirectory("Artifacts"); File.WriteAllText("Artifacts/last-build.txt",result.Directory);

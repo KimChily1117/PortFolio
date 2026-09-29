@@ -23,7 +23,7 @@ Windows 새 PC에서 처음 열면 TypeScript 패키지가 호환 Node 실행 �
 
 [칠리 아일랜드](multiplayer-demo.md)는 `KimchilyCreator/Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity`의 전용 씬이다. 직접 생성한 14개 환경·소품 프리팹과 OBJ/MTL, `PortalGarden.ts`를 포함하며 기존 `MyWorld.unity`와 분리한다.
 
-TypeScript SDK **0.2.0**, Networking SDK **0.3.0**을 포함한 실행기가 필요하다. TS는 `Room.enableGame("chili-portal-v1")`로 서버 프리셋에 참여하고, `Room.getState()`를 읽어 불빛·포털을 연출한다. C# 서버가 발판 좌표·점유·3초 유지·성공을 판정한다. 처음에는 아래 공통 실행기 빌드를 한 번 수행하고, 이후 모델·재질·지원 API 안의 TS 연출은 새 월드 버전으로 게시한다.
+TypeScript SDK **0.3.0**, Networking SDK **0.4.0**을 포함한 실행기가 필요하다. 서버 TS가 게임을 판정하고 클라이언트 TS가 `Room`과 `Hud`로 입력·UI·연출을 작성한다. `KimchilyCreator/tools/build_chili_island.ps1 -Publish`로 승인된 규칙 번들 등록과 해시가 일치하는 월드 게시를 수행한다. 새 SDK API를 처음 추가할 때 공통 실행기를 갱신하며, 이후 지원 API 내 규칙·연출 변경에는 게임 C# 수정이 필요 없다. [상세 흐름](portfolio-typescript-multiplayer.md)
 
 ## 2. 공통 웹 실행기를 준비하기
 

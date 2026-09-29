@@ -20,6 +20,10 @@ internal static class Program
         internal double[] Position = new double[3];
         internal string SlowOperation;
         internal int DelayMilliseconds;
+        internal string PanelJson;
+        internal string QueuedAction;
+        internal string RoomJson = "{\"connected\":true,\"selfId\":\"p1\",\"players\":[{\"playerId\":\"p1\",\"name\":\"Chili\",\"state\":null}],\"game\":null}";
+        internal readonly List<string> Actions = new List<string>();
         internal ObjectInstance Create(Engine engine)
         {
             var host = new JsObject(engine);
@@ -30,8 +34,12 @@ internal static class Program
                 var values = args[2].AsObject();
                 switch (op)
                 {
-                    case "network.getState": return "{\"connected\":true,\"selfId\":\"p1\",\"players\":[{\"playerId\":\"p1\",\"name\":\"Chili\",\"state\":null}],\"game\":null}";
-                    case "network.enableGame": case "network.startRound": case "network.replay": return true;
+                    case "network.getState": return RoomJson;
+                    case "network.useGame": return true;
+                    case "network.sendAction": Actions.Add(values.Get("0").AsString() + ":" + values.Get("1").AsString()); return true;
+                    case "hud.showPanel": PanelJson = values.Get("0").AsString(); return JsValue.Undefined;
+                    case "hud.takeAction": var action = QueuedAction; QueuedAction = null; return action == null ? JsValue.Null : (JsValue)action;
+                    case "hud.hide": PanelJson = QueuedAction = null; return JsValue.Undefined;
                     case "debug.log": Logs.Add(values.Get("0").AsString()); return JsValue.Undefined;
                     case "coroutine.start": Generators.Add(values.Get("0")); return Generators.Count;
                     case "time.deltaTime": return 0.25;
@@ -85,12 +93,33 @@ internal static class Program
         });
         Case("network snapshot is a frozen JSON graph in the real interpreter", () => {
             var host = new Host();
-            using var vm = Create("const {Room}=require('Kimchily.Network'); exports.default=class extends KimchilyScriptBehaviour {Start(){Room.enableGame('chili-portal-v1'); const a=Room.getState(); if(!Object.isFrozen(a.players[0])||Room.getState()!==a||a.players[0].GetType!==undefined) throw new Error('Unsafe snapshot'); let rejected=false; try{a.players[0].name='Fake';}catch(e){rejected=true;} if(!rejected)throw new Error('Writable snapshot'); Debug.Log(a.players[0].name);}};", host);
+            using var vm = Create("const {Room}=require('Kimchily.Network'); exports.default=class extends KimchilyScriptBehaviour {Start(){Room.useGame('portal','a'.repeat(64)); const a=Room.getState(); if(!Object.isFrozen(a.players[0])||Room.getState()!==a||a.players[0].GetType!==undefined) throw new Error('Unsafe snapshot'); let rejected=false; try{a.players[0].name='Fake';}catch(e){rejected=true;} if(!rejected)throw new Error('Writable snapshot'); Debug.Log(a.players[0].name);}};", host);
             vm.Invoke("Start");
             Check(host.Logs[0] == "Chili", "Detached immutable network value");
         });
         Case("bundled source cannot shadow the network module", () => {
             Reject(() => TypeScriptVm.ValidateModules(new Dictionary<string, string> { { "Kimchily.Network", "exports.Room={};" } }));
+            Reject(() => TypeScriptVm.ValidateModules(new Dictionary<string, string> { { "Kimchily.UI", "exports.Hud={};" } }));
+        });
+        Case("generic game JSON and queued HUD actions work without VM callbacks", () => {
+            var host = new Host();
+            host.RoomJson = "{\"connected\":true,\"selfId\":\"p1\",\"players\":[],\"game\":{\"scriptId\":\"portal\",\"scriptHash\":\"" + new string('a', 64) + "\",\"version\":2,\"stateJson\":\"{\\\"phase\\\":\\\"waiting\\\"}\"}}";
+            using var vm = Create("const {Room}=require('Kimchily.Network'); const {Hud}=require('Kimchily.UI'); exports.default=class extends KimchilyScriptBehaviour {Start(){const state=Room.getState().game.state;if(!Object.isFrozen(state))throw new Error('Mutable game');Hud.showPanel({eyebrow:'',title:state.phase,body:'Ready',action:{id:'start',label:'Start'}});} Update(){const action=Hud.takeAction();if(action)Room.sendAction(action,{source:'hud'});} OnDisable(){Hud.hide();}};", host);
+            vm.Invoke("Start"); Check(host.PanelJson.Contains("waiting"), "TS controls the displayed state");
+            host.QueuedAction = "start"; Check(host.Actions.Count == 0, "No click callback into VM");
+            vm.Invoke("Update"); vm.Invoke("Update");
+            Check(host.Actions.Count == 1 && host.Actions[0] == "start:{\"source\":\"hud\"}", "One queued action consumed");
+            vm.Invoke("OnDisable"); Check(host.PanelJson == null, "HUD hide reaches host");
+        });
+        Case("maximum legal game state fits the normal VM operation budget", () => {
+            var host = new Host();
+            var state = new { values = new int[1022] };
+            var players = new object[8];
+            for (int i = 0; i < players.Length; i++) players[i] = new { playerId = "p" + i, name = "Player", state = new { sequence = 1, x = 0, y = 0, z = 0, yaw = 0, speed = 0, verticalVelocity = 0, grounded = true } };
+            host.RoomJson = System.Text.Json.JsonSerializer.Serialize(new { connected = true, selfId = "p1", players,
+                game = new { scriptId = "game", scriptHash = new string('a', 64), version = 1, stateJson = System.Text.Json.JsonSerializer.Serialize(state) } });
+            using var vm = Create("const {Room}=require('Kimchily.Network'); exports.default=class extends KimchilyScriptBehaviour {Update(){const game=Room.getState().game;if(game.state.values.length!==1022)throw new Error('Maximum state rejected');}};", host);
+            vm.Invoke("Update");
         });
         Case("Inspector override leaves other initializers", () => {
             var host=new Host(); using var vm=Create("exports.default=class extends KimchilyScriptBehaviour {constructor(){super();this.speed=2;this.label='initial';}Start(){Debug.Log(this.speed+':'+this.label);}};",host,fields:engine=>{var all=new JsObject(engine);var b=new JsObject(engine);b.Set("type","number");b.Set("value",7);all.Set("speed",b);return all;}); vm.Invoke("Start"); Check(host.Logs[0]=="7:initial","field initializer");

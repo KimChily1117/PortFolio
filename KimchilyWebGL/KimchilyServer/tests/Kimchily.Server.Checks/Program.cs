@@ -146,6 +146,7 @@ try
     info.ArgumentList.Add(Path.Combine(root, $"src/Kimchily.Server.Host/bin/{configuration}/net10.0/Kimchily.Server.Host.dll"));
     info.ArgumentList.Add("--urls"); info.ArgumentList.Add("http://127.0.0.1:0");
     info.ArgumentList.Add("--Realtime:AllowedOrigins:0"); info.ArgumentList.Add("http://127.0.0.1:8788");
+    info.ArgumentList.Add("--Realtime:ScriptsRoot"); info.ArgumentList.Add(Path.Combine(root, "games"));
     host = new Process { StartInfo = info, EnableRaisingEvents = true };
     void Capture(object sender, DataReceivedEventArgs eventArgs)
     {

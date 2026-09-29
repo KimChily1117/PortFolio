@@ -191,41 +191,131 @@
         }
     }
 
-    // Networking crosses the host boundary as bounded JSON, never CLR/Unity objects.
-    // Cache identical snapshots; nested values remain frozen detached JavaScript data.
+    // 네트워크와 HUD는 JSON 값만 넘긴다. 사용자 getter, toJSON, CLR/Unity 참조는 실행하지 않는다.
+    function utf8Length(text) {
+        let count = 0;
+        for (const c of text) { const p = c.codePointAt(0); count += p <= 127 ? 1 : p <= 2047 ? 2 : p <= 65535 ? 3 : 4; }
+        return count;
+    }
+    function dataId(value, label) {
+        if (typeof value !== "string" || !/^[A-Za-z0-9_-]{1,80}$/.test(value)) throw new TypeError(label + " must be an ASCII identifier of 1..80 characters");
+        return value;
+    }
+    function plainJson(value, maxDepth = 12, maxValues = 1024, omitUndefined = false) {
+        let count = 0;
+        const seen = new Set();
+        function copy(v, depth) {
+            if (++count > maxValues || depth > maxDepth) throw new RangeError("JSON structure exceeds the SDK limit");
+            if (v === null || typeof v === "boolean" || typeof v === "string") return v;
+            if (typeof v === "number") return finite(v, "JSON number");
+            if (typeof v !== "object") throw new TypeError("Only plain JSON values are supported");
+            if (seen.has(v)) throw new TypeError("Cyclic JSON is not supported");
+            const array = Array.isArray(v), proto = Object.getPrototypeOf(v);
+            if (!array && proto !== Object.prototype && proto !== null) throw new TypeError("Only plain JSON objects are supported");
+            if (Object.getOwnPropertySymbols(v).length) throw new TypeError("JSON symbol keys are not supported");
+            const names = Object.keys(v);
+            if (names.length > maxValues || (array && (v.length > maxValues || names.length !== v.length))) throw new RangeError("JSON collection exceeds the SDK limit");
+            const out = array ? [] : Object.create(null);
+            seen.add(v);
+            for (const name of names) {
+                const field = Object.getOwnPropertyDescriptor(v, name);
+                if (!field || !Object.prototype.hasOwnProperty.call(field, "value")) throw new TypeError("JSON accessors are not supported");
+                // HUD의 선택 필드는 명시적 undefined도 생략으로 처리한다. 액션 payload에는 적용하지 않는다.
+                if (!array && omitUndefined && field.value === undefined
+                    && ((depth === 0 && ["progress", "accent", "action"].includes(name)) || (depth === 1 && name === "enabled"))) continue;
+                out[name] = copy(field.value, depth + 1);
+            }
+            seen.delete(v);
+            return out;
+        }
+        return copy(value, 0);
+    }
+    function boundedJson(value, bytes, depth = 12, values = 1024) {
+        const json = JSON.stringify(plainJson(value, depth, values));
+        if (utf8Length(json) > bytes) throw new RangeError("JSON payload exceeds the SDK limit");
+        return json;
+    }
+    function freezeGraph(value, maximumDepth, maximumValues) {
+        let count = 0;
+        function freeze(v, depth) {
+            if (++count > maximumValues || depth > maximumDepth) throw new RangeError("Room snapshot structure exceeds the SDK limit");
+            if (v === null || typeof v === "boolean" || typeof v === "string") return v;
+            if (typeof v === "number") return finite(v, "Room snapshot number");
+            if (typeof v !== "object") throw new TypeError("Invalid room snapshot value");
+            // state는 별도 예산으로 이미 검사했다. 방 래퍼에서 같은 그래프를 다시 순회하지 않는다.
+            if (Object.isFrozen(v)) return v;
+            for (const key of Object.keys(v)) freeze(v[key], depth + 1);
+            return Object.freeze(v);
+        }
+        return freeze(value, 0);
+    }
+    // 서버 stateJson을 해석한 복사본만 노출한다. 동일 스냅샷은 재사용하며 어떤 값도 서버를 직접 수정하지 못한다.
     let roomJson = null, roomSnapshot = null;
     function freezeRoomSnapshot(json) {
         if (typeof json !== "string" || json.length > 65536) throw new RangeError("Room snapshot exceeds the SDK limit");
         if (json === roomJson) return roomSnapshot;
         const value = JSON.parse(json);
-        let count = 0;
-        function freeze(value, depth) {
-            if (++count > 256 || depth > 6) throw new RangeError("Room snapshot structure exceeds the SDK limit");
-            if (value === null || typeof value === "boolean") return value;
-            if (typeof value === "string") {
-                if (value.length > 1024) throw new RangeError("Room snapshot text exceeds the SDK limit");
-                return value;
-            }
-            if (typeof value === "number") return finite(value, "Room snapshot number");
-            const keys = Object.keys(value);
-            if (keys.length > (Array.isArray(value) ? 8 : 32)) throw new RangeError("Room snapshot collection exceeds the SDK limit");
-            for (const key of keys) freeze(value[key], depth + 1);
-            return Object.freeze(value);
-        }
-        if (!value || Array.isArray(value) || typeof value !== "object" || typeof value.connected !== "boolean" || !Array.isArray(value.players))
+        if (!value || Array.isArray(value) || typeof value !== "object" || typeof value.connected !== "boolean" || !Array.isArray(value.players) || value.players.length > 8)
             throw new TypeError("Invalid room snapshot");
-        const frozen = freeze(value, 0);
+        if (value.game !== null) {
+            const game = value.game;
+            if (!game || typeof game !== "object" || typeof game.scriptHash !== "string" || !/^[a-f0-9]{64}$/.test(game.scriptHash)
+                || !Number.isSafeInteger(game.version) || game.version < 0 || typeof game.stateJson !== "string" || utf8Length(game.stateJson) > 16384)
+                throw new TypeError("Invalid game snapshot");
+            dataId(game.scriptId, "scriptId");
+            const state = JSON.parse(game.stateJson);
+            if (!state || typeof state !== "object" || Array.isArray(state)) throw new TypeError("Game state must be a JSON object");
+            freezeGraph(state, 12, 1024);
+            value.game = { scriptId: game.scriptId, scriptHash: game.scriptHash, version: game.version, state: state };
+        }
+        const frozen = freezeGraph(value, 14, 1280);
         roomJson = json; roomSnapshot = frozen;
         return frozen;
     }
     const Room = Object.freeze({
-        enableGame(preset) {
-            if (preset !== "chili-portal-v1") throw new TypeError("Unsupported shared game preset");
-            return call("network.enableGame", 0, [preset]);
+        useGame(scriptId, scriptHash) {
+            dataId(scriptId, "scriptId");
+            if (typeof scriptHash !== "string" || !/^[a-f0-9]{64}$/.test(scriptHash)) throw new TypeError("scriptHash must be lowercase SHA-256");
+            return call("network.useGame", 0, [scriptId, scriptHash]);
         },
         getState() { return freezeRoomSnapshot(call("network.getState", 0, [])); },
-        startRound() { return call("network.startRound", 0, []); },
-        replay() { return call("network.replay", 0, []); }
+        sendAction(action, payload = null) {
+            dataId(action, "action");
+            return call("network.sendAction", 0, [action, boundedJson(payload, 1024)]);
+        }
+    });
+
+    function hudText(value, label, maximum) {
+        if (typeof value !== "string" || value.length > maximum || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/.test(value))
+            throw new TypeError(label + " is invalid or too long");
+        return value;
+    }
+    // HUD는 이 VM의 Behaviour에만 속한다. 클릭 함수를 등록하지 않고 다음 Update에서 ID를 꺼낸다.
+    const Hud = Object.freeze({
+        showPanel(panel) {
+            const p = plainJson(panel, 3, 32, true);
+            if (!p || Array.isArray(p) || typeof p !== "object") throw new TypeError("Expected a HUD panel");
+            const allowed = ["eyebrow", "title", "body", "progress", "accent", "action"];
+            for (const key of Object.keys(p)) if (!allowed.includes(key)) throw new TypeError("Unknown HUD field: " + key);
+            const dto = {
+                eyebrow: hudText(p.eyebrow, "eyebrow", 48), title: hudText(p.title, "title", 96),
+                body: hudText(p.body, "body", 1200), progress: p.progress === undefined ? 0 : finite(p.progress, "progress"),
+                accent: p.accent === undefined ? "#72C6AE" : p.accent, action: null
+            };
+            if (dto.progress < 0 || dto.progress > 1) throw new RangeError("HUD progress must be between 0 and 1");
+            if (!dto.title.trim()) throw new TypeError("HUD title must not be empty");
+            if (typeof dto.accent !== "string" || !/^#[A-Fa-f0-9]{6}$/.test(dto.accent)) throw new TypeError("HUD accent must be #RRGGBB");
+            if (p.action !== undefined && p.action !== null) {
+                if (typeof p.action !== "object" || Array.isArray(p.action)) throw new TypeError("Expected a HUD action");
+                for (const key of Object.keys(p.action)) if (!["id", "label", "enabled"].includes(key)) throw new TypeError("Unknown HUD action field");
+                if (p.action.enabled !== undefined && typeof p.action.enabled !== "boolean") throw new TypeError("HUD enabled must be boolean");
+                dto.action = { id: dataId(p.action.id, "action.id"), label: hudText(p.action.label, "action.label", 48), enabled: p.action.enabled !== false };
+                if (!dto.action.label.trim()) throw new TypeError("HUD action label must not be empty");
+            }
+            call("hud.showPanel", 0, [boundedJson(dto, 4096, 3, 32)]);
+        },
+        takeAction() { return call("hud.takeAction", 0, []); },
+        hide() { call("hud.hide", 0, []); }
     });
 
     function create(ctor, owner = 0) {
@@ -275,7 +365,8 @@
         "Kimchily.Script": Object.freeze({ KimchilyScriptBehaviour: KimchilyScriptBehaviour, Coroutine: Coroutine, Event: Event }),
         "UnityEngine": Object.freeze({ GameObject: GameObject, Transform: Transform, Vector3: Vector3,
             Time: Time, Debug: Debug, WaitForSeconds: WaitForSeconds, Space: Space }),
-        "Kimchily.Network": Object.freeze({ Room: Room })
+        "Kimchily.Network": Object.freeze({ Room: Room }),
+        "Kimchily.UI": Object.freeze({ Hud: Hud })
     });
     return Object.freeze({ modules: modules, create: create, applyFields: applyFields });
 })

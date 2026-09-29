@@ -52,15 +52,20 @@ test('type errors include source locations and leave no executable output', () =
 }));
 
 test('network facade import stays external and provides readonly shared game types', () => fixture({
-  'Assets/Main.ts': `import { Room } from 'Kimchily.Network';\n` + entry(`
-    Start(): void { Room.enableGame('chili-portal-v1'); }
-    Update(): void { const room = Room.getState(); this.gameObject.SetActive(room.game?.phase !== 'complete'); }
+  'Assets/Main.ts': `import { Room } from 'Kimchily.Network';\nimport { Hud } from 'Kimchily.UI';\n` + entry(`
+    Start(): void { Room.useGame('portal', 'a'.repeat(64)); }
+    Update(): void {
+      const room = Room.getState<{ phase: string }>(); this.gameObject.SetActive(room.game?.state.phase !== 'complete');
+      Hud.showPanel({ eyebrow: '', title: 'Ready', body: '' });
+      const action = Hud.takeAction(); if (action) Room.sendAction(action);
+    }
   `)
 }, root => {
   const out = compile(root, 'Assets/Main.ts');
   assert.equal(out.compiledSuccessfully, true, out.diagnostics.join('\n'));
   assert.deepEqual(out.modules.map(m => m.id), ['Assets/Main']);
   assert.match(out.modules[0].source, /require\("Kimchily.Network"\)/);
+  assert.match(out.modules[0].source, /require\("Kimchily.UI"\)/);
 }));
 
 test('helper modules do not need a behaviour class', () => fixture({

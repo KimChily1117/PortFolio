@@ -67,8 +67,8 @@ PlayMode 테스트는 기존 브리지·SDK Coroutine/manifest·Lua·다운로�
 
 ## 닉네임과 멀티플레이 채팅
 
-홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.3.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [채팅 검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.
+홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.4.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [채팅 검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.
 
-TypeScript SDK 0.2.0의 `Kimchily.Network` 모듈은 정적 C# API `CoopPortalApi`로 연결되며, 동결된 `{connected,selfId,players,game}` 복사본과 프리셋 활성화·시작·재도전 요청만 노출합니다. `Room.enableGame("chili-portal-v1")`을 호출한 씬에 게임 HUD를 표시하고 서버가 확정한 발판·카운트다운·성공 상태를 전달합니다. 월드 퇴장 시 opt-in과 게임 상태를 정리합니다. 새로운 API를 처음 사용할 때는 공통 WebGL 실행기를 다시 빌드해야 합니다. [협동 데모 안내](../docs/multiplayer-demo.md)
+TypeScript SDK 0.3.0의 `Kimchily.Network.Room`은 범용 `ScriptRoomApi`로 연결된다. 승인된 규칙의 ID/해시 구독, 일반 액션 요청, 읽기 전용 게임 스냅샷을 제공한다. `Kimchily.UI.Hud`는 TS가 문구·버튼·진행률을 작성하는 범용 TMP 표시 기능이다. C# 실행기는 게임별 발판·승리 조건을 알지 못한다. 새 API 최초 도입에는 실행기 갱신이 필요하고, 이후 지원 API 내 게임 변경은 TS 콘텐츠로 게시한다. [상세 설명](../docs/portfolio-typescript-multiplayer.md)
 
 2026-09-29 협동 게임 통합 후 Unity PlayMode **115개**가 통과했습니다. 위의 과거 Android 결과와 구분하며, 이번 게임의 휴대전화 실기기 검증으로 합산하지 않습니다.

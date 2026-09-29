@@ -4,7 +4,7 @@ Write normal TypeScript classes with imports, typed fields and editor completion
 
 ## Setup
 
-Version 0.2.0 targets Unity 6 and requires `com.kimchily.creator` 0.1.0 and `com.kimchily.networking` 0.3.0. Install it in both the creator project and the player. Node.js is needed only on the creator's computer. From this package's `Tools~/Compiler` directory, install the pinned compiler with:
+Version 0.3.0 targets Unity 6 and requires `com.kimchily.creator` 0.1.0 and `com.kimchily.networking` 0.4.0. Install it in both the creator project and the player. Node.js is needed only on the creator's computer. From this package's `Tools~/Compiler` directory, install the pinned compiler with:
 
 ```powershell
 npm ci --ignore-scripts --no-audit --no-fund
@@ -59,36 +59,58 @@ joined.Invoke('sample-player');
 
 Events above are local callbacks. Shared game snapshots use the separate `Kimchily.Network` module described below. Character controllers and transport remain native SDK responsibilities; ZEPETO modules are unavailable. Unknown imports fail compilation. Standard TypeScript does not define C# event `+=` subscription; use `AddListener`/`RemoveListener`.
 
-## Shared portal game
+## 게임 규칙과 화면을 TypeScript로 작성하기
 
-`Kimchily.Network` exposes a room snapshot and four explicit operations. The native networking package owns identity, WebSocket connections and the Unity game HUD. A world script opts into the installed `chili-portal-v1` preset; no arbitrary server code, socket, endpoint or raw message capability is exposed.
+버전 0.3.0에서는 고정 포털용 `enableGame/startRound/replay`를 제거했다. `Kimchily.Network`는 등록된 서버 TS 스크립트 ID·SHA-256과 JSON 액션을 전달하고, 서버 TS가 계산한 상태를 읽는 범용 API다. C#은 연결·정체성·게임 방·실행 예산·동기화를 담당하며 게임 이름·발판·시간·승리 조건을 알지 못한다. 규칙 코드는 서버의 등록 목록에 별도로 설치한다. 클라이언트가 소스 코드를 업로드하거나 임의 파일을 실행하지 않는다.
+
+`Kimchily.UI`의 `Hud`는 Unity TMP 화면에 표시할 텍스트·진행률·색·버튼을 TS에서 정한다. 네이티브 버튼은 VM을 직접 호출하지 않고 문자열 ID를 저장한다. TS는 다음 `Update`에서 ID를 꺼내 필요한 액션을 보낸다.
 
 ```ts
 import { KimchilyScriptBehaviour } from 'Kimchily.Script';
 import { Room } from 'Kimchily.Network';
-import { GameObject } from 'UnityEngine';
+import { Hud } from 'Kimchily.UI';
 
-export default class PortalVisuals extends KimchilyScriptBehaviour {
-    public openPortal: GameObject | null = null;
+interface MyGameState { phase: string; progress: number; }
+
+export default class GamePresentation extends KimchilyScriptBehaviour {
+    // Inspector에 서버에 등록한 정확한 ID와 컴파일된 규칙의 SHA-256을 지정한다.
+    public serverScriptId: string = '';
+    public serverScriptHash: string = '';
 
     Start(): void {
-        // Queues a watch request if joining is still in progress. The native HUD
-        // lets the players start after their friends have arrived.
-        Room.enableGame('chili-portal-v1');
+        Room.useGame(this.serverScriptId, this.serverScriptHash);
     }
 
     Update(): void {
-        const room = Room.getState();
-        this.openPortal?.SetActive(room.game?.phase === 'complete');
+        // 표시 내용 변경 시 오래된 클릭을 지우므로 입력부터 소비한다.
+        const action = Hud.takeAction();
+        if (action) Room.sendAction(action, {});
+
+        const room = Room.getState<MyGameState>();
+        const game = room.game?.state;
+        Hud.showPanel({
+            eyebrow: '함께 만드는 월드',
+            title: room.connected ? '친구들과 함께 준비해요' : '서버 연결 중',
+            body: game?.phase ?? '게임 상태를 기다리는 중입니다.',
+            progress: game?.progress ?? 0,
+            accent: '#72C6AE',
+            action: room.connected ? { id: 'start', label: '시작', enabled: true } : null
+        });
     }
+
+    OnDisable(): void { Hud.hide(); }
 }
 ```
 
-`Room.getState()` returns `{connected, selfId, players, game}` as deeply frozen, detached JavaScript values. It does not poll the server or create a connection. Identical snapshots reuse the same frozen value inside a script VM. `game` is null before opting in/receiving a state and after leaving. Read `game.phase`, `round`, `requiredPlayers`, `holdSeconds`, `remainingMs`, `version` and the four pads to drive local visuals. A pad's `active` flag means required this round; a nonempty `playerId` means occupied. Player poses are data only, with no native Transform access.
+`Room.useGame(scriptId, scriptHash)`는 같은 게시 월드·버전·방에서 등록된 규칙에 참여한다. 아직 접속 중이면 요청을 기억한다. ID와 액션 이름은 ASCII 영문·숫자·`_`·`-` 1..80자, 해시는 소문자 16진수 64자다. `Room.sendAction(action, payload?)`의 생략한 payload는 `null`이며 UTF-8 1,024바이트 이내 JSON 값만 허용한다. 반환 boolean은 네이티브 클라이언트의 요청 접수 여부로, 서버 게임의 성공을 뜻하지 않는다.
 
-`Room.startRound()` requests that the server start with the current participant count. `Room.replay()` requests a return to waiting; the players then start the next round explicitly. Their boolean results report whether the native client accepted the request for sending, not whether the server completed it. The server decides occupancy, countdown and completion; changing a local visual cannot change shared results. The installed preset fixes the authoritative rules and pad locations. Inspector/TS animation settings can change freely, while adding server rules requires a corresponding native/server update.
+`Room.getState<T>()`는 `{connected,selfId,players,game}`를 반환한다. `game`은 대기 중 `null`, 수신 후 `{scriptId,scriptHash,version,state:T}`다. 전송용 `stateJson` 문자열은 브리지에서 파싱하여 `state`로 제공한다. 참가자와 게임 상태는 깊게 동결된 복사본이며 동일 JSON은 VM 안에서 재사용한다. 조회는 네트워크 요청이나 UI 생성을 하지 않는다. 제네릭 `T`는 제작자의 타입 선언이므로 게임별 런타임 스키마 검증을 대신하지 않는다.
 
-The bridge accepts at most 65,536 JSON characters, 256 values, depth 6, 8 array entries, 32 properties per object and 1,024 characters per string. Network state and transport are cleared with the world. Published content using this module requires the new runtime once; subsequent script/model revisions within this API can be published without another runtime build.
+서버 상태는 JSON 객체, 최대 UTF-8 16KiB·깊이 12·1,024값으로 제한한다. 전체 방 JSON은 65,536문자 이하이며 최대 8명의 참가자를 포함한다. 함수·getter·`toJSON`·순환 참조·Unity 참조를 액션과 HUD에 전달할 수 없다. 브리지는 평범한 JSON 값의 복사본만 호스트에 넘긴다. 브라우저·Node·CLR reflection이나 일반 소켓 API는 제공하지 않는다.
+
+HUD는 각 `KimchilyTypeScriptBehaviour`가 소유한다. `eyebrow` 48자, `title` 96자, `body` 1,200자, 버튼 `label` 48자까지 허용하며 title·버튼 label은 비어 있을 수 없다. 진행률은 0..1, 강조색은 `#RRGGBB`, 표시 DTO는 UTF-8 4KiB 이하이다. 긴 본문은 작은 화면에서 말줄임 처리되므로 게임 안내는 짧게 작성한다. `Hud.hide()`는 화면과 대기 입력을 지운다. TS의 정리 콜백이 예외를 던져도 C# 호스트가 비활성화·오류·재로드·파괴 때 강제로 정리한다.
+
+기존 TypeScript 0.2.0 고정 프리셋 콘텐츠는 새 `Room` API로 다시 작성해야 한다. 최초 이관에는 Networking 0.4.0·TypeScript 0.3.0을 포함한 공통 실행기가 필요하다. 이후 같은 API 안의 클라이언트 연출·모델은 월드 콘텐츠로, 서버 규칙은 서버 등록 자산으로 각각 갱신한다. 규칙을 수정하면 새 컴파일 결과의 해시로 클라이언트 참조도 맞춰야 하며, 임의 서버 파일을 기존 방에 즉시 덮어쓰는 기능은 아니다.
 
 ## Runtime and publication
 

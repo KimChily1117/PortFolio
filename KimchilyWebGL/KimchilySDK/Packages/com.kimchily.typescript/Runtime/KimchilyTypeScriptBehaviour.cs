@@ -21,6 +21,8 @@ namespace Kimchily.TypeScript
         [SerializeField, Range(100, 100000)] private int instructionBudget = 20000;
         private TypeScriptVm vm;
         private CoroutineScheduler scheduler;
+        // HUD는 각 Behaviour가 소유한다. 버튼은 문자열 큐로 받아 Jint 재진입을 막는다.
+        private Kimchily.Networking.WorldHudPanel worldHud;
         private readonly List<GameObject> objects = new List<GameObject>();
         private readonly Dictionary<int, Routine> routines = new Dictionary<int, Routine>();
         private readonly Queue<Routine> pending = new Queue<Routine>();
@@ -81,6 +83,7 @@ namespace Kimchily.TypeScript
         private void OnDisable()
         {
             acceptingRoutines = false;
+            HideWorldHud();
             CancelAllRoutines();
             pendingDisable = true;
             ProcessDeferred();
@@ -90,6 +93,8 @@ namespace Kimchily.TypeScript
         {
             destroying = true;
             acceptingRoutines = false;
+            HideWorldHud();
+            if (worldHud != null) { Destroy(worldHud); worldHud = null; }
             CancelAllRoutines();
             ProcessDeferred();
         }
@@ -98,6 +103,7 @@ namespace Kimchily.TypeScript
         {
             if (vm != null && vm.IsExecuting) throw new InvalidOperationException("Cannot reload while TypeScript is executing.");
             acceptingRoutines = false;
+            HideWorldHud();
             CancelAllRoutines();
             ProcessDeferred();
             if (vm != null)
@@ -196,22 +202,36 @@ namespace Kimchily.TypeScript
                 throw new InvalidOperationException("Object reference is outside this behaviour's capabilities.");
             int id = (int)rawId;
             ObjectInstance args = call[2].AsObject();
-            if (op == "network.enableGame")
+            if (op == "network.useGame")
             {
-                JsValue preset = args.Get("0");
-                if (!preset.IsString() || preset.AsString() != "chili-portal-v1")
-                    throw new InvalidOperationException("Unsupported shared game preset.");
-                return Kimchily.Networking.CoopPortalApi.EnableGame(preset.AsString());
+                // 스크립트 ID와 해시만 전달한다. 규칙 코드는 서버의 등록 목록에서 결정한다.
+                return Kimchily.Networking.ScriptRoomApi.UseGame(HostText(args, "0", 80), HostText(args, "1", 64));
             }
-            if (op == "network.startRound") return Kimchily.Networking.CoopPortalApi.StartRound();
-            if (op == "network.replay") return Kimchily.Networking.CoopPortalApi.Replay();
+            if (op == "network.sendAction")
+                return Kimchily.Networking.ScriptRoomApi.SendAction(HostText(args, "0", 80), HostText(args, "1", 1024));
             if (op == "network.getState")
             {
-                string snapshot = Kimchily.Networking.CoopPortalApi.GetStateJson();
+                string snapshot = Kimchily.Networking.ScriptRoomApi.GetStateJson();
                 if (snapshot == null || snapshot.Length > 65536)
                     throw new InvalidOperationException("Room snapshot exceeds the SDK limit.");
                 return snapshot;
             }
+            if (op == "hud.showPanel")
+            {
+                // 정리 콜백이 실패하거나 자기 자신을 비활성화해도 HUD를 다시 띄울 수 없다.
+                if (!isActiveAndEnabled || IsFaulted || destroying || !acceptingRoutines)
+                    throw new InvalidOperationException("Inactive behaviours cannot show a HUD.");
+                string panel = HostText(args, "0", 4096);
+                if (worldHud == null) worldHud = gameObject.AddComponent<Kimchily.Networking.WorldHudPanel>();
+                worldHud.ShowPanelJson(panel);
+                return JsValue.Undefined;
+            }
+            if (op == "hud.takeAction")
+            {
+                string action = worldHud != null ? worldHud.TakeAction() : null;
+                return action == null ? JsValue.Null : (JsValue)action;
+            }
+            if (op == "hud.hide") { HideWorldHud(); return JsValue.Undefined; }
             if (op == "time.deltaTime") return Time.deltaTime;
             if (op == "debug.log" || op == "debug.logWarning" || op == "debug.logError")
             {
@@ -279,6 +299,19 @@ namespace Kimchily.TypeScript
             return value.AsNumber();
         }
         private static bool Finite(double value) => !double.IsNaN(value) && !double.IsInfinity(value);
+
+        private static string HostText(ObjectInstance args, string key, int maximum)
+        {
+            JsValue value = args.Get(key);
+            if (!value.IsString() || value.AsString().Length > maximum)
+                throw new InvalidOperationException("Host text argument exceeds the SDK limit.");
+            return value.AsString();
+        }
+        private void HideWorldHud()
+        {
+            // TS finally/OnDisable을 신뢰하지 않고 네이티브 쪽에서 화면과 대기 입력을 정리한다.
+            if (worldHud != null) worldHud.Hide();
+        }
 
         private void Invoke(string callback, params JsValue[] arguments)
         {
@@ -401,7 +434,11 @@ namespace Kimchily.TypeScript
                     objects.Clear();
                 }
             }
-            finally { processing = false; }
+            finally
+            {
+                processing = false;
+                if (!isActiveAndEnabled || destroying || IsFaulted) HideWorldHud();
+            }
         }
 
         private void Fault(Exception exception)
@@ -410,6 +447,7 @@ namespace Kimchily.TypeScript
             IsFaulted = true;
             LastError = exception.Message;
             acceptingRoutines = false;
+            HideWorldHud();
             CancelAllRoutines();
             Debug.LogError("[Kimchily TypeScript] " + (scriptAsset == null ? name : scriptAsset.name) + ": " + LastError, this);
         }

@@ -11,7 +11,7 @@ namespace Kimchily.Networking
     [Serializable] public sealed class ChatCommand
     {
         public int protocolVersion = 1;
-        public string type, worldId, revisionId, roomId, name, text, preset, action;
+        public string type, worldId, revisionId, roomId, name, text, scriptId, scriptHash, action, payloadJson;
         public ChatPose state;
     }
     [Serializable] public sealed class ChatPose
@@ -32,7 +32,7 @@ namespace Kimchily.Networking
         public ChatPlayer[] players;
         public ChatLine chat;
         public ChatLine[] history;
-        public PortalGameState game;
+        public ScriptGameState game;
     }
     [Serializable] public sealed class ChatView
     {

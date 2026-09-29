@@ -36,7 +36,7 @@
       "source": "local",
       "dependencies": {
         "com.kimchily.creator": "0.1.0",
-        "com.kimchily.networking": "0.3.0"
+        "com.kimchily.networking": "0.4.0"
       }
     },
     "com.unity.springbone": {

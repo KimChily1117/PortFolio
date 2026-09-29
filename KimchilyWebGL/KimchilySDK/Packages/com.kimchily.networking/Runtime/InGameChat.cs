@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 using Kimchily.Creator.Mobile;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,7 +18,7 @@ namespace Kimchily.Networking
         public event Action Changed;
         public event Action<ChatEvent> ServerEvent;
         public NetworkAvatars Avatars { get; private set; }
-        public CoopPortalClient Portal { get; private set; }
+        public ScriptGameClient Game { get; private set; }
         public KimchilyMobilePlayer LocalPlayer { get; private set; }
         readonly ConcurrentQueue<ChatWireEvent> incoming = new ConcurrentQueue<ChatWireEvent>();
         readonly List<KimchilyMobileControls> pausedControls = new List<KimchilyMobileControls>();
@@ -49,7 +50,7 @@ namespace Kimchily.Networking
             View.worldId = "lobby"; View.revisionId = "v1"; View.settings.name = "";
             gameObject.AddComponent<UnityChatPanel>().Initialize(this);
             Avatars = gameObject.AddComponent<NetworkAvatars>(); Avatars.Initialize(this);
-            Portal = gameObject.AddComponent<CoopPortalClient>(); Portal.Initialize(this);
+            Game = gameObject.AddComponent<ScriptGameClient>(); Game.Initialize(this);
 #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLInput.captureAllKeyboardInput = false;
             KimchilyChat_Create(gameObject.name);
@@ -71,7 +72,7 @@ namespace Kimchily.Networking
         public void EnterWorld(Scene scene, string worldId, string revisionId)
         {
             SetContext(worldId, revisionId);
-            Portal.EnterWorld(worldId, revisionId);
+            Game.EnterWorld(worldId, revisionId);
             LocalPlayer = KimchilyMobilePlayerBootstrap.EnsureForScene(scene);
             Avatars.Bind(LocalPlayer); ApplyInputPause();
             if (configured) Connect(JsonUtility.ToJson(View.settings));
@@ -79,7 +80,7 @@ namespace Kimchily.Networking
         }
         public void ExitWorld()
         {
-            Portal.ResetWorld(); Disconnect(""); Avatars.Clear(); LocalPlayer = null;
+            Game.ResetWorld(); Disconnect(""); Avatars.Clear(); LocalPlayer = null;
             SetExpanded("false"); SetContext("lobby", "v1");
         }
         public void SetContext(string worldId, string revisionId)
@@ -143,15 +144,20 @@ namespace Kimchily.Networking
             if (!View.joined || !ChatValidation.IsText(text, 300)) return;
             Send(new ChatCommand { type = "chat", text = text });
         }
-        internal bool SendGameCommand(string preset, string action)
+        internal bool SendGameCommand(string scriptId, string scriptHash, string action, string payloadJson)
         {
-            if (!View.joined || preset != CoopPortalApi.Preset || (action != "watch" && action != "start" && action != "reset")) return false;
-            Send(new ChatCommand { type = "game", preset = preset, action = action });
+            if (!View.joined || !ScriptGameClient.IsValidIdentity(scriptId, scriptHash) || !ChatValidation.IsId(action)
+                || string.IsNullOrWhiteSpace(payloadJson) || payloadJson.Length > ScriptGameClient.MaximumPayloadCharacters) return false;
+            var json = JsonUtility.ToJson(new ChatCommand { type = "game", scriptId = scriptId, scriptHash = scriptHash, action = action, payloadJson = payloadJson });
+            // payload의 글자 수만으로 한글 UTF-8 및 JSON 이스케이프 비용을 예측할 수 없다.
+            // 서버의 4 KiB 수신 한도와 동일하게 최종 전송 바이트를 확인한다.
+            if (Encoding.UTF8.GetByteCount(json) > 4096) return false;
+            SendJson(json);
             return true;
         }
-        void Send(ChatCommand command)
+        void Send(ChatCommand command) => SendJson(JsonUtility.ToJson(command));
+        void SendJson(string json)
         {
-            string json = JsonUtility.ToJson(command);
 #if UNITY_WEBGL && !UNITY_EDITOR
             KimchilyChat_Send(json);
 #else

@@ -120,8 +120,8 @@ namespace Kimchily.TypeScript.Tests
                 const state=Room.getState();
                 if(typeof state.connected!=='boolean'||!Array.isArray(state.players)||!Object.isFrozen(state.players)) throw new Error('Invalid room facade');
                 if(Room.connect!==undefined||Room.send!==undefined||state.GetType!==undefined) throw new Error('Unexpected network capability');
-                let rejected=false; try {Room.enableGame('arbitrary-code');}catch(e){rejected=true;}
-                if(!rejected) throw new Error('Unknown preset accepted');
+                let rejected=false; try {Room.useGame('arbitrary-code','not-a-sha256');}catch(e){rejected=true;}
+                if(!rejected) throw new Error('Invalid script identity accepted');
                 this.gameObject.name='network-ready';
             }");
             behaviour.gameObject.SetActive(true);
@@ -129,6 +129,49 @@ namespace Kimchily.TypeScript.Tests
             Assert.IsTrue(behaviour.HasStarted);
             Assert.IsFalse(behaviour.IsFaulted, behaviour.LastError);
             Assert.AreEqual("network-ready", behaviour.name);
+        }
+
+        [UnityTest]
+        public IEnumerator HudQueuesOwnerInputAndDisableFaultCannotLeaveItVisible()
+        {
+            const string show = "const {Hud}=require('Kimchily.UI'); Hud.showPanel({eyebrow:'',title:'Ready',body:'',action:{id:'start',label:'Start'}});";
+            var first = Make("Start(){" + show + "} Update(){const id=require('Kimchily.UI').Hud.takeAction();if(id)this.gameObject.name=id;} OnDisable(){throw new Error('hud cleanup fault');}");
+            var second = Make("Start(){" + show + "}");
+            first.gameObject.SetActive(true); second.gameObject.SetActive(true);
+            yield return null;
+            var a = first.GetComponent<Kimchily.Networking.WorldHudPanel>();
+            var b = second.GetComponent<Kimchily.Networking.WorldHudPanel>();
+            Assert.IsNotNull(a); Assert.IsNotNull(b); Assert.AreNotSame(a, b);
+            Assert.IsTrue(a.IsVisible && b.IsVisible);
+            a.ActionButton.onClick.Invoke();
+            Assert.AreNotEqual("start", first.name, "A Unity click must not reenter Jint synchronously.");
+            Assert.IsNull(b.TakeAction(), "Another Behaviour cannot receive this click.");
+            yield return null;
+            Assert.AreEqual("start", first.name);
+            a.ActionButton.onClick.Invoke();
+            LogAssert.Expect(LogType.Error, new Regex("\\[Kimchily TypeScript\\].*hud cleanup fault"));
+            first.enabled = false;
+            Assert.IsTrue(first.IsFaulted);
+            Assert.IsFalse(a.IsVisible); Assert.IsNull(a.TakeAction()); Assert.IsTrue(b.IsVisible);
+        }
+
+        [UnityTest]
+        public IEnumerator HudIsClearedAfterStartFaultAndReloadEvenWhenDestroyCallbackThrows()
+        {
+            const string show = "require('Kimchily.UI').Hud.showPanel({eyebrow:'',title:'Ready',body:''});";
+            var bad = Make("Start(){" + show + "throw new Error('hud start fault');}");
+            var reload = Make("Start(){" + show + "} OnDestroy(){throw new Error('hud reload fault');}");
+            LogAssert.Expect(LogType.Error, new Regex("\\[Kimchily TypeScript\\].*hud start fault"));
+            bad.gameObject.SetActive(true); reload.gameObject.SetActive(true);
+            yield return null;
+            Assert.IsTrue(bad.IsFaulted);
+            Assert.IsFalse(bad.GetComponent<Kimchily.Networking.WorldHudPanel>().IsVisible);
+            var panel = reload.GetComponent<Kimchily.Networking.WorldHudPanel>(); Assert.IsTrue(panel.IsVisible);
+            reload.ScriptAsset.modules[0].source = Imports + "exports.default=class extends KimchilyScriptBehaviour {Start(){this.gameObject.name='reloaded';}};";
+            LogAssert.Expect(LogType.Error, new Regex("\\[Kimchily TypeScript\\].*hud reload fault"));
+            reload.Reload();
+            Assert.IsFalse(panel.IsVisible); Assert.IsNull(panel.TakeAction());
+            Assert.IsFalse(reload.IsFaulted, reload.LastError); Assert.AreEqual("reloaded", reload.name);
         }
 
         [UnityTest]

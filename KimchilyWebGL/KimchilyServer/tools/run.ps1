@@ -28,6 +28,7 @@ try {
         Write-Output "Kimchily room demo: http://127.0.0.1:$Port/"
         if ($BindAddress -ne '127.0.0.1') { Write-Output "LAN mode: open http://<this-PC-LAN-address>:$Port/ on each phone. Stop with Ctrl+C." }
         $hostArguments = @('--urls', "http://${BindAddress}:$Port")
+        $hostArguments += @('--Realtime:ScriptsRoot', (Join-Path $serverRoot 'games'))
         for ($index = 0; $index -lt $AllowedOrigin.Length; $index++) {
             $originUri = $null
             if (![Uri]::TryCreate($AllowedOrigin[$index], [UriKind]::Absolute, [ref]$originUri) -or $originUri.Scheme -notin @('http','https') -or $originUri.PathAndQuery -ne '/' -or $originUri.Fragment -or $originUri.UserInfo) { throw 'AllowedOrigin must be an HTTP(S) origin without a path, query, fragment or credentials.' }

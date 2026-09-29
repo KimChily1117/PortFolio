@@ -9,6 +9,7 @@ const typings = path.resolve(__dirname, "../../Typings~/kimchily.d.ts");
 const source = `import { KimchilyScriptBehaviour } from "Kimchily.Script";
 import { GameObject, Space } from "UnityEngine";
 import { Room } from "Kimchily.Network";
+import { Hud } from "Kimchily.UI";
 export default class AutocompleteScript extends KimchilyScriptBehaviour {
     public speed: number = 45;
     public beacon: GameObject | null = null;
@@ -17,6 +18,7 @@ export default class AutocompleteScript extends KimchilyScriptBehaviour {
         this.speed = this.speed;
         this.beacon?.SetActive(true);
         const shared = Room.getState();
+        const action = Hud.takeAction();
     }
 }
 `;
@@ -57,9 +59,14 @@ try {
     const room = service.getCompletionsAtPosition(probe, roomPosition, {});
     assert.ok(room, "Room. must provide network API completions");
     const roomNames = room.entries.map(entry => entry.name);
-    for (const expected of ["enableGame", "getState", "startRound", "replay"])
+    for (const expected of ["useGame", "getState", "sendAction"])
         assert.ok(roomNames.includes(expected), `Missing Room completion: ${expected}`);
     assert.ok(!roomNames.includes("send") && !roomNames.includes("connect"), "Raw transport is not an SDK capability");
+    const hudPosition = source.indexOf("Hud.takeAction") + "Hud.".length;
+    const hud = service.getCompletionsAtPosition(probe, hudPosition, {});
+    assert.ok(hud, "Hud. must provide display API completions");
+    const hudNames = hud.entries.map(entry => entry.name);
+    for (const expected of ["showPanel", "takeAction", "hide"]) assert.ok(hudNames.includes(expected), `Missing Hud completion: ${expected}`);
 
     const memberPosition = source.indexOf("this.speed =") + "this.".length;
     const members = service.getCompletionsAtPosition(probe, memberPosition, {});
@@ -91,6 +98,7 @@ try {
         strictSemanticDiagnostics: diagnostics.length,
         transformCompletions: transformNames,
         roomCompletions: roomNames,
+        hudCompletions: hudNames,
         scriptCompletions: memberNames,
         rotateQuickInfo: rotateInfo,
         speedQuickInfo: speedInfo,

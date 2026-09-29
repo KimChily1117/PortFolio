@@ -6,7 +6,7 @@ const crypto = require('node:crypto');
 const ts = require('typescript');
 if (ts.version !== '5.9.3') throw new Error('Kimchily requires exactly TypeScript 5.9.3; run npm ci --ignore-scripts.');
 
-const API_MODULES = new Set(['Kimchily.Script', 'UnityEngine', 'Kimchily.Network']);
+const API_MODULES = new Set(['Kimchily.Script', 'UnityEngine', 'Kimchily.Network', 'Kimchily.UI']);
 // Match TypeScriptVm's generated-code budgets. JavaScript string.length and C#
 // string.Length both count UTF-16 code units, rather than UTF-8 bytes/code points.
 const MAXIMUM_MODULE_CHARACTERS = 262144;

@@ -6,11 +6,12 @@ namespace Kimchily.Server.Core;
 /// Room registry and rules run on one bounded serialized queue for this small demo.
 /// No socket, Unity, SQL, character inventory, or Project Dawn RoomType dependency.
 /// </summary>
-public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clock)
+public sealed class RoomHub(Func<long>? clock = null, ApprovedScriptCatalog? scripts = null) : JobSerializer(clock: clock)
 {
     public const int RoomCapacity = 8;
     public const int MaxRooms = 32;
     private readonly Func<long> _clock = clock ?? (() => Environment.TickCount64);
+    private readonly ApprovedScriptCatalog _scripts = scripts ?? new(Path.Combine(AppContext.BaseDirectory, "games"));
     private readonly Dictionary<RoomKey, Room> _rooms = [];
     private readonly Dictionary<string, (Room Room, Member Member)> _members = [];
     private long _nextGameTickAt;
@@ -63,7 +64,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         var member = new Member(peer, new PlayerInfo(peer.Id, name!));
         room.Members.Add(peer.Id, member);
         _members.Add(peer.Id, (room, member));
-        var gameChanged = room.Game?.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), _clock()) == true;
+        var gameChanged = RunGame(room, "tick", null, null, null, _clock());
         peer.Send(new ServerEvent("joined")
         {
             Room = key, SelfId = peer.Id,
@@ -97,7 +98,12 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         {
             membership.Room.Members.Remove(peer.Id);
             Broadcast(membership.Room, new ServerEvent("playerLeft") { Player = membership.Member.Player });
-            if (membership.Room.Members.Count == 0) _rooms.Remove(membership.Room.Key);
+            if (membership.Room.Members.Count == 0)
+            {
+                // 방 수명과 VM 수명을 같게 두어 마지막 퇴장 때 스크립트 메모리와 상태를 함께 해제한다.
+                membership.Room.Game?.Dispose();
+                _rooms.Remove(membership.Room.Key);
+            }
             else RefreshGame(membership.Room, _clock());
         }
         if (acknowledge) peer.Send(new ServerEvent("left"));
@@ -136,10 +142,18 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
     {
         if (!_members.TryGetValue(peer.Id, out var membership))
         { Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요."); return; }
-        if (command.Preset != PortalPuzzle.Preset || command.Action is not ("watch" or "start" or "reset"))
-        { Error(peer, "INVALID_GAME", "지원하는 게임 규칙과 명령을 확인해 주세요."); return; }
+        if (!ApprovedScriptCatalog.ValidId(command.ScriptId) || !ApprovedScriptCatalog.ValidHash(command.ScriptHash)
+            || !ApprovedScriptCatalog.ValidId(command.Action))
+        { Error(peer, "INVALID_GAME", "스크립트 식별자와 명령을 확인해 주세요."); return; }
+        try { if (command.PayloadJson is not null) ScriptRoomGame.ReadJson(command.PayloadJson, ScriptRoomGame.MaximumPayloadBytes, objectOnly: false); }
+        catch (Exception error) when (error is System.Text.Json.JsonException or InvalidDataException)
+        { Error(peer, "INVALID_GAME_PAYLOAD", "명령 데이터의 JSON 형식 또는 크기를 확인해 주세요."); return; }
         var room = membership.Room;
         var now = _clock();
+        if (room.Game is not null && (room.Game.State.ScriptId != command.ScriptId || room.Game.State.ScriptHash != command.ScriptHash))
+        { Error(peer, "GAME_SCRIPT_MISMATCH", "이 방은 다른 버전의 스크립트를 사용합니다."); return; }
+        if (room.Game?.Faulted == true)
+        { Error(peer, "GAME_SCRIPT_FAULT", "이 방의 게임 스크립트가 중단되었습니다. 새 방에서 다시 시작해 주세요."); return; }
         if (command.Action != "watch")
         {
             var times = membership.Member.GameTimes;
@@ -148,13 +162,27 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
             times.Enqueue(now);
         }
         var created = room.Game is null;
-        room.Game ??= new PortalPuzzle();
-        var changed = room.Game.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), now);
-        if (command.Action != "watch")
+        if (created)
         {
-            changed |= command.Action == "start" ? room.Game.Start(room.Members.Count) : room.Game.Reset();
-            changed |= room.Game.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), now);
+            // 최초 watch가 월드와 해시가 일치하는 승인된 코드에 방을 바인딩한다. 이후 교체는 허용하지 않는다.
+            if (command.Action != "watch") { Error(peer, "GAME_NOT_WATCHED", "먼저 스크립트 상태를 구독해 주세요."); return; }
+            ScriptBundle bundle;
+            try { bundle = _scripts.Load(command.ScriptId!, command.ScriptHash!, room.Key.WorldId); }
+            catch (Exception error) when (error is IOException or InvalidDataException or UnauthorizedAccessException or System.Text.Json.JsonException)
+            {
+                Console.Error.WriteLine($"Script approval failed ({command.ScriptId}): {error.GetType().Name}: {error.Message}");
+                Error(peer, "GAME_NOT_APPROVED", "이 월드에 승인된 정확한 스크립트 버전이 없습니다."); return;
+            }
+            try { room.Game = new ScriptRoomGame(bundle); }
+            catch (Exception error)
+            {
+                Console.Error.WriteLine($"Script initialization failed ({command.ScriptId}): {error.GetType().Name}: {error.Message}");
+                Error(peer, "GAME_SCRIPT_FAULT", "게임 스크립트를 초기화할 수 없습니다."); return;
+            }
         }
+        var changed = RunGame(room, command.Action == "watch" ? "watch" : "command", command.Action,
+            command.PayloadJson, peer.Id, now, peer);
+        if (room.Game!.Faulted) return;
         var snapshot = new ServerEvent("game") { Game = room.Game.State };
         if (created || changed) Broadcast(room, snapshot);
         else peer.Send(snapshot);
@@ -162,8 +190,25 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
 
     private static void RefreshGame(Room room, long now)
     {
-        if (room.Game?.Update(room.Members.Values.Select(value => (value.Player, value.LastStateAt)), now) == true)
-            Broadcast(room, new ServerEvent("game") { Game = room.Game.State });
+        if (RunGame(room, "tick", null, null, null, now))
+            Broadcast(room, new ServerEvent("game") { Game = room.Game!.State });
+    }
+
+    private static bool RunGame(Room room, string kind, string? action, string? payload, string? selfId, long now, IRoomPeer? requester = null)
+    {
+        if (room.Game is null || room.Game.Faulted) return false;
+        try { return room.Game.Execute(kind, action, payload, selfId, room.Members.Values.Select(m => (m.Player, m.LastStateAt)), now); }
+        catch (GameCommandRejectedException)
+        {
+            if (requester is not null) Error(requester, "GAME_COMMAND_REJECTED", "게임 스크립트가 이 명령을 거부했습니다.");
+        }
+        catch (Exception error)
+        {
+            // 틱 작업의 예외를 여기서 끝낸다. 한 스크립트가 다른 방의 직렬 작업 큐를 멈추게 하지 않는다.
+            Console.Error.WriteLine($"Script execution stopped ({room.Game.State.ScriptId}): {error.GetType().Name}: {error.Message}");
+            Broadcast(room, new ServerEvent("error") { Code = "GAME_SCRIPT_FAULT", Message = "이 방의 게임 스크립트가 중단되었습니다." });
+        }
+        return false;
     }
 
     private static void Broadcast(Room room, ServerEvent message, string? except = null)
@@ -185,7 +230,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         public RoomKey Key { get; } = key;
         public Dictionary<string, Member> Members { get; } = [];
         public Queue<ChatMessage> History { get; } = [];
-        public PortalPuzzle? Game { get; set; }
+        public ScriptRoomGame? Game { get; set; }
     }
 
     private sealed class Member(IRoomPeer peer, PlayerInfo player)

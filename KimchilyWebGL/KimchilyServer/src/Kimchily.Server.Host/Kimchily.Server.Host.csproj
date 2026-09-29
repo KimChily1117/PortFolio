@@ -2,5 +2,8 @@
   <ItemGroup>
     <ProjectReference Include="../Kimchily.Server.Core/Kimchily.Server.Core.csproj" />
     <Content Update="wwwroot/**" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../games/**/*.json" Link="games/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../../KimchilySDK/Packages/com.kimchily.typescript/Runtime/Plugins/LICENSE-Jint.txt" Link="THIRD-PARTY-LICENSES/LICENSE-Jint.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../../KimchilySDK/Packages/com.kimchily.typescript/Runtime/Plugins/LICENSE-Acornima.txt" Link="THIRD-PARTY-LICENSES/LICENSE-Acornima.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

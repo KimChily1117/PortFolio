@@ -10,9 +10,9 @@
 
 수정·실행·검증은 **`E:\task\KimchilyWebGL`**, Git 갱신·관리는 **`E:\GItHub\PortFolio\KimchilyWebGL`** 에서 합니다. 작업 후 변경분을 Git 관리본에 반영·병합하고 커밋합니다. 원본 **`E:\task\Unity_Project`** 은 Unity 2022.3.16f1/Android 기준 버전으로 유지합니다. [보존 기록](preservation/README.md)에 원본 소스 해시와 APK·검증 자료를 기록했습니다.
 
-멀티플레이는 **[KimchilyServer](KimchilyServer/README.md)** 와 `com.kimchily.networking@0.3.0`을 사용합니다. QR/홈에서 닉네임을 정하고 월드에 들어가면 자동 접속하며, Unity Canvas/TextMeshPro 채팅·캐릭터 이름표·말풍선·원격 이동을 동기화합니다. 채팅은 제작 씬의 수정 없이 공통 실행기를 통해 게시 월드에도 적용합니다. 매칭 전 웹 로비도 유지합니다. [채팅 구현·검증 기록](docs/reports/2026-09-29-unity-multiplayer-chat.md)
+멀티플레이는 **[KimchilyServer](KimchilyServer/README.md)** 와 `com.kimchily.networking@0.4.0`을 사용합니다. QR/홈에서 닉네임을 정하고 월드에 들어가면 자동 접속하며, Unity Canvas/TextMeshPro 채팅·캐릭터 이름표·말풍선·원격 이동을 동기화합니다. 채팅은 제작 씬의 수정 없이 공통 실행기를 통해 게시 월드에도 적용합니다. 매칭 전 웹 로비도 유지합니다. [채팅 구현·검증 기록](docs/reports/2026-09-29-unity-multiplayer-chat.md)
 
-**칠리 아일랜드 — 고장 난 포털** 데모에는 직접 생성한 3D 메시 프리팹 14개와 OBJ/MTL, 전용 씬을 추가했습니다. `com.kimchily.typescript@0.2.0`의 `Kimchily.Network`에서 `Room`을 가져와 참가자·게임 상태를 읽고 발판과 포털을 연출합니다. C# 서버의 `chili-portal-v1` 프리셋이 발판 점유·3초 유지·성공을 판정하며, TS에서 임의 서버 규칙을 실행하지 않습니다. [시연과 제작 순서](docs/multiplayer-demo.md)
+**칠리 아일랜드 — 고장 난 포털** 데모는 14개 원본 3D 프리팹과 TS 게임 스크립트를 함께 제공합니다. 서버의 `PortalRules.ts`가 점유·유지 시간·승리를 판정하고, 클라이언트의 `PortalGarden.ts`가 UI·버튼·발판·포털 연출을 작성합니다. C#은 일반 통신·방 관리·제한된 JS 실행 호스트를 제공합니다. TypeScript SDK 0.3.0, Networking SDK 0.4.0을 사용합니다. [판정·동기화·TS 설계와 포트폴리오 설명](docs/portfolio-typescript-multiplayer.md) · [시연 순서](docs/multiplayer-demo.md)
 
 새 제작기는 이 폴더의 **[KimchilyCreator](KimchilyCreator/README.md)** 입니다. Unity 6 설치, Web 실행기·월드 번들 빌드, QR 게시와 PC Chrome 실행을 확인했습니다. TypeScript·코루틴, 키보드/터치 에뮬레이션 이동·걷기·달리기·점프, 3인칭 카메라와 재입장까지 검증했습니다. **iPhone 실기기에서도 정상 실행된다는 사용자 확인을 받았습니다(2026-09-20).** 복제본 게시 서버는 **8788**, 원본 서버는 **8787**로 분리합니다.
 

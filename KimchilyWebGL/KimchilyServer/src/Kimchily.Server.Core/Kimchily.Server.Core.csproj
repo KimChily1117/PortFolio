@@ -1,1 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- SDK에서 검증·라이선스 보관 중인 동일 Jint 버전을 재사용한다. Node는 빌드에만 필요하다. -->
+  <ItemGroup>
+    <PackageReference Include="Jint" Version="[4.16.2]" />
+    <PackageReference Include="Acornima" Version="[1.7.0]" />
+  </ItemGroup>
+</Project>

@@ -1,13 +1,21 @@
 using Kimchily.Server.Core;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 static class PortalChecks
 {
+    internal static string Root => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
+    internal const string ScriptId = "chili-portal-ts-v1";
+    internal static string ScriptHash => Regex.Match(File.ReadAllText(Path.Combine(Root,
+        "../KimchilyCreator/Assets/Demos/ChiliIsland/Scripts/PortalRuleIdentity.ts")), "SCRIPT_HASH = \"([a-f0-9]{64})\"").Groups[1].Value;
+    static PortalGameState? Decode(ScriptGameState? snapshot) => snapshot is null ? null
+        : JsonSerializer.Deserialize<PortalGameState>(snapshot.StateJson, Protocol.Json)! with { Version = snapshot.Version };
     public static async Task RunWire(Uri address, Action<bool, string> assert, Action<string> passed)
     {
         ClientCommand Join(string room) => new()
-        { ProtocolVersion = 1, Type = "join", Name = "포털 확인", WorldId = "island", RevisionId = "wire", RoomId = room };
+        { ProtocolVersion = 1, Type = "join", Name = "포털 확인", WorldId = "chili-island", RevisionId = "wire", RoomId = room };
         ClientCommand Game(string action) => new()
-        { ProtocolVersion = 1, Type = "game", Preset = "chili-portal-v1", Action = action };
+        { ProtocolVersion = 1, Type = "game", ScriptId = ScriptId, ScriptHash = ScriptHash, Action = action };
         ClientCommand Pose(long sequence, float x) => new()
         { ProtocolVersion = 1, Type = "state", State = new(sequence, x, .15f, 2, 0, 0, true, 0) };
         async Task<PortalGameState> UntilGame(Wire peer, string phase)
@@ -17,7 +25,7 @@ static class PortalChecks
             {
                 var item = await peer.Next();
                 assert(item.Type != "error", $"Game wire error: {item.Code}");
-                if (item.Game is { } game && game.Phase == phase) return game;
+                if (Decode(item.Game) is { } game && game.Phase == phase) return game;
             }
             throw new TimeoutException("Timed out waiting for game phase " + phase);
         }
@@ -43,8 +51,8 @@ static class PortalChecks
             "Real clients did not receive the same server-decided victory.");
         await using var late = await Wire.Connect(address);
         await late.Send(Join("portal-wire"));
-        assert((await late.Expect("joined")).Game is { Phase: "complete", RequiredPlayers: 2 }, "Real late join lost completed puzzle state.");
-        await late.Raw("{\"protocolVersion\":1,\"type\":\"game\",\"preset\":\"chili-portal-v1\",\"action\":\"reset\",\"requiredPlayers\":1}");
+        assert(Decode((await late.Expect("joined")).Game) is { Phase: "complete", RequiredPlayers: 2 }, "Real late join lost completed puzzle state.");
+        await late.Raw("{\"protocolVersion\":1,\"type\":\"game\",\"action\":\"reset\",\"requiredPlayers\":1}");
         assert((await late.Expect("error")).Code == "INVALID_MESSAGE", "Client-supplied puzzle rules were accepted.");
         await late.Send(Game("reset"));
         assert((await UntilGame(late, "waiting")).RequiredPlayers == 3, "Real replay reset did not use current member preview.");
@@ -52,6 +60,7 @@ static class PortalChecks
 
         await using var idle = await Wire.Connect(address);
         await idle.Send(Join("portal-idle")); await idle.Expect("joined");
+        await idle.Send(Game("watch")); await UntilGame(idle, "waiting");
         await idle.Send(Game("start")); await UntilGame(idle, "playing");
         await idle.Send(Pose(1, -3)); await UntilGame(idle, "holding");
         var expired = await UntilGame(idle, "playing");
@@ -62,32 +71,33 @@ static class PortalChecks
     public static async Task Run(Action<bool, string> assert, Action<string> passed)
     {
         long now = 0;
-        var hub = new RoomHub(() => now);
+        var hub = new RoomHub(() => now, new ApprovedScriptCatalog(Path.Combine(Root, "games")));
         ClientCommand Join(string room = "portal") => new()
-        { ProtocolVersion = 1, Type = "join", Name = "칠리", WorldId = "island", RevisionId = "r1", RoomId = room };
+        { ProtocolVersion = 1, Type = "join", Name = "칠리", WorldId = "chili-island", RevisionId = "r1", RoomId = room };
         ClientCommand Game(string action) => new()
-        { ProtocolVersion = 1, Type = "game", Preset = "chili-portal-v1", Action = action };
+        { ProtocolVersion = 1, Type = "game", ScriptId = ScriptId, ScriptHash = ScriptHash, Action = action };
         async Task Dispatch(FakePeer peer, ClientCommand command)
         { var task = hub.HandleAsync(peer, command); hub.Flush(); await task; }
         async Task Pose(FakePeer peer, long sequence, float x, float z, bool grounded = true, float y = .15f)
         { await Dispatch(peer, new() { ProtocolVersion = 1, Type = "state", State = new(sequence, x, y, z, 0, 0, grounded, 0) }); }
         void Tick() { assert(hub.TryQueueGameTick(), "Could not queue game tick."); hub.Flush(); }
-        PortalGameState State(FakePeer peer) => peer.Events.Last(item => item.Game is not null).Game!;
+        PortalGameState State(FakePeer peer) => Decode(peer.Events.Last(item => item.Game is not null).Game)!;
 
         var alice = new FakePeer("portal-a"); var bob = new FakePeer("portal-b"); var late = new FakePeer("portal-c");
         await Dispatch(alice, Game("start"));
         assert(alice.Events.Last().Code == "NOT_JOINED", "Unjoined game command accepted.");
         await Dispatch(alice, Join()); await Dispatch(bob, Join());
         assert(alice.Events.Single(item => item.Type == "joined").Game is null, "Ordinary room was opted into a game implicitly.");
-        await Dispatch(alice, Game("watch") with { Preset = "unregistered-rules" });
-        assert(alice.Events.Last().Code == "INVALID_GAME", "Unknown game preset accepted.");
+        await Dispatch(alice, Game("watch") with { ScriptId = "unregistered-rules" });
+        assert(alice.Events.Last().Code == "GAME_NOT_APPROVED", "Unknown game script accepted.");
         await Dispatch(alice, Game("finish"));
-        assert(alice.Events.Last().Code == "INVALID_GAME", "Client could request victory.");
-        passed("Portal rules require room membership and a registered preset with an allowed action");
+        assert(alice.Events.Last().Code == "GAME_NOT_WATCHED", "Client could request victory.");
+        passed("Portal rules require room membership and an approved script subscription before actions");
 
         var stranger = new FakePeer("portal-other"); await Dispatch(stranger, Join("other"));
         var otherEvents = stranger.Events.Count;
         await Dispatch(alice, Game("watch"));
+        assert(alice.Events.Last().Game is not null, "Watch failed: " + alice.Events.Last().Code + " hash=" + ScriptHash);
         assert(State(alice) is { Phase: "waiting", Round: 0, RequiredPlayers: 2, RemainingMs: 3000 }, "Watch started a round or missed membership.");
         assert(State(bob).Pads.Count(pad => pad.Active) == 2 && stranger.Events.Count == otherEvents, "Game escaped its room or active preview is wrong.");
         var beforeWatch = bob.Events.Count;
@@ -98,7 +108,7 @@ static class PortalChecks
         await Dispatch(alice, Game("start"));
         assert(State(alice) is { Phase: "playing", Round: 1, RequiredPlayers: 2 }, "Start did not lock the round count.");
         await Dispatch(late, Join());
-        assert(late.Events.Last().Game is { RequiredPlayers: 2, Round: 1 }, "Late join lacked game snapshot or changed a running round.");
+        assert(Decode(late.Events.Last().Game) is { RequiredPlayers: 2, Round: 1 }, "Late join lacked game snapshot or changed a running round.");
         await Dispatch(bob, Game("start"));
         assert(State(bob).Round == 1, "A simultaneous start restarted an active round.");
         passed("Explicit start locks one to four required players and late joins cannot alter the running round");
@@ -133,9 +143,9 @@ static class PortalChecks
         }
         var completed = State(alice);
         now = 9000; await Pose(alice, 11, 0, 0); Tick();
-        assert(State(alice) == completed && completed.RemainingMs == 0, "Moving or stale poses closed the completed portal.");
+        assert(State(alice).Version == completed.Version && completed.RemainingMs == 0, "Moving or stale poses closed the completed portal.");
         var spectator = new FakePeer("portal-d"); await Dispatch(spectator, Join());
-        assert(spectator.Events.Last().Game == completed, "Late joiner did not receive permanent success.");
+        assert(Decode(spectator.Events.Last().Game)?.Version == completed.Version, "Late joiner did not receive permanent success.");
         passed("Three continuous seconds open the portal permanently and completed snapshots reach late joiners");
 
         await Dispatch(alice, Game("reset"));
@@ -149,12 +159,12 @@ static class PortalChecks
         await Dispatch(alice, Game("reset")); await Dispatch(alice, Game("start"));
         var snapshot = State(alice);
         await Dispatch(alice, Game("reset"));
-        assert(alice.Events.Last().Code == "GAME_RATE_LIMIT" && State(alice) == snapshot, "Game control flood mutated the state or escaped the limit.");
+        assert(alice.Events.Last().Code == "GAME_RATE_LIMIT" && State(alice).Version == snapshot.Version, "Game control flood mutated the state or escaped the limit.");
         now += 5000; await Dispatch(alice, Game("reset"));
         assert(State(alice).Phase == "waiting", "Game command cooldown never recovers.");
         passed("Game control rate limiting rejects reset floods without changing the shared state and then recovers");
 
-        var solo = new FakePeer("solo"); await Dispatch(solo, Join("solo")); await Dispatch(solo, Game("start"));
+        var solo = new FakePeer("solo"); await Dispatch(solo, Join("solo")); await Dispatch(solo, Game("watch")); await Dispatch(solo, Game("start"));
         assert(State(solo).RequiredPlayers == 1, "Solo test was blocked by a multiplayer minimum.");
         await Pose(solo, 1, -3, 2);
         for (var step = 1; step <= 6; step++) { now += 500; await Pose(solo, step + 1, -3, 2); Tick(); }
@@ -166,9 +176,19 @@ static class PortalChecks
 
         var crowd = Enumerable.Range(0, 8).Select(index => new FakePeer("crowd-" + index)).ToArray();
         foreach (var person in crowd) await Dispatch(person, Join("crowd"));
+        await Dispatch(crowd[0], Game("watch"));
         await Dispatch(crowd[0], Game("start"));
         assert(State(crowd[0]).RequiredPlayers == 4 && State(crowd[0]).Pads.All(pad => pad.Active), "Room capacity above four made the puzzle impossible.");
         assert(stranger.Events.Count == otherEvents, "Game events leaked to a separate room.");
         passed("Larger demo rooms cap the puzzle at four pads while keeping game events isolated");
+        await ScriptHostChecks.Run(assert, passed);
     }
+}
+
+// 포털 필드는 테스트에서만 알고 있다. 실제 C# 호스트와 전송 계층에는 해당 DTO가 존재하지 않는다.
+record PortalPad(string Id, float X, float Y, float Z, float Radius, bool Active, string? PlayerId);
+record PortalGameState(string Phase, int Round, int RequiredPlayers, int HoldSeconds, int RemainingMs, PortalPad[] Pads,
+    [property: System.Text.Json.Serialization.JsonPropertyName("_holdingSince")] long? HoldingSince)
+{
+    [System.Text.Json.Serialization.JsonIgnore] public long Version { get; init; }
 }
