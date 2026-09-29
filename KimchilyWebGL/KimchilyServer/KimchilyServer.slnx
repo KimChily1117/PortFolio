@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Kimchily.Server.Core/Kimchily.Server.Core.csproj" />
+    <Project Path="src/Kimchily.Server.Host/Kimchily.Server.Host.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Kimchily.Server.Checks/Kimchily.Server.Checks.csproj" />
+  </Folder>
+</Solution>

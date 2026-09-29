@@ -1,5 +1,10 @@
 # KimchilyWebGL 소스 이주
 
+**2026-09-29 작업 흐름:** Git 갱신·관리는 `E:\GItHub\PortFolio`에서, 수정·실행·검증은
+`E:\task\KimchilyWebGL`에서 진행합니다. 검증 후 변경분을 Git 관리본에 반영·병합하고 커밋합니다.
+아래 내용은 2026-09-25 이주 당시 기록입니다. 새 .NET 10 실시간 서버는
+[KimchilyServer 안내](KimchilyServer/README.md)를 따릅니다.
+
 2026-09-25에 `E:\task\KimchilyWebGL`의 소스를
 `E:\GItHub\PortFolio\KimchilyWebGL`로 복사했습니다. 원본과
 `E:\task\Unity_Project`의 Unity 2022/Android 기준본은 그대로 보존했습니다.

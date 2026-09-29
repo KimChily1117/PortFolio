@@ -1,0 +1,8 @@
+{
+  "name": "com.kimchily.networking",
+  "version": "0.1.0",
+  "displayName": "Kimchily Networking SDK",
+  "description": "Guest room chat for Unity and WebGL, using the Kimchily C# realtime server.",
+  "unity": "6000.0",
+  "dependencies": { "com.kimchily.creator": "0.1.0" }
+}

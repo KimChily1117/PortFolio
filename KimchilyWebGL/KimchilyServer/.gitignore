@@ -1,0 +1,5 @@
+.tools/
+.local/
+Artifacts/
+**/bin/
+**/obj/

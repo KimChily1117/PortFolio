@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Kimchily · 함께 들어오는 방</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><a class="brand" href="/">kimchily<span>PLAY TOGETHER</span></a><span id="connection" class="badge">연결 전</span></header>
+    <section class="intro"><p class="eyebrow">MULTIPLAYER · FIRST STEP</p><h1>같은 방에서,<br>함께 시작해요.</h1><p>닉네임을 정하고 방 코드를 나눠 보세요.<br>다른 휴대폰에서도 같은 주소로 대화할 수 있어요.</p></section>
+    <div class="layout">
+      <aside class="panel setup">
+        <div class="section-title"><h2>우리의 방</h2><span>최대 8명</span></div>
+        <form id="join-form">
+          <label for="name">내 닉네임</label><input id="name" name="name" maxlength="24" placeholder="예: 칠리" required autocomplete="nickname">
+          <label for="room">방 코드</label><input id="room" name="room" value="playground" maxlength="64" pattern="[A-Za-z0-9_-]{1,64}" required autocomplete="off">
+          <details><summary>월드와 버전 설정</summary>
+            <label for="world">월드 ID</label><input id="world" name="world" value="network-demo" maxlength="64" pattern="[A-Za-z0-9_-]{1,64}" required>
+            <label for="revision">게시 버전</label><input id="revision" name="revision" value="v1" maxlength="64" pattern="[A-Za-z0-9_-]{1,64}" required>
+          </details>
+          <button id="join" class="primary" type="submit">방 입장하기 <span aria-hidden="true">↗</span></button>
+        </form>
+        <div class="room-actions"><button id="invite" type="button">초대 주소</button><button id="leave" type="button" disabled>나가기</button></div>
+        <input id="invite-url" aria-label="초대 주소" readonly hidden>
+        <p id="notice" role="status" aria-live="polite">같은 월드·버전·방 코드로 만나세요.</p>
+        <div class="people-heading"><h3>함께 있는 사람</h3><span id="count">0 / 8</span></div>
+        <ul id="players" aria-label="참여자"><li class="empty-player">아직 입장하지 않았어요.</li></ul>
+      </aside>
+      <section class="panel conversation" aria-label="방 채팅">
+        <div class="chat-heading"><div><p class="eyebrow">ROOM CHAT</p><h2 id="room-title">만나면 인사해요</h2></div><span class="live-dot" aria-hidden="true"></span></div>
+        <div id="messages" role="log" aria-live="polite" aria-label="채팅 메시지"><div id="empty-chat" class="empty-chat"><span aria-hidden="true">↗</span><h3>첫 인사를 기다리고 있어요.</h3><p>방에 들어오면 서로의 메시지가<br>여기에 나타나요.</p></div></div>
+        <form id="chat-form"><label class="sr-only" for="message">보낼 메시지</label><input id="message" maxlength="300" placeholder="함께할 사람에게 인사를 건네 보세요" disabled autocomplete="off"><button id="send" class="primary" type="submit" disabled>보내기</button></form>
+      </section>
+    </div>
+    <footer><span>01 / 방 입장과 채팅</span><span>매칭 전 로비 데모 · Unity 월드 안에서도 채팅할 수 있어요</span></footer>
+  </main>
+</body>
+</html>

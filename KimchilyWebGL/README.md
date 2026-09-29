@@ -8,7 +8,9 @@
 
 기존 Android 구현을 보존하고, Unity 6.3.24f1에서 모델·TypeScript 월드를 WebGL로 게시하여 iPhone Safari에서 실행하도록 확장하는 작업공간입니다.
 
-개발 경로는 **`E:\GItHub\PortFolio\KimchilyWebGL`** 입니다. 원본 **`E:\task\Unity_Project`** 은 Unity 2022.3.16f1/Android 기준 버전으로 유지합니다. [보존 기록](preservation/README.md)에 원본 소스 해시와 APK·검증 자료를 기록했습니다.
+수정·실행·검증은 **`E:\task\KimchilyWebGL`**, Git 갱신·관리는 **`E:\GItHub\PortFolio\KimchilyWebGL`** 에서 합니다. 작업 후 변경분을 Git 관리본에 반영·병합하고 커밋합니다. 원본 **`E:\task\Unity_Project`** 은 Unity 2022.3.16f1/Android 기준 버전으로 유지합니다. [보존 기록](preservation/README.md)에 원본 소스 해시와 APK·검증 자료를 기록했습니다.
+
+멀티플레이 확장의 첫 단계는 **[KimchilyServer](KimchilyServer/README.md)** 입니다. 기존 C# 서버의 작업 큐·예약 작업을 재사용한 .NET 10 서버에 Unity 인게임 채팅과 매칭 전 웹 로비 채팅을 연결했습니다. 새 `com.kimchily.networking@0.1.0` 패키지가 Editor/WebGL 연결을 담당합니다. 캐릭터 동기화와 TypeScript 네트워크 API는 다음 단계입니다. [구현·검증 기록](docs/reports/2026-09-29-csharp-realtime-foundation.md)
 
 새 제작기는 이 폴더의 **[KimchilyCreator](KimchilyCreator/README.md)** 입니다. Unity 6 설치, Web 실행기·월드 번들 빌드, QR 게시와 PC Chrome 실행을 확인했습니다. TypeScript·코루틴, 키보드/터치 에뮬레이션 이동·걷기·달리기·점프, 3인칭 카메라와 재입장까지 검증했습니다. **iPhone 실기기에서도 정상 실행된다는 사용자 확인을 받았습니다(2026-09-20).** 복제본 게시 서버는 **8788**, 원본 서버는 **8787**로 분리합니다.
 
@@ -23,6 +25,7 @@
 | [KimchilyExpo](KimchilyExpo/README.md) | React Native 홈·QR·Unity WebView, Expo Go 시연 및 EAS 설정 |
 | KimchilyWebApp | 브라우저 홈·QR 스캔·최근 입장·PWA |
 | [KimchilyPublish](KimchilyPublish/README.md) | 로컬 개발용 월드 게시·QR 서버 |
+| [KimchilyServer](KimchilyServer/README.md) | .NET 10 기반 UGC 방·채팅 서버와 브라우저 연결 데모 |
 
 Unity Editor 메뉴는 **Kimchily → Publish World**입니다. WebGL 게시 링크는 `/player/?manifest=...&sha256=...`이며, Android의 `kimchily://world` 링크와 구분합니다. 새 타깃의 실행기와 월드 번들은 같은 Unity 버전으로 빌드해야 합니다.
 

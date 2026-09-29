@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.kimchily.creator": "file:../../KimchilySDK/Packages/com.kimchily.creator",
+    "com.kimchily.networking": "file:../../KimchilySDK/Packages/com.kimchily.networking",
     "com.kimchily.scripting": "file:../../KimchilySDK/Packages/com.kimchily.scripting",
     "com.kimchily.typescript": "file:../../KimchilySDK/Packages/com.kimchily.typescript",
     "com.unity.springbone": "file:com.unity.springbone",

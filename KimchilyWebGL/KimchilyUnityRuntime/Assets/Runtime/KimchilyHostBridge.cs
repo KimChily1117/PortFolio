@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Kimchily.Creator;
 using Kimchily.Creator.Content;
 using Kimchily.Creator.Mobile;
+using Kimchily.Networking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Scripting;
@@ -55,6 +56,7 @@ namespace Kimchily.World
             transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
             State = WorldRuntimeState.Idle;
+            InGameChat.Ensure().SetContext("lobby", "v1");
 #if UNITY_ANDROID && !UNITY_EDITOR
             Screen.autorotateToPortrait = true;
             Screen.autorotateToPortraitUpsideDown = true;
@@ -333,6 +335,7 @@ namespace Kimchily.World
                 return;
             }
             State = WorldRuntimeState.Ready;
+            InGameChat.Ensure().SetContext(CurrentWorldId, CurrentRevisionId);
             openTerminalSent = true;
             Emit("WorldProgress", openCommand, 1, string.Empty, "World loaded.");
             Emit("WorldReady", openCommand, 1, string.Empty, "The world is ready.");
@@ -340,6 +343,7 @@ namespace Kimchily.World
 
         void BeginUnload()
         {
+            InGameChat.Ensure().Disconnect("");
             awaitingScriptStart = false;
             State = WorldRuntimeState.Closing;
             try
@@ -415,6 +419,7 @@ namespace Kimchily.World
 
         void ResetSession()
         {
+            InGameChat.Ensure().SetContext("lobby", "v1");
             content?.Dispose();
             content = null;
             download?.Dispose();
@@ -493,6 +498,7 @@ namespace Kimchily.World
         {
             if (Instance != this) return;
             CancelWorldCoroutines();
+            if (InGameChat.Instance != null) Destroy(InGameChat.Instance.gameObject);
             if (!worldScene.IsValid() || !worldScene.isLoaded) content?.Dispose();
             download?.Dispose();
             Instance = null;

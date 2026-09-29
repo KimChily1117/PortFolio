@@ -1,0 +1,6 @@
+{
+  "name": "Kimchily.Networking.Tests",
+  "references": ["Kimchily.Networking", "Kimchily.Creator.Runtime"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

@@ -13,6 +13,14 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       }
     },
+    "com.kimchily.networking": {
+      "version": "file:../../KimchilySDK/Packages/com.kimchily.networking",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.kimchily.creator": "0.1.0"
+      }
+    },
     "com.kimchily.scripting": {
       "version": "file:../../KimchilySDK/Packages/com.kimchily.scripting",
       "depth": 0,
