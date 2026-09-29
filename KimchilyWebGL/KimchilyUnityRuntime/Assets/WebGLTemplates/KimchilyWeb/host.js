@@ -25,8 +25,17 @@
     return { worldId: match[1], revisionId: match[2], manifestUrl: url.href, manifestSha256: sha.toLowerCase() };
   }
 
+  function readEntryProfile(href, storedName) {
+    const url = new URL(href), hash = new URLSearchParams(url.hash.slice(1));
+    const name = (hash.get('nickname') || storedName || '').trim();
+    const room = hash.get('room') || 'playground';
+    return { name: name.length <= 24 && !/[\u0000-\u001f\u007f-\u009f]/.test(name) ? name : '',
+      roomId: /^[A-Za-z0-9_-]{1,64}$/.test(room) ? room : 'playground',
+      endpoint: (url.protocol === 'https:' ? 'wss://' : 'ws://') + url.hostname + ':8790/ws' };
+  }
   function createHost(launch, onState) {
     let instance = null, serial = 0, initializeId = '', openId = '', closeId = '';
+    let session = null;
     let phase = 'idle', failure = '', wantsOpen = false, initialized = false;
     let current = { phase: 'idle', message: '월드를 시작할 준비가 되었습니다.', progress: 0, canRetry: true };
     function state(next, message, progress, canRetry) {
@@ -44,6 +53,7 @@
       if (!initialized || !wantsOpen || openId || closeId) return;
       wantsOpen = false; failure = ''; openId = id('open');
       state('loading', '월드를 불러오는 중입니다.', 0, false);
+      if (session) instance.SendMessage('KimchilyHostBridge', 'ConfigureSession', JSON.stringify(session));
       send('OpenWorld', openId, launch);
     }
     function close() {
@@ -53,6 +63,7 @@
       send('CloseWorld', closeId, { worldId: launch.worldId, revisionId: launch.revisionId });
     }
     return {
+      setSession: function (value) { session = value; },
       start: function () {
         if (!['idle', 'closed', 'error'].includes(phase) || (phase === 'error' && !current.canRetry)) return false;
         wantsOpen = true; failure = '';
@@ -108,5 +119,5 @@
       getState: function () { return Object.assign({}, current); }
     };
   }
-  return { parseLaunch: parseLaunch, createHost: createHost };
+  return { parseLaunch: parseLaunch, createHost: createHost, readEntryProfile: readEntryProfile };
 });

@@ -22,6 +22,14 @@
         <span class="eyebrow">A WORLD AWAY</span>
         <h1 id="title">새로운 공간으로.</h1>
         <p id="world-label"></p>
+        <div id="entry-profile" class="entry-profile">
+          <label for="nickname">월드에서 사용할 닉네임</label>
+          <input id="nickname" maxlength="24" autocomplete="nickname" placeholder="닉네임을 입력해 주세요">
+          <details><summary>함께 접속하기 설정</summary>
+            <label for="room-code">방 코드</label><input id="room-code" maxlength="64" value="playground">
+            <label for="chat-endpoint">채팅 서버</label><input id="chat-endpoint" type="url" spellcheck="false">
+          </details>
+        </div>
         <p id="status" role="status" aria-live="polite">월드를 시작할 준비가 되었습니다.</p>
         <progress id="progress" max="1" value="0" hidden aria-label="로딩 진행률"></progress>
         <button id="start" class="primary">월드 시작</button>

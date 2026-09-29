@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseLaunch, createHost } = require('../../Assets/WebGLTemplates/KimchilyWeb/host.js');
+const { parseLaunch, createHost, readEntryProfile } = require('../../Assets/WebGLTemplates/KimchilyWeb/host.js');
 const sha = 'A'.repeat(64);
 const page = 'http://localhost:8788/player/';
 const manifest = 'http://localhost:8788/worlds/sample-world/rev_1/world.json';
@@ -14,6 +14,19 @@ function fixture() {
   function ready() { host.start(); host.attach(instance); event('RuntimeReady', sent[0].value.requestId); }
   return { host, sent, states, instance, event, ready };
 }
+
+test('entry nickname is configured in Unity before opening the world', () => {
+  const f = fixture();
+  const profile = readEntryProfile(page + '#nickname=' + encodeURIComponent('칠리 & 친구'), 'old');
+  f.host.setSession(profile); f.ready();
+  assert.equal(f.sent[1].method, 'ConfigureSession'); assert.equal(JSON.parse(f.sent[1].value).name, '칠리 & 친구');
+  assert.equal(f.sent[2].value.type, 'OpenWorld');
+});
+test('profile validation rejects control characters and preserves secure WebSocket scheme', () => {
+  assert.equal(readEntryProfile('https://world.example/player/#nickname=hello').endpoint, 'wss://world.example:8790/ws');
+  assert.equal(readEntryProfile(page + '#nickname=bad%0Aname').name, '');
+  assert.equal(readEntryProfile(page + '#room=../bad', '칠리').roomId, 'playground');
+});
 test('bare player opens the bundled demo', () => assert.deepEqual(parseLaunch(page), { worldId: 'demo', revisionId: 'builtin-v1' }));
 test('remote link extracts exact world/revision and normalized hash', () => assert.deepEqual(parseLaunch(url()), {
   worldId: 'sample-world', revisionId: 'rev_1', manifestUrl: manifest, manifestSha256: sha.toLowerCase()

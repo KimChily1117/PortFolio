@@ -10,7 +10,7 @@
 
 수정·실행·검증은 **`E:\task\KimchilyWebGL`**, Git 갱신·관리는 **`E:\GItHub\PortFolio\KimchilyWebGL`** 에서 합니다. 작업 후 변경분을 Git 관리본에 반영·병합하고 커밋합니다. 원본 **`E:\task\Unity_Project`** 은 Unity 2022.3.16f1/Android 기준 버전으로 유지합니다. [보존 기록](preservation/README.md)에 원본 소스 해시와 APK·검증 자료를 기록했습니다.
 
-멀티플레이 확장의 첫 단계는 **[KimchilyServer](KimchilyServer/README.md)** 입니다. 기존 C# 서버의 작업 큐·예약 작업을 재사용한 .NET 10 서버에 Unity 인게임 채팅과 매칭 전 웹 로비 채팅을 연결했습니다. 새 `com.kimchily.networking@0.1.0` 패키지가 Editor/WebGL 연결을 담당합니다. 캐릭터 동기화와 TypeScript 네트워크 API는 다음 단계입니다. [구현·검증 기록](docs/reports/2026-09-29-csharp-realtime-foundation.md)
+멀티플레이는 **[KimchilyServer](KimchilyServer/README.md)** 와 `com.kimchily.networking@0.2.0`을 사용합니다. QR/홈에서 닉네임을 정하고 월드에 들어가면 자동 접속하며, Unity Canvas/TextMeshPro 채팅·캐릭터 이름표·말풍선·원격 이동을 동기화합니다. 제작 씬의 수정 없이 공통 실행기를 통해 게시 월드에도 적용합니다. 매칭 전 웹 로비는 유지하며 TypeScript 네트워크 API와 미니게임 판정은 다음 단계입니다. [구현·검증 기록](docs/reports/2026-09-29-unity-multiplayer-chat.md)
 
 새 제작기는 이 폴더의 **[KimchilyCreator](KimchilyCreator/README.md)** 입니다. Unity 6 설치, Web 실행기·월드 번들 빌드, QR 게시와 PC Chrome 실행을 확인했습니다. TypeScript·코루틴, 키보드/터치 에뮬레이션 이동·걷기·달리기·점프, 3인칭 카메라와 재입장까지 검증했습니다. **iPhone 실기기에서도 정상 실행된다는 사용자 확인을 받았습니다(2026-09-20).** 복제본 게시 서버는 **8788**, 원본 서버는 **8787**로 분리합니다.
 

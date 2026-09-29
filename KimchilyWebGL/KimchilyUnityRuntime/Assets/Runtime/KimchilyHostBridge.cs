@@ -83,6 +83,9 @@ namespace Kimchily.World
             lock (queueLock) commands.Enqueue(json);
         }
 
+        [Preserve]
+        public void ConfigureSession(string json) => InGameChat.Ensure().ConfigureSession(json);
+
         void Update()
         {
             if (Instance != this) return;
@@ -335,7 +338,7 @@ namespace Kimchily.World
                 return;
             }
             State = WorldRuntimeState.Ready;
-            InGameChat.Ensure().SetContext(CurrentWorldId, CurrentRevisionId);
+            InGameChat.Ensure().EnterWorld(worldScene, CurrentWorldId, CurrentRevisionId);
             openTerminalSent = true;
             Emit("WorldProgress", openCommand, 1, string.Empty, "World loaded.");
             Emit("WorldReady", openCommand, 1, string.Empty, "The world is ready.");
@@ -343,7 +346,7 @@ namespace Kimchily.World
 
         void BeginUnload()
         {
-            InGameChat.Ensure().Disconnect("");
+            InGameChat.Ensure().ExitWorld();
             awaitingScriptStart = false;
             State = WorldRuntimeState.Closing;
             try

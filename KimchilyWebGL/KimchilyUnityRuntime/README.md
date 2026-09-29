@@ -64,3 +64,7 @@ PlayMode 테스트는 기존 브리지·SDK Coroutine/manifest·Lua·다운로�
 첫 게시 대상은 정확히 한 씬, Built-in, Android, Unity 2022.3.16f1이며 최대 64개 번들/256 MiB다. 다운로드는 비동기이고 검증·로컬 번들 열기는 현재 동기 작업이므로 대형 월드는 별도 성능 개선이 필요하다. 개발 빌드만 HTTP를 허용하고 release는 HTTPS를 요구한다. 임시 파일은 월드 퇴장 후 제거하며 영구 다운로드 캐시는 아직 구현하지 않았다.
 
 통합 방식은 Unity as a Library이며, 직접 관리하는 Kotlin/manifest 코드는 Android 프로젝트에 둔다. `Builds/Android`의 생성 코드를 직접 수정하지 않는다. [Unity Android 통합 문서](https://docs.unity3d.com/2022.3/Documentation/Manual/UnityasaLibrary-Android.html)
+
+## 닉네임과 멀티플레이 채팅
+
+홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.2.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.

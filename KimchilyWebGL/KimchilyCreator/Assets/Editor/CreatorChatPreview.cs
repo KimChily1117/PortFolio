@@ -1,5 +1,6 @@
 using Kimchily.Networking;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Kimchily.Creator.Editor
 {
@@ -7,6 +8,11 @@ namespace Kimchily.Creator.Editor
     public static class CreatorChatPreview
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void StartChatPreview() => InGameChat.Ensure().SetContext("editor-preview", "v1");
+        static void StartChatPreview()
+        {
+            var chat = InGameChat.Ensure();
+            chat.EnterWorld(SceneManager.GetActiveScene(), "editor-preview", "v1");
+            chat.SetExpanded("true");
+        }
     }
 }

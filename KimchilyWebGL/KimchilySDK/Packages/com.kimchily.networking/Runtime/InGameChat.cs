@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Kimchily.Creator.Mobile;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Scripting;
 
 namespace Kimchily.Networking
@@ -13,18 +14,20 @@ namespace Kimchily.Networking
     {
         public static InGameChat Instance { get; private set; }
         public ChatView View { get; } = new ChatView();
+        public event Action Changed;
+        public event Action<ChatEvent> ServerEvent;
+        public NetworkAvatars Avatars { get; private set; }
+        public KimchilyMobilePlayer LocalPlayer { get; private set; }
         readonly ConcurrentQueue<ChatWireEvent> incoming = new ConcurrentQueue<ChatWireEvent>();
         readonly List<KimchilyMobileControls> pausedControls = new List<KimchilyMobileControls>();
         readonly List<ChatLine> lines = new List<ChatLine>();
         readonly List<ChatPlayer> players = new List<ChatPlayer>();
         int generation;
-        float deadline;
-        bool active;
-        string draft = "";
-        Vector2 scroll;
+        long sequence;
+        float deadline, nextPose;
+        bool active, configured;
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")] static extern void KimchilyChat_Create(string receiver);
-        [DllImport("__Internal")] static extern void KimchilyChat_Render(string json);
         [DllImport("__Internal")] static extern void KimchilyChat_Open(string endpoint, int generation);
         [DllImport("__Internal")] static extern void KimchilyChat_Send(string json);
         [DllImport("__Internal")] static extern void KimchilyChat_Close();
@@ -42,23 +45,49 @@ namespace Kimchily.Networking
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this; gameObject.name = "KimchilyInGameChat";
             DontDestroyOnLoad(gameObject);
-            View.worldId = "lobby"; View.revisionId = "v1";
-            View.settings.name = "Guest-" + UnityEngine.Random.Range(100, 1000);
+            View.worldId = "lobby"; View.revisionId = "v1"; View.settings.name = "";
+            gameObject.AddComponent<UnityChatPanel>().Initialize(this);
+            Avatars = gameObject.AddComponent<NetworkAvatars>(); Avatars.Initialize(this);
 #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLInput.captureAllKeyboardInput = false;
             KimchilyChat_Create(gameObject.name);
 #endif
             Render();
         }
+        [Preserve] public void ConfigureSession(string json)
+        {
+            ChatSettings settings;
+            try { settings = JsonUtility.FromJson<ChatSettings>(json); }
+            catch (Exception) { Status("입장 설정을 확인해 주세요."); return; }
+            if (!ValidSettings(settings)) { Status("닉네임과 서버 연결 설정을 확인해 주세요."); return; }
+            if (active) Disconnect("");
+            View.settings = settings; configured = true; Render();
+            if (LocalPlayer != null) Connect(json);
+        }
+        static bool ValidSettings(ChatSettings settings) => settings != null && ChatValidation.IsEndpoint(settings.endpoint)
+            && ChatValidation.IsId(settings.roomId) && ChatValidation.IsText(settings.name, 24);
+        public void EnterWorld(Scene scene, string worldId, string revisionId)
+        {
+            SetContext(worldId, revisionId);
+            LocalPlayer = KimchilyMobilePlayerBootstrap.EnsureForScene(scene);
+            Avatars.Bind(LocalPlayer); ApplyInputPause();
+            if (configured) Connect(JsonUtility.ToJson(View.settings));
+            else Status("입장 닉네임을 설정해 주세요.");
+        }
+        public void ExitWorld()
+        {
+            Disconnect(""); Avatars.Clear(); LocalPlayer = null;
+            SetExpanded("false"); SetContext("lobby", "v1");
+        }
         public void SetContext(string worldId, string revisionId)
         {
-            if (View.worldId == worldId && View.revisionId == revisionId) return;
-            bool reconnect = active;
-            Disconnect("");
-            View.worldId = worldId; View.revisionId = revisionId;
-            View.status = worldId == "lobby" ? "로비 채팅 · 매칭 전에 대화해 보세요." : "월드 채팅 · 같은 방의 플레이어와 대화하세요.";
+            if (View.worldId != worldId || View.revisionId != revisionId)
+            {
+                Disconnect(""); Avatars?.Clear(); LocalPlayer = null;
+                View.worldId = worldId; View.revisionId = revisionId;
+                View.status = worldId == "lobby" ? "월드에 입장하면 자동으로 연결합니다." : "월드 채팅을 준비합니다.";
+            }
             ApplyInputPause(); Render();
-            if (reconnect) Connect(JsonUtility.ToJson(View.settings));
         }
         [Preserve] public void ConfigureEndpoint(string endpoint)
         {
@@ -69,12 +98,11 @@ namespace Kimchily.Networking
             if (active) return;
             ChatSettings settings;
             try { settings = JsonUtility.FromJson<ChatSettings>(json); }
-            catch (Exception) { View.status = "연결 설정을 확인해 주세요."; Render(); return; }
-            if (settings == null || !ChatValidation.IsEndpoint(settings.endpoint) || !ChatValidation.IsId(settings.roomId)
-                || !ChatValidation.IsText(settings.name, 24) || !ChatValidation.IsId(View.worldId) || !ChatValidation.IsId(View.revisionId))
-            { View.status = "주소, 닉네임(1–24자), 방 코드(영문·숫자·_- 1–64자)를 확인해 주세요."; Render(); return; }
-            Disconnect(""); View.settings = settings; active = true; View.connecting = true;
-            View.status = "채팅방에 연결 중…"; deadline = Time.realtimeSinceStartup + 12;
+            catch (Exception) { Status("연결 설정을 확인해 주세요."); return; }
+            if (!ValidSettings(settings) || !ChatValidation.IsId(View.worldId) || !ChatValidation.IsId(View.revisionId))
+            { Status("닉네임(1–24자), 서버 주소, 방 코드를 확인해 주세요."); return; }
+            Disconnect(""); View.settings = settings; configured = true; active = true; View.connecting = true;
+            View.status = "월드 채팅 연결 중…"; deadline = Time.realtimeSinceStartup + 12; sequence = 0;
 #if UNITY_WEBGL && !UNITY_EDITOR
             KimchilyChat_Open(settings.endpoint, generation);
 #else
@@ -91,14 +119,12 @@ namespace Kimchily.Networking
             socket?.Dispose(); socket = null;
 #endif
             View.joined = false; View.connecting = false; View.selfId = "";
-            lines.Clear(); players.Clear(); draft = "";
-            View.status = "채팅방 연결을 종료했습니다.";
-            Render();
+            lines.Clear(); players.Clear(); Avatars?.ClearParticipants();
+            View.status = "연결 종료 · 다시 연결할 수 있습니다."; Render();
         }
         [Preserve] public void SetExpanded(string value)
         {
-            View.expanded = value == "true";
-            ApplyInputPause(); Render();
+            View.expanded = value == "true"; ApplyInputPause(); Render();
         }
         void ApplyInputPause()
         {
@@ -110,6 +136,7 @@ namespace Kimchily.Networking
         }
         [Preserve] public void SendChat(string text)
         {
+            text = text?.Trim();
             if (!View.joined || !ChatValidation.IsText(text, 300)) return;
             Send(new ChatCommand { type = "chat", text = text });
         }
@@ -135,18 +162,25 @@ namespace Kimchily.Networking
         void Update()
         {
             if (View.connecting && Time.realtimeSinceStartup >= deadline)
-            { Disconnect(""); View.status = "연결 시간이 초과되었습니다. 서버 주소를 확인해 주세요."; Render(); }
-            for (int i = 0; i < 32 && incoming.TryDequeue(out var wire); i++)
+            { Disconnect(""); Status("연결 시간이 초과되었습니다. 다시 연결을 눌러 주세요."); }
+            for (int i = 0; i < 48 && incoming.TryDequeue(out var wire); i++)
             {
                 if (!active || wire.generation != generation) continue;
                 if (wire.type == "open") Send(new ChatCommand { type = "join", worldId = View.worldId, revisionId = View.revisionId, roomId = View.settings.roomId, name = View.settings.name });
-                else if (wire.type == "closed")
-                { Disconnect(""); View.status = string.IsNullOrEmpty(wire.data) ? "연결이 종료되었습니다. 다시 연결할 수 있습니다." : wire.data; Render(); }
+                else if (wire.type == "closed") { Disconnect(""); Status(string.IsNullOrEmpty(wire.data) ? "연결이 끊겼습니다. 다시 연결을 눌러 주세요." : wire.data); }
                 else if (wire.type == "message")
                 {
                     try { Handle(JsonUtility.FromJson<ChatEvent>(wire.data)); }
-                    catch (Exception) { Disconnect(""); View.status = "서버 응답 형식을 확인해 주세요."; Render(); }
+                    catch (Exception error) { Debug.LogWarning("[Kimchily Network] Invalid response: " + error.Message); Disconnect(""); Status("서버 응답 형식을 확인해 주세요."); }
                 }
+            }
+            if (View.joined && LocalPlayer != null && LocalPlayer.isActiveAndEnabled && Time.unscaledTime >= nextPose)
+            {
+                nextPose = Time.unscaledTime + .1f;
+                var p = LocalPlayer.transform.position;
+                Send(new ChatCommand { type = "state", state = new ChatPose { sequence = ++sequence, x = p.x, y = p.y, z = p.z,
+                    yaw = LocalPlayer.transform.eulerAngles.y, speed = Mathf.Clamp(LocalPlayer.PlanarSpeed, 0, 25), grounded = LocalPlayer.IsGrounded,
+                    verticalVelocity = Mathf.Clamp(LocalPlayer.VerticalVelocity, -100, 100) } });
             }
         }
         void Handle(ChatEvent message)
@@ -157,69 +191,24 @@ namespace Kimchily.Networking
                 case "hello": View.selfId = message.selfId; break;
                 case "joined":
                     if (message.room == null || message.room.worldId != View.worldId || message.room.revisionId != View.revisionId || message.room.roomId != View.settings.roomId) throw new InvalidOperationException();
-                    View.joined = true; View.connecting = false; View.status = "채팅 연결됨";
+                    View.selfId = message.selfId; View.joined = true; View.connecting = false; View.status = "연결됨 · " + View.settings.name;
                     players.Clear(); if (message.players != null) players.AddRange(message.players);
-                    lines.Clear(); if (message.history != null) lines.AddRange(message.history); break;
+                    lines.Clear(); if (message.history != null) lines.AddRange(message.history);
+                    Debug.Log("[Kimchily Network] Joined " + View.worldId + "/" + View.revisionId + " as " + View.settings.name + " players=" + players.Count);
+                    break;
                 case "playerJoined": if (message.player != null && !players.Exists(p => p.playerId == message.player.playerId)) players.Add(message.player); break;
                 case "playerLeft": if (message.player != null) players.RemoveAll(p => p.playerId == message.player.playerId); break;
-                case "chat": if (message.chat != null) { lines.Add(message.chat); if (lines.Count > 100) lines.RemoveAt(0); scroll.y = float.MaxValue; } break;
-                case "error":
-                    if (!View.joined) Disconnect("");
-                    View.status = message.message; break;
+                case "state":
+                    if (message.player != null) { int index = players.FindIndex(p => p.playerId == message.player.playerId); if (index >= 0) players[index] = message.player; }
+                    ServerEvent?.Invoke(message); return;
+                case "chat": if (message.chat != null) { lines.Add(message.chat); if (lines.Count > 100) lines.RemoveAt(0); } break;
+                case "error": if (!View.joined) Disconnect(""); View.status = message.message; break;
             }
-            Render();
+            Render(); ServerEvent?.Invoke(message);
         }
-        void Render()
-        {
-            View.players = players.ToArray(); View.messages = lines.ToArray();
-#if UNITY_WEBGL && !UNITY_EDITOR
-            if (Instance == this) KimchilyChat_Render(JsonUtility.ToJson(View));
-#endif
-        }
-#if !UNITY_WEBGL || UNITY_EDITOR
-        void OnGUI()
-        {
-            var oldMatrix = GUI.matrix;
-            float scale = Mathf.Clamp(Screen.width / 700f, 1, 2);
-            GUI.matrix = Matrix4x4.Scale(Vector3.one * scale);
-            GUI.depth = -200;
-            float width = Screen.width / scale;
-            if (GUI.Button(new Rect(width - 160, 62, 145, 36), View.expanded ? "Close chat" : "Chat · " + players.Count)) SetExpanded(View.expanded ? "false" : "true");
-            if (View.expanded)
-            {
-                GUILayout.BeginArea(new Rect(Mathf.Max(8, width - 390), 105, Mathf.Min(380, width - 16), Mathf.Max(220, Screen.height / scale - 130)), GUI.skin.box);
-                GUILayout.Label("KIMCHILY · " + View.worldId + " / " + View.revisionId);
-                GUILayout.Label(View.status);
-                if (!active)
-                {
-                    GUILayout.Label("Server WebSocket URL"); View.settings.endpoint = GUILayout.TextField(View.settings.endpoint, 256);
-                    GUILayout.Label("Nickname"); View.settings.name = GUILayout.TextField(View.settings.name, 24);
-                    GUILayout.Label("Room code"); View.settings.roomId = GUILayout.TextField(View.settings.roomId, 64);
-                    if (GUILayout.Button("Join chat", GUILayout.Height(32))) Connect(JsonUtility.ToJson(View.settings));
-                }
-                else
-                {
-                    GUILayout.Label("Room: " + View.settings.roomId + " · " + players.Count + "/8");
-                    scroll = GUILayout.BeginScrollView(scroll);
-                    var plain = new GUIStyle(GUI.skin.label) { wordWrap = true, richText = false };
-                    foreach (var line in lines) GUILayout.Label(line.name + ": " + line.text, plain);
-                    GUILayout.EndScrollView();
-                    GUI.enabled = View.joined;
-                    draft = GUILayout.TextField(draft, 300);
-                    if (GUILayout.Button("Send", GUILayout.Height(32))) { SendChat(draft); draft = ""; GUI.FocusControl(null); }
-                    GUI.enabled = true;
-                    if (GUILayout.Button("Leave chat")) Disconnect("");
-                }
-                GUILayout.EndArea();
-            }
-            GUI.matrix = oldMatrix;
-        }
-#endif
-        void OnDisable()
-        {
-            if (Instance != this) return;
-            View.expanded = false; ApplyInputPause(); Disconnect("");
-        }
+        void Status(string text) { View.status = text; Render(); }
+        void Render() { View.players = players.ToArray(); View.messages = lines.ToArray(); Changed?.Invoke(); }
+        void OnDisable() { if (Instance == this) { View.expanded = false; ApplyInputPause(); Disconnect(""); } }
         void OnDestroy()
         {
             if (Instance != this) return;

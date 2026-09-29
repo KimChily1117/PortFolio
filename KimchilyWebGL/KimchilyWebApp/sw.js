@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kimchily-home-v1';
+const CACHE_NAME = 'kimchily-home-v2';
 const SHELL = [
   '/', '/manifest.webmanifest', '/app/styles.css', '/app/app.js', '/app/state.js',
   '/app/qr.js', '/app/scanner.js', '/app/vendor/jsQR-1.4.0.js',

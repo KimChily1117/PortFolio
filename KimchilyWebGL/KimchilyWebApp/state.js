@@ -76,6 +76,17 @@ export function prepareEntry(value, origin, session, recentStorage, now) {
   return world.launchUrl;
 }
 
+export function validNickname(value) {
+  return typeof value === 'string' && value.trim().length > 0 && value.trim().length <= 24 && !/[\u0000-\u001f\u007f-\u009f]/.test(value);
+}
+export function readNickname(storage) {
+  try { const value = storage.getItem('kimchily:nickname'); return validNickname(value) ? value.trim() : ''; } catch (_) { return ''; }
+}
+export function nicknameLaunch(url, nickname) {
+  if (!validNickname(nickname)) throw new Error('월드에서 사용할 닉네임을 1–24자로 입력해 주세요.');
+  const launch = new URL(url); launch.hash = new URLSearchParams({ nickname: nickname.trim(), room: 'playground' }).toString(); return launch.href;
+}
+
 export function recentTime(timestamp, now = Date.now()) {
   if (!timestamp || timestamp > now) return '최근에 열었던 월드';
   const days = Math.floor((now - timestamp) / 86400000);

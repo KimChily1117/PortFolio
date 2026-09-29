@@ -1,5 +1,7 @@
 <linker>
   <assembly fullname="Kimchily.Networking" preserve="all" />
+  <assembly fullname="Unity.TextMeshPro" preserve="all" />
+  <assembly fullname="Unity.ugui" preserve="all" />
   <!-- Downloaded worlds reference SDK classes absent from the built-in scenes. -->
   <assembly fullname="Kimchily.Creator.Runtime" preserve="all" />
   <assembly fullname="Kimchily.Scripting.Runtime" preserve="all" />

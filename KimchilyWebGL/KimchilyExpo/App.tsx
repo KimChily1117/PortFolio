@@ -7,7 +7,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import CameraScreen from './src/CameraScreen';
 import WorldPlayer from './src/WorldPlayer';
 import { fetchWorldCatalog, normalizeServerOrigin, resolveWorldQr, type WorldPublication } from './src/world-client';
-import { appendRecent, parseRecents, RECENT_KEY, SERVER_KEY, visitLabel, type RecentWorld } from './src/app-state';
+import { appendRecent, parseRecents, RECENT_KEY, SERVER_KEY, NICKNAME_KEY, validNickname, nicknameLaunch, visitLabel, type RecentWorld } from './src/app-state';
 
 const clientOptions = { allowLanHttp: __DEV__ || Constants.expoConfig?.extra?.allowLanHttp === true };
 const initialServer = process.env.EXPO_PUBLIC_WORLD_SERVER_URL || '';
@@ -32,6 +32,7 @@ function HomeApp() {
   const [sheetError, setSheetError] = useState('');
   const [rawLink, setRawLink] = useState('');
   const [camera, setCamera] = useState(false);
+  const [nickname, setNickname] = useState('');
   const [activeWorld, setActiveWorld] = useState<WorldPublication | null>(null);
   const aliases = useRef<string[]>([]);
   const catalogRequest = useRef<AbortController | null>(null);
@@ -42,10 +43,13 @@ function HomeApp() {
     let alive = true;
     void (async () => {
       let configured = initialServer;
+      let savedName = '';
+      try { savedName = (await AsyncStorage.getItem(NICKNAME_KEY)) || ''; } catch { }
       try { configured = (await AsyncStorage.getItem(SERVER_KEY)) || configured; } catch { /* A session without persistence remains usable. */ }
       let normalized = '';
       try { if (configured) normalized = normalizeServerOrigin(configured, clientOptions); } catch { /* An old invalid setting opens the server sheet. */ }
       if (!alive) return;
+      if (validNickname(savedName)) setNickname(savedName);
       setServer(normalized); setDraftServer(normalized || configured); setHydrated(true);
       if (!normalized) setSheet('server');
     })();
@@ -89,6 +93,7 @@ function HomeApp() {
   const enter = async (raw: string) => {
     if (entryRequest.current) return;
     setCamera(false);
+    if (!validNickname(nickname)) { setError('먼저 월드에서 사용할 닉네임을 1–24자로 입력해 주세요.'); return; }
     if (!server) { setDraftServer(''); setSheet('server'); return; }
     setSheet(null); setError(''); setNotice('');
     const request = new AbortController(); entryRequest.current = request; setEntryBusy(true);
@@ -99,7 +104,7 @@ function HomeApp() {
       historyVersion.current++;
       setRecents(next);
       void AsyncStorage.setItem(RECENT_KEY, JSON.stringify(next)).catch(() => {});
-      setActiveWorld(world);
+      setActiveWorld({ ...world, launchUrl: nicknameLaunch(world.launchUrl, nickname) });
     } catch (reason) {
       if (entryRequest.current === request && !request.signal.aborted) setError(reason instanceof Error ? reason.message : '월드에 연결하지 못했어요.');
     } finally { if (entryRequest.current === request) { entryRequest.current = null; setEntryBusy(false); } }
@@ -133,9 +138,13 @@ function HomeApp() {
           <Text style={styles.eyebrow}>YOUR NEXT LITTLE WORLD</Text>
           <Text style={styles.heroTitle}>새로운 공간으로,{"\n"}<Text style={styles.heroAccent}>함께 들어가요.</Text></Text>
           <Text style={styles.heroDescription}>마음에 드는 월드를 고르고,{"\n"}나만의 이야기를 시작해 보세요.</Text>
+          <Text style={styles.inputLabel}>월드에서 사용할 닉네임</Text>
+          <TextInput accessibilityLabel="내 닉네임" value={nickname} maxLength={24} placeholder="예: 칠리" placeholderTextColor="#91a095" style={styles.input} onChangeText={value => { setNickname(value); if (validNickname(value)) void AsyncStorage.setItem(NICKNAME_KEY, value.trim()).catch(() => {}); }} />
+          <Text style={styles.inputHelp}>닉네임을 정하고 QR를 찍으면 월드 채팅에 자동 연결돼요.</Text>
           <View style={styles.heroButtons}><View style={styles.flex}><Button title="⌗  월드 QR 스캔" disabled={entryBusy} onPress={() => {
             if (!server) { openSheet('server'); return; }
             if (Platform.OS === 'web') { setNotice('웹에서는 게시 서버의 홈에서 QR를 스캔할 수 있어요. 여기서는 링크를 붙여넣어 주세요.'); openSheet('link'); }
+            else if (!validNickname(nickname)) setError('QR를 찍기 전에 닉네임을 입력해 주세요.');
             else { setError(''); setCamera(true); }
           }} /></View><View style={styles.flex}><Button title="링크로 입장 ↗" secondary disabled={entryBusy} onPress={() => openSheet(server ? 'link' : 'server')} /></View></View>
           <View style={styles.heroIllustration} accessibilityElementsHidden importantForAccessibility="no-hide-descendants"><View style={styles.orbit} /><View style={styles.orbitSecond} /><Text style={styles.spark}>✦</Text><View style={styles.island}><View style={styles.portal}><View style={styles.portalOpening}><Text style={styles.portalStar}>✦</Text></View></View><View style={styles.tree} /><View style={styles.smallTree} /></View><Text style={styles.artLabel}>A WORLD OF YOUR OWN</Text></View>

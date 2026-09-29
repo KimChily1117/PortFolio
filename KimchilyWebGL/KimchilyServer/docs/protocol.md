@@ -13,7 +13,7 @@ TCP 패킷 길이 헤더나 Protobuf는 붙이지 않습니다. 프레임이 나
 {"protocolVersion":1,"type":"join","worldId":"network-demo","revisionId":"v1","roomId":"playground","name":"칠리"}
 ```
 
-ID 세 개는 각각 ASCII 영문·숫자·밑줄·하이픈 1~64자이며 대소문자를 구분합니다.
+ID 세 개는 각각 ASCII 영문·숫자·밑줄·하이픈 1~80자이며 대소문자를 구분합니다.
 다른 게시 버전은 같은 방 코드를 사용해도 별개 방입니다. 닉네임은 공백을 제거한 1~24자이며
 제어 문자를 허용하지 않습니다. 닉네임의 고유성을 요구하지 않습니다.
 
@@ -26,6 +26,20 @@ ID 세 개는 각각 ASCII 영문·숫자·밑줄·하이픈 1~64자이며 대�
 채팅은 앞뒤 공백을 제거한 1~300 UTF-16 코드 단위이며 제어 문자를 허용하지 않습니다.
 HTML 문자를 포함할 수 있으므로 소비자는 반드시 텍스트로 렌더링해야 합니다.
 
+입장 후 캐릭터 상태를 보낼 수 있습니다. 기존 채팅 전용 클라이언트도 계속 사용할 수 있습니다.
+
+```json
+{"protocolVersion":1,"type":"state","state":{"sequence":1,"x":0,"y":1,"z":0,"yaw":90,"speed":3,"grounded":true,"verticalVelocity":0}}
+```
+
+Unity는 초당 10회 전송합니다. 서버는 최소 70ms 간격과 증가하는 sequence만 허용하며,
+중복/이전 번호와 너무 잦은 갱신은 무시합니다. 좌표는 ±10,000, yaw는 [0,360),
+speed는 [0,25], verticalVelocity는 ±100 범위의 유한수여야 합니다.
+이동량은 최대 2초의 간격을 적용하여 수평 25m/s + 1.5m, 수직 100m/s + 2m까지 허용합니다.
+최초 스폰보다 20m 이상 낙하한 뒤 최초 스폰 주변으로 복귀하는 기본 리스폰은 예외입니다.
+필드 범위 오류는 INVALID_STATE, 이동량 초과는 STATE_TOO_FAR입니다.
+서버는 월드 충돌/지형을 시뮬레이션하지 않습니다.
+
 ## 서버 이벤트
 
 | type | 필드와 의미 |
@@ -35,11 +49,14 @@ HTML 문자를 포함할 수 있으므로 소비자는 반드시 텍스트로 �
 | `playerJoined` | `player: {playerId, name}`. 기존 참가자에게만 전달 |
 | `playerLeft` | `player: {playerId, name}` |
 | `chat` | `chat: {id, playerId, name, text, sentAtUtc}`. 보낸 사람을 포함해 방 전체 전달 |
+| `state` | `player: {playerId, name, state}`. 같은 방의 다른 참가자에게 최신 캐릭터 상태 전달 |
 | `left` | 자신의 퇴장 확인. 소켓은 계속 열려 있어 재입장 가능 |
 | `pong` | ping 응답 |
 | `error` | `code`, 사용자에게 표시할 `message` |
 
 `room`은 `{worldId, revisionId, roomId}`입니다. 모든 이벤트에 `protocolVersion: 1`이 있습니다.
+참가자 객체는 선택적 `state`를 포함합니다. 아직 위치를 보내지 않은 참가자는 null이며,
+joined 스냅샷에는 기존 참가자의 최신 state가 포함됩니다. playerId/name은 서버가 결정합니다.
 시간은 UTC ISO 8601입니다. 같은 소켓에는 하나의 송신 루프만 쓰며, 방 작업은 순서대로 실행합니다.
 서로 다른 연결에서 동시에 보낸 메시지의 처리 순서는 서버가 받은 순서로 결정합니다.
 채팅 ID는 중복 표시 방지를 위한 식별자로 활용할 수 있지만, 현재 재전송/전달 보장 프로토콜은 없습니다.

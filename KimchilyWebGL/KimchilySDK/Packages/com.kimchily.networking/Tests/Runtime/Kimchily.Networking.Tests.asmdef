@@ -1,6 +1,6 @@
 {
   "name": "Kimchily.Networking.Tests",
-  "references": ["Kimchily.Networking", "Kimchily.Creator.Runtime"],
+  "references": ["Kimchily.Networking", "Kimchily.Creator.Runtime", "Unity.TextMeshPro", "Unity.ugui"],
   "optionalUnityReferences": ["TestAssemblies"],
   "autoReferenced": false
 }

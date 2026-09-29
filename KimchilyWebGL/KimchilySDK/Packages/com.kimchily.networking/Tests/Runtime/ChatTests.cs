@@ -79,5 +79,42 @@ namespace Kimchily.Networking.Tests
             }
             finally { if (chat != null) Object.Destroy(chat.gameObject); }
         }
+        [UnityTest] public IEnumerator ChatUsesCanvasAndTmpAndSpeechDoesNotInterpretMarkup()
+        {
+            var chat = InGameChat.Ensure();
+            var root = new GameObject("speech owner");
+            try
+            {
+                var panel = chat.GetComponent<UnityChatPanel>();
+                Assert.AreEqual(RenderMode.ScreenSpaceOverlay, panel.Canvas.renderMode);
+                Assert.IsNotNull(panel.MessageInput); Assert.IsNotNull(UnityChatPanel.Font);
+                Assert.IsTrue(UnityChatPanel.Font.HasCharacter('한', true, true), "The shipped font must render Korean at runtime.");
+                Assert.IsFalse(panel.MessageInput.richText);
+                var speech = PlayerSpeech.Create(root.transform, "칠리", () => null);
+                speech.Say("<b>안녕하세요</b>");
+                Assert.AreEqual("<b>안녕하세요</b>", speech.CurrentText);
+                foreach (var text in speech.GetComponentsInChildren<TMPro.TextMeshProUGUI>(true)) Assert.IsFalse(text.richText);
+                speech.HideSpeech(); Assert.AreEqual("", speech.CurrentText);
+                yield return null;
+            }
+            finally { Object.Destroy(root); if (chat != null) Object.Destroy(chat.gameObject); }
+        }
+        [UnityTest] public IEnumerator RemoteAvatarHasNoLocalControllerAndIgnoresOlderPoses()
+        {
+            var player = KimchilyMobilePlayerBootstrap.CreateForScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+            var root = new GameObject("remote test"); root.SetActive(false);
+            try
+            {
+                var remote = root.AddComponent<RemoteAvatar>(); remote.Initialize(player, "친구"); root.SetActive(true);
+                remote.Apply(new ChatPose { sequence = 2, x = 2, y = 3, z = 4, yaw = 90, grounded = true });
+                remote.Apply(new ChatPose { sequence = 1, x = 100 });
+                yield return null;
+                Assert.AreEqual(2, remote.LastSequence); Assert.That(Vector3.Distance(root.transform.position, new Vector3(2, 3, 4)), Is.LessThan(.01f));
+                Assert.IsNull(root.GetComponentInChildren<KimchilyMobilePlayer>());
+                Assert.IsNull(root.GetComponentInChildren<KimchilyMobileControls>());
+                Assert.IsNull(root.GetComponentInChildren<Camera>());
+            }
+            finally { Object.Destroy(root); Object.Destroy(player.gameObject); }
+        }
     }
 }

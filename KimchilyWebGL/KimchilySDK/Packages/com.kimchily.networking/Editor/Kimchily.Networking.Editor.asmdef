@@ -1,0 +1,5 @@
+{
+  "name": "Kimchily.Networking.Editor",
+  "references": ["Unity.TextMeshPro"],
+  "includePlatforms": ["Editor"]
+}

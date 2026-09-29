@@ -1,6 +1,6 @@
 {
   "name": "Kimchily.Networking",
   "rootNamespace": "Kimchily.Networking",
-  "references": ["Kimchily.Creator.Runtime"],
+  "references": ["Kimchily.Creator.Runtime", "Unity.ugui", "Unity.TextMeshPro"],
   "autoReferenced": true
 }

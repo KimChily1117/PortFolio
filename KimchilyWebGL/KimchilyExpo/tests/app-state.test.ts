@@ -1,9 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { appendRecent, parseRecents, visitLabel } from '../src/app-state.ts';
+import { appendRecent, parseRecents, visitLabel, nicknameLaunch, validNickname } from '../src/app-state.ts';
 import type { WorldPublication } from '../src/world-client.ts';
 
 const origin = 'https://world.example';
+test('nickname handoff does not change the published manifest or hash', () => {
+  const original = world().launchUrl, launch = new URL(nicknameLaunch(original, ' 칠리 & 친구 '));
+  assert.equal(launch.search, new URL(original).search);
+  assert.equal(new URLSearchParams(launch.hash.slice(1)).get('nickname'), '칠리 & 친구');
+  assert.equal(validNickname('bad\nname'), false); assert.equal(validNickname('x'.repeat(25)), false);
+  assert.throws(() => nicknameLaunch(original, ''));
+});
 function world(id = 'sample', revision = 'rev-1'): WorldPublication {
   const hash = 'a'.repeat(64), manifestUrl = `${origin}/worlds/${id}/${revision}/world.json`;
   return { worldId: id, revisionId: revision, title: `월드 ${id}`, manifestUrl, manifestSha256: hash,

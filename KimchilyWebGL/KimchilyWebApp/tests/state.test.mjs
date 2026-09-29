@@ -1,9 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeWorld, normalizeCatalog, readRecents, rememberWorld, clearRecents, prepareEntry, RECENT_KEY } from '../state.js';
+import { normalizeWorld, normalizeCatalog, readRecents, rememberWorld, clearRecents, prepareEntry, RECENT_KEY, validNickname, readNickname, nicknameLaunch } from '../state.js';
 
 const origin = 'https://world.example';
 const sha = 'a'.repeat(64);
+test('nickname handoff preserves the pinned world query and safely encodes Unicode', () => {
+  const original = world().launchUrl, url = new URL(nicknameLaunch(original, ' 칠리 & 친구 '));
+  assert.equal(url.search, new URL(original).search);
+  assert.equal(new URLSearchParams(url.hash.slice(1)).get('nickname'), '칠리 & 친구');
+  for (const value of ['', '   ', 'bad\nname', 'x'.repeat(25)]) assert.equal(validNickname(value), false);
+  assert.equal(readNickname({ getItem() { throw new Error('blocked'); } }), '');
+  assert.throws(() => nicknameLaunch(original, ''));
+});
 function world(id = 'sample', revision = 'rev-1') {
   const manifest = `${origin}/worlds/${id}/${revision}/world.json`;
   return { worldId: id, revisionId: revision, manifestSha256: sha, title: `월드 ${id}`, launchUrl: `${origin}/player/?manifest=${encodeURIComponent(manifest)}&sha256=${sha}` };

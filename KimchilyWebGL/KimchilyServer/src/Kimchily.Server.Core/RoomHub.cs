@@ -21,6 +21,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         {
             case "join": Join(peer, command); break;
             case "chat": Chat(peer, command.Text); break;
+            case "state": UpdateState(peer, command.State); break;
             case "leave": Leave(peer, acknowledge: true); break;
             case "ping": peer.Send(new ServerEvent("pong")); break;
             default: Error(peer, "UNKNOWN_MESSAGE", "지원하지 않는 메시지입니다."); break;
@@ -37,7 +38,7 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
     {
         if (_members.ContainsKey(peer.Id)) { Error(peer, "ALREADY_JOINED", "현재 방에서 나간 뒤 입장해 주세요."); return; }
         if (!ValidId(command.WorldId) || !ValidId(command.RevisionId) || !ValidId(command.RoomId))
-        { Error(peer, "INVALID_ROOM", "월드·버전·방 코드는 영문, 숫자, 밑줄, 하이픈 1~64자입니다."); return; }
+        { Error(peer, "INVALID_ROOM", "월드·버전·방 코드는 영문, 숫자, 밑줄, 하이픈 1~80자입니다."); return; }
         var name = command.Name?.Trim();
         if (!ValidText(name, 24)) { Error(peer, "INVALID_NAME", "닉네임을 1~24자로 입력해 주세요."); return; }
         var key = new RoomKey(command.WorldId!, command.RevisionId!, command.RoomId!);
@@ -88,13 +89,41 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
         if (acknowledge) peer.Send(new ServerEvent("left"));
     }
 
+    private void UpdateState(IRoomPeer peer, PlayerState? state)
+    {
+        if (!_members.TryGetValue(peer.Id, out var membership))
+        { Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요."); return; }
+        if (state is null || state.Sequence < 0 || !float.IsFinite(state.X) || !float.IsFinite(state.Y) || !float.IsFinite(state.Z)
+            || !float.IsFinite(state.Yaw) || !float.IsFinite(state.Speed) || !float.IsFinite(state.VerticalVelocity)
+            || Math.Abs(state.X) > 10000 || Math.Abs(state.Y) > 10000 || Math.Abs(state.Z) > 10000
+            || state.Yaw < 0 || state.Yaw >= 360 || state.Speed < 0 || state.Speed > 25 || Math.Abs(state.VerticalVelocity) > 100)
+        { Error(peer, "INVALID_STATE", "플레이어 상태가 올바르지 않습니다."); return; }
+        var member = membership.Member;
+        var now = _clock();
+        if (member.Player.State is { } previous)
+        {
+            if (state.Sequence <= previous.Sequence) return; // Stale samples cannot rewind a remote avatar.
+            if (now - member.LastStateAt < 70) return; // At most about 14 samples/second, independently of chat.
+            double dx = state.X - previous.X, dy = state.Y - previous.Y, dz = state.Z - previous.Z;
+            var elapsed = Math.Clamp((now - member.LastStateAt) / 1000.0, .07, 2);
+            var respawn = member.Spawn is { } spawn && previous.Y < spawn.Y - 20
+                && Math.Abs(state.X - spawn.X) < .5 && Math.Abs(state.Z - spawn.Z) < .5 && Math.Abs(state.Y - spawn.Y) < 2;
+            if (!respawn && (dx * dx + dz * dz > Math.Pow(25 * elapsed + 1.5, 2) || Math.Abs(dy) > 100 * elapsed + 2))
+            { Error(peer, "STATE_TOO_FAR", "이동 상태가 허용 범위를 벗어났습니다."); return; }
+        }
+        member.Spawn ??= state;
+        member.LastStateAt = now;
+        member.Player = member.Player with { State = state };
+        Broadcast(membership.Room, new ServerEvent("state") { Player = member.Player }, except: peer.Id);
+    }
+
     private static void Broadcast(Room room, ServerEvent message, string? except = null)
     {
         foreach (var member in room.Members.Values)
             if (member.Peer.Id != except) member.Peer.Send(message);
     }
 
-    private static bool ValidId(string? value) => value is { Length: >= 1 and <= 64 }
+    private static bool ValidId(string? value) => value is { Length: >= 1 and <= 80 }
         && value.All(character => char.IsAsciiLetterOrDigit(character) || character is '_' or '-');
 
     private static bool ValidText(string? value, int maximum) => !string.IsNullOrWhiteSpace(value)
@@ -112,7 +141,9 @@ public sealed class RoomHub(Func<long>? clock = null) : JobSerializer(clock: clo
     private sealed class Member(IRoomPeer peer, PlayerInfo player)
     {
         public IRoomPeer Peer { get; } = peer;
-        public PlayerInfo Player { get; } = player;
+        public PlayerInfo Player { get; set; } = player;
+        public PlayerState? Spawn { get; set; }
+        public long LastStateAt { get; set; }
         public Queue<long> ChatTimes { get; } = [];
     }
 }

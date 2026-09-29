@@ -2,6 +2,14 @@ import { validateWorldPublication, type ServerOptions, type WorldPublication } f
 
 export const SERVER_KEY = 'kimchily.mobile.server.v1';
 export const RECENT_KEY = 'kimchily.mobile.recent.v1';
+export const NICKNAME_KEY = 'kimchily.mobile.nickname.v1';
+export function validNickname(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0 && value.trim().length <= 24 && !/[\u0000-\u001f\u007f-\u009f]/.test(value);
+}
+export function nicknameLaunch(url: string, nickname: string): string {
+  if (!validNickname(nickname)) throw new Error('월드에서 사용할 닉네임을 1–24자로 입력해 주세요.');
+  const launch = new URL(url); launch.hash = new URLSearchParams({ nickname: nickname.trim(), room: 'playground' }).toString(); return launch.href;
+}
 export interface RecentWorld { origin: string; world: WorldPublication; visitedAt: number }
 
 export function parseRecents(raw: string | null, origin: string, options: ServerOptions): RecentWorld[] {

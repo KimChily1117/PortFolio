@@ -1,11 +1,19 @@
 import { resolveQrPayload } from './qr.js';
 import { createQrScanner } from './scanner.js';
-import { normalizeCatalog, readRecents, clearRecents, prepareEntry, recentTime } from './state.js';
+import { normalizeCatalog, readRecents, clearRecents, prepareEntry, recentTime, readNickname, validNickname, nicknameLaunch } from './state.js';
 
 const $ = id => document.getElementById(id);
 const origin = location.origin;
 const safeStorage = name => { try { return window[name]; } catch (_) { return null; } };
 const local = safeStorage('localStorage'), session = safeStorage('sessionStorage');
+$('player-nickname').value = readNickname(local);
+function saveNickname(value) {
+  $('player-nickname').value = value; $('entry-nickname').value = value;
+  if (validNickname(value)) { try { local?.setItem('kimchily:nickname', value.trim()); } catch (_) {} }
+}
+saveNickname($('player-nickname').value);
+$('player-nickname').addEventListener('input', event => saveNickname(event.target.value));
+$('entry-nickname').addEventListener('input', event => saveNickname(event.target.value));
 let allowedOrigins = [origin], catalogRequest = null, entryRequest = null, deferredInstall = null;
 let mode = 'scan';
 const entryDialog = $('entry-dialog');
@@ -123,6 +131,10 @@ async function loadCatalog() {
 
 async function enterLink(raw, reopenOnError = false) {
   if (entryRequest) return;
+  if (!validNickname($('player-nickname').value)) {
+    openEntry('link'); $('world-link').value = raw; $('entry-nickname').focus();
+    showEntryMessage('먼저 월드에서 사용할 닉네임을 1–24자로 입력해 주세요.', 'error'); return;
+  }
   if (!navigator.onLine) {
     const message = '지금은 오프라인이에요. 인터넷과 월드 서버에 연결한 뒤 다시 시도해 주세요.';
     if (entryDialog.open) showEntryMessage(message, 'error'); else showMessage(message, 'error');
@@ -138,7 +150,7 @@ async function enterLink(raw, reopenOnError = false) {
     const world = await resolveQrPayload(raw, { origin, allowedOrigins, signal: request.signal });
     if (request !== entryRequest || request.signal.aborted) return;
     const url = prepareEntry(world, origin, session, local);
-    location.assign(url);
+    location.assign(nicknameLaunch(url, $('player-nickname').value));
   } catch (error) {
     if (request !== entryRequest || (request.signal.aborted && !timedOut)) return;
     const message = timedOut ? '서버 응답이 늦어지고 있어요. 연결을 확인한 뒤 다시 시도해 주세요.' : error.message || '월드 연결을 확인하지 못했어요.';
@@ -182,6 +194,7 @@ $('camera-security-note').hidden = isSecureContext;
 if (isSecureContext && !canUseCamera) $('camera-status').textContent = '이 브라우저에서는 카메라를 사용할 수 없어요. QR 이미지를 선택해 주세요.';
 $('start-camera').addEventListener('click', async () => {
   showEntryMessage('');
+  if (!validNickname($('player-nickname').value)) { showEntryMessage('닉네임을 먼저 입력해 주세요.', 'error'); $('entry-nickname').focus(); return; }
   if ($('camera-stage').dataset.live === 'true') scanner.stop();
   else { try { await scanner.start(); } catch (error) { showEntryMessage(error.message, 'error'); } }
 });

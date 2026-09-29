@@ -36,6 +36,8 @@
           <p class="eyebrow"><span></span> YOUR NEXT LITTLE WORLD</p>
           <h1 id="hero-title">새로운 공간으로,<br><span>함께 들어가요.</span></h1>
           <p class="hero-description">직접 만든 월드부터 처음 만나는 공간까지.<br>마음에 드는 곳에서 나만의 이야기를 시작하세요.</p>
+          <label class="nickname-field" for="player-nickname">월드에서 사용할 닉네임<input id="player-nickname" maxlength="24" autocomplete="nickname" placeholder="예: 칠리" aria-describedby="nickname-help"></label>
+          <p id="nickname-help" class="hero-note">닉네임을 정하고 QR를 찍으면 친구들과 바로 연결돼요.</p>
           <div class="hero-actions">
             <button id="open-scan" class="button button-primary" type="button">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5M8 8h2v2H8zM14 8h2v2h-2zM8 14h2v2H8zM14 14h2v2h-2z"/></svg>
@@ -89,6 +91,7 @@
 
   <dialog id="entry-dialog" class="entry-dialog" aria-labelledby="entry-title">
     <div class="dialog-top"><div><p class="eyebrow">YOUR WAY IN</p><h2 id="entry-title">월드로 들어가기</h2></div><button id="close-entry" class="icon-button" type="button" aria-label="입장 창 닫기">×</button></div>
+    <label class="nickname-field" for="entry-nickname">내 닉네임<input id="entry-nickname" maxlength="24" autocomplete="nickname" placeholder="월드에서 사용할 이름"></label>
     <div class="entry-tabs" role="tablist" aria-label="입장 방법">
       <button id="scan-tab" role="tab" aria-selected="true" aria-controls="scan-panel" type="button">QR 스캔</button>
       <button id="link-tab" role="tab" aria-selected="false" aria-controls="link-panel" tabindex="-1" type="button">링크 붙여넣기</button>
@@ -97,7 +100,7 @@
       <div id="camera-stage" class="camera-stage"><video id="camera-video" muted playsinline aria-label="QR 스캔 카메라"></video><div class="camera-placeholder"><div class="scan-outline" aria-hidden="true"><span>↗</span></div><p id="camera-status">카메라로 월드 QR를 비춰 주세요.</p></div><div class="camera-corners" aria-hidden="true"></div></div>
       <div id="camera-security-note" class="inline-note" hidden>카메라는 HTTPS 주소에서 사용할 수 있어요. QR 이미지를 선택하거나 링크를 붙여넣어 주세요. <a href="/dev/setup">HTTPS 연결 설정</a></div>
       <div class="scan-actions"><button id="start-camera" class="button button-primary" type="button">카메라 켜기</button><button id="pick-image" class="button button-secondary" type="button">QR 이미지 선택</button><input id="qr-file" type="file" accept="image/*" hidden></div>
-      <p class="small-note">QR를 찾으면 연결을 확인한 뒤 월드 시작 화면으로 이동해요.</p>
+      <p class="small-note">QR를 찾으면 링크를 확인한 뒤 설정한 닉네임으로 월드에 입장해요.</p>
     </section>
     <section id="link-panel" role="tabpanel" aria-labelledby="link-tab" hidden>
       <form id="link-form"><label for="world-link">전달받은 월드 링크</label><textarea id="world-link" rows="3" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="월드 링크를 여기에 붙여넣어 주세요" required maxlength="8192"></textarea><p class="small-note">이 Kimchily 서버에서 게시한 월드 링크를 사용할 수 있어요.</p><button id="submit-link" class="button button-primary full-width" type="submit">월드로 이동 <span aria-hidden="true">↗</span></button></form>

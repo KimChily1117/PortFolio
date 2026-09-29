@@ -113,3 +113,7 @@ Samsung **SM-G955N**에서 설치한 Unity 포함 APK를 유지한 채 다음 �
 두 게시본의 QR은 앱과 동일한 ZXing 3.5.3으로 기본·축소·회전 검출을 통과했고, [두 번째 QR 검증 결과](../KimchilyAndroid/Artifacts/qr-decode-editor-v2.json)에서 링크 전체와 필드 일치를 확인했다. **카메라 촬영도 실제 SM-G955N에서 확인했다.** 23:03:53 QR 인식 후 23:03:54 revision 2 Lua 실행이 기록됐으며, 사용자가 인식 성공을 확인했다. [카메라 흐름 로그](../KimchilyAndroid/Artifacts/device-camera-investigation.log), [QR 입장 후 화면](../KimchilyAndroid/Artifacts/device-after-camera-scan.png)을 보존했다.
 
 이 결과는 게시된 샘플과 해당 기기를 기준으로 한다. 모든 Lua API의 Android 경계 조건, 다른 기기·OS, 임의 셰이더/모델, 대용량 월드·장시간 사용·네트워크 장애·인터넷 HTTPS 배포까지 검증했다는 의미는 아니다.
+
+## 닉네임과 멀티플레이 채팅
+
+홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.2.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.

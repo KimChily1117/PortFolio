@@ -24,10 +24,12 @@ public sealed record ClientCommand
     public string? RoomId { get; init; }
     public string? Name { get; init; }
     public string? Text { get; init; }
+    public PlayerState? State { get; init; }
 }
 
 public sealed record RoomKey(string WorldId, string RevisionId, string RoomId);
-public sealed record PlayerInfo(string PlayerId, string Name);
+public sealed record PlayerState(long Sequence, float X, float Y, float Z, float Yaw, float Speed, bool Grounded, float VerticalVelocity);
+public sealed record PlayerInfo(string PlayerId, string Name, PlayerState? State = null);
 public sealed record ChatMessage(string Id, string PlayerId, string Name, string Text, DateTimeOffset SentAtUtc);
 public sealed record RoomSummary(RoomKey Room, int PlayerCount, int Capacity);
 

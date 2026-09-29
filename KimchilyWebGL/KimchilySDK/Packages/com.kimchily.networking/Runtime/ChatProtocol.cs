@@ -12,8 +12,15 @@ namespace Kimchily.Networking
     {
         public int protocolVersion = 1;
         public string type, worldId, revisionId, roomId, name, text;
+        public ChatPose state;
     }
-    [Serializable] public sealed class ChatPlayer { public string playerId, name; }
+    [Serializable] public sealed class ChatPose
+    {
+        public long sequence;
+        public float x, y, z, yaw, speed, verticalVelocity;
+        public bool grounded;
+    }
+    [Serializable] public sealed class ChatPlayer { public string playerId, name; public ChatPose state; }
     [Serializable] public sealed class ChatLine { public string id, playerId, name, text, sentAtUtc; }
     [Serializable] public sealed class ChatRoom { public string worldId, revisionId, roomId; }
     [Serializable] public sealed class ChatEvent
@@ -40,7 +47,7 @@ namespace Kimchily.Networking
     {
         public static bool IsId(string value)
         {
-            if (string.IsNullOrEmpty(value) || value.Length > 64) return false;
+            if (string.IsNullOrEmpty(value) || value.Length > 80) return false;
             foreach (char c in value)
                 if (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9') && c != '-' && c != '_') return false;
             return true;

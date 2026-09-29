@@ -130,3 +130,7 @@ Expo Go의 네이티브 설정은 설치용 앱의 `app.config.ts` 설정과 동
 Safari에서 월드가 실행됐다는 기존 사용자 확인은 유지한다. **설치한 Expo 앱 및 Expo Go 안의 실제 카메라·WebView 실행은 별도의 기기 확인 항목**이다. 타입 검사, 자동 테스트, iOS/Android JS 번들 생성은 EAS 클라우드 빌드 성공·앱 설치·GPU/메모리 실기기 검증을 대신하지 않는다. 서버 없이 월드를 완전히 오프라인으로 실행하는 기능은 구현하지 않았다.
 
 이번 앱은 기존 TypeScript 코드와 EAS 빌드 흐름을 활용하는 Expo/React Native로 구성했다. Flutter로 바꾸는 작업은 현재 구현 범위에 포함되지 않는다.
+
+## 닉네임과 멀티플레이 채팅
+
+홈/QR에서 닉네임을 정하면 게시 월드 입장 시 자동 연결됩니다. Unity 내부 TMP 채팅과 캐릭터 말풍선·이동 동기화는 Networking SDK 0.2.0 공통 실행기가 제공합니다. 씬에 채팅 컴포넌트를 추가할 필요가 없습니다. [연결 설정](../KimchilyServer/README.md)과 [검증 범위](../docs/reports/2026-09-29-unity-multiplayer-chat.md)를 참고하세요.
