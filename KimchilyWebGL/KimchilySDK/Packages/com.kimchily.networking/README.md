@@ -23,6 +23,8 @@ WebSocket 송수신만 담당하며 HTML 채팅 패널을 생성하지 않습니
 필수 리소스를 패키지에 포함합니다. 폰트 출처·라이선스는 Resources/Fonts/README.md를 참고합니다.
 TMP_InputField의 WebGL/기기 키보드 동작은 실제 배포 브라우저에서 별도 확인해야 합니다.
 
+2026-09-30 모바일 웹 배치는 공통 플레이어의 CSS 템플릿에서 나가기·전체 화면 toolbar와 Unity Canvas를 별도 행으로 분리합니다. 채팅은 이 패키지의 TMP UI를 그대로 사용하며 SDK 버전은 0.4.0을 유지합니다. [실행기 배치 안내](../../../KimchilyUnityRuntime/README.md)와 [작업·검증 기록](../../../docs/current-status-and-work-log.md)을 참고합니다.
+
 ## 캐릭터와 말풍선
 
 서버의 playerId를 키로 내 캐릭터와 원격 캐릭터를 구분합니다. 로컬 플레이어 상태는

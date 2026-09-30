@@ -13,7 +13,9 @@
 
 시작 예제는 [Character.ts](../KimchilyCreator/Assets/World/Character.ts)다. `public beacon`, `speed`, `blinkSeconds`가 Inspector 대상이고 private `Map`은 내부 상태다. **Kimchily → TypeScript → Configure Type Completion** 메뉴와 제작 프로젝트의 VS Code 설정을 사용한다. 구현·설정·API 표·검증 상태는 [2026-09-19 TypeScript 기록](../docs/reports/2026-09-19-typescript-runtime.md)에 정리했다.
 
-2026-09-29 협동 포털 확장에서는 TypeScript 컴파일러 **20개**, Jint VM **32개**, JS facade **20개**, strict 타입 정상/오류 사례와 실제 LanguageService 자동완성이 통과했다. 통합 Unity PlayMode **115개**와 C# 서버 검사 **40개**도 통과했다. 게임 시연과 역할 분리는 [협동 데모 안내](../docs/multiplayer-demo.md)를 참고한다.
+2026-09-29 TS 게임 이관에서는 TypeScript 컴파일러 **20개**, Jint VM **34개**, JS facade **24개**, 서버 TS 번들 컴파일러 **7개**, strict 타입 검사와 LanguageService 자동완성이 통과했다. 통합 Unity EditMode **60개**·PlayMode **121개**, 당시 C# 서버 검사 **49개**도 통과했다. 이전 고정 C# 포털 단계의 40/115개 결과와 구분한다.
+
+2026-09-30 포털 진입·두 번째 정원 릴레이는 기존 TypeScript 0.3.0 / Networking 0.4.0 API로 구현했다. 이 확장 때문에 SDK 버전을 추가로 올리지 않았다. 서버 최종 검사는 **57개**, 게시 WebGL은 두 미션 완주를 확인했다. 이날 Unity 181개를 다시 실행한 것은 아니다. [현재 작업·검증 범위](../docs/current-status-and-work-log.md) · [협동 데모 안내](../docs/multiplayer-demo.md)
 
 2026-09-19의 기존 TypeScript 0.1.0은 Unity PlayMode **54개**·EditMode **12개**, ARM64 IL2CPP 앱 빌드와 **SM-G955N / Android 9**에서 revision 1→2 재게시를 검증했다. 당시 APK·로그·QR 검사 범위는 [TypeScript 검증 기록](../docs/reports/2026-09-19-typescript-runtime.md)에 보존한다. 이 과거 결과는 최신 Unity 6 네트워크 SDK의 Android 실기기 검증을 뜻하지 않는다.
 

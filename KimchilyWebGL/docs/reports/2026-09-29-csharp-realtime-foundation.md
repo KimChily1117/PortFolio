@@ -1,5 +1,7 @@
 # C# UGC 실시간 서버 1단계 — 2026-09-29
 
+이 문서는 첫 서버 기반을 만든 당시 기록이다. 후속 Unity 채팅, TS 게임 이관, 포털 릴레이와 현재 검증 결과는 [전체 작업 이력](../current-status-and-work-log.md)과 [최신 서버 안내](../../KimchilyServer/README.md)를 따른다.
+
 ## 결과
 
 `KimchilyWebGL/KimchilyServer`를 추가했습니다. 기존 Project Dawn C# 서버의 작업 큐와

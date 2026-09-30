@@ -4,6 +4,8 @@
 
 [판정 수식·동기화·설계 이유·포트폴리오용 상세 설명](portfolio-typescript-multiplayer.md)
 
+2026-09-30 현재 구현 기준: `2672fce9c`. [전체 작업 이력·현재 QR·실행 명령](current-status-and-work-log.md). 데모 씬은 Task의 `KimchilyCreator/Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity`다.
+
 ## 시연 순서
 
 1. 같은 Wi-Fi에서 게시된 QR로 입장하고 각자 닉네임을 입력한다.
@@ -58,8 +60,8 @@
 
 | 파일 | 담당 |
 |---|---|
-| [PortalRules.ts](../KimchilyCreator/ServerScripts/chili-portal/PortalRules.ts) | 판정·유지 시간·승리·재시작 |
-| [PortalGarden.ts](../KimchilyCreator/Assets/Demos/ChiliIsland/Scripts/PortalGarden.ts) | HUD·버튼·문구·진행률·발판·포털 |
+| [PortalRules.ts](../KimchilyCreator/ServerScripts/chili-portal/PortalRules.ts) | 동시 발판·포털 입장·릴레이 순서·교대·완료·재시작 |
+| [PortalGarden.ts](../KimchilyCreator/Assets/Demos/ChiliIsland/Scripts/PortalGarden.ts) | HUD·버튼·문구·진행률·발판·포털·릴레이 완주 연출 |
 | [PortalRuleIdentity.ts](../KimchilyCreator/Assets/Demos/ChiliIsland/Scripts/PortalRuleIdentity.ts) | 자동 생성되는 서버 규칙 ID/해시 |
 | [ChiliIsland.unity](../KimchilyCreator/Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity) | 모델·배치·TS 오브젝트 바인딩 |
 
@@ -67,7 +69,7 @@ Task의 KimchilyCreator에서 다음 명령을 실행한다.
 
     .\tools\build_chili_island.ps1 -Publish
 
-이 도구는 서버 TS를 먼저 컴파일·등록한 뒤 별도 클론에서 Unity 콘텐츠를 만든다. 원본 에디터를 닫을 필요가 없다. 서버와 공통 WebGL 실행기는 새 SDK 최초 도입 시 한 번 갱신해야 한다.
+이 도구는 서버 TS를 먼저 컴파일·등록한 뒤 별도 클론에서 Unity 콘텐츠를 만든다. 원본 에디터를 닫을 필요가 없다. 새 SDK API 도입 시 공통 WebGL 실행기를 갱신하고, 공통 서버 코드 변경 시 서버도 다시 빌드·실행한다. 현재 모바일 배치는 실행기 CSS, 회전값 보정은 공통 서버에 있으므로 둘 다 최신 소스를 적용한다. TS 규칙·연출만 바꿀 때는 승인 번들과 월드 콘텐츠를 갱신한다.
 
 원본 프리팹 14종과 OBJ/MTL은 [아트 안내](chili-island-art.md)에 있다. 기존 Unity-Chan 플레이어는 재사용 자산이다.
 

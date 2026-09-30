@@ -1,5 +1,7 @@
 # 닉네임 입장·Unity TMP 채팅·캐릭터 동기화
 
+아래 Networking 0.2.0과 게시 주소·테스트 수치는 채팅 구현 당시 기록이다. 현재 Networking 0.4.0 / TypeScript 0.3.0, 모바일 배치 수정과 두 단계 데모는 [전체 작업 이력](../current-status-and-work-log.md) 및 [최신 검증 기록](../chili-island-validation.md)을 따른다.
+
 2026-09-29, 작업본 E:\task\KimchilyWebGL에서 구현·검증했습니다.
 기준 커밋은 2cbb3d134이며 Git 관리본에 소스만 반영합니다.
 

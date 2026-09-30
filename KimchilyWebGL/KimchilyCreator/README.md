@@ -10,6 +10,8 @@ TypeScript 컴파일·API 계약·자동완성과 Unity 2022.3.16f1의 **PlayMod
 
 `Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity`를 열면 직접 생성한 메시 프리팹 14개로 구성한 협동 포털 월드를 편집할 수 있다. 기존 `MyWorld.unity`와 분리된 씬이며, 소품의 OBJ/MTL은 `Assets/Demos/ChiliIsland/Models`에 있다. 생성기는 **Kimchily → Demos → Generate Chili Island**에 있다. 재생성하면 생성된 데모 자산을 갱신하므로 수작업 수정본은 별도 보관한다.
 
+2026-09-30 데모는 첫 정원의 동시 발판, 포털 진입, 실제 다리, 두 번째 정원의 순서·교대 릴레이, 완주와 재시작까지 포함한다. 두 구역은 같은 씬에 있으며 메시·재질을 공유한다. [전체 작업 이력·현재 게시본](../docs/current-status-and-work-log.md) · [검증 기록](../docs/chili-island-validation.md)
+
 TypeScript SDK **0.3.0**, Networking SDK **0.4.0**을 사용한다. 서버 규칙은 [PortalRules.ts](ServerScripts/chili-portal/PortalRules.ts), 클라이언트 UI·버튼·연출은 [PortalGarden.ts](Assets/Demos/ChiliIsland/Scripts/PortalGarden.ts)에 있다. `Room.useGame(id, hash)`로 승인된 서버 규칙을 연결하고, `Hud.showPanel`로 안내와 버튼을 작성한다. `tools/build_chili_island.ps1 -Publish`는 서버 TS 컴파일·등록과 Unity 콘텐츠 게시를 순서대로 수행한다. [상세 구조·포트폴리오 문서](../docs/portfolio-typescript-multiplayer.md)
 
 ## 기존 Android 기준본 빠르게 시작하기
@@ -70,13 +72,13 @@ export default class Character extends KimchilyScriptBehaviour {
 
 제공 API는 명시적인 GameObject/Transform 참조, Vector3, Time, Debug, 로컬 Event와 generator 코루틴이다. Vector3 getter는 복사본이므로 수정한 값을 Transform에 다시 대입한다. `yield null`은 다음 프레임, `yield new WaitForSeconds(...)`는 Unity의 시간 배율을 적용한 대기다. 비활성화·파괴·재로드·스크립트 오류 시 해당 Behaviour의 코루틴을 취소한다. 자세한 동작은 [TypeScript 패키지](../KimchilySDK/Packages/com.kimchily.typescript/README.md)를 참고한다.
 
-Animator·임의 `GetComponent`·오브젝트 검색·파일/네트워크·DOM/Node API·일반 npm 로더·네트워크 Room/Player·캐릭터 컨트롤러는 제공하지 않는다. `Character`는 이 샘플의 클래스 이름이며 별도 아바타 SDK를 뜻하지 않는다. C# DLL이나 새로운 Unity API를 콘텐츠만으로 추가할 수 없고, 실행기 API를 늘릴 때는 APK도 업데이트해야 한다. 현재 실행 제한은 검토된 개발 콘텐츠를 위한 것이며 완전한 악성 코드 격리가 아니다.
+Animator·임의 `GetComponent`·오브젝트 검색·파일·일반 소켓·DOM/Node API·일반 npm 로더·캐릭터 컨트롤러 API는 제공하지 않는다. 네트워크는 명시적인 `Kimchily.Network.Room`으로 승인된 서버 게임을 구독하고 액션·상태를 전달한다. `Character`는 이 샘플의 클래스 이름이며 별도 아바타 SDK를 뜻하지 않는다. C# DLL이나 새로운 Unity API를 콘텐츠만으로 추가할 수 없고, 실행기 API를 늘릴 때는 WebGL 실행기나 해당 네이티브 APK도 업데이트해야 한다. 현재 실행 제한은 검토된 개발 콘텐츠를 위한 것이며 완전한 악성 코드 격리가 아니다.
 
 기존 `.lua` 자산과 **Kimchily → Lua Behaviour**는 유지된다. Lua 월드를 계속 만들 때는 [Lua 패키지의 기존 API](../KimchilySDK/Packages/com.kimchily.scripting/README.md)를 사용한다. TypeScript와 Lua의 모듈·객체 API는 서로 다르다.
 
-## 명령줄 빌드와 게시
+## 기존 Android 기준본의 명령줄 빌드와 게시
 
-아래 명령은 워크스페이스 루트에서 실행한다. `prepare_creator.py`와 `Kimchily → Create Starter World`는 처음 준비할 때 사용한다. 이미 있는 씬·모델·스크립트는 준비 도구가 덮어쓰지 않는다.
+아래 명령은 기존 Android 기준본의 절차다. 현재 WebGL 작업은 [제작·게시 가이드](../docs/webgl-guide.md), Chili Island는 `tools/build_chili_island.ps1 -Publish`를 사용한다. 명령은 워크스페이스 루트에서 실행한다. `prepare_creator.py`와 `Kimchily → Create Starter World`는 처음 준비할 때 사용한다. 이미 있는 씬·모델·스크립트는 준비 도구가 덮어쓰지 않는다.
 
 ```powershell
 python KimchilyCreator/tools/prepare_creator.py

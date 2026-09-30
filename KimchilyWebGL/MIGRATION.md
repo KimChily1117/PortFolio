@@ -1,9 +1,11 @@
 # KimchilyWebGL 소스 이주
 
-**2026-09-29 작업 흐름:** Git 갱신·관리는 `E:\GItHub\PortFolio`에서, 수정·실행·검증은
+**2026-09-30 작업 흐름:** Git 갱신·관리는 `E:\GItHub\PortFolio`에서, 수정·실행·검증은
 `E:\task\KimchilyWebGL`에서 진행합니다. 검증 후 변경분을 Git 관리본에 반영·병합하고 커밋합니다.
 아래 내용은 2026-09-25 이주 당시 기록입니다. 새 .NET 10 실시간 서버는
 [KimchilyServer 안내](KimchilyServer/README.md)를 따릅니다.
+
+이주 이후의 채팅·TS 게임·모바일 배치·포털 릴레이 작업과 현재 커밋은 [전체 작업 이력](docs/current-status-and-work-log.md)에 정리했습니다. 아래 파일 수와 120개 검증 수치는 이주 당시 기록입니다.
 
 2026-09-25에 `E:\task\KimchilyWebGL`의 소스를
 `E:\GItHub\PortFolio\KimchilyWebGL`로 복사했습니다. 원본과
@@ -31,12 +33,12 @@ SDK의 선택적 구형 `ValidationProject` fixture/plugin 복사본은 제외�
 `prepare_validation.py`, `tools/clone_baseline.py`는 과거 복제·검증용 도구이며
 새 WebGL 작업본의 기본 설치 명령이 아닙니다.
 
-## 새 경로에서 실행
+## 현재 작업 경로에서 실행
 
 PowerShell 작업 폴더:
 
 ```powershell
-Set-Location 'E:\GItHub\PortFolio\KimchilyWebGL'
+Set-Location 'E:\task\KimchilyWebGL'
 ```
 
 1. Node.js 22.13 이상을 준비합니다. Expo 의존성은
@@ -45,10 +47,10 @@ Set-Location 'E:\GItHub\PortFolio\KimchilyWebGL'
    이후 같은 실행기의 `-Task start`로 Expo Go 시연을 시작합니다.
 2. Unity 6000.3.24f1 및 WebGL Build Support를 설치하고 `KimchilyCreator`를 엽니다.
    에디터 위치는 `tools/unity-version.json` 또는 `KIMCHILY_UNITY_EDITOR_ROOT`로 지정합니다.
-   TypeScript 컴파일러 의존성은 다음 명령으로 준비합니다.
+   현재 Windows 제작기는 최초 실행에서 호환 Node와 고정 TypeScript 컴파일러를 자동 준비합니다. 수동 복구는 다음 설치기를 사용합니다.
 
    ```powershell
-   npm --prefix .\KimchilySDK\Packages\com.kimchily.typescript\Tools~\Compiler ci
+   .\KimchilySDK\Packages\com.kimchily.typescript\Tools~\Compiler\install.ps1
    ```
 
 3. Python 3.10 이상에서 `KimchilyPublish/tools/install.ps1`을 실행하면 qrcode/Pillow를
@@ -58,9 +60,11 @@ Set-Location 'E:\GItHub\PortFolio\KimchilyWebGL'
    `Builds/WebGL`은 저장소에 없으므로 이 단계 전에는 `/player/`가
    `503 WEB_PLAYER_MISSING`을 반환합니다.
 5. `KimchilyPublish/tools/start.ps1`로 게시 서버를 실행합니다.
-   기본 포트 8788은 원본 WebGL 서버와 같으므로 동시에 실행하려면 원본 서버를
-   정상 종료하거나 새 서버에 다른 포트를 지정합니다. 서버가 준비되면 Creator에서
-   월드를 새로 Build & Publish합니다. 이주 과정에서는 서버를 실행하지 않았습니다.
+   작업본은 포트 8788, 원본 Android 게시 서버는 8787을 사용합니다. 다른 프로세스가
+   8788을 사용 중이면 경로와 소유 서버를 확인합니다. 서버가 준비되면 Creator에서
+   월드를 새로 Build & Publish합니다. 이주 당시에는 서버를 실행하지 않았습니다.
+6. 멀티플레이는 별도의 `KimchilyServer`를 8790에서 실행합니다. LAN origin, SDK 설치,
+   전용 Chili Island 빌드 방법은 [현재 작업 안내](docs/current-status-and-work-log.md)를 따릅니다.
 
 `KimchilyWebApp`은 별도 npm 설치가 필요하지 않습니다. Android 네이티브 빌드는
 이전 Unity 2022 기준 기록을 포함하므로 별도 검증이 필요합니다. 이주 과정에서

@@ -23,6 +23,8 @@ Windows 새 PC에서 처음 열면 TypeScript 패키지가 호환 Node 실행 �
 
 [칠리 아일랜드](multiplayer-demo.md)는 `KimchilyCreator/Assets/Demos/ChiliIsland/Scenes/ChiliIsland.unity`의 전용 씬이다. 직접 생성한 14개 환경·소품 프리팹과 OBJ/MTL, `PortalGarden.ts`를 포함하며 기존 `MyWorld.unity`와 분리한다.
 
+현재 시연은 첫 발판 미션 → 포털 통과 → 다리 이동 → 두 번째 정원 릴레이 → 완주·재시작이다. [현재 게시 주소·전체 작업 기록](current-status-and-work-log.md)과 [검증 범위](chili-island-validation.md)를 기준으로 확인한다.
+
 TypeScript SDK **0.3.0**, Networking SDK **0.4.0**을 포함한 실행기가 필요하다. 서버 TS가 게임을 판정하고 클라이언트 TS가 `Room`과 `Hud`로 입력·UI·연출을 작성한다. `KimchilyCreator/tools/build_chili_island.ps1 -Publish`로 승인된 규칙 번들 등록과 해시가 일치하는 월드 게시를 수행한다. 새 SDK API를 처음 추가할 때 공통 실행기를 갱신하며, 이후 지원 API 내 규칙·연출 변경에는 게임 C# 수정이 필요 없다. [상세 흐름](portfolio-typescript-multiplayer.md)
 
 ## 2. 공통 웹 실행기를 준비하기
@@ -105,6 +107,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\KimchilyCreator\tools\publ
 
 CLI 게시 응답은 `KimchilyCreator\Artifacts\publish-result.json`에 저장된다. GUI 게시 결과는 게시 창에서 확인한다.
 
+Chili Island 전용 도구 `KimchilyCreator/tools/build_chili_island.ps1 -Publish`는 별도 클론에서 작업하고 응답을 `Artifacts/ChiliIslandBuild/Artifacts/chili-island-publish-result.json`에 저장한다. 현재 데모 주소를 확인할 때 일반 Creator의 예전 응답과 혼동하지 않는다.
+
+## 멀티플레이 서버와 닉네임
+
+게시 서버 8788과 별도로 [KimchilyServer](../KimchilyServer/README.md)를 8790에서 실행한다. 휴대전화 접속에는 PC의 실제 LAN 주소와 게시 페이지 origin을 지정한다. 서버 최초 SDK 설치·실행 명령은 [현재 작업 안내](current-status-and-work-log.md)에 있다. 시작 화면에서 닉네임을 정하고 월드를 열면 Unity TMP 채팅, 이름표·말풍선·원격 이동이 연결된다. 매칭 전 웹 로비는 8790의 별도 페이지로 유지된다.
+
+여러 사람이 함께할 때는 같은 worldId·revisionId·roomId를 사용하고 모두 입장한 뒤 미션을 시작한다. 서로 다른 revision은 별도 방이다. 새 게임 규칙은 새 해시와 새 월드 게시본을 함께 사용해야 한다.
+
 ## 5. iPhone에서 QR로 열기
 
 아래 접속 경로를 안내한 뒤 사용자가 iPhone에서 정상 실행됨을 확인했다. 기능별 상세 검사와 성능 측정은 별도로 진행한다.
@@ -112,10 +122,12 @@ CLI 게시 응답은 `KimchilyCreator\Artifacts\publish-result.json`에 저장�
 1. iPhone과 서버 PC를 서로 통신할 수 있는 **같은 Wi-Fi/LAN**에 연결한다. PC는 같은 공유기의 유선 LAN을 사용해도 된다.
 2. PC에 게시 창 또는 **Published URL**의 QR을 표시한다.
 3. iPhone의 **기본 카메라**로 QR을 비추고 링크를 누른다. Safari에서 연다. 메신저 안의 내장 브라우저로 열렸다면 Safari로 다시 연다.
-4. Kimchily 시작 화면의 **월드 시작**을 누르고 실행기·월드 로딩을 기다린다. 시작 버튼은 사용자 입력이 필요한 브라우저 실행 흐름에 포함된다.
+4. Kimchily 시작 화면에서 **닉네임**을 설정하고 **월드 시작**을 누른 뒤 실행기·월드 로딩을 기다린다. 시작 버튼은 사용자 입력이 필요한 브라우저 실행 흐름에 포함된다.
 5. 월드가 준비되면 왼쪽 스틱으로 이동하고 오른쪽 영역을 드래그해 시점을 바꾼다. 점프 버튼과 상단 **나가기**로 동작을 확인한다.
 
 화면은 휴대전화의 가로·세로 크기에 맞춰 배치된다. 가로로 돌려 플레이하는 것을 권장한다. Safari에서는 브라우저와 기기의 회전 잠금 설정에 따라 동작하며 앱처럼 가로 방향 강제를 보장하지 않는다.
+
+폭 600 CSS px 이하 또는 높이 600 CSS px 이하에서는 웹의 나가기·전체 화면 toolbar를 Unity Canvas 위 별도 행에 둔다. 인게임 채팅은 계속 Unity TMP로 표시하며 웹 버튼과 영역이 겹치지 않는다. 이 수정은 공통 실행기의 WebGL 템플릿에 포함된다.
 
 별도 Android APK나 iPhone 앱을 설치하는 흐름이 아니다. PC에서는 같은 Launch Link를 브라우저에서 열어 **월드 시작**을 누른 뒤 WASD/방향키와 Space를 사용한다.
 
@@ -141,6 +153,9 @@ CLI 게시 응답은 `KimchilyCreator\Artifacts\publish-result.json`에 저장�
 | PC에서는 열리고 iPhone에서는 접속 불가 | QR의 LAN 주소, 같은 네트워크, 서버 상태, 방화벽·기기 격리 |
 | 월드 시작 후 오류 | 페이지 오류 문구와 브라우저 콘솔, Web 실행기/번들의 Unity·SDK 버전, 최신 공통 실행기를 빌드했는지 확인 |
 | 모델·애니메이션이 예전 상태 | 최신 씬 저장 후 Build & Publish했는지, 새 revision QR인지 |
+| 모바일 채팅과 나가기 버튼이 겹침 | 갱신한 WebGL 템플릿으로 공통 플레이어를 빌드했는지 확인하고 페이지를 새로 열기. 월드 콘텐츠만 재게시하면 예전 실행기 CSS는 바뀌지 않음 |
+| 미션 중 정면을 바라보면 위치 갱신이 멈춤 | 회전값 경계 보정을 포함한 `2672fce9c` 이후 KimchilyServer 빌드를 사용하는지 확인 |
+| 두 번째 정원 발판이 켜지지 않음 | 열린 포털 중앙 통과 여부, 별·달·해·잎 순서, 다음 담당자의 교대 조건, 접지·최신 위치와 서버 연결 확인 |
 | 원본 프로젝트나 서버가 선택됨 | 경로가 `E:\task\KimchilyWebGL`인지, 게시 포트가 8788인지 |
 
 서버 세부 옵션과 로그 위치는 [게시 서버 안내](../KimchilyPublish/README.md), 원본 보존 검사는 [공통 개발 도구 안내](../tools/README.md)를 참고한다.

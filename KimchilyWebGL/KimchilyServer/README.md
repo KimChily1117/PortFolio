@@ -6,7 +6,7 @@ Project Dawn의 직렬 작업 큐·예약 작업을 재사용한 .NET 10 WebSock
 
 | 파일 | 역할 |
 | --- | --- |
-| `../KimchilyCreator/ServerScripts/chili-portal/PortalRules.ts` | 발판 배치, 필요 인원, 점유·만료 조건, 시간, 성공·재도전 |
+| `../KimchilyCreator/ServerScripts/chili-portal/PortalRules.ts` | 동시 발판, 포털 입장, 순서·교대 릴레이, 완료·재도전 |
 | `../KimchilyCreator/Assets/Demos/ChiliIsland/Scripts/PortalGarden.ts` | 클라이언트 연출·게임 HUD |
 | `src/Kimchily.Server.Core/RoomHub.cs` | 방 수명, 순서 보장, 위치·명령 검증, 상태 전송 |
 | `src/Kimchily.Server.Core/ScriptRoomGame.cs` | 게임을 모르는 범용 Jint 실행기와 JSON 제한 |
@@ -73,7 +73,11 @@ Unity 로컬 이동 → 초당 10회 pose
 
 RoomPump는 20ms마다 직렬 작업 큐를 처리하고 게임 tick은 최대 초당 10회입니다. 위치·입퇴장·명령 때도 규칙을 실행합니다. 패킷이 끊겨도 tick이 만료를 판단합니다. 모든 연결이 같은 직렬 큐를 이용하므로 한 방의 상태를 동시에 쓰지 않습니다.
 
-현재 PortalRules.ts는 시작 인원 1~4명을 고정하고 첫 N개의 발판을 요구합니다. XZ 반경 1.1m, 높이 ±1.5m, 접지 상태, 1.2초 이내 pose를 모두 검사합니다. 한 사람은 한 발판만 점유하고 겹친 후보는 playerId 순서로 선택합니다. 모두 3초 연속 점유하면 성공하며 비거나 pose가 만료되면 진행을 초기화합니다. 시간은 폰이 아닌 서버 nowMs로 계산합니다. 남은 시간은 100ms 단위로 올림합니다. 성공은 reset 또는 빈 방 삭제까지 유지하고 늦은 입장은 joined.game으로 받습니다.
+현재 PortalRules.ts는 시작 인원 1~4명을 고정하고 첫 N개의 발판을 요구합니다. XZ 반경 1.1m, 높이 ±1.5m, 접지 상태, 1.2초 이내 pose를 모두 검사합니다. 한 사람은 한 발판만 점유하고 겹친 후보는 playerId 순서로 선택합니다. 모두 3초 연속 점유하면 `complete`로 포털을 엽니다. 비거나 pose가 만료되면 첫 미션의 충전을 초기화합니다.
+
+포털 중앙 통로에 들어온 참가자를 서버 TS가 기록하고, 두 번째 정원에서 별·달·해·잎을 1.5초씩 순서대로 밝힙니다. 처음에는 시작 인원만큼 서로 다른 참가자가 기여하며 이후 다인 플레이는 직전 담당자와 교대합니다. 이미 완료한 릴레이 단계는 이탈·위치 만료에도 유지하고, 네 번째 성공 후 `finished`가 됩니다. `reset` 또는 빈 방 삭제까지 전체 완료를 유지합니다. 늦은 참가자는 `joined.game`으로 진행 상황을 받고 포털을 통과해야 기여할 수 있습니다. 시간은 폰이 아닌 서버 `nowMs`로 계산하고 남은 시간을 100ms 단위로 올림합니다.
+
+공통 pose 검증은 정북 근처의 Unity Euler 오차를 고려해 yaw `[-0.006,360]`을 받아 `[0,360)`으로 정규화합니다. 범위를 벗어난 값과 비유한 수는 거부하며 기존 이동량 검사는 유지합니다. 이는 게임 TS와 별개의 공통 통신 보정입니다.
 
 세부 메시지는 [통신 규격](docs/protocol.md), 원본 재사용 범위는 [재사용 기록](docs/reuse.md)에 있습니다.
 
@@ -101,3 +105,5 @@ RoomPump는 20ms마다 직렬 작업 큐를 처리하고 게임 tick은 최대 �
 검사는 별도 loopback 포트를 사용하고 사용자 서버를 종료하지 않습니다. `Artifacts/checks/<UTC>`에 결과와 Kestrel 로그를 남깁니다.
 
 2인 발판·시간·이탈·만료·재도전·늦은 입장·실제 WebSocket 동기화를 검사합니다. 해시/월드 불일치, 파일 변조, JSON 크기·깊이·값 수, 무한 루프의 방 격리도 포함합니다. TS 복사본의 holdSeconds만 3→5로 바꿔 컴파일한 뒤 같은 C# 호스트에서 정확히 5초째 성공하는 검증과, 전혀 다른 counter 게임을 실행하는 범용성 검증이 있습니다.
+
+2026-09-30 최종 결과는 **57 passed / 0 failed**입니다. 3참가자 릴레이의 진입·순서·교대·만료·늦은 입장·공유 완료·초기화 검사 7개와 회전값 경계 검사 1개가 포함됩니다. 근거는 `Artifacts/checks/20260930-020458/results.json`입니다. [검증 기록](../docs/chili-island-validation.md)과 [전체 작업 이력](../docs/current-status-and-work-log.md)에서 브라우저·실기기 확인 범위를 구분합니다.

@@ -71,4 +71,10 @@ PlayMode 테스트는 기존 브리지·SDK Coroutine/manifest·Lua·다운로�
 
 TypeScript SDK 0.3.0의 `Kimchily.Network.Room`은 범용 `ScriptRoomApi`로 연결된다. 승인된 규칙의 ID/해시 구독, 일반 액션 요청, 읽기 전용 게임 스냅샷을 제공한다. `Kimchily.UI.Hud`는 TS가 문구·버튼·진행률을 작성하는 범용 TMP 표시 기능이다. C# 실행기는 게임별 발판·승리 조건을 알지 못한다. 새 API 최초 도입에는 실행기 갱신이 필요하고, 이후 지원 API 내 게임 변경은 TS 콘텐츠로 게시한다. [상세 설명](../docs/portfolio-typescript-multiplayer.md)
 
-2026-09-29 협동 게임 통합 후 Unity PlayMode **115개**가 통과했습니다. 위의 과거 Android 결과와 구분하며, 이번 게임의 휴대전화 실기기 검증으로 합산하지 않습니다.
+2026-09-29 TS 게임 이관 후 Unity EditMode **60개**, PlayMode **121개**가 통과했습니다. 이전 고정 C# 포털 단계의 PlayMode 115개 및 과거 Android 결과와 구분합니다. 2026-09-30에는 공통 WebGL 빌드와 게시 데모의 두 미션 완주를 확인했으며 Unity 181개를 재실행한 것은 아닙니다. [검증 이력](../docs/chili-island-validation.md)
+
+## 모바일 웹 상단 버튼 배치
+
+`Assets/WebGLTemplates/KimchilyWeb/player.css`는 폭 600 CSS px 이하 또는 높이 600 CSS px 이하에서 웹 toolbar와 Unity Canvas를 별도 행으로 배치합니다. 나가기·전체 화면 버튼은 DOM, 게임 채팅과 HUD는 Unity TMP입니다. 이 분리로 화면 회전이나 Unity Canvas 배율에 관계없이 상단 버튼과 채팅이 겹치지 않게 합니다. 데스크톱 1280×720은 기존 overlay 배치를 유지합니다.
+
+템플릿 변경은 공통 플레이어 빌드에 포함됩니다. 이미 만들어진 `Builds/WebGL`은 소스 템플릿을 자동으로 다시 읽지 않으므로 이후 배포에서는 `tools/export_webgl.ps1`로 갱신합니다. 09-30 검증본은 마지막 CSS 전용 조정을 빌드 폴더에도 반영하고 원본·제공 파일 SHA-256 일치를 확인했습니다. [현재 상태와 작업 이력](../docs/current-status-and-work-log.md)

@@ -2,6 +2,8 @@
 
 ## Current delivery — mobile layout and portal relay, 2026-09-30
 
+Source commit: `2672fce9c`. The [current status and work log](current-status-and-work-log.md) collects the full project history, version table, execution paths, and remaining checks. Documentation updates do not count as a new runtime test run.
+
 The portal now admits participants into a second cooperative area in the same scene. Players cross the physical bridge and charge star, moon, sun, and leaf pads in order for 1.5 seconds each. The initial contributors must be distinct up to the round's required player count; subsequent multiplayer turns alternate. Solo demonstration remains supported. Both admission and relay outcomes are authored in server TS, with client TS handling the HUD and visuals. No game-specific C# runtime rule or teleport exception was added.
 
 Mobile layouts at widths up to 600 CSS pixels or heights up to 600 CSS pixels reserve a separate toolbar row above the Unity Canvas. This avoids mixing CSS button positions with Unity's height-based Canvas scaling. Browser checks covered 390×844 portrait, 844×390 landscape, and the final 896×520 layout. In each mobile layout, the toolbar occupied y=0..72 and the Canvas began at y=72, keeping Unity chat outside the exit-button region. Portrait/landscape chat panels were opened, and the temporary viewport override was reset. The 1280×720 desktop layout retains its overlay toolbar.
@@ -36,14 +38,14 @@ After the final server fix, a fresh browser session completed both missions usin
 
 ## Previous delivery — TypeScript game rules and presentation, 2026-09-29
 
-The current demo uses server-side `PortalRules.ts` for occupancy, round state, hold time, completion, and reset. Client-side `PortalGarden.ts` authors the HUD, button actions, pad visuals, and portal animation. C# hosts the generic script VM, transport, state versions, JSON boundaries, and TMP renderer. The former C# `PortalPuzzle` and game-specific HUD/client were removed.
+That delivery introduced server-side `PortalRules.ts` for occupancy, round state, hold time, completion, and reset. Client-side `PortalGarden.ts` authored the HUD, button actions, pad visuals, and portal animation. C# hosted the generic script VM, transport, state versions, JSON boundaries, and TMP renderer. The former C# `PortalPuzzle` and game-specific HUD/client were removed.
 
 - TypeScript SDK 0.3.0; Networking SDK 0.4.0.
 - Approved rule ID: `chili-portal-ts-v1`.
 - Rule JavaScript SHA-256: `5acf8acbf0153a0b5f7672984c27498826c31c527e91131cdb6f61ce9fb04290`.
 - [Architecture and portfolio explanation in Korean](portfolio-typescript-multiplayer.md).
 
-| Check | Current result |
+| Check | Result at that delivery |
 |---|---|
 | C# server Release checks | 49 passed |
 | Unity EditMode | 60 passed |
@@ -64,12 +66,12 @@ The published WebGL walkthrough verified nickname entry, a solo round, movement 
 
 Two-player simultaneous hold is covered by the server tests. The browser walkthrough verifies solo completion, two-client late joining, and reset propagation; it does not establish simultaneous play on two physical phones. Portrait layout was checked in the earlier art delivery below, while current HUD behavior is also covered by Unity tests. Physical multi-phone testing remains separate.
 
-### Current published revision
+### Previous published revision — 2026-09-29
 
 `webgl-20260929T120442251Z-263c8bfc`
 
 - World manifest SHA-256: `6ddc31f2e0bed96379f192665dfce631603d72649169c5428c444644e957cda5`.
-- [Current QR and entry page](http://192.168.0.4:8788/w/chili-island/webgl-20260929T120442251Z-263c8bfc).
+- [Previous QR and entry page](http://192.168.0.4:8788/w/chili-island/webgl-20260929T120442251Z-263c8bfc).
 - Local publisher: port 8788; C# script host: port 8790. The LAN address can change and these links require the local services to be running.
 - Release server test evidence: `KimchilyServer/Artifacts/checks/20260929-120522`.
 - Unity XML reports: `KimchilyUnityRuntime/Artifacts/runtime-editmode.xml` and `runtime-playmode.xml`.

@@ -2,6 +2,8 @@
 
 WebSocket `/ws`는 UTF-8 JSON 명령을 받습니다. 분할 프레임은 EndOfMessage까지 조립하며 최대 합계 4,096바이트입니다. 명령은 protocolVersion:1과 type을 포함합니다. 미등록 필드는 거부합니다. 발신자 ID·서버 시간은 서버가 정합니다.
 
+2026-09-30 구현 기준: `2672fce9c`. [현재 상태·작업 이력](../../docs/current-status-and-work-log.md)
+
 ## 입장·채팅·캐릭터
 
 ```json
@@ -15,7 +17,8 @@ WebSocket `/ws`는 UTF-8 JSON 명령을 받습니다. 분할 프레임은 EndOfM
 - worldId/revisionId/roomId는 각각 ASCII 영문·숫자·밑줄·하이픈 1~80자입니다. 하나라도 다르면 다른 방입니다.
 - 닉네임은 앞뒤 공백 제거 후 1~24 UTF-16 코드 단위, 채팅은 1~300입니다. 제어 문자를 거부하고 HTML도 텍스트로 표시합니다.
 - Unity는 초당 10회 pose를 보냅니다. 서버는 최소 70ms 간격, 증가하는 sequence만 받습니다.
-- 좌표 ±10,000, yaw [0,360), speed [0,25], verticalVelocity ±100 범위 유한수만 허용합니다.
+- 좌표 ±10,000, speed [0,25], verticalVelocity ±100 범위 유한수만 허용합니다.
+- yaw 입력은 [-0.006,360]의 유한수이며 저장·전달값은 [0,360)입니다. Unity 정북 근처의 작은 음수는 360을 더하고 정확히 360인 값은 0으로 정규화합니다. 덧셈의 float 반올림으로 360이 되면 역시 0을 사용합니다. 범위를 벗어난 값은 INVALID_STATE입니다.
 - 최대 2초의 경과 시간을 적용한 수평 25m/s + 1.5m, 수직 100m/s + 2m 이동량을 검사합니다. 최초 스폰보다 20m 아래로 낙하한 뒤 스폰 주변 복귀는 리스폰 예외입니다.
 - 위치는 클라이언트가 계산합니다. 서버 지형 충돌·계정 인증을 의미하지 않습니다.
 
@@ -28,7 +31,7 @@ WebSocket `/ws`는 UTF-8 JSON 명령을 받습니다. 분할 프레임은 EndOfM
   "protocolVersion": 1,
   "type": "game",
   "scriptId": "chili-portal-ts-v1",
-  "scriptHash": "5acf8acbf0153a0b5f7672984c27498826c31c527e91131cdb6f61ce9fb04290",
+  "scriptHash": "0e7ac1ee9620519d7b9b55696fb7a03527260096a7f0c57a706cc7c784a1d8e4",
   "action": "watch"
 }
 ```
@@ -42,7 +45,7 @@ WebSocket `/ws`는 UTF-8 JSON 명령을 받습니다. 분할 프레임은 EndOfM
 | action | ASCII 영문·숫자·밑줄·하이픈 1~80자. watch는 호스트 구독 동작 |
 | payloadJson | 선택적 JSON 문자열. UTF-8 최대 1,024바이트. 객체·배열·기본값 가능 |
 
-action을 start/reset으로 바꾸면 현재 포털 TS가 시작·재도전을 실행합니다. 범용 C# 호스트는 이 이름이나 승리 조건을 모릅니다. 다른 게임은 add와 payloadJson:'{"amount":7}'처럼 자기 명령을 정의할 수 있습니다. 전체 명령은 JSON escape까지 포함해 4,096바이트 이내여야 합니다. watch 이외의 명령은 참가자당 5초에 최대 4회입니다.
+action을 start/reset으로 바꾸면 현재 포털 TS가 시작·재도전을 실행합니다. 포털 진입과 릴레이 완료는 검증된 pose로 판정하며 enter/finish 명령은 제공하지 않습니다. 범용 C# 호스트는 이 이름이나 승리 조건을 모릅니다. 다른 게임은 add와 payloadJson:'{"amount":7}'처럼 자기 명령을 정의할 수 있습니다. 전체 명령은 JSON escape까지 포함해 4,096바이트 이내여야 합니다. watch 이외의 명령은 참가자당 5초에 최대 4회입니다.
 
 임의 JS, 파일 경로, 발신자 ID, 시간, 결과 상태를 직접 보내는 필드는 없습니다. 포털 TS는 payload로 규칙을 덮어쓰지 않습니다.
 
@@ -112,7 +115,7 @@ version은 C#이 상태 JSON 변경 때만 증가시킵니다. 스크립트가 v
 
 ```ts
 interface PortalState {
-    phase: "waiting" | "playing" | "holding" | "complete";
+    phase: "waiting" | "playing" | "holding" | "complete" | "relay" | "relayHolding" | "finished";
     round: number;
     requiredPlayers: number;
     holdSeconds: number;
@@ -122,6 +125,13 @@ interface PortalState {
         id: string; x: number; y: number; z: number; radius: number;
         active: boolean; playerId: string | null;
     }>;
+    enteredPlayerIds: string[];
+    relayStep: number; // 완료한 발판 수, 0..4
+    relayContributors: string[]; // 완료 순서대로 담당자 ID 한 개씩
+    relayHolderId: string | null;
+    relayHoldSeconds: number;
+    relayRemainingMs: number;
+    _relayHoldingSince: number | null;
 }
 ```
 
@@ -136,7 +146,28 @@ active는 필요한 발판이라는 뜻이고, 점유는 active && playerId!==nu
 
 start는 방 인원 1~4명을 고정하며 대기 중에는 현재 인원을 표시합니다. 중간 입퇴장으로 목표 인원이 바뀌지 않습니다. 모든 발판을 config.holdSeconds만큼 연속 점유하면 complete가 됩니다. 비거나 pose가 만료되면 시간을 초기화합니다. 점유자가 교체되어도 전부 채워진 상태가 연속 유지되면 진행은 유지합니다.
 
-서버 nowMs로 계산하고 남은 시간을 100ms 단위로 올림합니다. 100ms tick으로 패킷이 없어도 검사합니다. complete는 reset 또는 빈 방 삭제까지 유지합니다. 웹 로비의 같은 방 참가자도 인원에 포함되므로 협동 시연에서는 Unity 플레이어로 참여해야 발판을 채울 수 있습니다.
+서버 nowMs로 계산하고 남은 시간을 100ms 단위로 올림합니다. 100ms tick으로 패킷이 없어도 검사합니다. `complete`는 첫 미션 성공·포털 개방이며, 전체 탐험 완료는 `finished`입니다. 웹 로비의 같은 방 참가자도 인원에 포함되므로 협동 시연에서는 Unity 플레이어로 참여해야 발판을 채울 수 있습니다.
+
+| 단계 | 의미 |
+|---|---|
+| waiting | 대기, start로 시작 인원을 고정 |
+| playing / holding | 첫 정원의 서로 다른 발판을 동시에 3초 유지 |
+| complete | 포털 개방, 아직 진입한 참가자가 없는 상태 |
+| relay / relayHolding | 포털 진입 후 다음 정원의 순서 발판 대기 / 충전 |
+| finished | 네 릴레이 발판 완료, reset 또는 빈 방 삭제까지 유지 |
+
+열린 포털 중심 `(0,0,10)`에서 X ±1.35, Z ±0.85, 높이 ±1.5m에 있는 접지된 최신 pose를 받아 `enteredPlayerIds`에 기록합니다. 닫힌 포털 통과나 입장 기록 없는 두 번째 정원의 점유는 릴레이 기여가 아닙니다. 퇴장한 연결 ID는 진행 중 진입 목록에서 제거되므로 새 연결은 포털을 다시 통과해야 합니다.
+
+| 릴레이 순서/id | 중심 | 반경 / 유지 시간 |
+|---|---|---|
+| 1/star | (-3,0,34) | 1.1m / 1.5초 |
+| 2/moon | (3,0,34) | 1.1m / 1.5초 |
+| 3/sun | (-3,0,38) | 1.1m / 1.5초 |
+| 4/leaf | (3,0,38) | 1.1m / 1.5초 |
+
+현재 `relayStep`의 발판만 충전합니다. 첫 requiredPlayers명의 기여자는 서로 달라야 하며, 다인 플레이의 이후 단계는 직전 담당자와 교대합니다. solo는 같은 참가자가 네 번 진행할 수 있습니다. 현재 담당자가 유효하면 겹친 새 참가자가 충전을 빼앗지 않습니다. 담당자가 바뀌거나 접지·반경·높이·1,200ms 신선도 조건을 잃으면 현재 1.5초 충전만 다시 시작합니다. 완료한 단계와 기여 기록은 유지합니다.
+
+늦은 입장자는 현재 스냅샷을 받지만 포털 입장 자격은 별도로 얻어야 합니다. `reset`은 라운드 번호를 보존하고 두 미션, 진입 목록, 기여 기록, 현재 담당자와 타이머를 초기화합니다. 필요한 인원은 대기 상태에서 다시 계산합니다. 다리의 지형은 클라이언트 씬에 있으며 서버가 순간이동을 수행하지 않습니다.
 
 ## 제한과 오류
 
