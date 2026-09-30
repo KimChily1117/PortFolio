@@ -88,6 +88,8 @@ namespace Kimchily.Creator.Project
             Scatter(lamp, new [] {new Vector3(2.5f,0,-4.5f),new Vector3(-5,0,7.2f),new Vector3(5,0,7.2f),new Vector3(-3.2f,0,10)}, .8f,1);
             Path();
             Clouds();
+            // 두 번째 정원은 같은 월드 안의 별도 구역이다. 이동은 기존 캐릭터 컨트롤러를 그대로 사용한다.
+            var relayPads = RelayGarden(island, pads, treeA, treeB, flower, lamp, mascot, out var bridgeGlow, out var relayReward);
             var spawn = new GameObject("Arrival"); spawn.transform.position = new Vector3(0,.12f,-5.5f);
             var model = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/World/PublishedModels/unitychan_dynamic_Publishable.prefab");
             var player = KimchilyMobilePlayerBootstrap.CreateForScene(scene, model);
@@ -104,6 +106,12 @@ namespace Kimchily.Creator.Project
             bindings.Add(Binding("portalOpen", portal.transform.Find("Awake").gameObject));
             bindings.Add(Binding("portalClosed", portal.transform.Find("Sleeping").gameObject));
             bindings.Add(Binding("halo", portal.transform.Find("Halo").gameObject));
+            for (int i = 0; i < 4; i++) {
+                bindings.Add(Binding("relay" + i, relayPads[i].transform.Find("Occupied").gameObject));
+                bindings.Add(Binding("relayIdle" + i, relayPads[i].transform.Find("Idle").gameObject));
+            }
+            bindings.Add(Binding("bridgeGlow", bridgeGlow));
+            bindings.Add(Binding("relayReward", relayReward));
             director.Fields = bindings.ToArray();
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
@@ -125,6 +133,60 @@ namespace Kimchily.Creator.Project
         }
 
         static TypeScriptFieldBinding Binding(string name, GameObject value) => new TypeScriptFieldBinding { name=name, kind="GameObject", useOverride=true, gameObjectValue=value };
+        static GameObject[] RelayGarden(GameObject island, GameObject[] sourcePads, GameObject treeA, GameObject treeB,
+            GameObject flower, GameObject lamp, GameObject mascot, out GameObject bridgeGlow, out GameObject reward)
+        {
+            // 새 판정 코드는 생성기에 넣지 않는다. 아래 좌표는 PortalRules.ts의 relayPads와 맞춘 레벨 배치다.
+            var garden = UnityEngine.Object.Instantiate(island);
+            garden.name = "Second garden · Lantern relay"; garden.transform.position = new Vector3(0, 0, 32);
+            garden.transform.Find("Soft grass floor").GetComponent<MeshRenderer>().sharedMaterial = palette["Lilac"];
+            var pads = new GameObject[4];
+            for (int i = 0; i < pads.Length; i++) {
+                pads[i] = UnityEngine.Object.Instantiate(sourcePads[i]);
+                pads[i].name = "Relay " + (i + 1) + " · " + sourcePads[i].name;
+                pads[i].transform.position = sourcePads[i].transform.position + new Vector3(0, 0, 32);
+                // 표식 옆의 작은 등불도 기존 원본 메시를 공유한다.
+                var beacon = UnityEngine.Object.Instantiate(lamp);
+                beacon.transform.position = pads[i].transform.position + new Vector3(i % 2 == 0 ? -1.65f : 1.65f, 0, 0);
+            }
+            Scatter(treeA, new[] { new Vector3(-7,0,30), new Vector3(7,0,36), new Vector3(-6,0,43) }, .65f, .9f);
+            Scatter(treeB, new[] { new Vector3(7,0,29), new Vector3(-7,0,37), new Vector3(5,0,44) }, .65f, .9f);
+            Scatter(flower, new[] { new Vector3(-5,0,32), new Vector3(5,0,33), new Vector3(-5,0,40), new Vector3(4,0,42) }, .8f, 1.1f);
+            var path = Node("Relay garden path");
+            for (int i = 0; i < 15; i++) Disc("Relay paver", "Cream", path.transform,
+                new Vector3(Mathf.Sin(i) * .16f, .019f, 27 + i * 1.05f), new Vector3(.65f, .07f, .43f));
+
+            var bridge = Node("Portal crossing · permanent return path");
+            // 렌더링과 별개인 연속 바닥으로 발판 사이의 작은 틈에 발이 빠지는 일을 막는다.
+            BoxCollider(bridge, new Vector3(3.5f,.25f,14), new Vector3(0,-.085f,20));
+            for (int side = -1; side <= 1; side += 2) {
+                BoxCollider(bridge, new Vector3(.16f,.85f,14), new Vector3(side * 1.8f,.425f,20));
+                for (int i = 0; i < 8; i++) {
+                    Disc("Bridge post", "Gold", bridge.transform, new Vector3(side * 1.78f,.37f,13 + i * 2), new Vector3(.09f,.74f,.09f));
+                    Orb("Bridge lantern", "Glow", bridge.transform, new Vector3(side * 1.78f,.83f,13 + i * 2), Vector3.one * .13f);
+                }
+                Orb("Bridge handrail", "Cream", bridge.transform, new Vector3(side * 1.78f,.78f,20), new Vector3(.055f,.055f,7.05f));
+            }
+            for (int i = 0; i < 18; i++) Disc("Bridge step", i % 2 == 0 ? "Cream" : "Sand", bridge.transform,
+                new Vector3(0,-.06f,13.2f + i * .8f), new Vector3(1.75f,.2f,.48f));
+            bridgeGlow = Node("Portal route lights");
+            for (int i = 0; i < 18; i++) Orb("Guiding firefly", "Glow", bridgeGlow.transform,
+                new Vector3(Mathf.Sin(i * 1.6f) * .4f,.35f,10.5f + i * 1.18f), Vector3.one * .09f);
+            bridgeGlow.SetActive(false);
+
+            var monument = UnityEngine.Object.Instantiate(mascot);
+            monument.name = "Relay finish · sprout monument"; monument.transform.position = new Vector3(0,0,43);
+            monument.transform.rotation = Quaternion.identity; monument.transform.localScale = Vector3.one * 1.8f;
+            var dais = Disc("Victory terrace", "Cream", null, new Vector3(0,-.03f,43), new Vector3(2.6f,.15f,2.1f));
+            reward = Node("Relay completion celebration"); reward.transform.position = new Vector3(0,2,43);
+            for (int i = 0; i < 12; i++) {
+                float angle = i * Mathf.PI * 2 / 12;
+                Orb("Victory light", i % 2 == 0 ? "Gold" : "Glow", reward.transform,
+                    new Vector3(Mathf.Cos(angle) * 2.4f,.5f + Mathf.Sin(angle) * 1.8f,0), Vector3.one * .16f);
+            }
+            reward.SetActive(false);
+            return pads;
+        }
         public static void BuildWorld()
         {
             // 메시와 컴파일된 TS 자산을 WebGL용 콘텐츠로 묶는다. 실행기 전체 재빌드와는 별도다.

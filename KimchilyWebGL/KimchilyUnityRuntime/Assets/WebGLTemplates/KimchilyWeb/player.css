@@ -24,5 +24,13 @@ progress { display: block; width: 100%; height: 5px; border: 0; border-radius: 5
 progress::-webkit-progress-bar { background: #233444; border-radius: 5px; }
 progress::-webkit-progress-value { background: #9bf1d1; border-radius: 5px; }
 [hidden] { display: none !important; }
+/* 모바일에서는 DOM 버튼과 Unity Canvas가 서로 다른 행을 차지한다.
+   Unity의 화면 높이/DPR 배율과 CSS 픽셀이 달라도 채팅이 나가기 영역으로 올라오지 않는다. */
+@media (max-width: 600px), (max-height: 600px) {
+  #player { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+  .toolbar { position: relative; inset: auto; grid-row: 1; min-width: 0; background: #10242b; }
+  #unity-canvas { grid-row: 2; min-width: 0; min-height: 0; }
+  .toolbar-actions { flex-shrink: 0; }
+}
 @media (max-height: 500px) { .panel { inset: 64px 0 0; padding: 8px 24px; } .panel-inner { padding: 14px 24px; } .eyebrow, .hint { display: none; } h1 { font-size: 24px; margin: 0 0 8px; } #status, #world-label { margin: 8px 0; } .primary { margin-top: 2px; } }
 .entry-profile{text-align:left;margin:18px auto;max-width:340px;display:grid;gap:8px}.entry-profile label{font-size:13px;color:#b4cabe}.entry-profile input{box-sizing:border-box;width:100%;padding:11px;border:1px solid #45615c;border-radius:8px;background:#10262b;color:#f3faf5;font-size:16px}.entry-profile details{font-size:12px;color:#b4cabe}.entry-profile details input{margin:5px 0 10px}.entry-profile details label{display:block;margin-top:8px}

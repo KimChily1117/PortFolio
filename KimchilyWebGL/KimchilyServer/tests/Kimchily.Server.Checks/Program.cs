@@ -99,6 +99,27 @@ try
     Assert(late.Events.Last().History!.Length == 2, "Late joiner did not receive recent history.");
     Assert(late.Events.Last().Players!.Single(p => p.PlayerId == "a").State is { Sequence: 5, X: 1 }, "Late joiner missed latest avatar pose.");
     Passed("Late joiners receive current members and bounded recent chat history");
+    // Unity가 정북을 미세한 음수 또는 360으로 직렬화해도 fresh pose가 계속 갱신되어야 한다.
+    var angleHub = new RoomHub(() => now);
+    var anglePlayer = new FakePeer("angle"); var angleObserver = new FakePeer("angle-observer");
+    await Dispatch(angleHub, anglePlayer, Join()); await Dispatch(angleHub, angleObserver, Join());
+    await Dispatch(angleHub, anglePlayer, new() { ProtocolVersion = 1, Type = "state", State = pose with { Yaw = 360 } });
+    Assert(angleObserver.Events.Last().Player?.State is { Sequence: 1, Yaw: 0 }, "A full-turn heading did not normalize to north.");
+    now += 100;
+    await Dispatch(angleHub, anglePlayer, new() { ProtocolVersion = 1, Type = "state", State = pose with { Sequence = 2, Yaw = 360 } });
+    Assert(angleObserver.Events.Last().Player?.State is { Sequence: 2, Yaw: 0 }, "Stationary north-facing poses stopped refreshing.");
+    now += 100;
+    await Dispatch(angleHub, anglePlayer, new() { ProtocolVersion = 1, Type = "state", State = pose with { Sequence = 3, Yaw = -.0057f } });
+    Assert(angleObserver.Events.Last().Player?.State is { Sequence: 3, Yaw: >= 359.99f and < 360 }, "Unity's negative north-facing epsilon was rejected.");
+    now += 100;
+    await Dispatch(angleHub, anglePlayer, new() { ProtocolVersion = 1, Type = "state", State = pose with { Sequence = 4, Yaw = -float.Epsilon } });
+    Assert(angleObserver.Events.Last().Player?.State is { Sequence: 4, Yaw: 0 }, "Negative epsilon rounded outside the canonical range.");
+    foreach (var invalidAngle in new[] { -.01f, 360.01f, float.NaN, float.PositiveInfinity }) {
+        int beforeAngle = angleObserver.Events.Count;
+        await Dispatch(angleHub, anglePlayer, new() { ProtocolVersion = 1, Type = "state", State = pose with { Sequence = 5, Yaw = invalidAngle } });
+        Assert(anglePlayer.Events.Last().Code == "INVALID_STATE" && angleObserver.Events.Count == beforeAngle, "Invalid heading was broadcast.");
+    }
+    Passed("Unity north-facing epsilon and full-turn headings normalize while invalid angles remain rejected");
     var unjoined = new FakePeer("unjoined");
     await Dispatch(hub, unjoined, new() { ProtocolVersion = 1, Type = "chat", Text = "no room" });
     Assert(unjoined.Events.Last().Code == "NOT_JOINED", "Unjoined chat accepted.");

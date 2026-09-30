@@ -1,6 +1,40 @@
-# Chili Island verification — 2026-09-29
+# Chili Island verification
 
-## Current delivery — TypeScript game rules and presentation
+## Current delivery — mobile layout and portal relay, 2026-09-30
+
+The portal now admits participants into a second cooperative area in the same scene. Players cross the physical bridge and charge star, moon, sun, and leaf pads in order for 1.5 seconds each. The initial contributors must be distinct up to the round's required player count; subsequent multiplayer turns alternate. Solo demonstration remains supported. Both admission and relay outcomes are authored in server TS, with client TS handling the HUD and visuals. No game-specific C# runtime rule or teleport exception was added.
+
+Mobile layouts at widths up to 600 CSS pixels or heights up to 600 CSS pixels reserve a separate toolbar row above the Unity Canvas. This avoids mixing CSS button positions with Unity's height-based Canvas scaling. Browser checks covered 390×844 portrait, 844×390 landscape, and the final 896×520 layout. In each mobile layout, the toolbar occupied y=0..72 and the Canvas began at y=72, keeping Unity chat outside the exit-button region. Portrait/landscape chat panels were opened, and the temporary viewport override was reset. The 1280×720 desktop layout retains its overlay toolbar.
+
+| Current check | Result |
+|---|---|
+| Server Release checks | 57 passed, 0 failed; build warnings/errors 0 |
+| Added relay checks | 7 passed within the server total; includes three participants |
+| Authored client TS strict type check | Passed |
+| Unity common WebGL runtime | Built successfully; final CSS-only breakpoint adjustment copied from template to served build |
+| Isolated Creator generation, world build, publish | Successful |
+| Published WebGL walkthrough with final server | Solo first mission → portal → physical bridge → all four relay pads → ALL CLEAR |
+| Final browser error console | No error entries; expanded in-game chat showed connected status |
+
+The added checks cover closed-portal rejection, bypassing the entrance, height/grounding requirements, distinct contributors, ordered pads, late joining, expired position recovery, shared completion, and replay cleanup. Evidence: `KimchilyServer/Artifacts/checks/20260930-020458`.
+
+The browser walkthrough exposed an existing facing-angle boundary problem: at north-facing rest, position updates were rejected and the last accepted yaw remained near 360 degrees. Turning away restored updates. Unity's Euler conversion can retain a small negative angle near north ([Unity reference source](https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Math/Quaternion.cs)). The common server accepts the narrow -0.006-degree boundary tolerance and the equivalent full-turn endpoint, then canonicalizes the stored/broadcast heading to [0,360). One additional regression check verifies repeated 360-degree samples and small negative values keep refreshing while larger negative, greater-than-360, and non-finite angles remain rejected. Movement distance checks and TS game rules are unchanged by this transport fix.
+
+After the final server fix, a fresh browser session completed both missions using ordinary keyboard movement. The north-facing sun-pad charge succeeded without turning away. Completion activated the second garden's celebration and replay button. Final 896×520 expanded-chat verification retained ALL CLEAR and connected status, with the exit button ending at y=58 and the Canvas beginning at y=72. Screenshots: `Artifacts/portal-relay/portal-crossing.png`, `relay-complete.png`, and `mobile-final-chat.png`. These browser viewport checks are not physical-phone tests.
+
+**User-reported device check:** on 2026-09-30, the user reported simultaneous operation on up to three device types ("동시 3종까진 확인"). Model names, OS/browser versions, and detailed scenario coverage were not recorded. This report applies to the preceding delivery; the new second-stage mission still needs the user's physical-device walkthrough. It is separate from the automated three-participant relay test above.
+
+### Current published revision
+
+`webgl-20260930T014824479Z-2d905a55`
+
+- Rule JS SHA-256: `0e7ac1ee9620519d7b9b55696fb7a03527260096a7f0c57a706cc7c784a1d8e4`.
+- World manifest SHA-256: `cd2a2ec343f50c3006cd7b721d4fa83003adb328564bf3bc6b0eaeadfbd50b7d`.
+- [Current QR and entry page](http://192.168.0.4:8788/w/chili-island/webgl-20260930T014824479Z-2d905a55).
+- Final mobile screenshot: `Artifacts/portal-relay/mobile-final-chat.png`.
+- Source changes belong to Task and are mirrored to the Git management folder. The user's MyWorld and generated chat-font serialization are excluded.
+
+## Previous delivery — TypeScript game rules and presentation, 2026-09-29
 
 The current demo uses server-side `PortalRules.ts` for occupancy, round state, hold time, completion, and reset. Client-side `PortalGarden.ts` authors the HUD, button actions, pad visuals, and portal animation. C# hosts the generic script VM, transport, state versions, JSON boundaries, and TMP renderer. The former C# `PortalPuzzle` and game-specific HUD/client were removed.
 

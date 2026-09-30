@@ -182,6 +182,7 @@ static class PortalChecks
         assert(stranger.Events.Count == otherEvents, "Game events leaked to a separate room.");
         passed("Larger demo rooms cap the puzzle at four pads while keeping game events isolated");
         await ScriptHostChecks.Run(assert, passed);
+        await RelayChecks.Run(assert, passed);
     }
 }
 
@@ -191,4 +192,6 @@ record PortalGameState(string Phase, int Round, int RequiredPlayers, int HoldSec
     [property: System.Text.Json.Serialization.JsonPropertyName("_holdingSince")] long? HoldingSince)
 {
     [System.Text.Json.Serialization.JsonIgnore] public long Version { get; init; }
+    // 첫 미션의 회귀 검사는 공통 필드만 읽는다. 확장된 릴레이 필드는 RelayChecks가 JSON으로 검사한다.
+    [System.Text.Json.Serialization.JsonExtensionData] public Dictionary<string, JsonElement>? Extra { get; init; }
 }

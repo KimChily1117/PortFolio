@@ -7,6 +7,15 @@ export const config = {
     holdSeconds: 3,
     poseFreshMilliseconds: 1200,
     heightTolerance: 1.5,
+    // 포털의 중앙 통로를 통과해야 두 번째 정원의 발판을 사용할 수 있다.
+    portal: { x: 0, y: 0, z: 10, halfWidth: 1.35, halfDepth: .85 },
+    relayHoldSeconds: 1.5,
+    relayPads: [
+        { id: "star", x: -3, y: 0, z: 34, radius: 1.1 },
+        { id: "moon", x: 3, y: 0, z: 34, radius: 1.1 },
+        { id: "sun", x: -3, y: 0, z: 38, radius: 1.1 },
+        { id: "leaf", x: 3, y: 0, z: 38, radius: 1.1 }
+    ],
     pads: [
         { id: "star", x: -3, y: 0, z: 2, radius: 1.1 },
         { id: "moon", x: 3, y: 0, z: 2, radius: 1.1 },
@@ -27,12 +36,19 @@ interface Input {
 }
 interface Pad { id: string; x: number; y: number; z: number; radius: number; active: boolean; playerId: string | null; }
 interface State {
-    phase: "waiting" | "playing" | "holding" | "complete";
+    phase: "waiting" | "playing" | "holding" | "complete" | "relay" | "relayHolding" | "finished";
     round: number;
     requiredPlayers: number;
     holdSeconds: number;
     remainingMs: number;
     pads: Pad[];
+    enteredPlayerIds: string[];
+    relayStep: number;
+    relayContributors: string[];
+    relayHolderId: string | null;
+    relayHoldSeconds: number;
+    relayRemainingMs: number;
+    _relayHoldingSince: number | null;
     // 서버 시각을 저장한다. 외부에 전달되지만 클라이언트가 이를 덮어쓸 API는 없다.
     _holdingSince: number | null;
 }
@@ -43,6 +59,9 @@ export function create(): State {
         phase: "waiting", round: 0, requiredPlayers: 1,
         holdSeconds: config.holdSeconds, remainingMs: config.holdSeconds * 1000,
         pads: config.pads.map(pad => ({ ...pad, active: false, playerId: null })),
+        enteredPlayerIds: [], relayStep: 0, relayContributors: [], relayHolderId: null,
+        relayHoldSeconds: config.relayHoldSeconds, relayRemainingMs: config.relayHoldSeconds * 1000,
+        _relayHoldingSince: null,
         _holdingSince: null
     };
 }
@@ -52,7 +71,8 @@ export function create(): State {
  * null은 변경 없음이다. 변경 상태의 version 부여와 모든 참가자에게 전달하는 작업은 C# 호스트가 맡는다.
  */
 export function reduce(previous: State, input: Input): State | null {
-    const state: State = { ...previous, pads: previous.pads.map(pad => ({ ...pad })) };
+    const state: State = { ...previous, pads: previous.pads.map(pad => ({ ...pad })),
+        enteredPlayerIds: [...previous.enteredPlayerIds], relayContributors: [...previous.relayContributors] };
     const requiredNow = Math.max(1, Math.min(config.pads.length, input.players.length));
     const fullCharge = config.holdSeconds * 1000;
 
@@ -68,16 +88,19 @@ export function reduce(previous: State, input: Input): State | null {
                 state._holdingSince = null;
             }
         } else if (input.action === "reset") {
-            state.phase = "waiting";
-            state.remainingMs = fullCharge;
-            state._holdingSince = null;
+            // 라운드 번호만 보존한다. 포털 입장 기록과 릴레이 기여자도 함께 지워 다음 탐험에 섞이지 않는다.
+            Object.assign(state, create(), { round: previous.round });
         } else {
             throw new Error("Unknown portal command");
         }
     }
 
-    // 승리 후 발판에서 내려가거나 늦게 입장해도 포털은 열린 상태로 유지된다. 명시적인 reset만 해제한다.
-    if (state.phase === "complete") return null;
+    // 1단계 완료는 포털 개방이다. 2단계까지 끝내야 탐험 전체가 finished가 된다.
+    // 판정은 위치 스냅샷으로 자동 수행하며 클라이언트의 enter/finish 명령은 제공하지 않는다.
+    if (["complete", "relay", "relayHolding", "finished"].includes(state.phase)) {
+        if (state.phase !== "finished") updateRelay(state, input);
+        return JSON.stringify(state) === JSON.stringify(previous) ? null : state;
+    }
     if (state.phase === "waiting") state.requiredPlayers = requiredNow;
 
     const used = new Set<string>();
@@ -120,4 +143,57 @@ export function reduce(previous: State, input: Input): State | null {
     }
 
     return JSON.stringify(state) === JSON.stringify(previous) ? null : state;
+}
+
+/** 위치를 오래 보내지 않는 탭이나 점프 중인 캐릭터는 진입/충전에 사용할 수 없다. */
+function freshGrounded(player: Participant, nowMs: number): player is Participant & { state: Pose } {
+    const age = nowMs - player.receivedAtMs;
+    return !!player.state && player.state.grounded && age >= 0 && age <= config.poseFreshMilliseconds;
+}
+
+/**
+ * 포털 진입 → 실제 다리를 걸어 이동 → 별/달/해/잎 릴레이.
+ * 최초 requiredPlayers개 발판은 서로 다른 참가자가 맡는다. 이후에는 직전 담당자와 교대한다.
+ * 혼자 테스트할 때만 같은 사람이 네 발판을 순서대로 진행할 수 있다.
+ */
+function updateRelay(state: State, input: Input): void {
+    const liveIds = new Set(input.players.map(player => player.playerId));
+    state.enteredPlayerIds = state.enteredPlayerIds.filter(id => liveIds.has(id));
+    for (const player of input.players) {
+        if (!freshGrounded(player, input.nowMs) || state.enteredPlayerIds.includes(player.playerId)) continue;
+        const pose = player.state, gate = config.portal;
+        if (Math.abs(pose.x - gate.x) <= gate.halfWidth && Math.abs(pose.z - gate.z) <= gate.halfDepth
+            && Math.abs(pose.y - gate.y) <= config.heightTolerance) state.enteredPlayerIds.push(player.playerId);
+    }
+    if (state.enteredPlayerIds.length === 0 && state.phase === "complete") return;
+    state.phase = "relay";
+    const target = config.relayPads[state.relayStep];
+    const contributed = new Set(state.relayContributors);
+    const previousHolder = state.relayContributors[state.relayContributors.length - 1];
+    const eligible = input.players.filter(player => {
+        if (!state.enteredPlayerIds.includes(player.playerId) || !freshGrounded(player, input.nowMs)) return false;
+        if (contributed.size < state.requiredPlayers && contributed.has(player.playerId)) return false;
+        if (state.requiredPlayers > 1 && previousHolder === player.playerId) return false;
+        const dx = player.state.x - target.x, dz = player.state.z - target.z;
+        return dx * dx + dz * dz <= target.radius * target.radius
+            && Math.abs(player.state.y - target.y) <= config.heightTolerance;
+    });
+    // 다른 참가자가 겹쳐 들어와도 현재 담당자가 유효하면 충전 중간에 소유자가 바뀌지 않는다.
+    const holder = eligible.find(player => player.playerId === state.relayHolderId) ?? eligible[0];
+    if (!holder) {
+        state.relayHolderId = null; state._relayHoldingSince = null;
+        state.relayRemainingMs = config.relayHoldSeconds * 1000;
+        return;
+    }
+    if (state.relayHolderId !== holder.playerId || state._relayHoldingSince === null) state._relayHoldingSince = input.nowMs;
+    state.relayHolderId = holder.playerId;
+    const remaining = Math.max(0, config.relayHoldSeconds * 1000 - (input.nowMs - state._relayHoldingSince));
+    state.relayRemainingMs = Math.ceil(remaining / 100) * 100;
+    state.phase = "relayHolding";
+    if (remaining > 0) return;
+    state.relayContributors.push(holder.playerId);
+    state.relayStep++;
+    state.relayHolderId = null; state._relayHoldingSince = null;
+    state.relayRemainingMs = config.relayHoldSeconds * 1000;
+    state.phase = state.relayStep === config.relayPads.length ? "finished" : "relay";
 }

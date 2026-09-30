@@ -116,8 +116,14 @@ public sealed class RoomHub(Func<long>? clock = null, ApprovedScriptCatalog? scr
         if (state is null || state.Sequence < 0 || !float.IsFinite(state.X) || !float.IsFinite(state.Y) || !float.IsFinite(state.Z)
             || !float.IsFinite(state.Yaw) || !float.IsFinite(state.Speed) || !float.IsFinite(state.VerticalVelocity)
             || Math.Abs(state.X) > 10000 || Math.Abs(state.Y) > 10000 || Math.Abs(state.Z) > 10000
-            || state.Yaw < 0 || state.Yaw >= 360 || state.Speed < 0 || state.Speed > 25 || Math.Abs(state.VerticalVelocity) > 100)
+            || state.Yaw < -.006f || state.Yaw > 360 || state.Speed < 0 || state.Speed > 25 || Math.Abs(state.VerticalVelocity) > 100)
         { Error(peer, "INVALID_STATE", "플레이어 상태가 올바르지 않습니다."); return; }
+        // Unity Euler 변환은 0 근처에서 약 -0.00573도까지 음수를 남길 수 있다.
+        // 좁은 경계 오차와 정확히 360인 값만 [0,360)으로 정규화해 위치 갱신을 유지한다.
+        if (state.Yaw < 0 || state.Yaw == 360) {
+            var yaw = state.Yaw < 0 ? 360 + state.Yaw : 0;
+            state = state with { Yaw = yaw >= 360 ? 0 : yaw }; // 아주 작은 음수의 float 반올림도 처리한다.
+        }
         var member = membership.Member;
         var now = _clock();
         if (member.Player.State is { } previous)
