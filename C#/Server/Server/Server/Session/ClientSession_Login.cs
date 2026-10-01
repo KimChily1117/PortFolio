@@ -9,6 +9,7 @@ using Server.Data;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -38,6 +39,28 @@ namespace Server
         }
 
         public void HandleLogin(C_Login c_Login)
+        {
+            if (c_Login == null || string.IsNullOrWhiteSpace(c_Login.UniqueId))
+            {
+                Send(new S_Login { LoginOK = 0 });
+                return;
+            }
+
+            try
+            {
+                HandleLoginCore(c_Login);
+            }
+            catch (Exception ex) when (ex is DbException || ex is DbUpdateException)
+            {
+                AccountDbId = 0;
+                LobbyPlayers.Clear();
+                ClearUdpSecurityState();
+                Console.WriteLine($"[LOGIN][DB_ERROR] SessionId={SessionId}, Error={ex.GetBaseException().GetType().Name}: {ex.GetBaseException().Message}");
+                Send(new S_Login { LoginOK = 0 });
+            }
+        }
+
+        private void HandleLoginCore(C_Login c_Login)
         {
             if (ServerState != PlayerServerState.ServerStateLogin)
             {
@@ -75,12 +98,12 @@ namespace Server
                         };
 
                         LobbyPlayers.Add(playerInfo);
-                        s_Login.Players.Add(LobbyPlayers);
                     }
 
                     if (equipmentChanged)
                         db.SaveChanges();
 
+                    s_Login.Players.Add(LobbyPlayers);
                     Send(s_Login);
 
                     ServerState = PlayerServerState.ServerStateCharecterselect;

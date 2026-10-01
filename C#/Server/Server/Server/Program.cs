@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using System.Linq;
 using Google.Protobuf.Protocol;
 using Server.Data;
 using Server.DB;
@@ -33,10 +34,23 @@ namespace Server
 
             _timers.Add(timer);
         }
-        static void Main(string[] args)
+		static int Main(string[] args)
 		{
-			ConfigManager.LoadConfig();
-			DataManager.LoadData();
+            try
+            {
+                ConfigManager.LoadConfig();
+                DataManager.LoadData();
+                DatabaseStartup.Verify(args.Contains("--initialize-database"));
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"[STARTUP][ERROR] Server could not start. {ex.GetType().Name}: {ex.Message}");
+                Console.Error.WriteLine("Check dataPath, DB connection and schema before accepting clients. Use --initialize-database only for a new demo database.");
+                return 1;
+            }
+
+            if (args.Contains("--check-database"))
+                return 0;
             RoomManager.Instance.Add(RoomType.Town);
 
 			

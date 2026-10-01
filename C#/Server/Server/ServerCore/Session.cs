@@ -25,6 +25,8 @@ namespace ServerCore
 
                 // 패킷이 완전체로 도착했는지 확인
                 ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+                if (dataSize < HeaderSize + sizeof(ushort))
+                    throw new FormatException("Packet size must include both size and message id.");
                 if (buffer.Count < dataSize)
                     break;
 
@@ -112,10 +114,28 @@ namespace ServerCore
             if (Interlocked.Exchange(ref _disconnected, 1) == 1)
                 return;
 
-            OnDisconnected(_socket.RemoteEndPoint);
-            _socket.Shutdown(SocketShutdown.Both);
-            _socket.Close();
-            Clear();
+            try
+            {
+                OnDisconnected(_socket.RemoteEndPoint);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"OnDisconnected Failed {ex}");
+            }
+            finally
+            {
+                try
+                {
+                    _socket.Shutdown(SocketShutdown.Both);
+                }
+                catch (SocketException) { }
+                catch (ObjectDisposedException) { }
+                finally
+                {
+                    _socket.Close();
+                    Clear();
+                }
+            }
         }
 
         #region 네트워크 통신
@@ -141,6 +161,7 @@ namespace ServerCore
             catch (Exception e)
             {
                 Console.WriteLine($"RegisterSend Failed {e}");
+                Disconnect();
             }
         }
 
@@ -163,6 +184,7 @@ namespace ServerCore
                     catch (Exception e)
                     {
                         Console.WriteLine($"OnSendCompleted Failed {e}");
+                        Disconnect();
                     }
                 }
                 else
@@ -190,6 +212,7 @@ namespace ServerCore
             catch (Exception e)
             {
                 Console.WriteLine($"RegisterRecv Failed {e}");
+                Disconnect();
             }
         }
 
@@ -226,6 +249,7 @@ namespace ServerCore
                 catch (Exception e)
                 {
                     Console.WriteLine($"OnRecvCompleted Failed {e}");
+                    Disconnect();
                 }
             }
             else
