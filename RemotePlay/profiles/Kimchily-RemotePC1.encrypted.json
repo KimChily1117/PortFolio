@@ -1,0 +1,11 @@
+{
+  "format": "kimchily-vpn-v1",
+  "kdf": "PBKDF2-SHA256",
+  "iterations": 600000,
+  "cipher": "AES-256-CBC",
+  "mac": "HMAC-SHA256",
+  "salt": "9mvZdk6U5B78FLrCsSFb97GDfwq+IzsURXW0mF+9pSw=",
+  "iv": "MQ2P6MHD9P8EqIACE0oPBQ==",
+  "ciphertext": "119hk2mJaBEn3oX5uCRKH+2OXCqfecfgvDerqW5kwvejTrGr1qrFwJ5kmhjB29tHCoAEvKW8eB09j2XinLm7k5AWvbHp9Y1IOwTkmKTeicatCoVxE2eB/863mAtw3ywDOQ5iuBe8rN7WQ78tDbBiiZXSHu94irAh9SyYuW74A2o0xOenVG8B2durT1xSlmbbOnm0fCYGR3doUDH6QClNUobjXTwLIHEsuXFUOVyq90Bu1r2IgcHXSym9fiOuTuIyHrj2IVroaiM6N1jE/QroAXewEj89WkAT2tIH3/EuKLOJ8uXYGfopINF/9A8cX38qqXl0fCQnhmPjDsGIND2Y3CLwL3ZdURKlifcpOFohkQeQufmwg7D8VwqrTYPkgg/A9/MQxgmO7MoYzdnL0Rs2ARSpsxrVBBLK8nhOgK/mh/YH0G/57hfm3/LWUOt/Z9PmFqtk1VBNwPb3QpsT/5yFOUr8ZiR2vInEo/oOCezqVVcB4DZk95gMQqZQ0dbCod4i/j4ITTrHAqrqraQ8gPnO/oL1G5BJI5GoTIySUwmO8FY=",
+  "tag": "paB8k4sUICo5JPZnuUlti33z69c3VPRfzv7ZQhZ4V+A="
+}

@@ -1,0 +1,10 @@
+# Local credentials, QR codes, runtime logs and test artifacts never enter Git.
+.local/
+Artifacts/
+*.conf
+*.conf.*
+*.key
+*.password
+*.password.txt
+*.zip
+*.png
