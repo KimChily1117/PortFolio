@@ -11,16 +11,18 @@ Set-Location 'E:\GItHub\PortFolio'
 git pull --ff-only origin main
 
 # 직접 시작: 기존 자동 실행/감시 작업을 끄고 서버 세 개를 한 번 시작한다.
-& '.\RemotePlay\GameServers.ps1' start
+.\RemotePlay\servers.cmd start
 
 # 상태 조회: 서버 포트와 자동 실행 작업 상태를 확인한다. 설정 변경 없음.
-& '.\RemotePlay\GameServers.ps1' status
+.\RemotePlay\servers.cmd status
 
 # 직접 종료: 자동 실행/감시 작업을 끄고 확인된 서버 세 개를 종료한다.
-& '.\RemotePlay\GameServers.ps1' stop
+.\RemotePlay\servers.cmd stop
 ```
 
 `start`는 시작 확인 후 터미널로 돌아오며, 서버는 백그라운드에서 실행된다. 터미널을 닫아도 서버는 계속 실행되므로 종료할 때 `stop`을 사용한다. 수동 운용에서는 종료하거나 오류로 중단된 서버를 자동으로 다시 켜지 않는다. 첫 전환에서 기존 예약 작업이 중단되므로 플레이 중인 사람이 없는 시점에 실행한다.
+
+`servers.cmd`는 Windows PowerShell 5.1로 관리 스크립트를 실행한다. 영구적인 Windows 실행 정책 변경은 필요 없다. 작업 인자를 생략하면 상태만 조회한다.
 
 이전 감시 스크립트를 터미널 안에서 직접 실행해 둔 경우에는 그 창에서 Ctrl+C로 감시를 끝낸 뒤 관리 명령을 사용한다. 관리 명령은 남아 있는 감시 잠금을 확인하고, 감시가 계속 실행 중이면 오류를 알려 서버 종료 후 다시 켜지는 상황을 방지한다.
 
@@ -134,7 +136,8 @@ Test-NetConnection 192.168.0.4 -Port 8790
 
 서버 PC에서 수정·실행하는 위치는 `E:\task\RemotePlay`, Git 관리본은 `E:\GItHub\PortFolio\RemotePlay`다.
 
-- `GameServers.ps1`: 수동 `start`·`stop`·`status` 관리 명령. Git 관리본에서 직접 실행할 수 있다.
+- `servers.cmd`: 터미널에서 사용하는 짧은 수동 관리 명령.
+- `GameServers.ps1`: 수동 `start`·`stop`·`status` 관리 로직. Git 관리본에서 직접 실행할 수 있다.
 - `Start-GameServers.ps1`: 현재 서버 PC 전용 경로로 Dawn·게시·실시간 서버를 한 번 시작하고 상태를 확인한다. `-Once`는 기존 호출과 호환된다. `-Watch`를 명시해야 60초 감시·재시작을 수행한다. 다른 프로세스가 포트를 차지하면 종료하지 않고 오류를 기록한다.
 - `Register-ServerStartup.ps1`: 자동 실행을 명시적으로 구성할 때 쓰는 선택 도구. 새로 등록하는 작업은 `-Watch`로 시작한다. 수동 운용에는 실행하지 않는다. 외부 노트북에서는 VPN 복호화·WireGuard 연결 절차를 사용한다.
 - 로컬 상태·로그: 실행한 스크립트 폴더의 `.local\status.json`, `supervisor.log`, 서비스별 로그. 이전 감시 작업의 기록은 `E:\task\RemotePlay\.local`에 있다.
