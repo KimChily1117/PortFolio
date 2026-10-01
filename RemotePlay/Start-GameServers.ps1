@@ -1,5 +1,7 @@
 [CmdletBinding()]
-param([switch]$Once)
+param([switch]$Once, [switch]$Watch)
+
+if ($Once -and $Watch) { throw 'Use either -Once or -Watch.' }
 
 # Machine-local launcher. Run as the owner of the existing MSSQLLocalDB instance.
 # Never replaces an unknown port owner or stops a server used by connected players.
@@ -107,7 +109,7 @@ function Ensure-Realtime {
 try {
     try { $taskLocked = $taskMutex.WaitOne(0) } catch [Threading.AbandonedMutexException] { $taskLocked = $true }
     if (!$taskLocked) { Write-Output 'The game server supervisor is already running.'; exit 0 }
-    Write-Status "Supervisor started. User=$([Security.Principal.WindowsIdentity]::GetCurrent().Name) Once=$Once"
+    Write-Status "Launcher started. User=$([Security.Principal.WindowsIdentity]::GetCurrent().Name) Watch=$Watch"
     do {
         $taskResults = @()
         foreach ($taskService in @('Dawn','Publisher','Realtime')) {
@@ -121,7 +123,7 @@ try {
         }
         $taskSnapshot = [ordered]@{checkedAtUtc=[DateTime]::UtcNow.ToString('o');user=[Security.Principal.WindowsIdentity]::GetCurrent().Name;services=$taskResults}
         $taskSnapshot | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $taskStateRoot 'status.json') -Encoding UTF8
-        if ($Once) {
+        if (!$Watch) {
             $taskSnapshot | ConvertTo-Json -Depth 6
             if (@($taskResults | Where-Object { !$_.ready }).Count) { exit 1 }
             exit 0

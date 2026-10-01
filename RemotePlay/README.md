@@ -1,6 +1,32 @@
 # Project Dawn / UGC 원격 플레이
 
-갱신일: **2026-10-01**. 공유기 WireGuard VPN과 서버 자동 실행을 구성했다. 아래 순서는 **다른 장소의 Windows 노트북**에서 진행한다.
+갱신일: **2026-10-01**. 공유기 WireGuard VPN으로 원격 접속한다. 서버 운영은 `GameServers.ps1`의 `start`·`stop`·`status` 명령으로 직접 관리한다. 기존 서버 PC에 등록된 자동 실행은 서버 PC에서 최초 `start` 또는 `stop` 명령을 실행할 때 비활성화된다. Git 파일 갱신만으로 실행 중인 서버나 예약 작업이 바뀌지는 않는다.
+
+## 서버를 직접 켜고 끄기
+
+아래 명령은 **집 서버 PC의 관리자 PowerShell**에서, 기존 LocalDB 소유자 Windows 계정으로 실행한다. 외부 노트북에 있는 복사본은 서버 PC 전용 경로를 확인한 뒤 실행을 거부한다.
+
+```powershell
+Set-Location 'E:\GItHub\PortFolio'
+git pull --ff-only origin main
+
+# 직접 시작: 기존 자동 실행/감시 작업을 끄고 서버 세 개를 한 번 시작한다.
+& '.\RemotePlay\GameServers.ps1' start
+
+# 상태 조회: 서버 포트와 자동 실행 작업 상태를 확인한다. 설정 변경 없음.
+& '.\RemotePlay\GameServers.ps1' status
+
+# 직접 종료: 자동 실행/감시 작업을 끄고 확인된 서버 세 개를 종료한다.
+& '.\RemotePlay\GameServers.ps1' stop
+```
+
+`start`는 시작 확인 후 터미널로 돌아오며, 서버는 백그라운드에서 실행된다. 터미널을 닫아도 서버는 계속 실행되므로 종료할 때 `stop`을 사용한다. 수동 운용에서는 종료하거나 오류로 중단된 서버를 자동으로 다시 켜지 않는다. 첫 전환에서 기존 예약 작업이 중단되므로 플레이 중인 사람이 없는 시점에 실행한다.
+
+이전 감시 스크립트를 터미널 안에서 직접 실행해 둔 경우에는 그 창에서 Ctrl+C로 감시를 끝낸 뒤 관리 명령을 사용한다. 관리 명령은 남아 있는 감시 잠금을 확인하고, 감시가 계속 실행 중이면 오류를 알려 서버 종료 후 다시 켜지는 상황을 방지한다.
+
+`stop`은 포트·실행 파일·명령줄을 확인한 게임 서버만 종료하며, 저장해 둔 PID만 믿고 종료하지 않는다. 다른 프로그램이 포트를 사용하거나 PID의 프로세스가 바뀌면 해당 프로세스를 종료하지 않고 오류를 알린다. SQL 데이터베이스나 VPN 연결을 제거하지 않는다. 실행 상태와 로그는 명령 파일이 있는 `RemotePlay\.local`에 기록된다.
+
+수동 전환 후에는 PC를 켜거나 WOL로 부팅한 뒤에도 `start`를 직접 실행해야 게임 서버가 열린다.
 
 ## 다른 노트북에서 시작하기
 
@@ -48,7 +74,7 @@ Dawn의 채널 목록 UI는 아직 `127.0.0.1:8090` 고정이다. 원격 채널 
 
 [기존 공유기 관리 화면](http://kimchily.iptime.org:9239/ui/)에 로그인해 **특수 기능 → WOL 기능**에서 기존 서버 PC의 **PC 켜기**를 누른다. 공유기는 계속 켜져 있어야 한다.
 
-이 PC에는 `Kimchily-RemotePlay-Servers`라는 Windows 작업을 등록했다. 부팅 후 30초 지연으로 기존 Windows 사용자/LocalDB 소유자 계정에서 서버 세 개를 시작하고, 60초마다 상태를 확인한다. Windows 자동 로그인이나 비밀번호 저장은 설정하지 않았다.
+이 PC에는 이전에 `Kimchily-RemotePlay-Servers`라는 Windows 작업을 등록했다. 기존 구성은 부팅 후 30초 지연으로 서버 세 개를 시작하고 60초마다 상태를 확인한다. **위의 수동 관리 명령을 실행하면 이 예약 작업을 비활성화하고 실행 중인 감시 작업을 중지한다.** Windows 자동 로그인이나 비밀번호 저장은 설정하지 않았다.
 
 실제 Windows 재부팅·전원 종료 후 WOL 전체 흐름은 아직 시험하지 않았다. 작업 스케줄러의 비대화형 사용자 환경에서 서버 세 개를 새로 실행하고 DB·게임 접속을 확인한 상태다.
 
@@ -108,9 +134,10 @@ Test-NetConnection 192.168.0.4 -Port 8790
 
 서버 PC에서 수정·실행하는 위치는 `E:\task\RemotePlay`, Git 관리본은 `E:\GItHub\PortFolio\RemotePlay`다.
 
-- `Start-GameServers.ps1`: 현재 서버 PC 전용 경로로 Dawn·게시·실시간 서버를 시작하고 상태를 확인한다. 다른 프로세스가 포트를 차지하면 종료하지 않고 오류를 기록한다.
-- `Register-ServerStartup.ps1`: 현재 서버 PC의 LocalDB 소유자 계정으로 시작 작업을 등록한다. 외부 노트북에서는 위의 VPN 복호화·WireGuard 연결 절차를 사용한다.
-- 로컬 상태·로그: `E:\task\RemotePlay\.local\status.json`, `supervisor.log`, 서비스별 로그.
+- `GameServers.ps1`: 수동 `start`·`stop`·`status` 관리 명령. Git 관리본에서 직접 실행할 수 있다.
+- `Start-GameServers.ps1`: 현재 서버 PC 전용 경로로 Dawn·게시·실시간 서버를 한 번 시작하고 상태를 확인한다. `-Once`는 기존 호출과 호환된다. `-Watch`를 명시해야 60초 감시·재시작을 수행한다. 다른 프로세스가 포트를 차지하면 종료하지 않고 오류를 기록한다.
+- `Register-ServerStartup.ps1`: 자동 실행을 명시적으로 구성할 때 쓰는 선택 도구. 새로 등록하는 작업은 `-Watch`로 시작한다. 수동 운용에는 실행하지 않는다. 외부 노트북에서는 VPN 복호화·WireGuard 연결 절차를 사용한다.
+- 로컬 상태·로그: 실행한 스크립트 폴더의 `.local\status.json`, `supervisor.log`, 서비스별 로그. 이전 감시 작업의 기록은 `E:\task\RemotePlay\.local`에 있다.
 - Dawn 소스: `E:\task\Server`, UGC 소스: `E:\task\KimchilyWebGL`.
 - Dawn 빌드 산출물: `%LOCALAPPDATA%\ProjectDawn\local-server\server\Server.dll`. 소스 갱신 후 서버를 중지하고 빌드를 갱신해야 한다.
 
@@ -119,6 +146,6 @@ Get-ScheduledTask -TaskName 'Kimchily-RemotePlay-Servers'
 Get-Content 'E:\task\RemotePlay\.local\status.json'
 ```
 
-자동 시작을 비활성화하려면 `Disable-ScheduledTask -TaskName 'Kimchily-RemotePlay-Servers'`를 사용한다. 이 명령은 이미 실행 중인 서버를 종료하지 않는다. 다시 사용할 때는 `Enable-ScheduledTask`와 `Start-ScheduledTask`를 같은 이름으로 실행한다.
+수동 운용에서는 위의 `GameServers.ps1` 명령을 사용한다. `Disable-ScheduledTask`만 호출하면 이미 실행 중인 서버는 종료되지 않는다. 자동 실행으로 되돌리는 것은 별도 선택이며, 수동 관리 명령은 기존 예약 작업을 삭제하지 않는다.
 
 참고: [ipTIME WireGuard 설정](https://www.iptime.com/support/faq/25905), [Windows 작업 실행 계정](https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/new-scheduledtaskprincipal).

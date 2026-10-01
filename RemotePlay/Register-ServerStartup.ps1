@@ -14,7 +14,7 @@ if ($taskExisting) {
     exit 0
 }
 $taskAction = New-ScheduledTaskAction -Execute 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' `
-    -Argument ('-NoProfile -ExecutionPolicy Bypass -File "' + $taskScript + '"') -WorkingDirectory $PSScriptRoot
+    -Argument ('-NoProfile -ExecutionPolicy Bypass -File "' + $taskScript + '" -Watch') -WorkingDirectory $PSScriptRoot
 $taskTrigger = New-ScheduledTaskTrigger -AtStartup
 $taskTrigger.Delay = 'PT30S'
 # S4U uses the existing local Windows account without storing a password.
