@@ -17,16 +17,30 @@ namespace Kimchily.TypeScript.Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("scriptAsset"), new GUIContent("TypeScript Script"));
             serializedObject.ApplyModifiedProperties();
             var asset = behaviour.ScriptAsset;
-            if (asset == null) { EditorGUILayout.HelpBox("Assign a .ts asset with a default class extending KimchilyScriptBehaviour.", MessageType.Info); return; }
+            if (asset == null)
+            {
+                EditorGUILayout.HelpBox("Assign a .ts asset with a default class extending KimchilyScriptBehaviour.", MessageType.Info);
+                return;
+            }
+
             DrawDiagnostics(asset);
-            if (!asset.compiledSuccessfully) return;
+            if (!asset.compiledSuccessfully)
+            {
+                return;
+            }
+
             if (string.IsNullOrEmpty(asset.className))
             {
                 EditorGUILayout.HelpBox("This file is a helper module. A behaviour needs a default-exported class extending KimchilyScriptBehaviour.", MessageType.Error);
                 return;
             }
+
             EditorGUILayout.LabelField("Class", asset.className);
-            if (GUILayout.Button("Open TypeScript Source")) EditorUtility.OpenWithDefaultApp(Path.GetFullPath(AssetDatabase.GetAssetPath(asset)));
+            if (GUILayout.Button("Open TypeScript Source"))
+            {
+                EditorUtility.OpenWithDefaultApp(Path.GetFullPath(AssetDatabase.GetAssetPath(asset)));
+            }
+
             SynchronizeFields(behaviour);
             serializedObject.Update();
             var bindings = serializedObject.FindProperty("fields");
@@ -38,25 +52,81 @@ namespace Kimchily.TypeScript.Editor
                 var use = binding.FindPropertyRelative("useOverride");
                 EditorGUILayout.Space(3);
                 use.boolValue = EditorGUILayout.ToggleLeft(name + " : " + kind + " — Inspector override", use.boolValue);
-                if (!use.boolValue) { EditorGUILayout.LabelField("", "Uses the class initializer"); continue; }
-                string value = kind == "number" ? "numberValue" : kind == "string" ? "stringValue" : kind == "boolean" ? "boolValue" :
-                    kind == "GameObject" ? "gameObjectValue" : kind == "Transform" ? "transformValue" : kind == "Vector3" ? "vectorValue" : null;
-                if (value == null) EditorGUILayout.HelpBox("Unsupported field type: " + kind, MessageType.Error);
-                else EditorGUILayout.PropertyField(binding.FindPropertyRelative(value), new GUIContent(name));
+                if (!use.boolValue)
+                {
+                    EditorGUILayout.LabelField("", "Uses the class initializer");
+                    continue;
+                }
+
+                string value;
+                switch (kind)
+                {
+                    case "number":
+                        value = "numberValue";
+                        break;
+                    case "string":
+                        value = "stringValue";
+                        break;
+                    case "boolean":
+                        value = "boolValue";
+                        break;
+                    case "GameObject":
+                        value = "gameObjectValue";
+                        break;
+                    case "Transform":
+                        value = "transformValue";
+                        break;
+                    case "Vector3":
+                        value = "vectorValue";
+                        break;
+                    default:
+                        value = null;
+                        break;
+                }
+
+                if (value == null)
+                {
+                    EditorGUILayout.HelpBox("Unsupported field type: " + kind, MessageType.Error);
+                }
+                else
+                {
+                    EditorGUILayout.PropertyField(binding.FindPropertyRelative(value), new GUIContent(name));
+                }
             }
+
             serializedObject.ApplyModifiedProperties();
-            try { foreach (string error in behaviour.ValidateContent()) EditorGUILayout.HelpBox(error, MessageType.Error); }
-            catch (Exception exception) { EditorGUILayout.HelpBox(exception.Message, MessageType.Error); }
+            try
+            {
+                foreach (string error in behaviour.ValidateContent())
+                {
+                    EditorGUILayout.HelpBox(error, MessageType.Error);
+                }
+            }
+            catch (Exception exception)
+            {
+                EditorGUILayout.HelpBox(exception.Message, MessageType.Error);
+            }
         }
 
         internal static void SynchronizeFields(KimchilyTypeScriptBehaviour behaviour)
         {
             var schema = behaviour.ScriptAsset.fields ?? Array.Empty<TypeScriptField>();
             var old = behaviour.Fields ?? Array.Empty<TypeScriptFieldBinding>();
-            if (old.Length == schema.Length && old.Select((b, i) => b != null && b.name == schema[i].name && b.kind == schema[i].kind).All(x => x)) return;
+            if (old.Length == schema.Length &&
+                old.Select((b, i) => b != null && b.name == schema[i].name && b.kind == schema[i].kind).All(x => x))
+            {
+                return;
+            }
+
             Undo.RecordObject(behaviour, "Update TypeScript Inspector fields");
-            behaviour.Fields = schema.Select(field => old.FirstOrDefault(b => b != null && b.name == field.name && b.kind == field.kind)
-                ?? new TypeScriptFieldBinding { name = field.name, kind = field.kind, useOverride = false }).ToArray();
+            behaviour.Fields = schema.Select(field =>
+                old.FirstOrDefault(b => b != null && b.name == field.name && b.kind == field.kind)
+                ?? new TypeScriptFieldBinding
+                {
+                    name = field.name,
+                    kind = field.kind,
+                    useOverride = false
+                }).ToArray();
             EditorUtility.SetDirty(behaviour);
             PrefabUtility.RecordPrefabInstancePropertyModifications(behaviour);
         }
@@ -64,7 +134,9 @@ namespace Kimchily.TypeScript.Editor
         internal static void DrawDiagnostics(TypeScriptAsset asset)
         {
             foreach (string diagnostic in asset.diagnostics ?? Array.Empty<string>())
+            {
                 EditorGUILayout.HelpBox(diagnostic, asset.compiledSuccessfully ? MessageType.Warning : MessageType.Error);
+            }
         }
     }
 
@@ -80,8 +152,15 @@ namespace Kimchily.TypeScript.Editor
             EditorGUILayout.LabelField("Entry", asset.entryModule ?? string.Empty);
             EditorGUILayout.LabelField("Class", string.IsNullOrEmpty(asset.className) ? "Helper module" : asset.className);
             EditorGUILayout.LabelField("Bundled modules", (asset.modules?.Length ?? 0).ToString());
-            foreach (var field in asset.fields ?? Array.Empty<TypeScriptField>()) EditorGUILayout.LabelField(field.name, field.kind);
-            if (GUILayout.Button("Open TypeScript Source")) EditorUtility.OpenWithDefaultApp(Path.GetFullPath(AssetDatabase.GetAssetPath(asset)));
+            foreach (var field in asset.fields ?? Array.Empty<TypeScriptField>())
+            {
+                EditorGUILayout.LabelField(field.name, field.kind);
+            }
+
+            if (GUILayout.Button("Open TypeScript Source"))
+            {
+                EditorUtility.OpenWithDefaultApp(Path.GetFullPath(AssetDatabase.GetAssetPath(asset)));
+            }
         }
     }
 }

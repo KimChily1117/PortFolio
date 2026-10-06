@@ -34,8 +34,15 @@ namespace Kimchily.Creator.Tests
         public void TearDown()
         {
             driver.Dispose();
+
             for (int index = created.Count - 1; index >= 0; index--)
-                if (created[index] != null) Object.DestroyImmediate(created[index]);
+            {
+                if (created[index] != null)
+                {
+                    Object.DestroyImmediate(created[index]);
+                }
+            }
+
             created.Clear();
         }
 
@@ -103,7 +110,12 @@ namespace Kimchily.Creator.Tests
             driver.Tick(0, true, -2, .02f);
             Assert.AreEqual("Land", driver.CurrentState);
             Assert.That(probe.localPosition.x, Is.EqualTo(50).Within(.01f));
-            for (int index = 0; index < 20; index++) driver.Tick(0, true, -2, .02f);
+
+            for (int index = 0; index < 20; index++)
+            {
+                driver.Tick(0, true, -2, .02f);
+            }
+
             Assert.AreEqual("Idle", driver.CurrentState);
             Assert.That(probe.localPosition.x, Is.EqualTo(0).Within(.01f));
         }
@@ -144,7 +156,11 @@ namespace Kimchily.Creator.Tests
         [Test]
         public void WalkPlaybackUsesMeasuredSpeedAndLoopsWithoutChangingTheClipAsset()
         {
-            AnimationClip clip = new AnimationClip { name = "Walk distance probe", legacy = false };
+            AnimationClip clip = new AnimationClip
+            {
+                name = "Walk distance probe",
+                legacy = false
+            };
             created.Add(clip);
             clip.SetCurve("Probe", typeof(Transform), "localPosition.x", AnimationCurve.Linear(0, 0, 1, 1));
             profile.walk = clip;
@@ -212,15 +228,26 @@ namespace Kimchily.Creator.Tests
             observer.Driver = driver;
             observer.Target = probe;
             observer.PlanarSpeed = profile.walkSpeed;
-            for (int index = 0; index < 8; index++) yield return null;
+
+            for (int index = 0; index < 8; index++)
+            {
+                yield return null;
+            }
+
             Assert.GreaterOrEqual(observer.ObservedFrames, 5);
-            Assert.That(observer.LastLatePosition, Is.EqualTo(10).Within(.01f),
+            Assert.That(
+                observer.LastLatePosition,
+                Is.EqualTo(10).Within(.01f),
                 "The mapped pose must remain after Unity's automatic Animator evaluation, not only immediately after Tick.");
             Assert.IsNull(animator.runtimeAnimatorController);
             observer.PlanarSpeed = profile.runSpeed;
-            for (int index = 0; index < 5; index++) yield return null;
-            Assert.That(observer.LastLatePosition, Is.EqualTo(20).Within(.01f));
 
+            for (int index = 0; index < 5; index++)
+            {
+                yield return null;
+            }
+
+            Assert.That(observer.LastLatePosition, Is.EqualTo(20).Within(.01f));
             driver.Dispose();
             Assert.AreSame(originalController, animator.runtimeAnimatorController);
             Assert.AreEqual(AnimatorCullingMode.CullUpdateTransforms, animator.cullingMode);
@@ -228,7 +255,12 @@ namespace Kimchily.Creator.Tests
             // This fixture has no renderer; make the restored controller observable
             // in headless tests after first checking its authored culling was restored.
             animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-            for (int index = 0; index < 5; index++) yield return null;
+
+            for (int index = 0; index < 5; index++)
+            {
+                yield return null;
+            }
+
             Assert.That(observer.LastLatePosition, Is.EqualTo(2).Within(.01f));
 #else
             Assert.Ignore("The regression fixture constructs an AnimatorController in the Editor.");
@@ -247,7 +279,12 @@ namespace Kimchily.Creator.Tests
             clip.SetCurve(string.Empty, typeof(Transform), "localPosition.x", AnimationCurve.Constant(0, 1, 50));
             profile.idle = clip;
             Assert.IsTrue(driver.Initialize(animator, profile), driver.LastError);
-            for (int index = 0; index < 20; index++) driver.Tick(0, true, 0, .02f);
+
+            for (int index = 0; index < 20; index++)
+            {
+                driver.Tick(0, true, 0, .02f);
+            }
+
             Assert.That(Vector3.Distance(mount, animator.transform.localPosition), Is.LessThan(.001f));
             Assert.That(Quaternion.Angle(facing, animator.transform.localRotation), Is.LessThan(.001f));
             Assert.That(probe.localPosition.x, Is.EqualTo(5).Within(.01f), "Child-bone animation must still be evaluated.");
@@ -268,13 +305,18 @@ namespace Kimchily.Creator.Tests
 
         AnimationClip Clip(string name, float value)
         {
-            var clip = new AnimationClip { name = name, legacy = false };
+            var clip = new AnimationClip
+            {
+                name = name,
+                legacy = false
+            };
             clip.SetCurve("Probe", typeof(Transform), "localPosition.x", AnimationCurve.Constant(0, 1, value));
             created.Add(clip);
             return clip;
         }
 
 #if UNITY_EDITOR
+
         RuntimeAnimatorController ControllerWithClip(AnimationClip clip)
         {
             var controller = new UnityEditor.Animations.AnimatorController();
@@ -286,11 +328,15 @@ namespace Kimchily.Creator.Tests
             machine.defaultState = state;
             return controller;
         }
+
 #endif
 
         void Settle(float speed)
         {
-            for (int index = 0; index < 80; index++) driver.Tick(speed, true, 0, 1f / 60);
+            for (int index = 0; index < 80; index++)
+            {
+                driver.Tick(speed, true, 0, 1f / 60);
+            }
         }
     }
 }

@@ -1,0 +1,43 @@
+# Keep authored C# readable without changing the SDK or language version.
+[*.cs]
+indent_style = space
+indent_size = 4
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+csharp_new_line_before_open_brace = all
+csharp_preserve_single_line_blocks = false
+csharp_preserve_single_line_statements = false
+csharp_prefer_braces = true:suggestion
+csharp_style_namespace_declarations = block_scoped:suggestion
+csharp_style_expression_bodied_methods = false:suggestion
+csharp_style_expression_bodied_constructors = false:suggestion
+csharp_style_expression_bodied_operators = false:suggestion
+csharp_style_expression_bodied_properties = false:suggestion
+csharp_style_expression_bodied_accessors = false:suggestion
+csharp_style_expression_bodied_local_functions = false:suggestion
+csharp_style_implicit_object_creation_when_type_is_apparent = false:suggestion
+csharp_style_prefer_primary_constructors = false:suggestion
+csharp_style_prefer_collection_expression = never:suggestion
+
+# Bundled third-party sources keep their upstream formatting rules.
+[**/{Vendor,unity-chan!,com.unity.springbone}/**/*.cs]
+indent_style = unset
+indent_size = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+csharp_new_line_before_open_brace = unset
+csharp_preserve_single_line_blocks = unset
+csharp_preserve_single_line_statements = unset
+csharp_prefer_braces = unset
+csharp_style_namespace_declarations = unset
+csharp_style_expression_bodied_methods = unset
+csharp_style_expression_bodied_constructors = unset
+csharp_style_expression_bodied_operators = unset
+csharp_style_expression_bodied_properties = unset
+csharp_style_expression_bodied_accessors = unset
+csharp_style_expression_bodied_local_functions = unset
+csharp_style_implicit_object_creation_when_type_is_apparent = unset
+csharp_style_prefer_primary_constructors = unset
+csharp_style_prefer_collection_expression = unset

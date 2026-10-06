@@ -13,7 +13,6 @@ namespace Kimchily.Creator.Mobile
         public AnimationClip jump;
         public AnimationClip fall;
         public AnimationClip land;
-
         [Header("Movement reference speeds (metres / second)")]
         [Min(.01f), Tooltip("The movement speed represented by one second of the Walk clip.")]
         public float walkSpeed = 2;
@@ -23,7 +22,6 @@ namespace Kimchily.Creator.Mobile
         public float runThreshold = 3;
         [Min(0), Tooltip("Actual movement at or below this speed targets Idle.")]
         public float idleThreshold = .08f;
-
         [Header("Transitions")]
         [Min(0), Tooltip("Seconds for a transition to reach approximately 95% of its target blend. Zero switches immediately.")]
         public float blendDuration = .15f;
@@ -36,17 +34,39 @@ namespace Kimchily.Creator.Mobile
         /// </summary>
         public static string GetClipCompatibilityError(Animator animator, AnimationClip clip)
         {
-            if (clip == null) return null;
-            if (clip.legacy) return "Legacy clips are unsupported; import this clip as Humanoid or Generic.";
-            if (animator == null) return "The model has no Animator.";
+            if (clip == null)
+            {
+                return null;
+            }
+
+            if (clip.legacy)
+            {
+                return "Legacy clips are unsupported; import this clip as Humanoid or Generic.";
+            }
+
+            if (animator == null)
+            {
+                return "The model has no Animator.";
+            }
+
             Avatar avatar = animator.avatar;
             bool humanoid = avatar != null && avatar.isValid && avatar.isHuman;
+
             if (clip.humanMotion && !humanoid)
+            {
                 return "A Humanoid clip requires a valid Humanoid Avatar on the model Animator.";
+            }
+
             if (!clip.humanMotion && humanoid)
+            {
                 return "Use Humanoid clips for this Humanoid model, or matching Generic clips with a Generic model.";
+            }
+
             if (avatar != null && !avatar.isValid)
+            {
                 return "The model Animator has an invalid Avatar.";
+            }
+
             return null;
         }
     }

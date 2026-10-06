@@ -25,14 +25,37 @@ namespace Kimchily.TypeScript.Editor
         static Task<string> runtimeCheck;
         static bool installAfterRuntimeCheck;
         static bool checkingOverride;
+        public static bool IsInstalling
+        {
+            get
+            {
+                return installer != null;
+            }
+        }
 
-        public static bool IsInstalling => installer != null;
-        static bool IsBusy => IsInstalling || runtimeCheck != null;
-        static string SessionKey => "Kimchily.TypeScript.Setup." + Hash128.Compute(TypeScriptCompiler.CompilerDirectory);
+        static bool IsBusy
+        {
+            get
+            {
+                return IsInstalling || runtimeCheck != null;
+            }
+        }
+
+        static string SessionKey
+        {
+            get
+            {
+                return "Kimchily.TypeScript.Setup." + Hash128.Compute(TypeScriptCompiler.CompilerDirectory);
+            }
+        }
 
         static TypeScriptCompilerSetup()
         {
-            if (AssetDatabase.IsAssetImportWorkerProcess()) return;
+            if (AssetDatabase.IsAssetImportWorkerProcess())
+            {
+                return;
+            }
+
             EditorApplication.delayCall += TryAutomaticSetup;
             EditorApplication.update += PollInstallation;
             EditorApplication.quitting += StopForShutdown;
@@ -41,30 +64,49 @@ namespace Kimchily.TypeScript.Editor
 
         static void TryAutomaticSetup()
         {
-            if (AssetDatabase.IsAssetImportWorkerProcess() || IsBusy) return;
+            if (AssetDatabase.IsAssetImportWorkerProcess() || IsBusy)
+            {
+                return;
+            }
+
             if (EditorApplication.isCompiling || EditorApplication.isUpdating)
             {
                 EditorApplication.delayCall += TryAutomaticSetup;
                 return;
             }
+
             try
             {
                 // Retain failures across domain reloads; only a user menu action retries.
-                if (SessionState.GetBool(SessionKey, false)) return;
+                if (SessionState.GetBool(SessionKey, false))
+                {
+                    return;
+                }
+
                 PrepareInstallation(false);
             }
-            catch (Exception exception) { Debug.LogError("Kimchily TypeScript setup: " + exception.Message); }
+            catch (Exception exception)
+            {
+                Debug.LogError("Kimchily TypeScript setup: " + exception.Message);
+            }
         }
 
         [MenuItem(TypeScriptCompiler.InstallMenu)]
         public static void InstallOrRepair()
         {
-            if (AssetDatabase.IsAssetImportWorkerProcess() || IsBusy) return;
+            if (AssetDatabase.IsAssetImportWorkerProcess() || IsBusy)
+            {
+                return;
+            }
+
             PrepareInstallation(true);
         }
 
         [MenuItem(TypeScriptCompiler.InstallMenu, true)]
-        static bool CanInstallOrRepair() => !AssetDatabase.IsAssetImportWorkerProcess() && !IsBusy;
+        static bool CanInstallOrRepair()
+        {
+            return !AssetDatabase.IsAssetImportWorkerProcess() && !IsBusy;
+        }
 
         static void PrepareInstallation(bool repair)
         {
@@ -81,12 +123,14 @@ namespace Kimchily.TypeScript.Editor
                     return;
                 }
             }
+
             if (available || checkingOverride)
             {
                 installAfterRuntimeCheck = repair || !available;
                 runtimeCheck = Task.Run(() => TypeScriptCompiler.CheckNodeRuntime(node));
                 return;
             }
+
             StartInstallation();
         }
 
@@ -100,21 +144,28 @@ namespace Kimchily.TypeScript.Editor
                 Fail("Automatic compiler installation currently supports Windows Editor. Install Node.js and run npm ci --ignore-scripts in " + directory + ".");
                 return;
             }
+
             string configured = Environment.GetEnvironmentVariable("KIMCHILY_NODE_PATH");
             if (!string.IsNullOrWhiteSpace(configured) && TypeScriptCompiler.FindExecutable(configured, Environment.GetEnvironmentVariable("PATH")) == null)
             {
                 Fail("KIMCHILY_NODE_PATH points to an unavailable executable. Correct or remove it and restart Unity: " + configured);
                 return;
             }
+
             string script = Path.Combine(directory, "install.ps1");
             if (!File.Exists(script))
             {
                 Fail("The package installer is missing: " + script + ". Restore or update com.kimchily.typescript.");
                 return;
             }
+
             try
             {
-                lock (Output) Output.Clear();
+                lock (Output)
+                {
+                    Output.Clear();
+                }
+
                 latestOutput = "Downloading the package-local Node.js runtime and TypeScript compiler...";
                 displayedOutput = latestOutput;
                 // Use Windows PowerShell by its OS path; no shell/profile/startup scripts.
@@ -122,8 +173,9 @@ namespace Kimchily.TypeScript.Editor
                 installer = new Process
                 {
                     StartInfo = new ProcessStartInfo(powershell,
-                        "-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File " + TypeScriptCompiler.Quote(script) +
-                        " -CompilerDirectory " + TypeScriptCompiler.Quote(directory))
+                        "-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File " +
+                        TypeScriptCompiler.Quote(script) + " -CompilerDirectory " +
+                        TypeScriptCompiler.Quote(directory))
                     {
                         UseShellExecute = false,
                         CreateNoWindow = true,
@@ -155,12 +207,20 @@ namespace Kimchily.TypeScript.Editor
 
         static void CaptureOutput(object sender, DataReceivedEventArgs args)
         {
-            if (string.IsNullOrWhiteSpace(args.Data)) return;
+            if (string.IsNullOrWhiteSpace(args.Data))
+            {
+                return;
+            }
+
             lock (Output)
             {
                 // Bounded diagnostic tail; never call Unity APIs on a process thread.
                 Output.AppendLine(args.Data);
-                if (Output.Length > 12000) Output.Remove(0, Output.Length - 12000);
+                if (Output.Length > 12000)
+                {
+                    Output.Remove(0, Output.Length - 12000);
+                }
+
                 latestOutput = args.Data;
             }
         }
@@ -169,7 +229,11 @@ namespace Kimchily.TypeScript.Editor
         {
             if (runtimeCheck != null)
             {
-                if (!runtimeCheck.IsCompleted) return;
+                if (!runtimeCheck.IsCompleted)
+                {
+                    return;
+                }
+
                 string runtimeError = runtimeCheck.GetAwaiter().GetResult();
                 runtimeCheck = null;
                 if (runtimeError != null && checkingOverride)
@@ -177,9 +241,18 @@ namespace Kimchily.TypeScript.Editor
                     Fail("KIMCHILY_NODE_PATH: " + runtimeError + " Correct or remove the override and restart Unity.");
                     return;
                 }
-                if (installAfterRuntimeCheck || runtimeError != null) StartInstallation();
+
+                if (installAfterRuntimeCheck || runtimeError != null)
+                {
+                    StartInstallation();
+                }
             }
-            if (installer == null) return;
+
+            if (installer == null)
+            {
+                return;
+            }
+
             try
             {
                 if (!installer.HasExited)
@@ -190,25 +263,37 @@ namespace Kimchily.TypeScript.Editor
                         Fail("Installation exceeded the 10 minute timeout. Check your network/proxy and package folder write permissions.");
                         return;
                     }
+
                     string description;
-                    lock (Output) description = latestOutput;
+                    lock (Output)
+                    {
+                        description = latestOutput;
+                    }
+
                     if (progressId >= 0 && description != displayedOutput)
                     {
                         Progress.Report(progressId, -1f, description);
                         displayedOutput = description;
                     }
+
                     return;
                 }
+
                 installer.WaitForExit(); // HasExited is true; drain asynchronous output.
                 int exitCode = installer.ExitCode;
                 DisposeProcess();
                 if (exitCode != 0)
                 {
                     string output;
-                    lock (Output) output = Output.ToString().Trim();
+                    lock (Output)
+                    {
+                        output = Output.ToString().Trim();
+                    }
+
                     Fail("Installer exited with code " + exitCode + ". " + output);
                     return;
                 }
+
                 string directory = TypeScriptCompiler.CompilerDirectory;
                 bool usable = TypeScriptCompiler.TryGetToolchain(directory, out _, out string reason);
                 if (TypeScriptCompiler.ReadBundledNode(directory) == null || !usable)
@@ -216,6 +301,7 @@ namespace Kimchily.TypeScript.Editor
                     Fail("Installation finished without a usable runtime/compiler. " + reason);
                     return;
                 }
+
                 FinishProgress(Progress.Status.Succeeded);
                 SessionState.EraseString(SessionKey + ".Error");
                 Debug.Log("Kimchily TypeScript compiler is ready. Reimporting TypeScript assets; you can retry the build when importing finishes.");
@@ -230,15 +316,22 @@ namespace Kimchily.TypeScript.Editor
 
         static void ReimportScripts()
         {
-            if (AssetDatabase.IsAssetImportWorkerProcess()) return;
+            if (AssetDatabase.IsAssetImportWorkerProcess())
+            {
+                return;
+            }
+
             if (EditorApplication.isCompiling || EditorApplication.isUpdating)
             {
                 EditorApplication.delayCall += ReimportScripts;
                 return;
             }
+
             TypeScriptBuildValidation.UpdateToolDependency();
             foreach (string path in AssetDatabase.GetAllAssetPaths().Where(path => path.EndsWith(".ts", StringComparison.OrdinalIgnoreCase)))
+            {
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+            }
         }
 
         static void Fail(string message)
@@ -247,22 +340,29 @@ namespace Kimchily.TypeScript.Editor
             FinishProgress(Progress.Status.Failed);
             SessionState.SetBool(SessionKey, true);
             SessionState.SetString(SessionKey + ".Error", message);
-            Debug.LogError("Kimchily TypeScript setup failed: " + message + "\nRetry with " + TypeScriptCompiler.InstallMenu +
+            Debug.LogError("Kimchily TypeScript setup failed: " + message + "\nRetry with " +
+                TypeScriptCompiler.InstallMenu +
                 ". You can also run Tools~/Compiler/install.ps1 from the package in PowerShell. Automatic retries are paused for this Editor session.");
         }
 
         internal static string UnavailableMessage(string reason)
         {
             string instruction = Application.platform == RuntimePlatform.WindowsEditor
-                ? "Unity prepares the compiler automatically on first use. Wait for the Kimchily TypeScript background task, then retry. To retry a failed setup, use " + TypeScriptCompiler.InstallMenu + "."
-                : "Automatic setup supports Windows Editor. Install Node.js and run npm ci --ignore-scripts in " + TypeScriptCompiler.CompilerDirectory + ".";
+                ? "Unity prepares the compiler automatically on first use. Wait for the Kimchily TypeScript background task, then retry. To retry a failed setup, use " +
+                    TypeScriptCompiler.InstallMenu + "."
+                : "Automatic setup supports Windows Editor. Install Node.js and run npm ci --ignore-scripts in " +
+                    TypeScriptCompiler.CompilerDirectory + ".";
             string failure = AssetDatabase.IsAssetImportWorkerProcess() ? null : SessionState.GetString(SessionKey + ".Error", "");
             return reason + " " + instruction + (string.IsNullOrWhiteSpace(failure) ? "" : " Last setup error: " + failure);
         }
 
         static void FinishProgress(Progress.Status status)
         {
-            if (progressId < 0) return;
+            if (progressId < 0)
+            {
+                return;
+            }
+
             Progress.Finish(progressId, status);
             progressId = -1;
         }
@@ -270,14 +370,22 @@ namespace Kimchily.TypeScript.Editor
         static void StopForShutdown()
         {
             runtimeCheck = null;
-            if (installer == null) return;
+            if (installer == null)
+            {
+                return;
+            }
+
             StopProcess();
             FinishProgress(Progress.Status.Failed);
         }
 
         static void StopProcess()
         {
-            if (installer == null) return;
+            if (installer == null)
+            {
+                return;
+            }
+
             try
             {
                 if (!installer.HasExited)
@@ -286,20 +394,40 @@ namespace Kimchily.TypeScript.Editor
                     // Stop only the installer we started, including its npm child.
                     string taskkill = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "taskkill.exe");
                     using (var kill = Process.Start(new ProcessStartInfo(taskkill, "/PID " + installer.Id + " /T /F")
-                    { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden }))
+                    {
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    }))
+                    {
                         kill?.WaitForExit(3000);
-                    if (!installer.HasExited) installer.Kill();
+                    }
+
+                    if (!installer.HasExited)
+                    {
+                        installer.Kill();
+                    }
                 }
             }
-            catch (Exception exception) { Debug.LogWarning("Kimchily TypeScript installer shutdown: " + exception.Message); }
-            finally { DisposeProcess(); }
+            catch (Exception exception)
+            {
+                Debug.LogWarning("Kimchily TypeScript installer shutdown: " + exception.Message);
+            }
+            finally
+            {
+                DisposeProcess();
+            }
         }
 
         static void DisposeProcess()
         {
             installer?.Dispose();
             installer = null;
-            if (!reloadLocked) return;
+            if (!reloadLocked)
+            {
+                return;
+            }
+
             reloadLocked = false;
             EditorApplication.UnlockReloadAssemblies();
         }

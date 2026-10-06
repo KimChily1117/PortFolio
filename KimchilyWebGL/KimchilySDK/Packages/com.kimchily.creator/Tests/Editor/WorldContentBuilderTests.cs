@@ -36,8 +36,8 @@ namespace Kimchily.Creator.Editor.Tests
             restoreUntitledScene = false;
             original = SceneManager.GetActiveScene();
             startupSceneCount = SceneManager.sceneCount;
-            bool hasUntitledScene = Enumerable.Range(0, SceneManager.sceneCount)
-                .Select(SceneManager.GetSceneAt).Any(open => string.IsNullOrEmpty(open.path));
+            bool hasUntitledScene = Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(open => string.IsNullOrEmpty(open.path));
+
             if (hasUntitledScene)
             {
                 // Test Framework 1.1.33 EditModeLauncher.OpenNewScene creates a
@@ -45,20 +45,27 @@ namespace Kimchily.Creator.Editor.Tests
                 // scene, or a clean empty additive scene alongside saved scenes.
                 // Adapt only these runner baselines; never save dirty scenes or
                 // arbitrary untitled content to work around Unity's restriction.
-                bool otherUntitledScene = Enumerable.Range(0, SceneManager.sceneCount)
-                    .Select(SceneManager.GetSceneAt)
-                    .Any(open => open != original && string.IsNullOrEmpty(open.path));
-                if (!original.IsValid() || !string.IsNullOrEmpty(original.path) || original.isDirty ||
-                    otherUntitledScene || (original.rootCount != 0 &&
-                        (SceneManager.sceneCount != 1 || !HasDefaultGameObjects(original))))
+                bool otherUntitledScene = Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(open => open != original
+                    && string.IsNullOrEmpty(open.path));
+
+                if (!original.IsValid()
+                    || !string.IsNullOrEmpty(original.path)
+                    || original.isDirty
+                    || otherUntitledScene
+                    || (original.rootCount != 0 && (SceneManager.sceneCount != 1 || !HasDefaultGameObjects(original))))
+                {
                     Assert.Ignore("Additive scene tests require the clean empty/default scene created by Test Runner. User scenes were left unchanged.");
-                startupSceneSetup = original.rootCount == 0
-                    ? NewSceneSetup.EmptyScene : NewSceneSetup.DefaultGameObjects;
+                }
+
+                startupSceneSetup = original.rootCount == 0 ? NewSceneSetup.EmptyScene : NewSceneSetup.DefaultGameObjects;
                 startupRoots = DescribeRoots(original);
                 restoreUntitledScene = true;
             }
 
-            try { CreateFixture(); }
+            try
+            {
+                CreateFixture();
+            }
             catch
             {
                 // NUnit need not invoke TearDown when SetUp itself fails.
@@ -71,12 +78,15 @@ namespace Kimchily.Creator.Editor.Tests
         {
             folder = "Assets/__KimchilyTests_" + Guid.NewGuid().ToString("N");
             AssetDatabase.CreateFolder("Assets", Path.GetFileName(folder));
+
             if (restoreUntitledScene)
             {
                 startupSceneAnchorPath = folder + "/TestRunnerStartupScene.unity";
-                Assert.IsTrue(EditorSceneManager.SaveScene(original, startupSceneAnchorPath),
+                Assert.IsTrue(
+                    EditorSceneManager.SaveScene(original, startupSceneAnchorPath),
                     "Could not save the Test Runner anchor scene.");
             }
+
             scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
             SceneManager.SetActiveScene(scene);
             var texture = new Texture2D(2, 2);
@@ -103,17 +113,24 @@ namespace Kimchily.Creator.Editor.Tests
         public void TearDown()
         {
             if (scene.IsValid() && scene.isLoaded)
+            {
                 Assert.IsTrue(EditorSceneManager.CloseScene(scene, true), "Could not close this test's scene.");
-            if (original.IsValid() && original.isLoaded) SceneManager.SetActiveScene(original);
-            if (restoreUntitledScene && original.IsValid() && original.isLoaded &&
-                original.path == startupSceneAnchorPath)
+            }
+
+            if (original.IsValid() && original.isLoaded)
+            {
+                SceneManager.SetActiveScene(original);
+            }
+
+            if (restoreUntitledScene && original.IsValid() && original.isLoaded && original.path == startupSceneAnchorPath)
             {
                 // If another editor extension/user changed the anchor during the
                 // test, preserve it and its assets rather than discarding work.
                 Assert.AreEqual(startupSceneCount, SceneManager.sceneCount);
-                Assert.IsFalse(original.isDirty,
-                    "The Test Runner startup scene changed. Its scene and temporary assets were preserved.");
-                CollectionAssert.AreEqual(startupRoots, DescribeRoots(original),
+                Assert.IsFalse(original.isDirty, "The Test Runner startup scene changed. Its scene and temporary assets were preserved.");
+                CollectionAssert.AreEqual(
+                    startupRoots,
+                    DescribeRoots(original),
                     "The Test Runner startup objects changed. Its scene and temporary assets were preserved.");
                 // Additive replacement preserves every other scene, including
                 // dirty named user scenes. Close only our temporary anchor.
@@ -128,12 +145,12 @@ namespace Kimchily.Creator.Editor.Tests
                 Assert.AreEqual(startupSceneCount, SceneManager.sceneCount);
                 restoreUntitledScene = false;
             }
+
             // Only this test's uniquely created Assets folder can be removed.
             if (!string.IsNullOrEmpty(folder) && folder.StartsWith("Assets/__KimchilyTests_", StringComparison.Ordinal))
             {
-                Assert.IsFalse(Enumerable.Range(0, SceneManager.sceneCount)
-                    .Select(SceneManager.GetSceneAt)
-                    .Any(open => open.path.StartsWith(folder + "/", StringComparison.Ordinal)),
+                Assert.IsFalse(
+                    Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(open => open.path.StartsWith(folder + "/", StringComparison.Ordinal)),
                     "A temporary scene is still open. Its assets were preserved to avoid losing work.");
                 AssetDatabase.DeleteAsset(folder);
             }
@@ -142,34 +159,51 @@ namespace Kimchily.Creator.Editor.Tests
         static bool HasDefaultGameObjects(Scene candidate)
         {
             GameObject[] roots = candidate.GetRootGameObjects();
-            if (roots.Length != 2 || roots.Any(root => root.transform.childCount != 0)) return false;
+
+            if (roots.Length != 2 || roots.Any(root => root.transform.childCount != 0))
+            {
+                return false;
+            }
+
             GameObject camera = roots.SingleOrDefault(root => root.name == "Main Camera");
             GameObject light = roots.SingleOrDefault(root => root.name == "Directional Light");
-            return camera != null && light != null && camera.CompareTag("MainCamera") &&
-                camera.GetComponent<Camera>() != null && camera.GetComponent<AudioListener>() != null &&
-                camera.GetComponents<Component>().Length == 3 && light.GetComponent<Light>() != null &&
-                light.GetComponent<Light>().type == LightType.Directional &&
-                light.GetComponents<Component>().Length == 2;
+            return camera != null
+                && light != null
+                && camera.CompareTag("MainCamera")
+                && camera.GetComponent<Camera>() != null
+                && camera.GetComponent<AudioListener>() != null
+                && camera.GetComponents<Component>().Length == 3
+                && light.GetComponent<Light>() != null
+                && light.GetComponent<Light>().type == LightType.Directional
+                && light.GetComponents<Component>().Length == 2;
         }
 
         static string[] DescribeRoots(Scene candidate)
         {
             // Recreated built-in objects have new instance IDs; compare their
             // serialized state while excluding only those transient references.
-            return candidate.GetRootGameObjects().OrderBy(root => root.name, StringComparer.Ordinal)
-                .Select(root => root.name + "\n" + NormalizeObjectIds(EditorJsonUtility.ToJson(root)) + "\n" +
-                    string.Join("\n", root.GetComponents<Component>().Select(component =>
-                        component.GetType().FullName + ":" + NormalizeObjectIds(EditorJsonUtility.ToJson(component)))))
-                .ToArray();
+            return candidate.GetRootGameObjects().OrderBy(root => root.name, StringComparer.Ordinal).Select(root => root.name + "\n" + NormalizeObjectIds(EditorJsonUtility.ToJson(root)) + "\n" + string.Join(
+                "\n",
+                root.GetComponents<Component>().Select(component => component.GetType().FullName + ":" + NormalizeObjectIds(EditorJsonUtility.ToJson(component))))).ToArray();
         }
 
-        static string NormalizeObjectIds(string json) =>
-            Regex.Replace(json, "\\\"instanceID\\\"\\s*:\\s*-?\\d+", "\"instanceID\":0");
-
-        WorldBuildRequest Request() => new WorldBuildRequest
+        static string NormalizeObjectIds(string json)
         {
-            worldId = "test-world", entryScene = scenePath, scenes = new[] { scenePath }
-        };
+            return Regex.Replace(json, "\\\"instanceID\\\"\\s*:\\s*-?\\d+", "\"instanceID\":0");
+        }
+
+        WorldBuildRequest Request()
+        {
+            return new WorldBuildRequest
+            {
+                worldId = "test-world",
+                entryScene = scenePath,
+                scenes = new[]
+                {
+                    scenePath
+                }
+            };
+        }
 
         [Test]
         public void CompilerDiagnosticsBlockBuildBeforeCreatingOutput()
@@ -177,12 +211,15 @@ namespace Kimchily.Creator.Editor.Tests
             string output = Path.GetFullPath("Temp/RejectedScript-" + Guid.NewGuid().ToString("N"));
             var request = Request();
             request.outputRoot = output;
+
             void Reject(string[] dependencies, System.Collections.Generic.List<string> errors)
             {
                 Assert.Contains(scenePath, dependencies);
                 errors.Add("Character.ts(4,1): incompatible public field type");
             }
+
             WorldContentBuilder.ValidateAdditionalAssets += Reject;
+
             try
             {
                 var report = WorldContentBuilder.Validate(request);
@@ -191,7 +228,10 @@ namespace Kimchily.Creator.Editor.Tests
                 Assert.Throws<InvalidOperationException>(() => WorldContentBuilder.Build(request));
                 Assert.IsFalse(Directory.Exists(output));
             }
-            finally { WorldContentBuilder.ValidateAdditionalAssets -= Reject; }
+            finally
+            {
+                WorldContentBuilder.ValidateAdditionalAssets -= Reject;
+            }
         }
 
         [Test]
@@ -217,7 +257,10 @@ namespace Kimchily.Creator.Editor.Tests
             AssetDatabase.ImportAsset(path);
             var request = Request();
             CollectionAssert.DoesNotContain(WorldContentBuilder.Validate(request).BundleAssets, path);
-            request.additionalAssets = new[] { path };
+            request.additionalAssets = new[]
+            {
+                path
+            };
             CollectionAssert.Contains(WorldContentBuilder.Validate(request).BundleAssets, path);
         }
 
@@ -233,7 +276,10 @@ namespace Kimchily.Creator.Editor.Tests
         public void FolderCannotBeUsedAsAnAdditionalAsset()
         {
             var request = Request();
-            request.additionalAssets = new[] { folder };
+            request.additionalAssets = new[]
+            {
+                folder
+            };
             Assert.IsFalse(WorldContentBuilder.Validate(request).IsValid);
         }
 

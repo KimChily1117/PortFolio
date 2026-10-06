@@ -9,7 +9,14 @@ namespace Kimchily.Creator.Mobile
         public Rect Joystick;
         public Rect Jump;
         public Rect Look;
-        public float JoystickRadius => Joystick.width * .34f;
+
+        public float JoystickRadius
+        {
+            get
+            {
+                return Joystick.width * .34f;
+            }
+        }
 
         public static MobileControlLayout Calculate(Rect safeArea)
         {
@@ -23,8 +30,7 @@ namespace Kimchily.Creator.Mobile
                 Joystick = new Rect(safeArea.x + margin, safeArea.y + margin, size, size),
                 Jump = new Rect(safeArea.xMax - margin - jumpSize, safeArea.y + margin, jumpSize, jumpSize),
                 // Native host header/exit controls occupy the upper part of the screen.
-                Look = new Rect(safeArea.x + safeArea.width * .5f, safeArea.y,
-                    safeArea.width * .5f, safeArea.height * .85f)
+                Look = new Rect(safeArea.x + safeArea.width * .5f, safeArea.y, safeArea.width * .5f, safeArea.height * .85f)
             };
         }
     }
@@ -39,13 +45,32 @@ namespace Kimchily.Creator.Mobile
         private Vector2 lastLook;
         private Vector2 lookDelta;
         private bool jumpPending;
+
         public Vector2 Move { get; private set; }
-        public bool IsMovingPointer => movePointer != NoPointer;
-        public bool IsJumpPressed => jumpPointer != NoPointer;
+
+        public bool IsMovingPointer
+        {
+            get
+            {
+                return movePointer != NoPointer;
+            }
+        }
+
+        public bool IsJumpPressed
+        {
+            get
+            {
+                return jumpPointer != NoPointer;
+            }
+        }
 
         public void BeginPointer(int id, Vector2 position, MobileControlLayout layout)
         {
-            if (!layout.SafeArea.Contains(position)) return;
+            if (!layout.SafeArea.Contains(position))
+            {
+                return;
+            }
+
             if (layout.Joystick.Contains(position) && movePointer == NoPointer)
             {
                 movePointer = id;
@@ -65,21 +90,71 @@ namespace Kimchily.Creator.Mobile
 
         public void MovePointer(int id, Vector2 position, MobileControlLayout layout)
         {
-            if (id == movePointer) UpdateMove(position, layout);
-            if (id == lookPointer) { lookDelta += position - lastLook; lastLook = position; }
+            if (id == movePointer)
+            {
+                UpdateMove(position, layout);
+            }
+
+            if (id == lookPointer)
+            {
+                lookDelta += position - lastLook;
+                lastLook = position;
+            }
         }
 
         public void EndPointer(int id, bool cancelled = false)
         {
-            if (id == movePointer) { movePointer = NoPointer; Move = Vector2.zero; }
-            if (id == lookPointer) { lookPointer = NoPointer; if (cancelled) lookDelta = Vector2.zero; }
-            if (id == jumpPointer) { jumpPointer = NoPointer; if (cancelled) jumpPending = false; }
+            if (id == movePointer)
+            {
+                movePointer = NoPointer;
+                Move = Vector2.zero;
+            }
+
+            if (id == lookPointer)
+            {
+                lookPointer = NoPointer;
+
+                if (cancelled)
+                {
+                    lookDelta = Vector2.zero;
+                }
+            }
+
+            if (id == jumpPointer)
+            {
+                jumpPointer = NoPointer;
+
+                if (cancelled)
+                {
+                    jumpPending = false;
+                }
+            }
         }
 
-        public void AddLookDelta(Vector2 delta) { lookDelta += delta; }
-        public void RequestJump() { jumpPending = true; }
-        public bool ConsumeJump() { bool result = jumpPending; jumpPending = false; return result; }
-        public Vector2 ConsumeLook() { Vector2 result = lookDelta; lookDelta = Vector2.zero; return result; }
+        public void AddLookDelta(Vector2 delta)
+        {
+            lookDelta += delta;
+        }
+
+        public void RequestJump()
+        {
+            jumpPending = true;
+        }
+
+        public bool ConsumeJump()
+        {
+            bool result = jumpPending;
+            jumpPending = false;
+            return result;
+        }
+
+        public Vector2 ConsumeLook()
+        {
+            Vector2 result = lookDelta;
+            lookDelta = Vector2.zero;
+            return result;
+        }
+
         public void Clear()
         {
             movePointer = lookPointer = jumpPointer = NoPointer;

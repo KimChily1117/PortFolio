@@ -2,7 +2,9 @@
 
 소스 이주와 새 환경 실행 방법은 [MIGRATION.md](MIGRATION.md)에 정리했습니다.
 
-**2026-09-30 현재 상태와 전체 작업 내역:** [작업 이력·버전·실행 방법·검증·남은 확인 사항](docs/current-status-and-work-log.md). 현재 구현 기준은 `2672fce9c`이며, 과거 보고서의 테스트 수치와 게시 주소는 당시 기록입니다.
+**2026-10-06 현재 상태와 전체 작업 내역:** [작업 이력·버전·실행 방법·검증·남은 확인 사항](docs/current-status-and-work-log.md). 기능 기준은 `2672fce9c`이며, 이후 운영·가독성 변경과 각 검증 결과는 작업 이력에 구분해 기록합니다.
+
+**C# 읽기 안내:** 축약된 생성자·한 줄 함수·분기를 일반 블록으로 풀고 함수와 처리 단계 사이 간격을 정리했습니다. [작성 스타일](docs/csharp-style.md) · [변경 범위와 검증 결과](docs/reports/2026-10-06-csharp-readability.md)
 
 **개인 iPhone·Android 시연용 앱은 [KimchilyExpo](KimchilyExpo/README.md)에서 개발합니다.** Windows에서 EAS 내부 배포용 iOS 앱과 Android APK를 빌드하는 설정을 준비했습니다. 현재 iOS는 Apple 개발자 팀 연결 문제로 설치용 빌드를 보류했으며 Expo Go로 시연할 수 있습니다. 브라우저/PWA 보조 클라이언트는 `KimchilyWebApp`, 웹 카메라용 인증서 설정은 [LAN HTTPS 가이드](docs/lan-webapp-guide.md)에 있습니다.
 

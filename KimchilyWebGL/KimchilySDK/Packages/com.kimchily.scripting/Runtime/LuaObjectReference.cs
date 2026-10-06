@@ -8,8 +8,10 @@ namespace Kimchily.Scripting
     {
         public string name;
         public GameObject target;
+        public LuaObjectReference()
+        {
+        }
 
-        public LuaObjectReference() { }
         public LuaObjectReference(string name, GameObject target)
         {
             this.name = name;

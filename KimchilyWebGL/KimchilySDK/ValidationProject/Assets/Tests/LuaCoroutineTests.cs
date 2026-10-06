@@ -54,21 +54,32 @@ namespace Kimchily.Validation.Tests
         [UnityTearDown]
         public IEnumerator ReleaseLuaEnvironmentAfterCallbacksLeaveTheFrame()
         {
-            if (scheduler != null) scheduler.CancelAll();
+            if (scheduler != null)
+            {
+                scheduler.CancelAll();
+            }
+
             api?.Dispose();
             api = null;
+
             if (environment != null)
             {
                 environment.Global.Set<string, object>("scheduler", null);
                 environment.Global.Set<string, object>("owner", null);
                 environment.DoString("api = nil; kimchily_util = nil; collectgarbage('collect')");
             }
-            if (host != null) Object.Destroy(host);
+
+            if (host != null)
+            {
+                Object.Destroy(host);
+            }
+
             host = null;
             scheduler = null;
             // Unity Mono can keep callback temporaries alive on the current
             // native/managed stack. Dispose only after that frame has unwound.
             yield return null;
+
             if (environment != null)
             {
                 System.GC.Collect();

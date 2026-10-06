@@ -14,7 +14,6 @@ namespace Kimchily.TypeScript.Tests
     {
         string folder;
         const string Header = "import { KimchilyScriptBehaviour } from 'Kimchily.Script';\nimport { GameObject } from 'UnityEngine';\n";
-
         [SetUp]
         public void SetUp()
         {
@@ -26,7 +25,10 @@ namespace Kimchily.TypeScript.Tests
         [TearDown]
         public void TearDown()
         {
-            if (!string.IsNullOrEmpty(folder)) AssetDatabase.DeleteAsset(folder);
+            if (!string.IsNullOrEmpty(folder))
+            {
+                AssetDatabase.DeleteAsset(folder);
+            }
         }
 
         TypeScriptAsset Import(string name, string source)
@@ -41,8 +43,7 @@ namespace Kimchily.TypeScript.Tests
         public void ImportProducesActualClassModuleGraphAndPublicInspectorFields()
         {
             Import("Helper", "export const amount: number = 45;");
-            var asset = Import("Main", "import { amount } from './Helper';\n" + Header +
-                "export default class Main extends KimchilyScriptBehaviour { public speed = amount; public target: GameObject | null = null; private hidden = new Map<string, number>(); }");
+            var asset = Import("Main", "import { amount } from './Helper';\n" + Header + "export default class Main extends KimchilyScriptBehaviour { public speed = amount; public target: GameObject | null = null; private hidden = new Map<string, number>(); }");
             Assert.NotNull(asset);
             Assert.IsTrue(asset.compiledSuccessfully, string.Join("\n", asset.diagnostics));
             Assert.AreEqual("Main", asset.className);
@@ -76,7 +77,10 @@ namespace Kimchily.TypeScript.Tests
                 behaviour.ScriptAsset = helper;
                 Assert.IsTrue(behaviour.ValidateContent().Any(error => error.Contains("default-export")));
             }
-            finally { UnityEngine.Object.DestroyImmediate(owner); }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(owner);
+            }
         }
 
         [Test]
@@ -95,15 +99,17 @@ namespace Kimchily.TypeScript.Tests
                 Assert.IsEmpty(failed.fields);
                 Assert.IsTrue(failed.diagnostics.Any(error => error.Contains("TS2322")));
             }
-            finally { LogAssert.ignoreFailingMessages = previous; }
+            finally
+            {
+                LogAssert.ignoreFailingMessages = previous;
+            }
         }
 
         [Test]
         public void BuildPreflightDetectsAHelperEditedOutsideUnityAndRefreshesTheAsset()
         {
             Import("Helper", "export const amount = 45;");
-            var initial = Import("Main", "import { amount } from './Helper';\n" + Header +
-                "export default class Main extends KimchilyScriptBehaviour { public speed = amount; }");
+            var initial = Import("Main", "import { amount } from './Helper';\n" + Header + "export default class Main extends KimchilyScriptBehaviour { public speed = amount; }");
             string before = initial.sourceHash;
             File.WriteAllText(folder + "/Helper.ts", "export const amount = 80;");
             var errors = new List<string>();

@@ -23,13 +23,26 @@ namespace Kimchily.Creator.Tests
         }
 
         [TearDown]
-        public void TearDown() { if (Directory.Exists(root)) Directory.Delete(root, true); }
-
-        LocalPublisherStatus Ready() => new LocalPublisherStatus
+        public void TearDown()
         {
-            schemaVersion = 1, status = "running", processVerified = true, healthy = true,
-            localUrl = "http://127.0.0.1:8787", stateDirectory = Path.Combine(publisher, ".local")
-        };
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, true);
+            }
+        }
+
+        LocalPublisherStatus Ready()
+        {
+            return new LocalPublisherStatus
+            {
+                schemaVersion = 1,
+                status = "running",
+                processVerified = true,
+                healthy = true,
+                localUrl = "http://127.0.0.1:8787",
+                stateDirectory = Path.Combine(publisher, ".local")
+            };
+        }
 
         [Test]
         public void StoppedManagementResponseAllowsANullPid()
@@ -87,8 +100,7 @@ namespace Kimchily.Creator.Tests
         [TestCase("http://127.0.0.1:8787/other")]
         public void AnAutomaticallyConnectedTokenCannotBeSentToAnEditedServer(string destination)
         {
-            Assert.Throws<InvalidOperationException>(() =>
-                LocalPublisherController.ValidateCredentialDestination("http://127.0.0.1:8787", destination));
+            Assert.Throws<InvalidOperationException>(() => LocalPublisherController.ValidateCredentialDestination("http://127.0.0.1:8787", destination));
             Assert.DoesNotThrow(() => LocalPublisherController.ValidateCredentialDestination("http://127.0.0.1:8787", "http://127.0.0.1:8787/"));
         }
     }

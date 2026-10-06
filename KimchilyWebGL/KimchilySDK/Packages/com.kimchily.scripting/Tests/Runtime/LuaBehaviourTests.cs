@@ -12,13 +12,23 @@ namespace Kimchily.Scripting.Tests
         private GameObject owner;
         private GameObject target;
         private TextAsset asset;
-
         [TearDown]
         public void TearDown()
         {
-            if (owner != null) Object.DestroyImmediate(owner);
-            if (target != null) Object.DestroyImmediate(target);
-            if (asset != null) Object.DestroyImmediate(asset);
+            if (owner != null)
+            {
+                Object.DestroyImmediate(owner);
+            }
+
+            if (target != null)
+            {
+                Object.DestroyImmediate(target);
+            }
+
+            if (asset != null)
+            {
+                Object.DestroyImmediate(asset);
+            }
         }
 
         private KimchilyLuaBehaviour Create(string source, int budget = 20000)
@@ -27,9 +37,15 @@ namespace Kimchily.Scripting.Tests
             owner = new GameObject("Lua test");
             owner.SetActive(false);
             var behaviour = owner.AddComponent<KimchilyLuaBehaviour>();
-            asset = new TextAsset(source) { name = "test.lua" };
+            asset = new TextAsset(source)
+            {
+                name = "test.lua"
+            };
             behaviour.ScriptAsset = asset;
-            behaviour.References = new[] { new LuaObjectReference("target", target) };
+            behaviour.References = new[]
+            {
+                new LuaObjectReference("target", target)
+            };
             behaviour.InstructionBudget = budget;
             owner.SetActive(true);
             return behaviour;
@@ -164,7 +180,10 @@ end");
             owner = new GameObject("Untrusted serialized budget");
             owner.SetActive(false);
             var behaviour = owner.AddComponent<KimchilyLuaBehaviour>();
-            asset = new TextAsset("local n = 0; for i = 1, 100000 do n = n + 1 end") { name = "budget.lua" };
+            asset = new TextAsset("local n = 0; for i = 1, 100000 do n = n + 1 end")
+            {
+                name = "budget.lua"
+            };
             behaviour.ScriptAsset = asset;
             // Deliberately bypass the public setter, as AssetBundle deserialization does.
             JsonUtility.FromJsonOverwrite("{\"instructionBudget\":2147483647}", behaviour);

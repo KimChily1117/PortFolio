@@ -47,9 +47,12 @@ namespace Kimchily.Creator
                 get
                 {
                     if (execution.Handle.IsDone)
+                    {
                         return false;
+                    }
 
                     execution.ExecutionDepth++;
+
                     try
                     {
                         bool waiting = Original.keepWaiting;
@@ -68,12 +71,17 @@ namespace Kimchily.Creator
             }
         }
 
-        private readonly Dictionary<CoroutineHandle, Execution> active =
-            new Dictionary<CoroutineHandle, Execution>();
+        private readonly Dictionary<CoroutineHandle, Execution> active = new Dictionary<CoroutineHandle, Execution>();
         private readonly List<Execution> ownerCheck = new List<Execution>();
         private bool acceptingWork;
 
-        public int ActiveCount => active.Count;
+        public int ActiveCount
+        {
+            get
+            {
+                return active.Count;
+            }
+        }
 
         /// <summary>
         /// Starts immediately until the first yield, like Unity StartCoroutine.
@@ -83,13 +91,21 @@ namespace Kimchily.Creator
         public CoroutineHandle StartRoutine(IEnumerator routine, UnityEngine.Object owner = null)
         {
             if (routine == null)
+            {
                 throw new ArgumentNullException(nameof(routine));
+            }
+
             if (!acceptingWork || !isActiveAndEnabled)
+            {
                 throw new InvalidOperationException("The coroutine scheduler must be active and enabled.");
+            }
 
             bool hasOwner = !ReferenceEquals(owner, null);
+
             if (hasOwner && owner == null)
+            {
                 throw new ArgumentException("The coroutine owner has already been destroyed.", nameof(owner));
+            }
 
             var handle = new CoroutineHandle(this);
             var execution = new Execution
@@ -107,7 +123,9 @@ namespace Kimchily.Creator
                 Coroutine native = StartCoroutine(Run(execution));
                 // Run may finish, fault, or cancel before StartCoroutine returns.
                 if (!execution.Finished)
+                {
                     execution.NativeCoroutine = native;
+                }
             }
             catch (Exception exception)
             {
@@ -121,29 +139,40 @@ namespace Kimchily.Creator
         public bool Stop(CoroutineHandle handle)
         {
             if (handle == null || !active.TryGetValue(handle, out Execution execution) || handle.IsDone)
+            {
                 return false;
+            }
 
             handle.Status = CoroutineStatus.Cancelled;
             // Never Dispose an iterator while its MoveNext/Current/keepWaiting is
             // running. Self-cancellation unwinds when that invocation returns.
             if (execution.ExecutionDepth == 0)
+            {
                 Finish(execution, true);
+            }
+
             return true;
         }
 
         public int CancelOwnedBy(UnityEngine.Object owner)
         {
             if (ReferenceEquals(owner, null))
+            {
                 throw new ArgumentNullException(nameof(owner));
+            }
 
             int ownerId = owner.GetInstanceID();
             int cancelled = 0;
             var snapshot = new List<Execution>(active.Values);
+
             foreach (Execution execution in snapshot)
             {
                 if (execution.HasOwner && execution.OwnerId == ownerId && Stop(execution.Handle))
+                {
                     cancelled++;
+                }
             }
+
             return cancelled;
         }
 
@@ -152,11 +181,15 @@ namespace Kimchily.Creator
         {
             int cancelled = 0;
             var snapshot = new List<Execution>(active.Values);
+
             foreach (Execution execution in snapshot)
             {
                 if (Stop(execution.Handle))
+                {
                     cancelled++;
+                }
             }
+
             return cancelled;
         }
 
@@ -169,11 +202,15 @@ namespace Kimchily.Creator
         {
             ownerCheck.Clear();
             ownerCheck.AddRange(active.Values);
+
             foreach (Execution execution in ownerCheck)
             {
                 if (execution.HasOwner && execution.Owner == null)
+                {
                     Stop(execution.Handle);
+                }
             }
+
             ownerCheck.Clear();
         }
 
@@ -196,14 +233,20 @@ namespace Kimchily.Creator
                 while (!execution.Handle.IsDone)
                 {
                     if (!Advance(execution, out object yielded))
+                    {
                         yield break;
+                    }
+
                     yield return yielded;
                 }
             }
             finally
             {
                 if (!execution.Handle.IsDone)
+                {
                     execution.Handle.Status = CoroutineStatus.Cancelled;
+                }
+
                 Finish(execution, false);
             }
         }
@@ -212,15 +255,20 @@ namespace Kimchily.Creator
         {
             yielded = null;
             execution.ExecutionDepth++;
+
             try
             {
                 DisposePendingYield(execution);
+
                 while (!execution.Handle.IsDone && execution.Stack.Count > 0)
                 {
                     IEnumerator current = execution.Stack[execution.Stack.Count - 1];
                     bool hasNext = current.MoveNext();
+
                     if (execution.Handle.IsDone)
+                    {
                         return false;
+                    }
 
                     if (!hasNext)
                     {
@@ -230,8 +278,11 @@ namespace Kimchily.Creator
                     }
 
                     object next = current.Current;
+
                     if (execution.Handle.IsDone)
+                    {
                         return false;
+                    }
 
                     if (next is CustomYieldInstruction customYield)
                     {
@@ -245,8 +296,11 @@ namespace Kimchily.Creator
                         foreach (IEnumerator ancestor in execution.Stack)
                         {
                             if (ReferenceEquals(ancestor, nested))
+                            {
                                 throw new InvalidOperationException("A coroutine cannot yield itself or an active ancestor.");
+                            }
                         }
+
                         execution.Stack.Add(nested);
                         continue;
                     }
@@ -258,7 +312,10 @@ namespace Kimchily.Creator
                 }
 
                 if (!execution.Handle.IsDone)
+                {
                     execution.Handle.Status = CoroutineStatus.Completed;
+                }
+
                 return false;
             }
             catch (Exception exception)
@@ -275,16 +332,26 @@ namespace Kimchily.Creator
         private void Finish(Execution execution, bool stopNative)
         {
             if (execution.Finished || execution.Cleaning || execution.ExecutionDepth != 0)
+            {
                 return;
+            }
 
             execution.Cleaning = true;
+
             if (stopNative && execution.NativeCoroutine != null)
             {
-                try { StopCoroutine(execution.NativeCoroutine); }
-                catch (Exception exception) { RecordFault(execution, exception); }
+                try
+                {
+                    StopCoroutine(execution.NativeCoroutine);
+                }
+                catch (Exception exception)
+                {
+                    RecordFault(execution, exception);
+                }
             }
 
             DisposePendingYield(execution);
+
             while (execution.Stack.Count > 0)
             {
                 int index = execution.Stack.Count - 1;
@@ -299,25 +366,32 @@ namespace Kimchily.Creator
             execution.Finished = true;
             execution.Cleaning = false;
             active.Remove(execution.Handle);
-
             // Faults are contained at the scheduler boundary. Scripts inspect
             // handle.Exception; Unity receives one log after every finally ran.
             if (execution.Handle.Exception != null)
+            {
                 Debug.LogException(execution.Handle.Exception, this);
+            }
         }
 
         private static void DisposePendingYield(Execution execution)
         {
             GuardedYield pending = execution.PendingYield;
             execution.PendingYield = null;
+
             if (pending != null)
+            {
                 DisposeIterator(execution, pending.Original);
+            }
         }
 
         private static void DisposeIterator(Execution execution, IEnumerator iterator)
         {
             if (!(iterator is IDisposable disposable))
+            {
                 return;
+            }
+
             try
             {
                 disposable.Dispose();
@@ -331,9 +405,7 @@ namespace Kimchily.Creator
         private static void RecordFault(Execution execution, Exception exception)
         {
             Exception previous = execution.Handle.Exception;
-            execution.Handle.Exception = previous == null
-                ? exception
-                : new AggregateException("Coroutine execution or cleanup failed.", previous, exception);
+            execution.Handle.Exception = previous == null ? exception : new AggregateException("Coroutine execution or cleanup failed.", previous, exception);
             // Cleanup errors make even a requested cancellation a fault.
             execution.Handle.Status = CoroutineStatus.Faulted;
         }

@@ -16,7 +16,11 @@ namespace Kimchily.Creator.Tests
             Exception failure = null;
             using (var queue = new CreatorWindowActionQueue(callbacks.Add, action => callbacks.Remove(action), null, error => failure = error))
             {
-                Assert.IsTrue(queue.TryEnqueue(() => { Assert.IsFalse(insideGui); calls++; }));
+                Assert.IsTrue(queue.TryEnqueue(() =>
+                {
+                    Assert.IsFalse(insideGui);
+                    calls++;
+                }));
                 Assert.AreEqual(0, calls, "The button event must never run validation/build/publish inline.");
                 Assert.IsTrue(queue.IsBusy);
                 insideGui = false;
@@ -90,10 +94,19 @@ namespace Kimchily.Creator.Tests
             var callbacks = new List<Action>();
             bool closed = false;
             int lateNotifications = 0;
-            using (var queue = new CreatorWindowActionQueue(callbacks.Add, action => callbacks.Remove(action),
-                () => { if (closed) lateNotifications++; }, error => Assert.Fail(error.ToString())))
+            using (var queue = new CreatorWindowActionQueue(callbacks.Add, action => callbacks.Remove(action), () =>
             {
-                queue.TryEnqueue(() => { closed = true; queue.Dispose(); });
+                if (closed)
+                {
+                    lateNotifications++;
+                }
+            }, error => Assert.Fail(error.ToString())))
+            {
+                queue.TryEnqueue(() =>
+                {
+                    closed = true;
+                    queue.Dispose();
+                });
                 callbacks[0]();
                 Assert.AreEqual(0, lateNotifications);
                 Assert.IsFalse(queue.IsBusy);

@@ -7,7 +7,9 @@ namespace Kimchily.World.Tests
     public sealed class ScriptStartupProbe : MonoBehaviour, IWorldScriptStatus
     {
         public bool HasStarted { get; set; }
+
         public bool IsFaulted { get; set; }
+
         public string LastError { get; set; }
     }
 }

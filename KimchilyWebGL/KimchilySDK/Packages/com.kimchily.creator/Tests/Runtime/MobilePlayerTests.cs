@@ -17,11 +17,22 @@ namespace Kimchily.Creator.Tests
         {
             foreach (Scene scene in scenes)
             {
-                if (!scene.IsValid() || !scene.isLoaded) continue;
+                if (!scene.IsValid() || !scene.isLoaded)
+                {
+                    continue;
+                }
+
                 foreach (GameObject root in scene.GetRootGameObjects())
-                    foreach (KimchilyMobilePlayer player in root.GetComponentsInChildren<KimchilyMobilePlayer>(true)) player.enabled = false;
+                {
+                    foreach (KimchilyMobilePlayer player in root.GetComponentsInChildren<KimchilyMobilePlayer>(true))
+                    {
+                        player.enabled = false;
+                    }
+                }
+
                 yield return SceneManager.UnloadSceneAsync(scene);
             }
+
             scenes.Clear();
         }
 
@@ -147,7 +158,12 @@ namespace Kimchily.Creator.Tests
         public void ExactLegacyStarterFloorIsRepairedOnlyInLoadedScene(string name, float width, float thickness)
         {
             Scene scene = NewScene();
-            GameObject floor = Primitive(scene, PrimitiveType.Cylinder, name, new Vector3(0, -thickness, 0), new Vector3(width, thickness, width));
+            GameObject floor = Primitive(
+                scene,
+                PrimitiveType.Cylinder,
+                name,
+                new Vector3(0, -thickness, 0),
+                new Vector3(width, thickness, width));
             CapsuleCollider original = floor.GetComponent<CapsuleCollider>();
             Mesh originalMesh = floor.GetComponent<MeshFilter>().sharedMesh;
             Vector3 originalScale = floor.transform.localScale;
@@ -173,26 +189,47 @@ namespace Kimchily.Creator.Tests
         public void AuthoredFloorVariationsNeverReceiveLegacyCompatibility(string change)
         {
             Scene scene = NewScene();
-            GameObject floor = Primitive(scene, PrimitiveType.Cylinder, "World Platform", new Vector3(0, -.1f, 0), new Vector3(4.5f, .1f, 4.5f));
+            GameObject floor = Primitive(
+                scene,
+                PrimitiveType.Cylinder,
+                "World Platform",
+                new Vector3(0, -.1f, 0),
+                new Vector3(4.5f, .1f, 4.5f));
             CapsuleCollider original = floor.GetComponent<CapsuleCollider>();
             Mesh customMesh = null;
+
             switch (change)
             {
-                case "name": floor.name = "My authored platform"; break;
-                case "scale": floor.transform.localScale += Vector3.right * .1f; break;
-                case "position": floor.transform.position += Vector3.right; break;
-                case "radius": original.radius = .6f; break;
-                case "extraCollider": floor.AddComponent<BoxCollider>(); break;
+                case "name":
+                    floor.name = "My authored platform";
+                    break;
+                case "scale":
+                    floor.transform.localScale += Vector3.right * .1f;
+                    break;
+                case "position":
+                    floor.transform.position += Vector3.right;
+                    break;
+                case "radius":
+                    original.radius = .6f;
+                    break;
+                case "extraCollider":
+                    floor.AddComponent<BoxCollider>();
+                    break;
                 case "customMesh":
                     customMesh = Object.Instantiate(floor.GetComponent<MeshFilter>().sharedMesh);
                     customMesh.name = "Cylinder";
                     floor.GetComponent<MeshFilter>().sharedMesh = customMesh;
                     break;
             }
+
             KimchilyMobilePlayerBootstrap.EnsureForScene(scene);
             Assert.IsTrue(original.enabled);
             Assert.IsNull(floor.GetComponent<MeshCollider>());
-            if (customMesh != null) Object.Destroy(customMesh);
+
+            if (customMesh != null)
+            {
+                Object.Destroy(customMesh);
+            }
         }
 
         [Test]
@@ -201,7 +238,12 @@ namespace Kimchily.Creator.Tests
             Scene scene = NewScene();
             CreateFloor(scene);
             KimchilyMobilePlayer player = KimchilyMobilePlayerBootstrap.CreateForScene(scene);
-            for (int i = 0; i < 20; i++) player.Simulate(.02f, Vector2.zero, false);
+
+            for (int i = 0; i < 20; i++)
+            {
+                player.Simulate(.02f, Vector2.zero, false);
+            }
+
             Assert.IsTrue(player.Controller.isGrounded);
             float groundY = player.transform.position.y;
             player.Simulate(.02f, Vector2.zero, true);
@@ -210,18 +252,33 @@ namespace Kimchily.Creator.Tests
             player.Simulate(.02f, Vector2.zero, true);
             Assert.Less(player.VerticalVelocity, firstVelocity, "A second airborne press must not grant another jump.");
             float peak = player.transform.position.y;
-            for (int i = 0; i < 100; i++) { player.Simulate(.02f, Vector2.zero, false); peak = Mathf.Max(peak, player.transform.position.y); }
+
+            for (int i = 0; i < 100; i++)
+            {
+                player.Simulate(.02f, Vector2.zero, false);
+                peak = Mathf.Max(peak, player.transform.position.y);
+            }
+
             Assert.Greater(peak - groundY, .8f);
             Assert.Less(peak - groundY, 1.5f);
             Assert.IsTrue(player.Controller.isGrounded);
             Assert.That(player.transform.position.y, Is.EqualTo(groundY).Within(.1f));
-
             Vector3 start = player.transform.position;
             Vector3 forward = Vector3.ProjectOnPlane(player.ViewCamera.transform.forward, Vector3.up).normalized;
-            GameObject wall = Primitive(scene, PrimitiveType.Cube, "Collision wall", start + forward * 2 + Vector3.up, new Vector3(5, 3, .3f));
+            GameObject wall = Primitive(
+                scene,
+                PrimitiveType.Cube,
+                "Collision wall",
+                start + forward * 2 + Vector3.up,
+                new Vector3(5, 3, .3f));
             wall.transform.rotation = Quaternion.LookRotation(forward);
             Physics.SyncTransforms();
-            for (int i = 0; i < 80; i++) player.Simulate(.02f, Vector2.up, false);
+
+            for (int i = 0; i < 80; i++)
+            {
+                player.Simulate(.02f, Vector2.up, false);
+            }
+
             float distance = Vector3.Dot(player.transform.position - start, forward);
             Assert.Greater(distance, .5f);
             Assert.Less(distance, 1.9f, "CharacterController must be stopped by the authored wall collider.");
@@ -255,11 +312,9 @@ namespace Kimchily.Creator.Tests
             nestedPlayer.AddComponent<KimchilyMobilePlayer>();
             Assert.Throws<System.ArgumentException>(() => player.ModelPrefab = nestedPlayer);
             Assert.IsNull(player.ModelPrefab);
-
             // Serialized Inspector data can bypass the public property; the execution
             // path and publish validation must enforce the same restriction.
-            typeof(KimchilyMobilePlayer).GetField("modelPrefab", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .SetValue(player, nestedPlayer);
+            typeof(KimchilyMobilePlayer).GetField("modelPrefab", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(player, nestedPlayer);
             Assert.IsNotEmpty(new List<string>(player.ValidateContent()));
             Transform originalVisual = player.VisualRoot;
             Assert.Throws<System.InvalidOperationException>(() => player.RefreshVisual());
@@ -301,12 +356,14 @@ namespace Kimchily.Creator.Tests
             scenes.Add(scene);
             return scene;
         }
+
         private static GameObject NewObject(Scene scene, string name)
         {
             var value = new GameObject(name);
             SceneManager.MoveGameObjectToScene(value, scene);
             return value;
         }
+
         private static GameObject Primitive(Scene scene, PrimitiveType type, string name, Vector3 position, Vector3 scale)
         {
             GameObject value = GameObject.CreatePrimitive(type);
@@ -316,7 +373,12 @@ namespace Kimchily.Creator.Tests
             value.transform.localScale = scale;
             return value;
         }
-        private static void CreateFloor(Scene scene) => Primitive(scene, PrimitiveType.Cube, "Floor", new Vector3(1000, -.5f, 0), new Vector3(30, 1, 30));
+
+        private static void CreateFloor(Scene scene)
+        {
+            Primitive(scene, PrimitiveType.Cube, "Floor", new Vector3(1000, -.5f, 0), new Vector3(30, 1, 30));
+        }
+
         private static void AssertRectInside(Rect parent, Rect child)
         {
             Assert.GreaterOrEqual(child.xMin, parent.xMin);
@@ -324,6 +386,7 @@ namespace Kimchily.Creator.Tests
             Assert.LessOrEqual(child.xMax, parent.xMax);
             Assert.LessOrEqual(child.yMax, parent.yMax);
         }
+
         private static void HoldAll(KimchilyMobileControls controls)
         {
             MobileControlLayout layout = controls.Layout;
@@ -331,6 +394,7 @@ namespace Kimchily.Creator.Tests
             controls.InputState.RequestJump();
             controls.InputState.AddLookDelta(Vector2.one);
         }
+
         private static void AssertCleared(KimchilyMobileControls controls)
         {
             Assert.AreEqual(Vector2.zero, controls.Move);

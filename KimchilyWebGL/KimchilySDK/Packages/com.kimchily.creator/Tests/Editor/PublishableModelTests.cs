@@ -26,7 +26,10 @@ namespace Kimchily.Creator.Editor.Tests
             folder = "Assets/__KimchilyModelTests_" + Guid.NewGuid().ToString("N");
             AssetDatabase.CreateFolder("Assets", Path.GetFileName(folder));
             preview = EditorSceneManager.NewPreviewScene();
-            holder = new GameObject("Test Holder") { hideFlags = HideFlags.HideAndDontSave };
+            holder = new GameObject("Test Holder")
+            {
+                hideFlags = HideFlags.HideAndDontSave
+            };
             holder.SetActive(false);
             SceneManager.MoveGameObjectToScene(holder, preview);
             preparedPlayerAsset = null;
@@ -36,12 +39,27 @@ namespace Kimchily.Creator.Editor.Tests
         [TearDown]
         public void TearDown()
         {
-            if (preview.IsValid()) EditorSceneManager.ClosePreviewScene(preview);
-            if (!string.IsNullOrEmpty(preparedPlayerAsset)) AssetDatabase.DeleteAsset(preparedPlayerAsset);
-            if (createdPlayerFolder && Directory.Exists("Assets/PublishedModels") &&
-                Directory.GetFileSystemEntries("Assets/PublishedModels").Length == 0)
+            if (preview.IsValid())
+            {
+                EditorSceneManager.ClosePreviewScene(preview);
+            }
+
+            if (!string.IsNullOrEmpty(preparedPlayerAsset))
+            {
+                AssetDatabase.DeleteAsset(preparedPlayerAsset);
+            }
+
+            if (createdPlayerFolder
+                && Directory.Exists("Assets/PublishedModels")
+                && Directory.GetFileSystemEntries("Assets/PublishedModels").Length == 0)
+            {
                 AssetDatabase.DeleteAsset("Assets/PublishedModels");
-            if (!string.IsNullOrEmpty(folder)) AssetDatabase.DeleteAsset(folder);
+            }
+
+            if (!string.IsNullOrEmpty(folder))
+            {
+                AssetDatabase.DeleteAsset(folder);
+            }
         }
 
         GameObject NewObject(string name)
@@ -54,10 +72,15 @@ namespace Kimchily.Creator.Editor.Tests
         GameObject SourceWithScripts(string name = "Source")
         {
             GameObject root = NewObject(name);
-            Assert.IsNotNull(root.AddComponent<PublishableModelRequiredBehaviour>(), "The fixture must be a runtime-attachable script, not an Editor-only script.");
+            Assert.IsNotNull(
+                root.AddComponent<PublishableModelRequiredBehaviour>(),
+                "The fixture must be a runtime-attachable script, not an Editor-only script.");
             root.AddComponent<CoroutineScheduler>();
             GameObject source = PrefabUtility.SaveAsPrefabAsset(root, folder + "/" + name + ".prefab");
-            Assert.AreEqual(1, source.GetComponentsInChildren<PublishableModelRequiredBehaviour>(true).Length, "The original prefab must actually serialize the external component.");
+            Assert.AreEqual(
+                1,
+                source.GetComponentsInChildren<PublishableModelRequiredBehaviour>(true).Length,
+                "The original prefab must actually serialize the external component.");
             Assert.AreEqual(2, PublishableModelUtility.GetUnsupportedScripts(source).Length);
             return source;
         }
@@ -75,29 +98,51 @@ namespace Kimchily.Creator.Editor.Tests
         [Test]
         public void NestedCopyPreservesSkinMaterialAndAnimatorWithoutOriginalPrefabDependencies()
         {
-            var mesh = new Mesh { name = "Fixture Mesh" };
-            mesh.vertices = new[] { Vector3.zero, Vector3.right, Vector3.up };
-            mesh.triangles = new[] { 0, 1, 2 };
+            var mesh = new Mesh
+            {
+                name = "Fixture Mesh"
+            };
+            mesh.vertices = new[]
+            {
+                Vector3.zero,
+                Vector3.right,
+                Vector3.up
+            };
+            mesh.triangles = new[]
+            {
+                0,
+                1,
+                2
+            };
             mesh.RecalculateBounds();
             AssetDatabase.CreateAsset(mesh, folder + "/Mesh.asset");
             var material = new Material(Shader.Find("Unlit/Color"));
             AssetDatabase.CreateAsset(material, folder + "/Surface.mat");
-            var clip = new AnimationClip { name = "Idle" };
+            var clip = new AnimationClip
+            {
+                name = "Idle"
+            };
             AssetDatabase.CreateAsset(clip, folder + "/Idle.anim");
             AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(folder + "/Visual.controller");
             controller.layers[0].stateMachine.AddState("Idle").motion = clip;
             AssetDatabase.SaveAssetIfDirty(controller);
-
             GameObject child = NewObject("Nested Model");
             var bone = new GameObject("Bone");
             bone.transform.SetParent(child.transform, false);
             var skin = child.AddComponent<SkinnedMeshRenderer>();
-            skin.sharedMesh = mesh; skin.sharedMaterial = material;
-            skin.rootBone = bone.transform; skin.bones = new[] { bone.transform };
+            skin.sharedMesh = mesh;
+            skin.sharedMaterial = material;
+            skin.rootBone = bone.transform;
+            skin.bones = new[]
+            {
+                bone.transform
+            };
             var avatar = AvatarBuilder.BuildGenericAvatar(child, "");
             AssetDatabase.CreateAsset(avatar, folder + "/Skeleton.asset");
             Animator animator = child.AddComponent<Animator>();
-            animator.avatar = avatar; animator.runtimeAnimatorController = controller; animator.applyRootMotion = true;
+            animator.avatar = avatar;
+            animator.runtimeAnimatorController = controller;
+            animator.applyRootMotion = true;
             Assert.IsNotNull(child.AddComponent<PublishableModelRequiredBehaviour>());
             child.AddComponent<CoroutineScheduler>();
             GameObject nested = PrefabUtility.SaveAsPrefabAsset(child, folder + "/Nested.prefab");
@@ -105,18 +150,27 @@ namespace Kimchily.Creator.Editor.Tests
             var nestedInstance = (GameObject)PrefabUtility.InstantiatePrefab(nested, root.transform);
             nestedInstance.transform.localPosition = new Vector3(1, 2, 3);
             GameObject source = PrefabUtility.SaveAsPrefabAsset(root, folder + "/Source.prefab");
-            Assert.AreEqual(2, PublishableModelUtility.GetUnsupportedScripts(source).Length, "The nested source must contain both unsupported scripts before conversion.");
+            Assert.AreEqual(
+                2,
+                PublishableModelUtility.GetUnsupportedScripts(source).Length,
+                "The nested source must contain both unsupported scripts before conversion.");
             byte[] sourceBytes = File.ReadAllBytes(folder + "/Source.prefab");
             byte[] nestedBytes = File.ReadAllBytes(folder + "/Nested.prefab");
             PublishableModelExternalBehaviour.EnableCount = 0;
-
             GameObject copy = PublishableModelUtility.CreateCopy(source, folder + "/Copy.prefab", out string[] removed);
-
-            CollectionAssert.AreEquivalent(new[] { typeof(PublishableModelExternalBehaviour).FullName,
-                typeof(PublishableModelRequiredBehaviour).FullName }, removed);
+            CollectionAssert.AreEquivalent(
+                new[]
+            {
+                typeof(PublishableModelExternalBehaviour).FullName,
+                typeof(PublishableModelRequiredBehaviour).FullName
+            },
+                removed);
             Assert.AreEqual(0, copy.GetComponentsInChildren<PublishableModelExternalBehaviour>(true).Length);
             Assert.AreEqual(1, copy.GetComponentsInChildren<CoroutineScheduler>(true).Length);
-            Assert.AreEqual(0, PublishableModelExternalBehaviour.EnableCount, "Preparing an asset must not enable its ExecuteAlways scripts.");
+            Assert.AreEqual(
+                0,
+                PublishableModelExternalBehaviour.EnableCount,
+                "Preparing an asset must not enable its ExecuteAlways scripts.");
             SkinnedMeshRenderer copiedSkin = copy.GetComponentInChildren<SkinnedMeshRenderer>(true);
             AssertSameAsset(mesh, copiedSkin.sharedMesh);
             AssertSameAsset(material, copiedSkin.sharedMaterial);
@@ -138,9 +192,22 @@ namespace Kimchily.Creator.Editor.Tests
         [Test]
         public void StaticMeshModelNeedsNoAnimatorOrCharacterSpecificNames()
         {
-            var mesh = new Mesh { name = "Custom Prop Mesh" };
-            mesh.vertices = new[] { Vector3.zero, Vector3.right, Vector3.up };
-            mesh.triangles = new[] { 0, 1, 2 };
+            var mesh = new Mesh
+            {
+                name = "Custom Prop Mesh"
+            };
+            mesh.vertices = new[]
+            {
+                Vector3.zero,
+                Vector3.right,
+                Vector3.up
+            };
+            mesh.triangles = new[]
+            {
+                0,
+                1,
+                2
+            };
             mesh.RecalculateBounds();
             AssetDatabase.CreateAsset(mesh, folder + "/PropMesh.asset");
             var material = new Material(Shader.Find("Unlit/Color"));
@@ -154,9 +221,7 @@ namespace Kimchily.Creator.Editor.Tests
             child.AddComponent<MeshRenderer>().sharedMaterial = material;
             GameObject source = PrefabUtility.SaveAsPrefabAsset(sourceObject, folder + "/Prop.prefab");
             byte[] original = File.ReadAllBytes(folder + "/Prop.prefab");
-
             GameObject copy = PublishableModelUtility.CreateCopy(source, folder + "/PropCopy.prefab", out string[] removed);
-
             Assert.IsEmpty(removed);
             Assert.IsEmpty(copy.GetComponentsInChildren<Animator>(true));
             AssertSameAsset(mesh, copy.GetComponentInChildren<MeshFilter>(true).sharedMesh);
@@ -174,14 +239,17 @@ namespace Kimchily.Creator.Editor.Tests
             Assert.IsNotNull(source, "The validation project's imported FBX fixture must exist.");
             Assert.AreEqual(PrefabAssetType.Model, PrefabUtility.GetPrefabAssetType(source));
             byte[] original = File.ReadAllBytes(path);
-
             GameObject copy = PublishableModelUtility.CreateCopy(source, folder + "/ImportedCopy.prefab", out string[] removed);
-
             Assert.IsEmpty(removed);
             Assert.AreEqual(source.GetComponentsInChildren<Renderer>(true).Length, copy.GetComponentsInChildren<Renderer>(true).Length);
             Assert.Greater(copy.GetComponentsInChildren<Renderer>(true).Length, 0);
             CollectionAssert.Contains(AssetDatabase.GetDependencies(folder + "/ImportedCopy.prefab", true), path);
-            foreach (Animator animator in copy.GetComponentsInChildren<Animator>(true)) Assert.IsFalse(animator.applyRootMotion);
+
+            foreach (Animator animator in copy.GetComponentsInChildren<Animator>(true))
+            {
+                Assert.IsFalse(animator.applyRootMotion);
+            }
+
             CollectionAssert.AreEqual(original, File.ReadAllBytes(path));
         }
 
@@ -207,7 +275,8 @@ namespace Kimchily.Creator.Editor.Tests
         public void ExternalAnimatorBehaviourIsRejectedAndNewOutputIsRemoved()
         {
             AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(folder + "/External.controller");
-            Assert.IsNotNull(controller.layers[0].stateMachine.AddState("Idle").AddStateMachineBehaviour<PublishableModelStateBehaviour>(),
+            Assert.IsNotNull(
+                controller.layers[0].stateMachine.AddState("Idle").AddStateMachineBehaviour<PublishableModelStateBehaviour>(),
                 "The fixture must contain a serialized runtime StateMachineBehaviour.");
             AssetDatabase.SaveAssetIfDirty(controller);
             Assert.IsTrue(AssetDatabase.LoadAllAssetsAtPath(folder + "/External.controller").OfType<PublishableModelStateBehaviour>().Any());
@@ -235,9 +304,7 @@ namespace Kimchily.Creator.Editor.Tests
             player.RefreshVisual();
             Assert.AreEqual(1, player.VisualRoot.GetComponentsInChildren<PublishableModelExternalBehaviour>(true).Length);
             createdPlayerFolder = !AssetDatabase.IsValidFolder("Assets/PublishedModels");
-
             preparedPlayerAsset = MobilePlayerModelPreparation.PreparePlayer(player);
-
             Assert.AreEqual(preparedPlayerAsset, AssetDatabase.GetAssetPath(player.ModelPrefab));
             Assert.AreNotSame(source, player.ModelPrefab);
             Assert.AreEqual(0, PublishableModelUtility.GetUnsupportedScripts(player.ModelPrefab).Length);

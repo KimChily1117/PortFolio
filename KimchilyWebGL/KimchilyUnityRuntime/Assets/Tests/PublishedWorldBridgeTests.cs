@@ -21,7 +21,7 @@ namespace Kimchily.World.Tests
         private const float TimeoutSeconds = 30;
         private const string RemoteWorld = "published-test";
         private const string RemoteRevision = "r1";
-        private static readonly string WrongHash = new string('0', 64);
+        private static readonly string WrongHash = new string ('0', 64);
         private readonly List<HostEvent> events = new List<HostEvent>();
         private GameObject host;
         private KimchilyHostBridge bridge;
@@ -33,6 +33,7 @@ namespace Kimchily.World.Tests
         public IEnumerator SetUp()
         {
             KimchilyHostBridge existing = KimchilyHostBridge.Instance;
+
             if (existing != null)
             {
                 existing.Receive(JsonUtility.ToJson(Close("setup-close")));
@@ -40,8 +41,14 @@ namespace Kimchily.World.Tests
                 UnityEngine.Object.Destroy(existing.gameObject);
                 yield return null;
             }
+
             Scene leftover = SceneManager.GetSceneByName(HostProtocol.DemoSceneName);
-            if (leftover.IsValid() && leftover.isLoaded) yield return SceneManager.UnloadSceneAsync(leftover);
+
+            if (leftover.IsValid() && leftover.isLoaded)
+            {
+                yield return SceneManager.UnloadSceneAsync(leftover);
+            }
+
             events.Clear();
             host = new GameObject("Published world test host");
             bridge = host.AddComponent<KimchilyHostBridge>();
@@ -65,11 +72,20 @@ namespace Kimchily.World.Tests
             }
             finally
             {
-                if (bridge != null) bridge.EventRaised -= Capture;
+                if (bridge != null)
+                {
+                    bridge.EventRaised -= Capture;
+                }
+
                 server?.Dispose();
                 server = null;
-                if (host != null) UnityEngine.Object.Destroy(host);
+
+                if (host != null)
+                {
+                    UnityEngine.Object.Destroy(host);
+                }
             }
+
             yield return null;
             Assert.That(KimchilyHostBridge.Instance, Is.Null);
             AssertNoNewStaging();
@@ -84,8 +100,9 @@ namespace Kimchily.World.Tests
                 Remote("bad-path", "http://127.0.0.1:1/worlds/another/r1/world.json", WrongHash),
                 Remote("bad-userinfo", "http://user:password@127.0.0.1:1/worlds/published-test/r1/world.json", WrongHash),
                 Remote("missing-hash", "http://127.0.0.1:1/worlds/published-test/r1/world.json", null),
-                Remote("invalid-hash", "http://127.0.0.1:1/worlds/published-test/r1/world.json", new string('g', 64))
+                Remote("invalid-hash", "http://127.0.0.1:1/worlds/published-test/r1/world.json", new string ('g', 64))
             };
+
             foreach (HostCommand command in commands)
             {
                 Send(command);
@@ -95,6 +112,7 @@ namespace Kimchily.World.Tests
                 AssertNoNewStaging();
                 AssertNoNewScene();
             }
+
             Assert.That(events.Any(item => item.type == "WorldReady"), Is.False);
         }
 
@@ -108,12 +126,14 @@ namespace Kimchily.World.Tests
             Assert.That(server.RequestPath, Is.EqualTo("/worlds/published-test/r1/world.json"));
             Assert.That(bridge.State, Is.EqualTo(WorldRuntimeState.Loading));
             Assert.That(StagingDirectories().Except(originalStaging).Count(), Is.EqualTo(1));
-
             Send(Close("close-downloading"));
             yield return WaitForEvent("WorldClosed", "close-downloading");
             Assert.That(Event("WorldFailed", "remote-cancelled").code, Is.EqualTo("CANCELLED"));
-            Assert.That(events.FindIndex(item => item.type == "WorldFailed" && item.requestId == "remote-cancelled"),
-                Is.LessThan(events.FindIndex(item => item.type == "WorldClosed" && item.requestId == "close-downloading")));
+            Assert.That(
+                events.FindIndex(item => item.type == "WorldFailed"
+                && item.requestId == "remote-cancelled"),
+                Is.LessThan(events.FindIndex(item => item.type == "WorldClosed"
+                && item.requestId == "close-downloading")));
             Assert.That(bridge.State, Is.EqualTo(WorldRuntimeState.Idle));
             Assert.That(bridge.CurrentWorldId, Is.Empty);
             AssertNoNewStaging();
@@ -140,11 +160,13 @@ namespace Kimchily.World.Tests
             Assert.That(events.Any(item => item.type == "WorldReady"), Is.False);
             AssertNoNewStaging();
             AssertNoNewScene();
-
             Send(new HostCommand
             {
-                protocolVersion = HostProtocol.Version, type = "OpenWorld", requestId = "demo-after-remote-failure",
-                worldId = HostProtocol.DemoWorldId, revisionId = HostProtocol.DemoRevisionId
+                protocolVersion = HostProtocol.Version,
+                type = "OpenWorld",
+                requestId = "demo-after-remote-failure",
+                worldId = HostProtocol.DemoWorldId,
+                revisionId = HostProtocol.DemoRevisionId
             });
             yield return WaitForEvent("WorldReady", "demo-after-remote-failure");
             Assert.That(bridge.State, Is.EqualTo(WorldRuntimeState.Ready));
@@ -155,25 +177,59 @@ namespace Kimchily.World.Tests
             AssertNoNewScene();
         }
 
-        private static HostCommand Remote(string request, string url, string hash) => new HostCommand
+        private static HostCommand Remote(string request, string url, string hash)
         {
-            protocolVersion = HostProtocol.Version, type = "OpenWorld", requestId = request,
-            worldId = RemoteWorld, revisionId = RemoteRevision, manifestUrl = url, manifestSha256 = hash
-        };
-        private static HostCommand Close(string request) => new HostCommand
+            return new HostCommand
+            {
+                protocolVersion = HostProtocol.Version,
+                type = "OpenWorld",
+                requestId = request,
+                worldId = RemoteWorld,
+                revisionId = RemoteRevision,
+                manifestUrl = url,
+                manifestSha256 = hash
+            };
+        }
+
+        private static HostCommand Close(string request)
         {
-            protocolVersion = HostProtocol.Version, type = "CloseWorld", requestId = request
-        };
-        private void Send(HostCommand command) => bridge.Receive(JsonUtility.ToJson(command));
-        private void Capture(HostEvent value) => events.Add(value);
-        private HostEvent Event(string type, string request) => events.Single(item => item.type == type && item.requestId == request);
-        private IEnumerator WaitForEvent(string type, string request) =>
-            WaitUntil(() => events.Any(item => item.type == type && item.requestId == request), type + " for " + request);
+            return new HostCommand
+            {
+                protocolVersion = HostProtocol.Version,
+                type = "CloseWorld",
+                requestId = request
+            };
+        }
+
+        private void Send(HostCommand command)
+        {
+            bridge.Receive(JsonUtility.ToJson(command));
+        }
+
+        private void Capture(HostEvent value)
+        {
+            events.Add(value);
+        }
+
+        private HostEvent Event(string type, string request)
+        {
+            return events.Single(item => item.type == type && item.requestId == request);
+        }
+
+        private IEnumerator WaitForEvent(string type, string request)
+        {
+            return WaitUntil(() => events.Any(item => item.type == type && item.requestId == request), type + " for " + request);
+        }
 
         private static IEnumerator WaitUntil(Func<bool> condition, string description)
         {
             float deadline = Time.realtimeSinceStartup + TimeoutSeconds;
-            while (!condition() && Time.realtimeSinceStartup < deadline) yield return null;
+
+            while (!condition() && Time.realtimeSinceStartup < deadline)
+            {
+                yield return null;
+            }
+
             Assert.That(condition(), Is.True, "Timed out waiting for " + description);
         }
 
@@ -182,12 +238,27 @@ namespace Kimchily.World.Tests
             string root = Path.Combine(Application.temporaryCachePath, "KimchilyWorldDownloads");
             return new HashSet<string>(Directory.Exists(root) ? Directory.GetDirectories(root) : Array.Empty<string>());
         }
-        private static HashSet<Scene> LoadedSceneHandles() => new HashSet<Scene>(Enumerable.Range(0, SceneManager.sceneCount)
-            .Select(SceneManager.GetSceneAt).Where(scene => scene.isLoaded));
-        private void AssertNoNewStaging() => Assert.That(StagingDirectories().Except(originalStaging), Is.Empty,
-            "A terminal host response must follow deletion of this request's download staging directory.");
-        private void AssertNoNewScene() => Assert.That(LoadedSceneHandles().Except(originalScenes), Is.Empty,
-            "A rejected/cancelled remote request must not leave an additive scene loaded.");
+
+        private static HashSet<Scene> LoadedSceneHandles()
+        {
+            return new HashSet<Scene>(Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Where(scene => scene.isLoaded));
+        }
+
+        private void AssertNoNewStaging()
+        {
+            Assert.That(
+                StagingDirectories().Except(originalStaging),
+                Is.Empty,
+                "A terminal host response must follow deletion of this request's download staging directory.");
+        }
+
+        private void AssertNoNewScene()
+        {
+            Assert.That(
+                LoadedSceneHandles().Except(originalScenes),
+                Is.Empty,
+                "A rejected/cancelled remote request must not leave an additive scene loaded.");
+        }
 
         /// <summary>
         /// One HTTP response on an OS-assigned loopback port. TcpListener avoids Windows
@@ -202,10 +273,20 @@ namespace Kimchily.World.Tests
             private int received;
             private volatile bool disposed;
             private readonly Task completion;
+
             public string ManifestUrl { get; }
+
             public string RequestPath { get; private set; }
+
             public Exception Failure { get; private set; }
-            public bool RequestReceived => Volatile.Read(ref received) != 0;
+
+            public bool RequestReceived
+            {
+                get
+                {
+                    return Volatile.Read(ref received) != 0;
+                }
+            }
 
             public LoopbackResponse(string json, bool holdResponse)
             {
@@ -214,11 +295,19 @@ namespace Kimchily.World.Tests
                 listener.Start(1);
                 int port = ((IPEndPoint)listener.LocalEndpoint).Port;
                 ManifestUrl = "http://127.0.0.1:" + port + "/worlds/published-test/r1/world.json";
-                if (!holdResponse) release.TrySetResult(true);
+
+                if (!holdResponse)
+                {
+                    release.TrySetResult(true);
+                }
+
                 completion = Respond();
             }
 
-            public void ReleaseResponse() => release.TrySetResult(true);
+            public void ReleaseResponse()
+            {
+                release.TrySetResult(true);
+            }
 
             private async Task Respond()
             {
@@ -226,32 +315,52 @@ namespace Kimchily.World.Tests
                 {
                     client = await listener.AcceptTcpClientAsync().ConfigureAwait(false);
                     using (client)
-                    using (NetworkStream stream = client.GetStream())
                     {
-                        var buffer = new byte[4096];
-                        int count = 0;
-                        string request = string.Empty;
-                        while (!request.Contains("\r\n\r\n"))
+                        using (NetworkStream stream = client.GetStream())
                         {
-                            int read = await stream.ReadAsync(buffer, count, buffer.Length - count).ConfigureAwait(false);
-                            if (read == 0) throw new IOException("Client closed before HTTP headers.");
-                            count += read;
-                            request = Encoding.ASCII.GetString(buffer, 0, count);
-                            if (count == buffer.Length && !request.Contains("\r\n\r\n"))
-                                throw new IOException("Test request headers exceed 4096 bytes.");
+                            var buffer = new byte[4096];
+                            int count = 0;
+                            string request = string.Empty;
+
+                            while (!request.Contains("\r\n\r\n"))
+                            {
+                                int read = await stream.ReadAsync(buffer, count, buffer.Length - count).ConfigureAwait(false);
+
+                                if (read == 0)
+                                {
+                                    throw new IOException("Client closed before HTTP headers.");
+                                }
+
+                                count += read;
+                                request = Encoding.ASCII.GetString(buffer, 0, count);
+
+                                if (count == buffer.Length && !request.Contains("\r\n\r\n"))
+                                {
+                                    throw new IOException("Test request headers exceed 4096 bytes.");
+                                }
+                            }
+
+                            RequestPath = request.Split(' ')[1];
+                            Volatile.Write(ref received, 1);
+
+                            if (!await release.Task.ConfigureAwait(false))
+                            {
+                                return;
+                            }
+
+                            byte[] header = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: " + body.Length + "\r\nConnection: close\r\n\r\n");
+                            await stream.WriteAsync(header, 0, header.Length).ConfigureAwait(false);
+                            await stream.WriteAsync(body, 0, body.Length).ConfigureAwait(false);
                         }
-                        RequestPath = request.Split(' ')[1];
-                        Volatile.Write(ref received, 1);
-                        if (!await release.Task.ConfigureAwait(false)) return;
-                        byte[] header = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: " + body.Length + "\r\nConnection: close\r\n\r\n");
-                        await stream.WriteAsync(header, 0, header.Length).ConfigureAwait(false);
-                        await stream.WriteAsync(body, 0, body.Length).ConfigureAwait(false);
                     }
                 }
                 catch (Exception exception)
                 {
                     // Request cancellation deliberately closes the socket before a delayed reply.
-                    if (!disposed && !(RequestReceived && exception is IOException)) Failure = exception;
+                    if (!disposed && !(RequestReceived && exception is IOException))
+                    {
+                        Failure = exception;
+                    }
                 }
             }
 

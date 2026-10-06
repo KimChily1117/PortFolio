@@ -19,6 +19,7 @@ namespace Kimchily.Validation.Tests
             string locator = Path.GetFullPath(Path.Combine(Application.dataPath, "../../Artifacts/world-fixture-path.txt"));
             Assert.IsTrue(File.Exists(locator), "Run VerificationBootstrap.BuildFixture first.");
             string folder = File.ReadAllText(locator).Trim();
+
             for (int iteration = 0; iteration < 2; iteration++)
             {
                 var session = WorldContentSession.OpenLocal(folder);
@@ -30,19 +31,24 @@ namespace Kimchily.Validation.Tests
                 Assert.AreEqual(new Vector3(2, 3, 4), root.transform.GetChild(0).localPosition);
                 var renderers = root.GetComponentsInChildren<Renderer>(true);
                 Assert.Greater(renderers.Length, 0);
+
                 foreach (var renderer in renderers)
                 {
                     Assert.IsNotNull(renderer.sharedMaterial);
                     Assert.IsNotNull(renderer.sharedMaterial.mainTexture);
+
                     if (renderer is SkinnedMeshRenderer skin)
                     {
                         Assert.IsNotNull(skin.sharedMesh);
                         Assert.Greater(skin.sharedMesh.vertexCount, 0);
                         Assert.Greater(skin.bones.Length, 0);
                     }
-                    else if (renderer.GetComponent<MeshFilter>() is MeshFilter filter)
+                    else if (renderer.GetComponent<MeshFilter>()is MeshFilter filter)
+                    {
                         Assert.IsNotNull(filter.sharedMesh);
+                    }
                 }
+
                 var animator = root.GetComponentInChildren<Animator>(true);
                 Assert.IsNotNull(animator.runtimeAnimatorController);
                 Assert.Greater(animator.runtimeAnimatorController.animationClips.Length, 0);

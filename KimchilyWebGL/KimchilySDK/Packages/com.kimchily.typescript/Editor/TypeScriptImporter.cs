@@ -24,17 +24,27 @@ namespace Kimchily.TypeScript.Editor
             asset.diagnostics = (result.diagnostics ?? Array.Empty<string>()).Concat(result.warnings ?? Array.Empty<string>()).ToArray();
             asset.modules = result.compiledSuccessfully ? result.modules : Array.Empty<TypeScriptModule>();
             asset.fields = result.compiledSuccessfully ? result.fields : Array.Empty<TypeScriptField>();
-            context.AddObjectToAsset("script", asset); context.SetMainObject(asset);
+            context.AddObjectToAsset("script", asset);
+            context.SetMainObject(asset);
             context.DependsOnCustomDependency(TypeScriptCompiler.DependencyName);
             foreach (string dependency in (result.dependencies ?? Array.Empty<string>()).Concat(TypeScriptCompiler.ToolFiles()).Distinct())
             {
                 string path = TypeScriptCompiler.ToAssetPath(dependency);
-                if (!string.IsNullOrEmpty(path) && path != context.assetPath) context.DependsOnSourceAsset(path);
+                if (!string.IsNullOrEmpty(path) && path != context.assetPath)
+                {
+                    context.DependsOnSourceAsset(path);
+                }
             }
+
             if (!result.compiledSuccessfully)
-                foreach (string diagnostic in result.diagnostics ?? Array.Empty<string>()) context.LogImportError(diagnostic);
-            // Successful helper modules intentionally have an empty className. They
-            // may be imported by a behaviour, but cannot be attached as one.
+            {
+                foreach (string diagnostic in result.diagnostics ?? Array.Empty<string>())
+                {
+                    context.LogImportError(diagnostic);
+                }
+            }
+        // Successful helper modules intentionally have an empty className. They
+        // may be imported by a behaviour, but cannot be attached as one.
         }
 
         [MenuItem("Assets/Create/Kimchily/TypeScript Script", priority = 80)]
@@ -52,9 +62,16 @@ namespace Kimchily.TypeScript.Editor
         public static void EnsureProjectConfiguration()
         {
             string file = Path.Combine(TypeScriptCompiler.ProjectRoot, "tsconfig.json");
-            if (File.Exists(file)) { Debug.Log("Keeping existing tsconfig.json: " + file); return; }
-            string relative = new Uri(TypeScriptCompiler.ProjectRoot.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar)
-                .MakeRelativeUri(new Uri(Path.Combine(TypeScriptCompiler.PackageRoot, "Typings~/kimchily.d.ts"))).ToString();
+            if (File.Exists(file))
+            {
+                Debug.Log("Keeping existing tsconfig.json: " + file);
+                return;
+            }
+
+            string relative = new Uri(
+                TypeScriptCompiler.ProjectRoot.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar)
+                .MakeRelativeUri(new Uri(Path.Combine(TypeScriptCompiler.PackageRoot, "Typings~/kimchily.d.ts")))
+                .ToString();
             File.WriteAllText(file, "{\n  \"compilerOptions\": { \"target\": \"ES2018\", \"module\": \"CommonJS\", \"strict\": true, \"noEmit\": true, \"lib\": [\"ES2018\"], \"types\": [] },\n  \"include\": [\"Assets/**/*.ts\", \"" + relative + "\"]\n}\n");
             Debug.Log("Created TypeScript completion configuration: " + file);
         }

@@ -6,6 +6,10 @@ namespace Kimchily.Creator.Editor.Tests
     public sealed class PublishableModelExternalBehaviour : MonoBehaviour
     {
         public static int EnableCount;
-        void OnEnable() { EnableCount++; }
+
+        void OnEnable()
+        {
+            EnableCount++;
+        }
     }
 }

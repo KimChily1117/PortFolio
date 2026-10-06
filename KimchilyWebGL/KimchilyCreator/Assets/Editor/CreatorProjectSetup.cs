@@ -22,8 +22,17 @@ namespace Kimchily.Creator.Project
                 Debug.Log("Starter world already exists; preserving your scene: " + ScenePath);
                 return;
             }
-            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
-            if (!AssetDatabase.IsValidFolder("Assets/World")) AssetDatabase.CreateFolder("Assets", "World");
+
+            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                return;
+            }
+
+            if (!AssetDatabase.IsValidFolder("Assets/World"))
+            {
+                AssetDatabase.CreateFolder("Assets", "World");
+            }
+
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             RenderSettings.ambientMode = AmbientMode.Flat;
             RenderSettings.ambientLight = new Color(0.65f, 0.72f, 0.8f);
@@ -46,24 +55,50 @@ namespace Kimchily.Creator.Project
             ground.transform.position = new Vector3(0, -0.1f, 0);
             ground.GetComponent<Renderer>().sharedMaterial = MakeMaterial("Platform", new Color(0.09f, 0.3f, 0.35f));
             var modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/World/Model.fbx");
-            if (modelAsset == null) throw new InvalidOperationException("Run tools/prepare_creator.py first.");
+
+            if (modelAsset == null)
+            {
+                throw new InvalidOperationException("Run tools/prepare_creator.py first.");
+            }
+
             var pivot = new GameObject("My TypeScript Character");
             var model = (GameObject)PrefabUtility.InstantiatePrefab(modelAsset);
             model.transform.SetParent(pivot.transform, false);
             var renderers = model.GetComponentsInChildren<Renderer>();
             var bounds = renderers[0].bounds;
-            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
-            if (bounds.size.y > 0) model.transform.localScale *= 2 / bounds.size.y;
+
+            foreach (var renderer in renderers)
+            {
+                bounds.Encapsulate(renderer.bounds);
+            }
+
+            if (bounds.size.y > 0)
+            {
+                model.transform.localScale *= 2 / bounds.size.y;
+            }
+
             bounds = renderers[0].bounds;
-            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+
+            foreach (var renderer in renderers)
+            {
+                bounds.Encapsulate(renderer.bounds);
+            }
+
             model.transform.position -= new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
             var material = MakeMaterial("Character", new Color(0.96f, 0.58f, 0.2f));
+
             foreach (var renderer in renderers)
             {
                 var materials = renderer.sharedMaterials;
-                for (int i = 0; i < materials.Length; i++) materials[i] = material;
+
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    materials[i] = material;
+                }
+
                 renderer.sharedMaterials = materials;
             }
+
             var beacon = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             beacon.name = "TypeScript Coroutine Beacon";
             beacon.transform.position = new Vector3(1.7f, 0.65f, 0);
@@ -71,7 +106,10 @@ namespace Kimchily.Creator.Project
             beacon.GetComponent<Renderer>().sharedMaterial = MakeMaterial("Beacon", new Color(0.2f, 0.9f, 0.8f));
             AttachTypeScript(pivot, beacon);
             EditorSceneManager.SaveScene(scene, ScenePath);
-            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
+            EditorBuildSettings.scenes = new[]
+            {
+                new EditorBuildSettingsScene(ScenePath, true)
+            };
             PlayerSettings.companyName = "Kimchily";
             PlayerSettings.productName = "Kimchily Creator";
             PlayerSettings.insecureHttpOption = InsecureHttpOption.DevelopmentOnly;
@@ -82,57 +120,118 @@ namespace Kimchily.Creator.Project
         static void AttachTypeScript(GameObject owner, GameObject beacon)
         {
             var asset = AssetDatabase.LoadAssetAtPath<TypeScriptAsset>("Assets/World/Character.ts");
+
             if (asset == null || !asset.compiledSuccessfully)
+            {
                 throw new InvalidOperationException("Character.ts must compile successfully before preparing the world.");
+            }
+
             var behaviour = owner.AddComponent<KimchilyTypeScriptBehaviour>();
             behaviour.ScriptAsset = asset;
-            behaviour.Fields = new[] {
-                new TypeScriptFieldBinding { name = "beacon", kind = "GameObject", useOverride = true, gameObjectValue = beacon }
+            behaviour.Fields = new[]
+            {
+                new TypeScriptFieldBinding
+                {
+                    name = "beacon",
+                    kind = "GameObject",
+                    useOverride = true,
+                    gameObjectValue = beacon
+                }
             };
         }
 
         [MenuItem("Kimchily/Migrate Starter World to TypeScript")]
         public static void MigrateStarterWorldToTypeScript()
         {
-            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                return;
+            }
+
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+
             if (!File.Exists(ScenePath))
             {
                 CreateStarterWorld();
                 Debug.Log("KIMCHILY_TYPESCRIPT_MIGRATION_READY created=1");
                 return;
             }
+
             var asset = AssetDatabase.LoadAssetAtPath<TypeScriptAsset>("Assets/World/Character.ts");
+
             if (asset == null || !asset.compiledSuccessfully)
+            {
                 throw new InvalidOperationException("Fix TypeScript compiler errors before migrating the starter scene.");
+            }
+
             string backup = Path.Combine("Artifacts", "typescript-migration", "MyWorld.before-typescript.unity");
             Directory.CreateDirectory(Path.GetDirectoryName(backup));
-            if (!File.Exists(backup)) File.Copy(ScenePath, backup);
+
+            if (!File.Exists(backup))
+            {
+                File.Copy(ScenePath, backup);
+            }
+
             var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
             int migrated = 0;
+
             foreach (var root in scene.GetRootGameObjects())
+            {
                 foreach (var previous in root.GetComponentsInChildren<KimchilyLuaBehaviour>(true))
                 {
-                    if (AssetDatabase.GetAssetPath(previous.ScriptAsset) != "Assets/World/Character.lua") continue;
+                    if (AssetDatabase.GetAssetPath(previous.ScriptAsset) != "Assets/World/Character.lua")
+                    {
+                        continue;
+                    }
+
                     var owner = previous.gameObject;
+
                     if (owner.GetComponent<KimchilyTypeScriptBehaviour>() != null)
+                    {
                         throw new InvalidOperationException("Starter object already has both script components; inspect it before migration.");
+                    }
+
                     GameObject beacon = null;
+
                     foreach (var reference in previous.References)
-                        if (reference != null && reference.name == "beacon") beacon = reference.target;
+                    {
+                        if (reference != null && reference.name == "beacon")
+                        {
+                            beacon = reference.target;
+                        }
+                    }
+
                     AttachTypeScript(owner, beacon);
                     UnityEngine.Object.DestroyImmediate(previous);
-                    if (owner.name == "My Lua Character") owner.name = "My TypeScript Character";
-                    if (beacon != null && beacon.name == "Lua Coroutine Beacon") beacon.name = "TypeScript Coroutine Beacon";
+
+                    if (owner.name == "My Lua Character")
+                    {
+                        owner.name = "My TypeScript Character";
+                    }
+
+                    if (beacon != null && beacon.name == "Lua Coroutine Beacon")
+                    {
+                        beacon.name = "TypeScript Coroutine Beacon";
+                    }
+
                     migrated++;
                 }
-            if (migrated > 0) EditorSceneManager.SaveScene(scene, ScenePath);
+            }
+
+            if (migrated > 0)
+            {
+                EditorSceneManager.SaveScene(scene, ScenePath);
+            }
+
             Debug.Log("KIMCHILY_TYPESCRIPT_MIGRATION_READY converted=" + migrated);
         }
 
         static Material MakeMaterial(string name, Color color)
         {
-            var material = new Material(Shader.Find("Standard")) { color = color };
+            var material = new Material(Shader.Find("Standard"))
+            {
+                color = color
+            };
             material.SetFloat("_Glossiness", 0.25f);
             AssetDatabase.CreateAsset(material, "Assets/World/" + name + ".mat");
             return material;
@@ -141,8 +240,11 @@ namespace Kimchily.Creator.Project
         public static void BuildStarterWorld()
         {
             CreateStarterWorld();
-            var result = WorldContentBuilder.Build(new WorldBuildRequest {
-                worldId = "my-first-world", entryScene = ScenePath, scenes = new[] { ScenePath },
+            var result = WorldContentBuilder.Build(new WorldBuildRequest
+            {
+                worldId = "my-first-world",
+                entryScene = ScenePath,
+                scenes = new[] { ScenePath },
                 target = EditorUserBuildSettings.activeBuildTarget,
                 requirePortableScripts = WorldContentBuilder.IsPublishTarget(EditorUserBuildSettings.activeBuildTarget),
                 outputRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "../WorldBuilds"))

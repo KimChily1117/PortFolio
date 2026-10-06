@@ -20,16 +20,29 @@ namespace Kimchily.Validation
             AssetDatabase.CreateFolder("Assets", folderName);
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var texture = new Texture2D(2, 2);
-            texture.SetPixels(new[] { Color.red, Color.green, Color.blue, Color.white }); texture.Apply();
+            texture.SetPixels(new[] { Color.red, Color.green, Color.blue, Color.white });
+            texture.Apply();
             AssetDatabase.CreateAsset(texture, folder + "/Texture.asset");
-            var material = new Material(Shader.Find("Unlit/Texture")) { mainTexture = texture };
+            var material = new Material(Shader.Find("Unlit/Texture"))
+            {
+                mainTexture = texture
+            };
             AssetDatabase.CreateAsset(material, folder + "/Material.mat");
             var model = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Fixtures/Model.fbx");
-            if (model == null) throw new InvalidOperationException("The FBX test fixture did not import.");
+
+            if (model == null)
+            {
+                throw new InvalidOperationException("The FBX test fixture did not import.");
+            }
+
             var modelInstance = (GameObject)PrefabUtility.InstantiatePrefab(model);
             modelInstance.name = "ImportedModel";
+
             foreach (var renderer in modelInstance.GetComponentsInChildren<Renderer>(true))
+            {
                 renderer.sharedMaterials = renderer.sharedMaterials.Select(x => material).ToArray();
+            }
+
             var clip = new AnimationClip();
             new GameObject("AnimationProbe").transform.SetParent(modelInstance.transform, false);
             clip.SetCurve("AnimationProbe", typeof(Transform), "localPosition.x", AnimationCurve.Linear(0, 0, 1, 1));
@@ -37,7 +50,12 @@ namespace Kimchily.Validation
             var controller = AnimatorController.CreateAnimatorControllerAtPath(folder + "/Animation.controller");
             controller.AddMotion(clip);
             var animator = modelInstance.GetComponent<Animator>();
-            if (animator == null) animator = modelInstance.AddComponent<Animator>();
+
+            if (animator == null)
+            {
+                animator = modelInstance.AddComponent<Animator>();
+            }
+
             animator.runtimeAnimatorController = controller;
             var nested = PrefabUtility.SaveAsPrefabAsset(modelInstance, folder + "/NestedModel.prefab");
             UnityEngine.Object.DestroyImmediate(modelInstance);
@@ -52,16 +70,29 @@ namespace Kimchily.Validation
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var request = new WorldBuildRequest
             {
-                worldId = "fbx-roundtrip", entryScene = scenePath, scenes = new[] { scenePath },
+                worldId = "fbx-roundtrip",
+                entryScene = scenePath,
+                scenes = new[]
+                {
+                    scenePath
+                },
                 outputRoot = Path.GetFullPath("../Artifacts/content"),
                 target = BuildTarget.StandaloneWindows64
             };
             var report = WorldContentBuilder.Validate(request);
-            if (!report.IsValid) throw new InvalidOperationException(string.Join("\n", report.Errors));
-            if (!report.Dependencies.Contains("Assets/Fixtures/Model.fbx") ||
-                !report.Dependencies.Contains(folder + "/Texture.asset") ||
-                !report.Dependencies.Contains(folder + "/Animation.controller"))
+
+            if (!report.IsValid)
+            {
+                throw new InvalidOperationException(string.Join("\n", report.Errors));
+            }
+
+            if (!report.Dependencies.Contains("Assets/Fixtures/Model.fbx")
+                || !report.Dependencies.Contains(folder + "/Texture.asset")
+                || !report.Dependencies.Contains(folder + "/Animation.controller"))
+            {
                 throw new InvalidOperationException("FBX/material/animation dependency collection failed.");
+            }
+
             var result = WorldContentBuilder.Build(request);
             File.WriteAllText(Path.GetFullPath("../Artifacts/world-fixture-path.txt"), result.Directory);
             Debug.Log("KIMCHILY_FIXTURE_BUILT " + result.Directory);

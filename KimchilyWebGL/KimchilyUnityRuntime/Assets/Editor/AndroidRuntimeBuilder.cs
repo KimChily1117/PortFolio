@@ -22,8 +22,15 @@ namespace Kimchily.World.Editor
             // This project owns these generated scenes. Never invoke on a user's
             // authoring project, or discard open dirty work in an interactive editor.
             if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
                 throw new OperationCanceledException("Scene preparation was cancelled.");
-            if (!AssetDatabase.IsValidFolder(Generated)) AssetDatabase.CreateFolder("Assets", "Generated");
+            }
+
+            if (!AssetDatabase.IsValidFolder(Generated))
+            {
+                AssetDatabase.CreateFolder("Assets", "Generated");
+            }
+
             var bootstrap = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             new GameObject("KimchilyHostBridge").AddComponent<KimchilyHostBridge>();
             var bootstrapCamera = new GameObject("Bootstrap Camera").AddComponent<Camera>();
@@ -32,7 +39,6 @@ namespace Kimchily.World.Editor
             bootstrapCamera.cullingMask = 0;
             bootstrapCamera.depth = -10;
             EditorSceneManager.SaveScene(bootstrap, BootstrapPath);
-
             var demo = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             RenderSettings.ambientMode = AmbientMode.Flat;
             RenderSettings.ambientLight = new Color(0.6f, 0.65f, 0.75f);
@@ -56,35 +62,66 @@ namespace Kimchily.World.Editor
             ground.transform.localScale = new Vector3(12, 0.08f, 12);
             ground.transform.position = new Vector3(0, -0.08f, 0);
             ground.GetComponent<Renderer>().sharedMaterial = MaterialAsset("Platform", new Color(0.08f, 0.24f, 0.29f));
-
             var spinner = new GameObject("Sample World");
             var modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Fixtures/Model.fbx");
-            if (modelAsset == null) throw new InvalidOperationException("Run tools/prepare_runtime.py to copy the local FBX fixture first.");
+
+            if (modelAsset == null)
+            {
+                throw new InvalidOperationException("Run tools/prepare_runtime.py to copy the local FBX fixture first.");
+            }
+
             var model = (GameObject)PrefabUtility.InstantiatePrefab(modelAsset);
             model.name = "Kimchily Sample Character";
             model.transform.SetParent(spinner.transform, false);
             var renderers = model.GetComponentsInChildren<Renderer>();
-            if (renderers.Length == 0) throw new InvalidOperationException("FBX has no renderers.");
+
+            if (renderers.Length == 0)
+            {
+                throw new InvalidOperationException("FBX has no renderers.");
+            }
+
             var bounds = renderers[0].bounds;
-            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
-            if (bounds.size.y > 0) model.transform.localScale *= 2f / bounds.size.y;
+
+            foreach (var renderer in renderers)
+            {
+                bounds.Encapsulate(renderer.bounds);
+            }
+
+            if (bounds.size.y > 0)
+            {
+                model.transform.localScale *= 2f / bounds.size.y;
+            }
+
             bounds = renderers[0].bounds;
-            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+
+            foreach (var renderer in renderers)
+            {
+                bounds.Encapsulate(renderer.bounds);
+            }
+
             model.transform.position -= new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
             var characterMaterial = MaterialAsset("Character", new Color(0.35f, 0.85f, 0.72f));
+
             foreach (var renderer in renderers)
             {
                 var materials = renderer.sharedMaterials;
-                for (int i = 0; i < materials.Length; i++) materials[i] = characterMaterial;
+
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    materials[i] = characterMaterial;
+                }
+
                 renderer.sharedMaterials = materials;
             }
+
             var behaviour = spinner.AddComponent<KimchilyDemoBehaviour>();
             behaviour.rotatingContent = model.transform;
             behaviour.animator = model.GetComponentInChildren<Animator>();
             // The bundled sample also demonstrates assigning an FBX to the controllable player.
             KimchilyMobilePlayerBootstrap.CreateForScene(demo, modelAsset);
             EditorSceneManager.SaveScene(demo, DemoPath);
-            EditorBuildSettings.scenes = new[] {
+            EditorBuildSettings.scenes = new[]
+            {
                 new EditorBuildSettingsScene(BootstrapPath, true),
                 new EditorBuildSettingsScene(DemoPath, true)
             };
@@ -97,13 +134,20 @@ namespace Kimchily.World.Editor
         {
             string path = Generated + "/" + name + ".mat";
             var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+
             if (material == null)
             {
                 var shader = Shader.Find("Standard");
-                if (shader == null) throw new InvalidOperationException("Built-in Standard shader not found.");
+
+                if (shader == null)
+                {
+                    throw new InvalidOperationException("Built-in Standard shader not found.");
+                }
+
                 material = new Material(shader);
                 AssetDatabase.CreateAsset(material, path);
             }
+
             material.color = color;
             material.SetFloat("_Glossiness", 0.2f);
             EditorUtility.SetDirty(material);
@@ -114,7 +158,10 @@ namespace Kimchily.World.Editor
         public static void Export()
         {
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
+            {
                 throw new InvalidOperationException("Switch to Android, or launch Unity with -buildTarget Android.");
+            }
+
             PrepareScenes();
             PlayerSettings.companyName = "Kimchily";
             PlayerSettings.productName = "Kimchily World Runtime";
@@ -140,16 +187,24 @@ namespace Kimchily.World.Editor
             PlayerSettings.SetGraphicsAPIs(BuildTarget.Android, new[] { GraphicsDeviceType.OpenGLES3 });
             EditorUserBuildSettings.exportAsGoogleAndroidProject = true;
             string output = Path.GetFullPath(Path.Combine(Application.dataPath, "../Builds/Android"));
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions {
+            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+            {
                 scenes = new[] { BootstrapPath, DemoPath },
                 target = BuildTarget.Android,
                 locationPathName = output,
                 options = BuildOptions.Development | BuildOptions.AcceptExternalModificationsToPlayer
             });
+
             if (report.summary.result != BuildResult.Succeeded)
+            {
                 throw new InvalidOperationException("Unity Android export failed: " + report.summary.result);
+            }
+
             if (!File.Exists(Path.Combine(output, "unityLibrary", "build.gradle")))
+            {
                 throw new InvalidOperationException("Export did not produce unityLibrary/build.gradle.");
+            }
+
             Debug.Log("KIMCHILY_ANDROID_EXPORT_READY " + output);
         }
     }

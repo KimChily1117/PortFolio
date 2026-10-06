@@ -1,251 +1,625 @@
 using Kimchily.Server.Core.Jobs;
 
-namespace Kimchily.Server.Core;
-
-/// <summary>
-/// Room registry and rules run on one bounded serialized queue for this small demo.
-/// No socket, Unity, SQL, character inventory, or Project Dawn RoomType dependency.
-/// </summary>
-public sealed class RoomHub(Func<long>? clock = null, ApprovedScriptCatalog? scripts = null) : JobSerializer(clock: clock)
+namespace Kimchily.Server.Core
 {
-    public const int RoomCapacity = 8;
-    public const int MaxRooms = 32;
-    private readonly Func<long> _clock = clock ?? (() => Environment.TickCount64);
-    private readonly ApprovedScriptCatalog _scripts = scripts ?? new(Path.Combine(AppContext.BaseDirectory, "games"));
-    private readonly Dictionary<RoomKey, Room> _rooms = [];
-    private readonly Dictionary<string, (Room Room, Member Member)> _members = [];
-    private long _nextGameTickAt;
-
-    public Task HandleAsync(IRoomPeer peer, ClientCommand command) => InvokeAsync(() =>
+    /// <summary>
+    /// Room registry and rules run on one bounded serialized queue for this small demo.
+    /// No socket, Unity, SQL, character inventory, or Project Dawn RoomType dependency.
+    /// </summary>
+    public sealed class RoomHub : JobSerializer
     {
-        if (command.ProtocolVersion != Protocol.Version) Error(peer, "PROTOCOL_MISMATCH", "지원하지 않는 통신 버전입니다.");
-        else switch (command.Type)
+        public const int RoomCapacity = 8;
+        public const int MaxRooms = 32;
+
+        private readonly Func<long> _clock;
+        private readonly ApprovedScriptCatalog _scripts;
+        private readonly Dictionary<RoomKey, Room> _rooms = new Dictionary<RoomKey, Room>();
+        private readonly Dictionary<string, (Room Room, Member Member)> _members =
+            new Dictionary<string, (Room Room, Member Member)>();
+
+        private long _nextGameTickAt;
+
+        public RoomHub(Func<long>? clock = null, ApprovedScriptCatalog? scripts = null)
+            : base(clock: clock)
         {
-            case "join": Join(peer, command); break;
-            case "chat": Chat(peer, command.Text); break;
-            case "state": UpdateState(peer, command.State); break;
-            case "game": Game(peer, command); break;
-            case "leave": Leave(peer, acknowledge: true); break;
-            case "ping": peer.Send(new ServerEvent("pong")); break;
-            default: Error(peer, "UNKNOWN_MESSAGE", "지원하지 않는 메시지입니다."); break;
+            _clock = clock ?? (() => Environment.TickCount64);
+            _scripts = scripts ?? new ApprovedScriptCatalog(
+                Path.Combine(AppContext.BaseDirectory, "games"));
         }
-        return true;
-    });
 
-    public Task DisconnectAsync(IRoomPeer peer) => InvokeAsync(() => { Leave(peer, acknowledge: false); return true; });
-
-    public Task<RoomSummary[]> SnapshotAsync() => InvokeAsync(() => _rooms.Values
-        .Select(room => new RoomSummary(room.Key, room.Members.Count, RoomCapacity)).ToArray());
-
-    // The host queues this on its existing room pump. All game state still runs under the same serializer.
-    public bool TryQueueGameTick() => TryPush(() =>
-    {
-        var now = _clock();
-        if (now < _nextGameTickAt) return;
-        _nextGameTickAt = now + 100;
-        foreach (var room in _rooms.Values) RefreshGame(room, now);
-    });
-
-    private void Join(IRoomPeer peer, ClientCommand command)
-    {
-        if (_members.ContainsKey(peer.Id)) { Error(peer, "ALREADY_JOINED", "현재 방에서 나간 뒤 입장해 주세요."); return; }
-        if (!ValidId(command.WorldId) || !ValidId(command.RevisionId) || !ValidId(command.RoomId))
-        { Error(peer, "INVALID_ROOM", "월드·버전·방 코드는 영문, 숫자, 밑줄, 하이픈 1~80자입니다."); return; }
-        var name = command.Name?.Trim();
-        if (!ValidText(name, 24)) { Error(peer, "INVALID_NAME", "닉네임을 1~24자로 입력해 주세요."); return; }
-        var key = new RoomKey(command.WorldId!, command.RevisionId!, command.RoomId!);
-        if (!_rooms.TryGetValue(key, out var room))
+        public Task HandleAsync(IRoomPeer peer, ClientCommand command)
         {
-            if (_rooms.Count >= MaxRooms) { Error(peer, "SERVER_FULL", "현재 새 방을 만들 수 없습니다."); return; }
-            room = new Room(key);
-            _rooms.Add(key, room);
-        }
-        if (room.Members.Count >= RoomCapacity) { Error(peer, "ROOM_FULL", "방 정원 8명이 모두 찼습니다."); return; }
-        var member = new Member(peer, new PlayerInfo(peer.Id, name!));
-        room.Members.Add(peer.Id, member);
-        _members.Add(peer.Id, (room, member));
-        var gameChanged = RunGame(room, "tick", null, null, null, _clock());
-        peer.Send(new ServerEvent("joined")
-        {
-            Room = key, SelfId = peer.Id,
-            Players = room.Members.Values.Select(value => value.Player).ToArray(),
-            History = room.History.ToArray(), Game = room.Game?.State
-        });
-        Broadcast(room, new ServerEvent("playerJoined") { Player = member.Player }, except: peer.Id);
-        if (gameChanged) Broadcast(room, new ServerEvent("game") { Game = room.Game!.State }, except: peer.Id);
-    }
-
-    private void Chat(IRoomPeer peer, string? rawText)
-    {
-        if (!_members.TryGetValue(peer.Id, out var membership))
-        { Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요."); return; }
-        var text = rawText?.Trim();
-        if (!ValidText(text, 300)) { Error(peer, "INVALID_CHAT", "메시지를 1~300자로 입력해 주세요."); return; }
-        var recent = membership.Member.ChatTimes;
-        var now = _clock();
-        while (recent.TryPeek(out var timestamp) && now - timestamp >= 5000) recent.Dequeue();
-        if (recent.Count >= 5) { Error(peer, "CHAT_RATE_LIMIT", "메시지가 너무 빠릅니다. 잠시 후 보내 주세요."); return; }
-        recent.Enqueue(now);
-        var message = new ChatMessage(Guid.NewGuid().ToString("N"), peer.Id, membership.Member.Player.Name, text!, DateTimeOffset.UtcNow);
-        membership.Room.History.Enqueue(message);
-        while (membership.Room.History.Count > 20) membership.Room.History.Dequeue();
-        Broadcast(membership.Room, new ServerEvent("chat") { Chat = message });
-    }
-
-    private void Leave(IRoomPeer peer, bool acknowledge)
-    {
-        if (_members.Remove(peer.Id, out var membership))
-        {
-            membership.Room.Members.Remove(peer.Id);
-            Broadcast(membership.Room, new ServerEvent("playerLeft") { Player = membership.Member.Player });
-            if (membership.Room.Members.Count == 0)
+            return InvokeAsync(() =>
             {
-                // 방 수명과 VM 수명을 같게 두어 마지막 퇴장 때 스크립트 메모리와 상태를 함께 해제한다.
-                membership.Room.Game?.Dispose();
-                _rooms.Remove(membership.Room.Key);
-            }
-            else RefreshGame(membership.Room, _clock());
-        }
-        if (acknowledge) peer.Send(new ServerEvent("left"));
-    }
+                if (command.ProtocolVersion != Protocol.Version)
+                {
+                    Error(peer, "PROTOCOL_MISMATCH", "지원하지 않는 통신 버전입니다.");
+                }
+                else
+                {
+                    switch (command.Type)
+                    {
+                        case "join":
+                            Join(peer, command);
+                            break;
 
-    private void UpdateState(IRoomPeer peer, PlayerState? state)
-    {
-        if (!_members.TryGetValue(peer.Id, out var membership))
-        { Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요."); return; }
-        if (state is null || state.Sequence < 0 || !float.IsFinite(state.X) || !float.IsFinite(state.Y) || !float.IsFinite(state.Z)
-            || !float.IsFinite(state.Yaw) || !float.IsFinite(state.Speed) || !float.IsFinite(state.VerticalVelocity)
-            || Math.Abs(state.X) > 10000 || Math.Abs(state.Y) > 10000 || Math.Abs(state.Z) > 10000
-            || state.Yaw < -.006f || state.Yaw > 360 || state.Speed < 0 || state.Speed > 25 || Math.Abs(state.VerticalVelocity) > 100)
-        { Error(peer, "INVALID_STATE", "플레이어 상태가 올바르지 않습니다."); return; }
-        // Unity Euler 변환은 0 근처에서 약 -0.00573도까지 음수를 남길 수 있다.
-        // 좁은 경계 오차와 정확히 360인 값만 [0,360)으로 정규화해 위치 갱신을 유지한다.
-        if (state.Yaw < 0 || state.Yaw == 360) {
-            var yaw = state.Yaw < 0 ? 360 + state.Yaw : 0;
-            state = state with { Yaw = yaw >= 360 ? 0 : yaw }; // 아주 작은 음수의 float 반올림도 처리한다.
-        }
-        var member = membership.Member;
-        var now = _clock();
-        if (member.Player.State is { } previous)
-        {
-            if (state.Sequence <= previous.Sequence) return; // Stale samples cannot rewind a remote avatar.
-            if (now - member.LastStateAt < 70) return; // At most about 14 samples/second, independently of chat.
-            double dx = state.X - previous.X, dy = state.Y - previous.Y, dz = state.Z - previous.Z;
-            var elapsed = Math.Clamp((now - member.LastStateAt) / 1000.0, .07, 2);
-            var respawn = member.Spawn is { } spawn && previous.Y < spawn.Y - 20
-                && Math.Abs(state.X - spawn.X) < .5 && Math.Abs(state.Z - spawn.Z) < .5 && Math.Abs(state.Y - spawn.Y) < 2;
-            if (!respawn && (dx * dx + dz * dz > Math.Pow(25 * elapsed + 1.5, 2) || Math.Abs(dy) > 100 * elapsed + 2))
-            { Error(peer, "STATE_TOO_FAR", "이동 상태가 허용 범위를 벗어났습니다."); return; }
-        }
-        member.Spawn ??= state;
-        member.LastStateAt = now;
-        member.Player = member.Player with { State = state };
-        Broadcast(membership.Room, new ServerEvent("state") { Player = member.Player }, except: peer.Id);
-        RefreshGame(membership.Room, now);
-    }
+                        case "chat":
+                            Chat(peer, command.Text);
+                            break;
 
-    private void Game(IRoomPeer peer, ClientCommand command)
-    {
-        if (!_members.TryGetValue(peer.Id, out var membership))
-        { Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요."); return; }
-        if (!ApprovedScriptCatalog.ValidId(command.ScriptId) || !ApprovedScriptCatalog.ValidHash(command.ScriptHash)
-            || !ApprovedScriptCatalog.ValidId(command.Action))
-        { Error(peer, "INVALID_GAME", "스크립트 식별자와 명령을 확인해 주세요."); return; }
-        try { if (command.PayloadJson is not null) ScriptRoomGame.ReadJson(command.PayloadJson, ScriptRoomGame.MaximumPayloadBytes, objectOnly: false); }
-        catch (Exception error) when (error is System.Text.Json.JsonException or InvalidDataException)
-        { Error(peer, "INVALID_GAME_PAYLOAD", "명령 데이터의 JSON 형식 또는 크기를 확인해 주세요."); return; }
-        var room = membership.Room;
-        var now = _clock();
-        if (room.Game is not null && (room.Game.State.ScriptId != command.ScriptId || room.Game.State.ScriptHash != command.ScriptHash))
-        { Error(peer, "GAME_SCRIPT_MISMATCH", "이 방은 다른 버전의 스크립트를 사용합니다."); return; }
-        if (room.Game?.Faulted == true)
-        { Error(peer, "GAME_SCRIPT_FAULT", "이 방의 게임 스크립트가 중단되었습니다. 새 방에서 다시 시작해 주세요."); return; }
-        if (command.Action != "watch")
-        {
-            var times = membership.Member.GameTimes;
-            while (times.TryPeek(out var timestamp) && now - timestamp >= 5000) times.Dequeue();
-            if (times.Count >= 4) { Error(peer, "GAME_RATE_LIMIT", "게임 조작이 너무 빠릅니다. 잠시 후 다시 시도해 주세요."); return; }
-            times.Enqueue(now);
+                        case "state":
+                            UpdateState(peer, command.State);
+                            break;
+
+                        case "game":
+                            Game(peer, command);
+                            break;
+
+                        case "leave":
+                            Leave(peer, acknowledge: true);
+                            break;
+
+                        case "ping":
+                            peer.Send(new ServerEvent("pong"));
+                            break;
+
+                        default:
+                            Error(peer, "UNKNOWN_MESSAGE", "지원하지 않는 메시지입니다.");
+                            break;
+                    }
+                }
+
+                return true;
+            });
         }
-        var created = room.Game is null;
-        if (created)
+
+        public Task DisconnectAsync(IRoomPeer peer)
         {
-            // 최초 watch가 월드와 해시가 일치하는 승인된 코드에 방을 바인딩한다. 이후 교체는 허용하지 않는다.
-            if (command.Action != "watch") { Error(peer, "GAME_NOT_WATCHED", "먼저 스크립트 상태를 구독해 주세요."); return; }
-            ScriptBundle bundle;
-            try { bundle = _scripts.Load(command.ScriptId!, command.ScriptHash!, room.Key.WorldId); }
-            catch (Exception error) when (error is IOException or InvalidDataException or UnauthorizedAccessException or System.Text.Json.JsonException)
+            return InvokeAsync(() =>
             {
-                Console.Error.WriteLine($"Script approval failed ({command.ScriptId}): {error.GetType().Name}: {error.Message}");
-                Error(peer, "GAME_NOT_APPROVED", "이 월드에 승인된 정확한 스크립트 버전이 없습니다."); return;
+                Leave(peer, acknowledge: false);
+                return true;
+            });
+        }
+
+        public Task<RoomSummary[]> SnapshotAsync()
+        {
+            return InvokeAsync(() =>
+            {
+                return _rooms.Values
+                    .Select(room => new RoomSummary(room.Key, room.Members.Count, RoomCapacity))
+                    .ToArray();
+            });
+        }
+
+        // The host queues this on its existing room pump. All game state still runs under the same serializer.
+        public bool TryQueueGameTick()
+        {
+            return TryPush(() =>
+            {
+                long now = _clock();
+                if (now < _nextGameTickAt)
+                {
+                    return;
+                }
+
+                _nextGameTickAt = now + 100;
+                foreach (Room room in _rooms.Values)
+                {
+                    RefreshGame(room, now);
+                }
+            });
+        }
+
+        private void Join(IRoomPeer peer, ClientCommand command)
+        {
+            if (_members.ContainsKey(peer.Id))
+            {
+                Error(peer, "ALREADY_JOINED", "현재 방에서 나간 뒤 입장해 주세요.");
+                return;
             }
-            try { room.Game = new ScriptRoomGame(bundle); }
+
+            if (!ValidId(command.WorldId)
+                || !ValidId(command.RevisionId)
+                || !ValidId(command.RoomId))
+            {
+                Error(peer, "INVALID_ROOM", "월드·버전·방 코드는 영문, 숫자, 밑줄, 하이픈 1~80자입니다.");
+                return;
+            }
+
+            string? name = command.Name?.Trim();
+            if (!ValidText(name, 24))
+            {
+                Error(peer, "INVALID_NAME", "닉네임을 1~24자로 입력해 주세요.");
+                return;
+            }
+
+            RoomKey key = new RoomKey(command.WorldId!, command.RevisionId!, command.RoomId!);
+            if (!_rooms.TryGetValue(key, out Room? room))
+            {
+                if (_rooms.Count >= MaxRooms)
+                {
+                    Error(peer, "SERVER_FULL", "현재 새 방을 만들 수 없습니다.");
+                    return;
+                }
+
+                room = new Room(key);
+                _rooms.Add(key, room);
+            }
+
+            if (room.Members.Count >= RoomCapacity)
+            {
+                Error(peer, "ROOM_FULL", "방 정원 8명이 모두 찼습니다.");
+                return;
+            }
+
+            Member member = new Member(peer, new PlayerInfo(peer.Id, name!));
+            room.Members.Add(peer.Id, member);
+            _members.Add(peer.Id, (room, member));
+
+            bool gameChanged = RunGame(room, "tick", null, null, null, _clock());
+            peer.Send(new ServerEvent("joined")
+            {
+                Room = key,
+                SelfId = peer.Id,
+                Players = room.Members.Values.Select(value => value.Player).ToArray(),
+                History = room.History.ToArray(),
+                Game = room.Game?.State
+            });
+
+            Broadcast(room, new ServerEvent("playerJoined")
+            {
+                Player = member.Player
+            }, except: peer.Id);
+
+            if (gameChanged)
+            {
+                Broadcast(room, new ServerEvent("game")
+                {
+                    Game = room.Game!.State
+                }, except: peer.Id);
+            }
+        }
+
+        private void Chat(IRoomPeer peer, string? rawText)
+        {
+            if (!_members.TryGetValue(peer.Id, out var membership))
+            {
+                Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요.");
+                return;
+            }
+
+            string? text = rawText?.Trim();
+            if (!ValidText(text, 300))
+            {
+                Error(peer, "INVALID_CHAT", "메시지를 1~300자로 입력해 주세요.");
+                return;
+            }
+
+            Queue<long> recent = membership.Member.ChatTimes;
+            long now = _clock();
+            while (recent.TryPeek(out long timestamp) && now - timestamp >= 5000)
+            {
+                recent.Dequeue();
+            }
+
+            if (recent.Count >= 5)
+            {
+                Error(peer, "CHAT_RATE_LIMIT", "메시지가 너무 빠릅니다. 잠시 후 보내 주세요.");
+                return;
+            }
+
+            recent.Enqueue(now);
+
+            ChatMessage message = new ChatMessage(
+                Guid.NewGuid().ToString("N"),
+                peer.Id,
+                membership.Member.Player.Name,
+                text!,
+                DateTimeOffset.UtcNow);
+
+            membership.Room.History.Enqueue(message);
+            while (membership.Room.History.Count > 20)
+            {
+                membership.Room.History.Dequeue();
+            }
+
+            Broadcast(membership.Room, new ServerEvent("chat")
+            {
+                Chat = message
+            });
+        }
+
+        private void Leave(IRoomPeer peer, bool acknowledge)
+        {
+            if (_members.Remove(peer.Id, out var membership))
+            {
+                membership.Room.Members.Remove(peer.Id);
+                Broadcast(membership.Room, new ServerEvent("playerLeft")
+                {
+                    Player = membership.Member.Player
+                });
+
+                if (membership.Room.Members.Count == 0)
+                {
+                    // 방 수명과 VM 수명을 같게 두어 마지막 퇴장 때 스크립트 메모리와 상태를 함께 해제한다.
+                    membership.Room.Game?.Dispose();
+                    _rooms.Remove(membership.Room.Key);
+                }
+                else
+                {
+                    RefreshGame(membership.Room, _clock());
+                }
+            }
+
+            if (acknowledge)
+            {
+                peer.Send(new ServerEvent("left"));
+            }
+        }
+
+        private void UpdateState(IRoomPeer peer, PlayerState? state)
+        {
+            if (!_members.TryGetValue(peer.Id, out var membership))
+            {
+                Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요.");
+                return;
+            }
+
+            if (state == null
+                || state.Sequence < 0
+                || !float.IsFinite(state.X)
+                || !float.IsFinite(state.Y)
+                || !float.IsFinite(state.Z)
+                || !float.IsFinite(state.Yaw)
+                || !float.IsFinite(state.Speed)
+                || !float.IsFinite(state.VerticalVelocity)
+                || Math.Abs(state.X) > 10000
+                || Math.Abs(state.Y) > 10000
+                || Math.Abs(state.Z) > 10000
+                || state.Yaw < -.006f
+                || state.Yaw > 360
+                || state.Speed < 0
+                || state.Speed > 25
+                || Math.Abs(state.VerticalVelocity) > 100)
+            {
+                Error(peer, "INVALID_STATE", "플레이어 상태가 올바르지 않습니다.");
+                return;
+            }
+
+            // Unity Euler 변환은 0 근처에서 약 -0.00573도까지 음수를 남길 수 있다.
+            // 좁은 경계 오차와 정확히 360인 값만 [0,360)으로 정규화해 위치 갱신을 유지한다.
+            if (state.Yaw < 0 || state.Yaw == 360)
+            {
+                float yaw = state.Yaw < 0 ? 360 + state.Yaw : 0;
+                state = state with
+                {
+                    Yaw = yaw >= 360 ? 0 : yaw // 아주 작은 음수의 float 반올림도 처리한다.
+                };
+            }
+
+            Member member = membership.Member;
+            long now = _clock();
+            PlayerState? previous = member.Player.State;
+
+            if (previous != null)
+            {
+                // Stale samples cannot rewind a remote avatar.
+                if (state.Sequence <= previous.Sequence)
+                {
+                    return;
+                }
+
+                // At most about 14 samples/second, independently of chat.
+                if (now - member.LastStateAt < 70)
+                {
+                    return;
+                }
+
+                double dx = state.X - previous.X;
+                double dy = state.Y - previous.Y;
+                double dz = state.Z - previous.Z;
+                double elapsed = Math.Clamp((now - member.LastStateAt) / 1000.0, .07, 2);
+                PlayerState? spawn = member.Spawn;
+                bool respawn = spawn != null
+                    && previous.Y < spawn.Y - 20
+                    && Math.Abs(state.X - spawn.X) < .5
+                    && Math.Abs(state.Z - spawn.Z) < .5
+                    && Math.Abs(state.Y - spawn.Y) < 2;
+
+                if (!respawn
+                    && (dx * dx + dz * dz > Math.Pow(25 * elapsed + 1.5, 2)
+                        || Math.Abs(dy) > 100 * elapsed + 2))
+                {
+                    Error(peer, "STATE_TOO_FAR", "이동 상태가 허용 범위를 벗어났습니다.");
+                    return;
+                }
+            }
+
+            if (member.Spawn == null)
+            {
+                member.Spawn = state;
+            }
+
+            member.LastStateAt = now;
+            member.Player = member.Player with
+            {
+                State = state
+            };
+
+            Broadcast(membership.Room, new ServerEvent("state")
+            {
+                Player = member.Player
+            }, except: peer.Id);
+
+            RefreshGame(membership.Room, now);
+        }
+
+        private void Game(IRoomPeer peer, ClientCommand command)
+        {
+            if (!_members.TryGetValue(peer.Id, out var membership))
+            {
+                Error(peer, "NOT_JOINED", "먼저 방에 입장해 주세요.");
+                return;
+            }
+
+            if (!ApprovedScriptCatalog.ValidId(command.ScriptId)
+                || !ApprovedScriptCatalog.ValidHash(command.ScriptHash)
+                || !ApprovedScriptCatalog.ValidId(command.Action))
+            {
+                Error(peer, "INVALID_GAME", "스크립트 식별자와 명령을 확인해 주세요.");
+                return;
+            }
+
+            try
+            {
+                if (command.PayloadJson != null)
+                {
+                    ScriptRoomGame.ReadJson(
+                        command.PayloadJson,
+                        ScriptRoomGame.MaximumPayloadBytes,
+                        objectOnly: false);
+                }
+            }
+            catch (Exception error) when (error is System.Text.Json.JsonException
+                || error is InvalidDataException)
+            {
+                Error(peer, "INVALID_GAME_PAYLOAD", "명령 데이터의 JSON 형식 또는 크기를 확인해 주세요.");
+                return;
+            }
+
+            Room room = membership.Room;
+            long now = _clock();
+
+            if (room.Game != null
+                && (room.Game.State.ScriptId != command.ScriptId
+                    || room.Game.State.ScriptHash != command.ScriptHash))
+            {
+                Error(peer, "GAME_SCRIPT_MISMATCH", "이 방은 다른 버전의 스크립트를 사용합니다.");
+                return;
+            }
+
+            if (room.Game?.Faulted == true)
+            {
+                Error(peer, "GAME_SCRIPT_FAULT", "이 방의 게임 스크립트가 중단되었습니다. 새 방에서 다시 시작해 주세요.");
+                return;
+            }
+
+            if (command.Action != "watch")
+            {
+                Queue<long> times = membership.Member.GameTimes;
+                while (times.TryPeek(out long timestamp) && now - timestamp >= 5000)
+                {
+                    times.Dequeue();
+                }
+
+                if (times.Count >= 4)
+                {
+                    Error(peer, "GAME_RATE_LIMIT", "게임 조작이 너무 빠릅니다. 잠시 후 다시 시도해 주세요.");
+                    return;
+                }
+
+                times.Enqueue(now);
+            }
+
+            bool created = room.Game == null;
+            if (created)
+            {
+                // 최초 watch가 월드와 해시가 일치하는 승인된 코드에 방을 바인딩한다. 이후 교체는 허용하지 않는다.
+                if (command.Action != "watch")
+                {
+                    Error(peer, "GAME_NOT_WATCHED", "먼저 스크립트 상태를 구독해 주세요.");
+                    return;
+                }
+
+                ScriptBundle bundle;
+                try
+                {
+                    bundle = _scripts.Load(command.ScriptId!, command.ScriptHash!, room.Key.WorldId);
+                }
+                catch (Exception error) when (error is IOException
+                    || error is InvalidDataException
+                    || error is UnauthorizedAccessException
+                    || error is System.Text.Json.JsonException)
+                {
+                    Console.Error.WriteLine(
+                        $"Script approval failed ({command.ScriptId}): {error.GetType().Name}: {error.Message}");
+                    Error(peer, "GAME_NOT_APPROVED", "이 월드에 승인된 정확한 스크립트 버전이 없습니다.");
+                    return;
+                }
+
+                try
+                {
+                    room.Game = new ScriptRoomGame(bundle);
+                }
+                catch (Exception error)
+                {
+                    Console.Error.WriteLine(
+                        $"Script initialization failed ({command.ScriptId}): {error.GetType().Name}: {error.Message}");
+                    Error(peer, "GAME_SCRIPT_FAULT", "게임 스크립트를 초기화할 수 없습니다.");
+                    return;
+                }
+            }
+
+            bool changed = RunGame(
+                room,
+                command.Action == "watch" ? "watch" : "command",
+                command.Action,
+                command.PayloadJson,
+                peer.Id,
+                now,
+                peer);
+
+            if (room.Game!.Faulted)
+            {
+                return;
+            }
+
+            ServerEvent snapshot = new ServerEvent("game")
+            {
+                Game = room.Game.State
+            };
+
+            if (created || changed)
+            {
+                Broadcast(room, snapshot);
+            }
+            else
+            {
+                peer.Send(snapshot);
+            }
+        }
+
+        private static void RefreshGame(Room room, long now)
+        {
+            if (RunGame(room, "tick", null, null, null, now))
+            {
+                Broadcast(room, new ServerEvent("game")
+                {
+                    Game = room.Game!.State
+                });
+            }
+        }
+
+        private static bool RunGame(
+            Room room,
+            string kind,
+            string? action,
+            string? payload,
+            string? selfId,
+            long now,
+            IRoomPeer? requester = null)
+        {
+            if (room.Game == null || room.Game.Faulted)
+            {
+                return false;
+            }
+
+            try
+            {
+                return room.Game.Execute(
+                    kind,
+                    action,
+                    payload,
+                    selfId,
+                    room.Members.Values.Select(member => (member.Player, member.LastStateAt)),
+                    now);
+            }
+            catch (GameCommandRejectedException)
+            {
+                if (requester != null)
+                {
+                    Error(requester, "GAME_COMMAND_REJECTED", "게임 스크립트가 이 명령을 거부했습니다.");
+                }
+            }
             catch (Exception error)
             {
-                Console.Error.WriteLine($"Script initialization failed ({command.ScriptId}): {error.GetType().Name}: {error.Message}");
-                Error(peer, "GAME_SCRIPT_FAULT", "게임 스크립트를 초기화할 수 없습니다."); return;
+                // 틱 작업의 예외를 여기서 끝낸다. 한 스크립트가 다른 방의 직렬 작업 큐를 멈추게 하지 않는다.
+                Console.Error.WriteLine(
+                    $"Script execution stopped ({room.Game.State.ScriptId}): {error.GetType().Name}: {error.Message}");
+
+                Broadcast(room, new ServerEvent("error")
+                {
+                    Code = "GAME_SCRIPT_FAULT",
+                    Message = "이 방의 게임 스크립트가 중단되었습니다."
+                });
+            }
+
+            return false;
+        }
+
+        private static void Broadcast(Room room, ServerEvent message, string? except = null)
+        {
+            foreach (Member member in room.Members.Values)
+            {
+                if (member.Peer.Id != except)
+                {
+                    member.Peer.Send(message);
+                }
             }
         }
-        var changed = RunGame(room, command.Action == "watch" ? "watch" : "command", command.Action,
-            command.PayloadJson, peer.Id, now, peer);
-        if (room.Game!.Faulted) return;
-        var snapshot = new ServerEvent("game") { Game = room.Game.State };
-        if (created || changed) Broadcast(room, snapshot);
-        else peer.Send(snapshot);
-    }
 
-    private static void RefreshGame(Room room, long now)
-    {
-        if (RunGame(room, "tick", null, null, null, now))
-            Broadcast(room, new ServerEvent("game") { Game = room.Game!.State });
-    }
-
-    private static bool RunGame(Room room, string kind, string? action, string? payload, string? selfId, long now, IRoomPeer? requester = null)
-    {
-        if (room.Game is null || room.Game.Faulted) return false;
-        try { return room.Game.Execute(kind, action, payload, selfId, room.Members.Values.Select(m => (m.Player, m.LastStateAt)), now); }
-        catch (GameCommandRejectedException)
+        private static bool ValidId(string? value)
         {
-            if (requester is not null) Error(requester, "GAME_COMMAND_REJECTED", "게임 스크립트가 이 명령을 거부했습니다.");
+            return value != null
+                && value.Length >= 1
+                && value.Length <= 80
+                && value.All(character => char.IsAsciiLetterOrDigit(character)
+                    || character == '_'
+                    || character == '-');
         }
-        catch (Exception error)
+
+        private static bool ValidText(string? value, int maximum)
         {
-            // 틱 작업의 예외를 여기서 끝낸다. 한 스크립트가 다른 방의 직렬 작업 큐를 멈추게 하지 않는다.
-            Console.Error.WriteLine($"Script execution stopped ({room.Game.State.ScriptId}): {error.GetType().Name}: {error.Message}");
-            Broadcast(room, new ServerEvent("error") { Code = "GAME_SCRIPT_FAULT", Message = "이 방의 게임 스크립트가 중단되었습니다." });
+            return !string.IsNullOrWhiteSpace(value)
+                && value.Length <= maximum
+                && !value.Any(char.IsControl);
         }
-        return false;
-    }
 
-    private static void Broadcast(Room room, ServerEvent message, string? except = null)
-    {
-        foreach (var member in room.Members.Values)
-            if (member.Peer.Id != except) member.Peer.Send(message);
-    }
+        private static void Error(IRoomPeer peer, string code, string message)
+        {
+            peer.Send(new ServerEvent("error")
+            {
+                Code = code,
+                Message = message
+            });
+        }
 
-    private static bool ValidId(string? value) => value is { Length: >= 1 and <= 80 }
-        && value.All(character => char.IsAsciiLetterOrDigit(character) || character is '_' or '-');
+        private sealed class Room
+        {
+            public RoomKey Key { get; }
 
-    private static bool ValidText(string? value, int maximum) => !string.IsNullOrWhiteSpace(value)
-        && value.Length <= maximum && !value.Any(char.IsControl);
+            public Dictionary<string, Member> Members { get; } = new Dictionary<string, Member>();
 
-    private static void Error(IRoomPeer peer, string code, string message) => peer.Send(new ServerEvent("error") { Code = code, Message = message });
+            public Queue<ChatMessage> History { get; } = new Queue<ChatMessage>();
 
-    private sealed class Room(RoomKey key)
-    {
-        public RoomKey Key { get; } = key;
-        public Dictionary<string, Member> Members { get; } = [];
-        public Queue<ChatMessage> History { get; } = [];
-        public ScriptRoomGame? Game { get; set; }
-    }
+            public ScriptRoomGame? Game { get; set; }
 
-    private sealed class Member(IRoomPeer peer, PlayerInfo player)
-    {
-        public IRoomPeer Peer { get; } = peer;
-        public PlayerInfo Player { get; set; } = player;
-        public PlayerState? Spawn { get; set; }
-        public long LastStateAt { get; set; }
-        public Queue<long> ChatTimes { get; } = [];
-        public Queue<long> GameTimes { get; } = [];
+            public Room(RoomKey key)
+            {
+                Key = key;
+            }
+        }
+
+        private sealed class Member
+        {
+            public IRoomPeer Peer { get; }
+
+            public PlayerInfo Player { get; set; }
+
+            public PlayerState? Spawn { get; set; }
+
+            public long LastStateAt { get; set; }
+
+            public Queue<long> ChatTimes { get; } = new Queue<long>();
+
+            public Queue<long> GameTimes { get; } = new Queue<long>();
+
+            public Member(IRoomPeer peer, PlayerInfo player)
+            {
+                Peer = peer;
+                Player = player;
+            }
+        }
     }
 }

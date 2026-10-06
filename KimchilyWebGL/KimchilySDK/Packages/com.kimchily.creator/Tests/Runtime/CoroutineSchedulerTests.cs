@@ -25,12 +25,18 @@ namespace Kimchily.Creator.Tests
         public IEnumerator TearDown()
         {
             if (host != null)
+            {
                 UnityEngine.Object.Destroy(host);
+            }
+
             foreach (GameObject owner in owners)
             {
                 if (owner != null)
+                {
                     UnityEngine.Object.Destroy(owner);
+                }
             }
+
             owners.Clear();
             yield return null;
         }
@@ -40,6 +46,7 @@ namespace Kimchily.Creator.Tests
         {
             int startedFrame = -1;
             int resumedFrame = -1;
+
             IEnumerator Routine()
             {
                 startedFrame = Time.frameCount;
@@ -51,7 +58,6 @@ namespace Kimchily.Creator.Tests
             Assert.AreEqual(Time.frameCount, startedFrame);
             Assert.AreEqual(CoroutineStatus.Running, handle.Status);
             yield return handle;
-
             Assert.Greater(resumedFrame, startedFrame);
             Assert.AreEqual(CoroutineStatus.Completed, handle.Status);
             Assert.IsNull(handle.Exception);
@@ -61,7 +67,11 @@ namespace Kimchily.Creator.Tests
         [Test]
         public void ImmediateCompletionDoesNotRetainAnActiveNativeCoroutine()
         {
-            IEnumerator Routine() { yield break; }
+            IEnumerator Routine()
+            {
+                yield break;
+            }
+
             CoroutineHandle handle = scheduler.StartRoutine(Routine());
             Assert.AreEqual(CoroutineStatus.Completed, handle.Status);
             Assert.AreEqual(0, scheduler.ActiveCount);
@@ -72,15 +82,29 @@ namespace Kimchily.Creator.Tests
         public void CancellationDisposesNestedIteratorsInsideOutExactlyOnce()
         {
             var disposed = new List<string>();
+
             IEnumerator Child()
             {
-                try { yield return new WaitForSeconds(60); }
-                finally { disposed.Add("child"); }
+                try
+                {
+                    yield return new WaitForSeconds(60);
+                }
+                finally
+                {
+                    disposed.Add("child");
+                }
             }
+
             IEnumerator Parent()
             {
-                try { yield return Child(); }
-                finally { disposed.Add("parent"); }
+                try
+                {
+                    yield return Child();
+                }
+                finally
+                {
+                    disposed.Add("parent");
+                }
             }
 
             CoroutineHandle handle = scheduler.StartRoutine(Parent());
@@ -98,6 +122,7 @@ namespace Kimchily.Creator.Tests
             bool disposed = false;
             bool cancellationAccepted = false;
             bool disposedInsideMoveNext = false;
+
             IEnumerator Routine()
             {
                 try
@@ -107,12 +132,14 @@ namespace Kimchily.Creator.Tests
                     disposedInsideMoveNext = disposed;
                     yield return null;
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
 
             handle = scheduler.StartRoutine(Routine());
             yield return handle;
-
             Assert.IsTrue(cancellationAccepted);
             Assert.IsFalse(disposedInsideMoveNext);
             Assert.IsTrue(disposed);
@@ -124,6 +151,7 @@ namespace Kimchily.Creator.Tests
         public IEnumerator NestedFaultIsCapturedAndDisposesTheParent()
         {
             var disposed = new List<string>();
+
             IEnumerator Child()
             {
                 try
@@ -131,18 +159,27 @@ namespace Kimchily.Creator.Tests
                     yield return null;
                     throw new InvalidOperationException("nested failure");
                 }
-                finally { disposed.Add("child"); }
+                finally
+                {
+                    disposed.Add("child");
+                }
             }
+
             IEnumerator Parent()
             {
-                try { yield return Child(); }
-                finally { disposed.Add("parent"); }
+                try
+                {
+                    yield return Child();
+                }
+                finally
+                {
+                    disposed.Add("parent");
+                }
             }
 
             LogAssert.Expect(LogType.Exception, new Regex("InvalidOperationException: nested failure"));
             CoroutineHandle handle = scheduler.StartRoutine(Parent());
             yield return handle;
-
             Assert.AreEqual(CoroutineStatus.Faulted, handle.Status);
             Assert.IsInstanceOf<InvalidOperationException>(handle.Exception);
             CollectionAssert.AreEqual(new[] { "child", "parent" }, disposed);
@@ -153,19 +190,22 @@ namespace Kimchily.Creator.Tests
         public IEnumerator CustomYieldPredicateFaultUsesTheSameCleanupPolicy()
         {
             bool disposed = false;
+
             IEnumerator Routine()
             {
                 try
                 {
                     yield return new WaitUntil(() => throw new InvalidOperationException("predicate failure"));
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
 
             LogAssert.Expect(LogType.Exception, new Regex("InvalidOperationException: predicate failure"));
             CoroutineHandle handle = scheduler.StartRoutine(Routine());
             yield return handle;
-
             Assert.AreEqual(CoroutineStatus.Faulted, handle.Status);
             Assert.IsTrue(disposed);
             Assert.AreEqual(0, scheduler.ActiveCount);
@@ -175,21 +215,34 @@ namespace Kimchily.Creator.Tests
         public void CleanupFaultDoesNotPreventOtherIteratorsFromBeingDisposed()
         {
             bool parentDisposed = false;
+
             IEnumerator Child()
             {
-                try { yield return new WaitForSeconds(60); }
-                finally { throw new InvalidOperationException("cleanup failure"); }
+                try
+                {
+                    yield return new WaitForSeconds(60);
+                }
+                finally
+                {
+                    throw new InvalidOperationException("cleanup failure");
+                }
             }
+
             IEnumerator Parent()
             {
-                try { yield return Child(); }
-                finally { parentDisposed = true; }
+                try
+                {
+                    yield return Child();
+                }
+                finally
+                {
+                    parentDisposed = true;
+                }
             }
 
             CoroutineHandle handle = scheduler.StartRoutine(Parent());
             LogAssert.Expect(LogType.Exception, new Regex("InvalidOperationException: cleanup failure"));
             handle.Cancel();
-
             Assert.AreEqual(CoroutineStatus.Faulted, handle.Status);
             Assert.IsTrue(parentDisposed);
             Assert.AreEqual(0, scheduler.ActiveCount);
@@ -200,17 +253,23 @@ namespace Kimchily.Creator.Tests
         {
             GameObject owner = NewOwner();
             bool disposed = false;
+
             IEnumerator Routine()
             {
-                try { yield return new WaitForSeconds(60); }
-                finally { disposed = true; }
+                try
+                {
+                    yield return new WaitForSeconds(60);
+                }
+                finally
+                {
+                    disposed = true;
+                }
             }
 
             CoroutineHandle handle = scheduler.StartRoutine(Routine(), owner);
             UnityEngine.Object.Destroy(owner);
             yield return null;
             yield return null;
-
             Assert.AreEqual(CoroutineStatus.Cancelled, handle.Status);
             Assert.IsTrue(disposed);
             Assert.AreEqual(0, scheduler.ActiveCount);
@@ -221,10 +280,14 @@ namespace Kimchily.Creator.Tests
         {
             GameObject firstOwner = NewOwner();
             GameObject secondOwner = NewOwner();
-            IEnumerator Routine() { yield return new WaitForSeconds(60); }
+
+            IEnumerator Routine()
+            {
+                yield return new WaitForSeconds(60);
+            }
+
             CoroutineHandle first = scheduler.StartRoutine(Routine(), firstOwner);
             CoroutineHandle second = scheduler.StartRoutine(Routine(), secondOwner);
-
             Assert.AreEqual(1, scheduler.CancelOwnedBy(firstOwner));
             Assert.AreEqual(CoroutineStatus.Cancelled, first.Status);
             Assert.AreEqual(CoroutineStatus.Running, second.Status);
@@ -235,15 +298,21 @@ namespace Kimchily.Creator.Tests
         public void DisablingSchedulerCancelsAndDisposesWork()
         {
             bool disposed = false;
+
             IEnumerator Routine()
             {
-                try { yield return new WaitForSeconds(60); }
-                finally { disposed = true; }
+                try
+                {
+                    yield return new WaitForSeconds(60);
+                }
+                finally
+                {
+                    disposed = true;
+                }
             }
 
             CoroutineHandle handle = scheduler.StartRoutine(Routine());
             scheduler.enabled = false;
-
             Assert.AreEqual(CoroutineStatus.Cancelled, handle.Status);
             Assert.IsTrue(disposed);
             Assert.AreEqual(0, scheduler.ActiveCount);
@@ -254,16 +323,22 @@ namespace Kimchily.Creator.Tests
         public IEnumerator DestroyingSchedulerCancelsAndDisposesWork()
         {
             bool disposed = false;
+
             IEnumerator Routine()
             {
-                try { yield return new WaitForSeconds(60); }
-                finally { disposed = true; }
+                try
+                {
+                    yield return new WaitForSeconds(60);
+                }
+                finally
+                {
+                    disposed = true;
+                }
             }
 
             CoroutineHandle handle = scheduler.StartRoutine(Routine());
             UnityEngine.Object.Destroy(host);
             yield return null;
-
             Assert.AreEqual(CoroutineStatus.Cancelled, handle.Status);
             Assert.IsTrue(disposed);
         }
@@ -273,6 +348,7 @@ namespace Kimchily.Creator.Tests
         {
             float previousTimeScale = Time.timeScale;
             bool resumed = false;
+
             IEnumerator Routine()
             {
                 yield return new WaitForSecondsRealtime(0.01f);
@@ -287,7 +363,10 @@ namespace Kimchily.Creator.Tests
                 Assert.IsTrue(resumed);
                 Assert.AreEqual(CoroutineStatus.Completed, handle.Status);
             }
-            finally { Time.timeScale = previousTimeScale; }
+            finally
+            {
+                Time.timeScale = previousTimeScale;
+            }
         }
 
         private GameObject NewOwner()

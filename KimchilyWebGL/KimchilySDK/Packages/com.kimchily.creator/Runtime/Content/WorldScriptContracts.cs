@@ -12,7 +12,9 @@ namespace Kimchily.Creator.Content
     public interface IWorldScriptStatus
     {
         bool HasStarted { get; }
+
         bool IsFaulted { get; }
+
         string LastError { get; }
     }
 }

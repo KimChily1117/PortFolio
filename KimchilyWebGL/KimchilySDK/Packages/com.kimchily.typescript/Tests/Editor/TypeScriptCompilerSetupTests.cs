@@ -9,7 +9,6 @@ namespace Kimchily.TypeScript.Tests
     public sealed class TypeScriptCompilerSetupTests
     {
         string directory;
-
         [SetUp]
         public void SetUp()
         {
@@ -20,7 +19,10 @@ namespace Kimchily.TypeScript.Tests
         [TearDown]
         public void TearDown()
         {
-            if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory, true);
+            }
         }
 
         string FileAt(string relative)
@@ -34,13 +36,7 @@ namespace Kimchily.TypeScript.Tests
         void Ready(string relative, int schemaVersion = 1)
         {
             string marker = FileAt(".tools/ready.json");
-            File.WriteAllText(marker, JsonUtility.ToJson(new TypeScriptCompiler.ReadyMarker
-            {
-                schemaVersion = schemaVersion,
-                nodeRelativePath = relative,
-                nodeVersion = "v24.21.0",
-                typescriptVersion = "5.9.3"
-            }));
+            File.WriteAllText(marker, JsonUtility.ToJson(new TypeScriptCompiler.ReadyMarker { schemaVersion = schemaVersion, nodeRelativePath = relative, nodeVersion = "v24.21.0", typescriptVersion = "5.9.3" }));
         }
 
         [Test]
@@ -88,20 +84,32 @@ namespace Kimchily.TypeScript.Tests
         {
             string lockPath = Path.Combine(directory, ".tools/install.lock");
             using (TypeScriptCompiler.AcquireCompilerLock(directory))
-            using (TypeScriptCompiler.AcquireCompilerLock(directory))
-                Assert.Throws<IOException>(() =>
+            {
+                using (TypeScriptCompiler.AcquireCompilerLock(directory))
                 {
-                    using (new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None)) { }
-                });
+                    Assert.Throws<IOException>(() =>
+                    {
+                        using (new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+                        {
+                        }
+                    });
+                }
+            }
+
             using (new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
             {
                 var error = Assert.Throws<InvalidOperationException>(() =>
                 {
-                    using (TypeScriptCompiler.AcquireCompilerLock(directory)) { }
+                    using (TypeScriptCompiler.AcquireCompilerLock(directory))
+                    {
+                    }
                 });
                 StringAssert.Contains("setup is running", error.Message);
             }
-            using (TypeScriptCompiler.AcquireCompilerLock(directory)) { }
+
+            using (TypeScriptCompiler.AcquireCompilerLock(directory))
+            {
+            }
         }
 
         [Test]

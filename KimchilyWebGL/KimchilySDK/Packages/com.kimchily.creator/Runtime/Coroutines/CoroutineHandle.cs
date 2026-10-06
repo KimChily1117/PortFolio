@@ -23,9 +23,24 @@ namespace Kimchily.Creator
         }
 
         public CoroutineStatus Status { get; internal set; }
+
         public Exception Exception { get; internal set; }
-        public bool IsDone => Status != CoroutineStatus.Running;
-        public override bool keepWaiting => !IsDone;
+
+        public bool IsDone
+        {
+            get
+            {
+                return Status != CoroutineStatus.Running;
+            }
+        }
+
+        public override bool keepWaiting
+        {
+            get
+            {
+                return !IsDone;
+            }
+        }
 
         /// <summary>Returns true only when this call requests cancellation of running work.</summary>
         public bool Cancel()

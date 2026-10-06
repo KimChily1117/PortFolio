@@ -8,8 +8,16 @@ namespace Kimchily.Creator
     {
         public static IEnumerator WithCleanup(IEnumerator routine, Action cleanup)
         {
-            if (routine == null) throw new ArgumentNullException(nameof(routine));
-            if (cleanup == null) throw new ArgumentNullException(nameof(cleanup));
+            if (routine == null)
+            {
+                throw new ArgumentNullException(nameof(routine));
+            }
+
+            if (cleanup == null)
+            {
+                throw new ArgumentNullException(nameof(cleanup));
+            }
+
             return new CleanupEnumerator(routine, cleanup);
         }
 
@@ -17,23 +25,62 @@ namespace Kimchily.Creator
         {
             IEnumerator routine;
             Action cleanup;
-            public CleanupEnumerator(IEnumerator routine, Action cleanup) { this.routine = routine; this.cleanup = cleanup; }
-            public object Current => routine?.Current;
-            public bool MoveNext() => routine != null && routine.MoveNext();
-            public void Reset() => throw new NotSupportedException();
+
+            public CleanupEnumerator(IEnumerator routine, Action cleanup)
+            {
+                this.routine = routine;
+                this.cleanup = cleanup;
+            }
+
+            public object Current
+            {
+                get
+                {
+                    return routine?.Current;
+                }
+            }
+
+            public bool MoveNext()
+            {
+                return routine != null && routine.MoveNext();
+            }
+
+            public void Reset()
+            {
+                throw new NotSupportedException();
+            }
+
             public void Dispose()
             {
                 var original = routine;
                 var callback = cleanup;
-                routine = null; cleanup = null;
+                routine = null;
+                cleanup = null;
                 Exception error = null;
-                try { (original as IDisposable)?.Dispose(); }
-                catch (Exception ex) { error = ex; }
-                try { callback?.Invoke(); }
-                catch (Exception ex) { error = error == null ? ex : new AggregateException(error, ex); }
-                if (error != null) throw error;
+
+                try
+                {
+                    (original as IDisposable)?.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                }
+
+                try
+                {
+                    callback?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    error = error == null ? ex : new AggregateException(error, ex);
+                }
+
+                if (error != null)
+                {
+                    throw error;
+                }
             }
         }
     }
 }
-

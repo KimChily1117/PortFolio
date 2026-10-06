@@ -10,13 +10,23 @@ namespace Kimchily.Creator.Tests
         public KimchilyPlayerAnimationDriver Driver;
         public Transform Target;
         public float PlanarSpeed;
+
         public float LastLatePosition { get; private set; }
+
         public int ObservedFrames { get; private set; }
 
-        void Update() { Driver?.Tick(PlanarSpeed, true, 0, Time.deltaTime); }
+        void Update()
+        {
+            Driver?.Tick(PlanarSpeed, true, 0, Time.deltaTime);
+        }
+
         void LateUpdate()
         {
-            if (Target == null) return;
+            if (Target == null)
+            {
+                return;
+            }
+
             LastLatePosition = Target.localPosition.x;
             ObservedFrames++;
         }

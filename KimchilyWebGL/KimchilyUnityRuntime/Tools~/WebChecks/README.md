@@ -8,6 +8,11 @@ Unity installation without starting Unity. It includes the Web player adapter pa
 and therefore needs the installed WebGL module. Before that module is available,
 `-p:DefineConstants=UNITY_EDITOR` checks only the Editor-visible path.
 
+The compile check also includes the real Networking runtime sources. Import
+`KimchilyUnityRuntime` once in the configured Unity Editor so its package assemblies
+`Library/ScriptAssemblies/Unity.TextMeshPro.dll` and `UnityEngine.UI.dll` exist.
+These generated DLLs stay local and are not committed.
+
 Build with `Kimchily.World.Editor.WebRuntimeBuilder.Build` and `-buildTarget WebGL`.
 The result goes to `Builds/WebGL` and uses the `KimchilyWeb` template. The sample
 passes actual TypeScript through the installed pinned compiler; a missing compiler

@@ -15,7 +15,6 @@ namespace Kimchily.TypeScript.Editor
     {
         static double nextCheck;
         static string lastToolHash;
-
         static TypeScriptBuildValidation()
         {
             WorldContentBuilder.ValidateAdditionalAssets += ValidateAssets;
@@ -25,31 +24,49 @@ namespace Kimchily.TypeScript.Editor
 
         static void PollToolDependency()
         {
-            if (EditorApplication.timeSinceStartup < nextCheck || EditorApplication.isCompiling || EditorApplication.isUpdating) return;
+            if (EditorApplication.timeSinceStartup < nextCheck || EditorApplication.isCompiling || EditorApplication.isUpdating)
+            {
+                return;
+            }
+
             nextCheck = EditorApplication.timeSinceStartup + 2;
             UpdateToolDependency();
         }
 
         internal static void UpdateToolDependency()
         {
-            if (AssetDatabase.IsAssetImportWorkerProcess()) return;
+            if (AssetDatabase.IsAssetImportWorkerProcess())
+            {
+                return;
+            }
+
             try
             {
                 using (var sha = SHA256.Create())
-                using (var bytes = new MemoryStream())
                 {
-                    foreach (string file in TypeScriptCompiler.ToolFiles())
+                    using (var bytes = new MemoryStream())
                     {
-                        byte[] data = File.Exists(file) ? File.ReadAllBytes(file) : Encoding.UTF8.GetBytes("missing:" + file);
-                        bytes.Write(data, 0, data.Length);
+                        foreach (string file in TypeScriptCompiler.ToolFiles())
+                        {
+                            byte[] data = File.Exists(file) ? File.ReadAllBytes(file) : Encoding.UTF8.GetBytes("missing:" + file);
+                            bytes.Write(data, 0, data.Length);
+                        }
+
+                        string hash = BitConverter.ToString(sha.ComputeHash(bytes.ToArray())).Replace("-", "");
+                        if (hash == lastToolHash)
+                        {
+                            return;
+                        }
+
+                        lastToolHash = hash;
+                        AssetDatabase.RegisterCustomDependency(TypeScriptCompiler.DependencyName, Hash128.Compute(hash));
                     }
-                    string hash = BitConverter.ToString(sha.ComputeHash(bytes.ToArray())).Replace("-", "");
-                    if (hash == lastToolHash) return;
-                    lastToolHash = hash;
-                    AssetDatabase.RegisterCustomDependency(TypeScriptCompiler.DependencyName, Hash128.Compute(hash));
                 }
             }
-            catch (Exception exception) { Debug.LogWarning("Kimchily TypeScript dependency check: " + exception.Message); }
+            catch (Exception exception)
+            {
+                Debug.LogWarning("Kimchily TypeScript dependency check: " + exception.Message);
+            }
         }
 
         /// <summary>Fresh type checking for every referenced TS asset, including helpers.</summary>
@@ -65,13 +82,23 @@ namespace Kimchily.TypeScript.Editor
                     AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
                     asset = AssetDatabase.LoadAssetAtPath<TypeScriptAsset>(path);
                 }
+
                 if (!result.compiledSuccessfully)
                 {
-                    foreach (string diagnostic in result.diagnostics ?? Array.Empty<string>()) errors.Add(diagnostic);
-                    if (result.diagnostics == null || result.diagnostics.Length == 0) errors.Add("TypeScript compilation failed: " + path);
+                    foreach (string diagnostic in result.diagnostics ?? Array.Empty<string>())
+                    {
+                        errors.Add(diagnostic);
+                    }
+
+                    if (result.diagnostics == null || result.diagnostics.Length == 0)
+                    {
+                        errors.Add("TypeScript compilation failed: " + path);
+                    }
                 }
                 else if (asset == null || !asset.compiledSuccessfully || asset.sourceHash != result.sourceHash || asset.apiVersion != 1)
+                {
                     errors.Add("TypeScript imported asset is missing or stale. Reimport it before building: " + path);
+                }
             }
         }
     }

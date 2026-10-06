@@ -42,6 +42,7 @@ namespace Kimchily.TypeScript
             private int timeoutMilliseconds;
             private bool active;
             internal string Stage { get; set; }
+
             internal void Begin(int statements, int milliseconds, string stage)
             {
                 remaining = initialStatements = statements;
@@ -51,32 +52,62 @@ namespace Kimchily.TypeScript
                 Stage = stage;
                 active = true;
             }
-            internal void End() { active = false; }
-            public override void Reset() { }
+
+            internal void End()
+            {
+                active = false;
+            }
+
+            public override void Reset()
+            {
+            }
+
             public override void Check()
             {
-                if (!active) return;
+                if (!active)
+                {
+                    return;
+                }
+
                 if (--remaining < 0)
+                {
                     throw new InvalidOperationException("TypeScript statement budget exceeded.");
+                }
+
                 CheckTime();
             }
+
             // Also called after host operations: a final slow host callback may
             // return without another interpreted statement that would run Check.
             internal void CheckTime()
             {
                 if (active && Stopwatch.GetTimestamp() > deadline)
+                {
                     throw new InvalidOperationException("TypeScript time budget exceeded.");
+                }
             }
-            internal string Describe() => "stage=" + Stage + ", elapsedMs=" +
-                ((Stopwatch.GetTimestamp() - startedAt) * 1000 / Stopwatch.Frequency) +
-                ", timeLimitMs=" + timeoutMilliseconds + ", statements=" +
-                (initialStatements - remaining) + "/" + initialStatements;
+
+            internal string Describe()
+            {
+                return "stage=" + Stage + ", elapsedMs=" +
+                    ((Stopwatch.GetTimestamp() - startedAt) * 1000 / Stopwatch.Frequency) +
+                    ", timeLimitMs=" + timeoutMilliseconds + ", statements=" +
+                    (initialStatements - remaining) + "/" + initialStatements;
+            }
         }
 
-        internal TypeScriptVm(Dictionary<string, string> modules, string bootstrap,
-            Func<Engine, ObjectInstance> createHost, int instructionBudget)
+        internal TypeScriptVm(
+            Dictionary<string, string> modules,
+            string bootstrap,
+            Func<Engine, ObjectInstance> createHost,
+            int instructionBudget)
         {
-            sources = modules ?? throw new ArgumentNullException(nameof(modules));
+            if (modules == null)
+            {
+                throw new ArgumentNullException(nameof(modules));
+            }
+
+            sources = modules;
             ValidateModules(sources);
             InstructionBudget = ClampBudget(instructionBudget);
             budget = new OperationBudget();
@@ -122,12 +153,21 @@ namespace Kimchily.TypeScript
             })").AsObject());
                     JsValue factory = AtStage("bootstrap:parse", () => Engine.Evaluate(bootstrap));
                     ObjectInstance host = AtStage("bootstrap:host", () => createHost(Engine));
-                    ObjectInstance localBridge = AtStage("bootstrap:execute", () => Engine.Call(factory,
-                        JsValue.Undefined, new JsValue[] { host }).AsObject());
-                    return new[] { localHelpers, localBridge };
+                    ObjectInstance localBridge = AtStage("bootstrap:execute", () => Engine.Call(
+                        factory, JsValue.Undefined, new JsValue[] { host }).AsObject());
+                    return new[]
+                    {
+                        localHelpers,
+                        localBridge
+                    };
                 });
             }
-            catch { Engine.Dispose(); throw; }
+            catch
+            {
+                Engine.Dispose();
+                throw;
+            }
+
             helpers = initialized[0];
             bridge = initialized[1];
         }
@@ -138,19 +178,24 @@ namespace Kimchily.TypeScript
             {
                 ObjectInstance exports = Require(entry, null).AsObject();
                 JsValue constructor = AtStage("load:default-export", () => exports.Get("default"));
-                instance = AtStage("load:constructor", () => Engine.Call(bridge.Get("create"), bridge,
-                    new JsValue[] { constructor, 0 }).AsObject());
+                instance = AtStage("load:constructor", () => Engine.Call(
+                    bridge.Get("create"), bridge, new JsValue[] { constructor, 0 }).AsObject());
                 ObjectInstance fields = AtStage("load:host-fields", () => createFields(Engine));
-                AtStage("load:apply-fields", () => Engine.Call(bridge.Get("applyFields"), bridge,
-                    new JsValue[] { instance, fields }));
+                AtStage("load:apply-fields", () => Engine.Call(
+                    bridge.Get("applyFields"), bridge, new JsValue[] { instance, fields }));
                 return JsValue.Undefined;
             });
         }
 
         internal void Invoke(string name, params JsValue[] arguments)
         {
-            if (instance == null) return;
-            Run("lifecycle:" + name, ExecutionTimeoutMilliseconds, () => Engine.Call(helpers.Get("invoke"), helpers,
+            if (instance == null)
+            {
+                return;
+            }
+
+            Run("lifecycle:" + name, ExecutionTimeoutMilliseconds, () => Engine.Call(
+                helpers.Get("invoke"), helpers,
                 new JsValue[] { instance, name, new JsArray(Engine, arguments) }));
         }
 
@@ -160,7 +205,11 @@ namespace Kimchily.TypeScript
             {
                 JsValue raw = Engine.Call(helpers.Get("next"), helpers, new[] { generator });
                 var step = Engine.Call(helpers.Get("step"), helpers, new[] { raw }).AsObject();
-                return new[] { step.Get("0"), step.Get("1") };
+                return new[]
+                {
+                    step.Get("0"),
+                    step.Get("1")
+                };
             });
             seconds = (float)result[1].AsNumber();
             return !result[0].AsBoolean();
@@ -168,13 +217,22 @@ namespace Kimchily.TypeScript
 
         internal void Close(JsValue generator)
         {
-            Run("coroutine:cleanup", ExecutionTimeoutMilliseconds, () => Engine.Call(helpers.Get("close"), helpers, new[] { generator }));
+            Run("coroutine:cleanup", ExecutionTimeoutMilliseconds, () => Engine.Call(
+                helpers.Get("close"), helpers, new[] { generator }));
         }
 
         private T Run<T>(string stage, int timeoutMilliseconds, Func<T> action)
         {
-            if (disposed) throw new ObjectDisposedException(nameof(TypeScriptVm));
-            if (IsExecuting) throw new InvalidOperationException("Reentrant TypeScript host execution is not supported.");
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(TypeScriptVm));
+            }
+
+            if (IsExecuting)
+            {
+                throw new InvalidOperationException("Reentrant TypeScript host execution is not supported.");
+            }
+
             IsExecuting = true;
             budget.Begin(InstructionBudget, timeoutMilliseconds, stage);
             try
@@ -187,7 +245,11 @@ namespace Kimchily.TypeScript
             {
                 throw new InvalidOperationException("TypeScript [" + budget.Describe() + "]: " + exception.Message, exception);
             }
-            finally { budget.End(); IsExecuting = false; }
+            finally
+            {
+                budget.End();
+                IsExecuting = false;
+            }
         }
 
         private T AtStage<T>(string stage, Func<T> action)
@@ -205,73 +267,139 @@ namespace Kimchily.TypeScript
         private JsValue Require(string requested, string parent)
         {
             if (requested == "Kimchily.Script" || requested == "UnityEngine" || requested == "Kimchily.Network" || requested == "Kimchily.UI")
+            {
                 return bridge.Get("modules").AsObject().Get(requested);
+            }
+
             string id = ResolveModule(requested, parent);
             if (!sources.TryGetValue(id, out string source))
+            {
                 throw new InvalidOperationException("Module is not bundled: " + requested);
-            if (loaded.TryGetValue(id, out ObjectInstance existing)) return existing.Get("exports");
+            }
+
+            if (loaded.TryGetValue(id, out ObjectInstance existing))
+            {
+                return existing.Get("exports");
+            }
+
             var module = new JsObject(Engine);
             module.Set("exports", new JsObject(Engine));
             loaded.Add(id, module); // CommonJS cycles see the partially initialized exports object.
             var require = new ClrFunction(Engine, "require", (_, args) =>
             {
-                if (args.Length != 1 || !args[0].IsString()) throw new InvalidOperationException("require expects a bundled module name.");
+                if (args.Length != 1 || !args[0].IsString())
+                {
+                    throw new InvalidOperationException("require expects a bundled module name.");
+                }
+
                 return Require(args[0].AsString(), id);
             });
-            JsValue wrapper = AtStage("module:" + id + ":parse", () =>
-                Engine.Evaluate("(function(module,exports,require){\n'use strict';\n" + source + "\n})", id + ".js"));
-            AtStage("module:" + id + ":execute", () =>
-                Engine.Call(wrapper, JsValue.Undefined, new JsValue[] { module, module.Get("exports"), require }));
+            JsValue wrapper = AtStage("module:" + id + ":parse", () => Engine.Evaluate(
+                "(function(module,exports,require){\n'use strict';\n" + source + "\n})", id + ".js"));
+            AtStage("module:" + id + ":execute", () => Engine.Call(wrapper, JsValue.Undefined, new JsValue[] { module, module.Get("exports"), require }));
             return module.Get("exports");
         }
 
         internal static string ResolveModule(string requested, string parent)
         {
-            if (string.IsNullOrEmpty(requested) || requested.Length > 512 || requested.IndexOf('\\') >= 0 || requested.IndexOf(':') >= 0 || requested.StartsWith("/", StringComparison.Ordinal))
+            if (string.IsNullOrEmpty(requested) || requested.Length > 512 ||
+                requested.IndexOf('\\') >= 0 || requested.IndexOf(':') >= 0 ||
+                requested.StartsWith("/", StringComparison.Ordinal))
+            {
                 throw new InvalidOperationException("Invalid bundled module name.");
+            }
+
             string value = requested;
             if (value.StartsWith(".", StringComparison.Ordinal))
             {
-                if (parent == null) throw new InvalidOperationException("Entry module must use its absolute bundle ID.");
+                if (parent == null)
+                {
+                    throw new InvalidOperationException("Entry module must use its absolute bundle ID.");
+                }
+
                 int slash = parent.LastIndexOf('/');
                 value = (slash < 0 ? "" : parent.Substring(0, slash + 1)) + value;
             }
+
             var parts = new List<string>();
             foreach (string part in value.Split('/'))
             {
-                if (part == ".") continue;
+                if (part == ".")
+                {
+                    continue;
+                }
+
                 if (part == "..")
                 {
-                    if (parts.Count == 0) throw new InvalidOperationException("Module leaves bundle root.");
+                    if (parts.Count == 0)
+                    {
+                        throw new InvalidOperationException("Module leaves bundle root.");
+                    }
+
                     parts.RemoveAt(parts.Count - 1);
                 }
-                else if (part.Length == 0) throw new InvalidOperationException("Invalid bundled module name.");
-                else parts.Add(part);
+                else if (part.Length == 0)
+                {
+                    throw new InvalidOperationException("Invalid bundled module name.");
+                }
+                else
+                {
+                    parts.Add(part);
+                }
             }
+
             value = string.Join("/", parts);
-            if (value.EndsWith(".js", StringComparison.Ordinal) || value.EndsWith(".ts", StringComparison.Ordinal)) value = value.Substring(0, value.Length - 3);
+            if (value.EndsWith(".js", StringComparison.Ordinal) || value.EndsWith(".ts", StringComparison.Ordinal))
+            {
+                value = value.Substring(0, value.Length - 3);
+            }
+
             return value;
         }
 
         internal static void ValidateModules(Dictionary<string, string> modules)
         {
-            if (modules.Count == 0 || modules.Count > MaximumModules) throw new InvalidOperationException("TypeScript bundle module count is out of range.");
+            if (modules.Count == 0 || modules.Count > MaximumModules)
+            {
+                throw new InvalidOperationException("TypeScript bundle module count is out of range.");
+            }
+
             long total = 0;
             foreach (var pair in modules)
             {
-                if (pair.Key == "UnityEngine" || pair.Key == "Kimchily.Script" || pair.Key == "Kimchily.Network" || pair.Key == "Kimchily.UI" || ResolveModule(pair.Key, null) != pair.Key)
+                if (pair.Key == "UnityEngine" || pair.Key == "Kimchily.Script" ||
+                    pair.Key == "Kimchily.Network" || pair.Key == "Kimchily.UI" ||
+                    ResolveModule(pair.Key, null) != pair.Key)
+                {
                     throw new InvalidOperationException("Invalid or reserved TypeScript module ID: " + pair.Key);
-                if (pair.Value == null || pair.Value.Length > MaximumModuleCharacters) throw new InvalidOperationException("TypeScript module exceeds the source limit.");
+                }
+
+                if (pair.Value == null || pair.Value.Length > MaximumModuleCharacters)
+                {
+                    throw new InvalidOperationException("TypeScript module exceeds the source limit.");
+                }
+
                 total += pair.Value.Length;
             }
-            if (total > MaximumTotalCharacters) throw new InvalidOperationException("TypeScript bundle exceeds the source limit.");
+
+            if (total > MaximumTotalCharacters)
+            {
+                throw new InvalidOperationException("TypeScript bundle exceeds the source limit.");
+            }
         }
 
-        internal static int ClampBudget(int value) => Math.Max(MinimumBudget, Math.Min(MaximumBudget, value));
+        internal static int ClampBudget(int value)
+        {
+            return Math.Max(MinimumBudget, Math.Min(MaximumBudget, value));
+        }
 
         public void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                return;
+            }
+
             disposed = true;
             instance = null;
             loaded.Clear();

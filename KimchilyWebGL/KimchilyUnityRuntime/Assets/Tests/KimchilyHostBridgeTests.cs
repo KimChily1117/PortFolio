@@ -25,6 +25,7 @@ namespace Kimchily.World.Tests
             // Test Runner starts. End that dedicated test session before isolating
             // each case; never leave a previous additive demo or singleton behind.
             KimchilyHostBridge existing = KimchilyHostBridge.Instance;
+
             if (existing != null)
             {
                 existing.Receive(JsonUtility.ToJson(Command("CloseWorld", "setup-close")));
@@ -32,9 +33,13 @@ namespace Kimchily.World.Tests
                 UnityEngine.Object.Destroy(existing.gameObject);
                 yield return null;
             }
+
             Scene leftover = SceneManager.GetSceneByName(HostProtocol.DemoSceneName);
+
             if (leftover.IsValid() && leftover.isLoaded)
+            {
                 yield return SceneManager.UnloadSceneAsync(leftover);
+            }
 
             events.Clear();
             host = new GameObject("Host bridge test");
@@ -57,9 +62,15 @@ namespace Kimchily.World.Tests
                     Send(Command("CloseWorld", "teardown-close"));
                     yield return WaitUntil(() => bridge.State == WorldRuntimeState.Idle, "teardown world close");
                 }
+
                 bridge.EventRaised -= Capture;
             }
-            if (host != null) UnityEngine.Object.Destroy(host);
+
+            if (host != null)
+            {
+                UnityEngine.Object.Destroy(host);
+            }
+
             yield return null;
             Assert.IsNull(KimchilyHostBridge.Instance);
             AssertWorldUnloaded();
@@ -69,12 +80,19 @@ namespace Kimchily.World.Tests
         public IEnumerator WorldReadyWaitsForScriptStartInsteadOfOnlySceneLoad()
         {
             ScriptStartupProbe probe = null;
+
             void Loaded(Scene scene, LoadSceneMode mode)
             {
-                if (scene.name != HostProtocol.DemoSceneName) return;
+                if (scene.name != HostProtocol.DemoSceneName)
+                {
+                    return;
+                }
+
                 probe = scene.GetRootGameObjects()[0].AddComponent<ScriptStartupProbe>();
             }
+
             SceneManager.sceneLoaded += Loaded;
+
             try
             {
                 Send(Command("OpenWorld", "script-start"));
@@ -86,7 +104,10 @@ namespace Kimchily.World.Tests
                 probe.HasStarted = true;
                 yield return WaitForEvent("WorldReady", "script-start");
             }
-            finally { SceneManager.sceneLoaded -= Loaded; }
+            finally
+            {
+                SceneManager.sceneLoaded -= Loaded;
+            }
         }
 
         [UnityTest]
@@ -94,13 +115,19 @@ namespace Kimchily.World.Tests
         {
             void Loaded(Scene scene, LoadSceneMode mode)
             {
-                if (scene.name != HostProtocol.DemoSceneName) return;
+                if (scene.name != HostProtocol.DemoSceneName)
+                {
+                    return;
+                }
+
                 var probe = scene.GetRootGameObjects()[0].AddComponent<ScriptStartupProbe>();
                 probe.HasStarted = true;
                 probe.IsFaulted = true;
                 probe.LastError = "Invalid TypeScript constructor";
             }
+
             SceneManager.sceneLoaded += Loaded;
+
             try
             {
                 Send(Command("OpenWorld", "script-failure"));
@@ -110,7 +137,11 @@ namespace Kimchily.World.Tests
                 yield return WaitUntil(() => bridge.State == WorldRuntimeState.Idle, "failed scene cleanup");
                 AssertWorldUnloaded();
             }
-            finally { SceneManager.sceneLoaded -= Loaded; }
+            finally
+            {
+                SceneManager.sceneLoaded -= Loaded;
+            }
+
             Send(Command("OpenWorld", "script-retry"));
             yield return WaitForEvent("WorldReady", "script-retry");
         }
@@ -122,7 +153,6 @@ namespace Kimchily.World.Tests
             yield return WaitForEvent("RuntimeReady", "initialize-cold");
             Send(Command("Initialize", "initialize-warm"));
             yield return WaitForEvent("RuntimeReady", "initialize-warm");
-
             Assert.AreEqual(2, events.Count(item => item.type == "RuntimeReady"));
             Assert.IsTrue(events.All(item => item.protocolVersion == HostProtocol.Version));
             Assert.AreEqual(WorldRuntimeState.Idle, bridge.State);
@@ -133,7 +163,6 @@ namespace Kimchily.World.Tests
         {
             bridge.Receive("{invalid JSON");
             yield return WaitUntil(() => events.Any(item => item.code == "INVALID_JSON"), "invalid JSON failure");
-
             var wrongVersion = Command("OpenWorld", "wrong-version");
             wrongVersion.protocolVersion = 999;
             Send(wrongVersion);
@@ -145,7 +174,6 @@ namespace Kimchily.World.Tests
             Send(wrongRevision);
             Send(Command("UnsupportedCommand", "wrong-command"));
             Send(Command("OpenWorld", string.Empty));
-
             yield return WaitForEvent("WorldFailed", "wrong-command");
             Assert.AreEqual("UNSUPPORTED_PROTOCOL", Event("WorldFailed", "wrong-version").code);
             Assert.AreEqual("UNKNOWN_WORLD", Event("WorldFailed", "wrong-world").code);
@@ -173,25 +201,30 @@ namespace Kimchily.World.Tests
                 Assert.AreEqual(HostProtocol.DemoWorldId, Event("WorldReady", openId).worldId);
                 Assert.AreEqual(HostProtocol.DemoRevisionId, Event("WorldReady", openId).revisionId);
                 Assert.AreEqual(1, Event("WorldReady", openId).progress);
-
                 Scene loaded = SceneManager.GetSceneByName(HostProtocol.DemoSceneName);
                 Assert.IsTrue(loaded.IsValid() && loaded.isLoaded);
                 var players = loaded.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<KimchilyMobilePlayer>(true)).ToArray();
                 Assert.AreEqual(1, players.Length, "Each world entry creates one controllable player.");
-                CoroutineScheduler[] schedulers = loaded.GetRootGameObjects()
-                    .SelectMany(root => root.GetComponentsInChildren<CoroutineScheduler>(true)).ToArray();
+                CoroutineScheduler[] schedulers = loaded.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<CoroutineScheduler>(true)).ToArray();
                 Assert.Greater(schedulers.Length, 0, "The demo should exercise the SDK scheduler.");
                 Assert.Greater(schedulers.Sum(item => item.ActiveCount), 0);
                 bool disposed = false;
+
                 IEnumerator LongWork()
                 {
-                    try { yield return new WaitForSecondsRealtime(60); }
-                    finally { disposed = true; }
+                    try
+                    {
+                        yield return new WaitForSecondsRealtime(60);
+                    }
+                    finally
+                    {
+                        disposed = true;
+                    }
                 }
+
                 CoroutineHandle handle = schedulers[0].StartRoutine(LongWork(), schedulers[0].gameObject);
                 Send(Command("CloseWorld", closeId));
                 yield return WaitForEvent("WorldClosed", closeId);
-
                 Assert.IsTrue(disposed, "WorldClosed must follow explicit coroutine cleanup.");
                 Assert.AreEqual(CoroutineStatus.Cancelled, handle.Status);
                 Assert.AreEqual(WorldRuntimeState.Idle, bridge.State);
@@ -208,11 +241,13 @@ namespace Kimchily.World.Tests
             Send(Command("OpenWorld", "open-cancelled"));
             Send(Command("CloseWorld", "close-loading"));
             yield return WaitForEvent("WorldClosed", "close-loading");
-
             Assert.AreEqual("CANCELLED", Event("WorldFailed", "open-cancelled").code);
             Assert.IsFalse(events.Any(item => item.type == "WorldReady" && item.requestId == "open-cancelled"));
-            Assert.Less(events.FindIndex(item => item.type == "WorldFailed" && item.requestId == "open-cancelled"),
-                events.FindIndex(item => item.type == "WorldClosed" && item.requestId == "close-loading"));
+            Assert.Less(
+                events.FindIndex(item => item.type == "WorldFailed"
+                && item.requestId == "open-cancelled"),
+                events.FindIndex(item => item.type == "WorldClosed"
+                && item.requestId == "close-loading"));
             Assert.AreEqual(WorldRuntimeState.Idle, bridge.State);
             AssertWorldUnloaded();
         }
@@ -226,12 +261,12 @@ namespace Kimchily.World.Tests
             yield return WaitForEvent("WorldReady", "accepted-open");
             Send(Command("OpenWorld", "busy-ready"));
             yield return WaitForEvent("WorldFailed", "busy-ready");
-
             Assert.AreEqual("BUSY", Event("WorldFailed", "busy-loading").code);
             Assert.AreEqual("BUSY", Event("WorldFailed", "busy-ready").code);
             Assert.AreEqual("accepted-open", bridge.CurrentOpenRequestId);
-            Assert.AreEqual(1, Enumerable.Range(0, SceneManager.sceneCount)
-                .Select(SceneManager.GetSceneAt).Count(scene => scene.name == HostProtocol.DemoSceneName));
+            Assert.AreEqual(
+                1,
+                Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Count(scene => scene.name == HostProtocol.DemoSceneName));
             Assert.AreEqual(1, events.Count(item => item.type == "WorldReady"));
         }
 
@@ -244,7 +279,6 @@ namespace Kimchily.World.Tests
             Send(Command("CloseWorld", "close-second"));
             yield return WaitForEvent("WorldClosed", "close-first");
             yield return WaitForEvent("WorldClosed", "close-second");
-
             Assert.AreEqual(1, events.Count(item => item.type == "WorldClosed" && item.requestId == "close-first"));
             Assert.AreEqual(1, events.Count(item => item.type == "WorldClosed" && item.requestId == "close-second"));
             Assert.IsFalse(events.Any(item => item.type == "WorldFailed"));
@@ -255,27 +289,47 @@ namespace Kimchily.World.Tests
             Assert.AreEqual("ALREADY_CLOSED", Event("WorldClosed", "close-already-idle").code);
         }
 
-        static HostCommand Command(string type, string requestId) => new HostCommand
+        static HostCommand Command(string type, string requestId)
         {
-            protocolVersion = HostProtocol.Version,
-            type = type,
-            requestId = requestId,
-            worldId = HostProtocol.DemoWorldId,
-            revisionId = HostProtocol.DemoRevisionId
-        };
+            return new HostCommand
+            {
+                protocolVersion = HostProtocol.Version,
+                type = type,
+                requestId = requestId,
+                worldId = HostProtocol.DemoWorldId,
+                revisionId = HostProtocol.DemoRevisionId
+            };
+        }
 
-        void Send(HostCommand command) => bridge.Receive(JsonUtility.ToJson(command));
-        void Capture(HostEvent payload) => events.Add(payload);
-        HostEvent Event(string type, string requestId) =>
-            events.Single(item => item.type == type && item.requestId == requestId);
+        void Send(HostCommand command)
+        {
+            bridge.Receive(JsonUtility.ToJson(command));
+        }
 
-        IEnumerator WaitForEvent(string type, string requestId) =>
-            WaitUntil(() => events.Any(item => item.type == type && item.requestId == requestId), type + " for " + requestId);
+        void Capture(HostEvent payload)
+        {
+            events.Add(payload);
+        }
+
+        HostEvent Event(string type, string requestId)
+        {
+            return events.Single(item => item.type == type && item.requestId == requestId);
+        }
+
+        IEnumerator WaitForEvent(string type, string requestId)
+        {
+            return WaitUntil(() => events.Any(item => item.type == type && item.requestId == requestId), type + " for " + requestId);
+        }
 
         static IEnumerator WaitUntil(Func<bool> condition, string description)
         {
             float deadline = Time.realtimeSinceStartup + TimeoutSeconds;
-            while (!condition() && Time.realtimeSinceStartup < deadline) yield return null;
+
+            while (!condition() && Time.realtimeSinceStartup < deadline)
+            {
+                yield return null;
+            }
+
             Assert.IsTrue(condition(), "Timed out waiting for " + description);
         }
 

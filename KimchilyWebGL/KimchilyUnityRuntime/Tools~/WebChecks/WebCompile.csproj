@@ -9,11 +9,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../../KimchilySDK/Packages/com.kimchily.creator/Runtime/**/*.cs" />
+    <Compile Include="../../../KimchilySDK/Packages/com.kimchily.networking/Runtime/**/*.cs" />
     <Compile Include="../../../KimchilySDK/Packages/com.kimchily.typescript/Runtime/**/*.cs" />
     <Compile Include="../../Assets/Runtime/*.cs" />
     <Compile Include="../../Assets/Editor/*.cs" />
     <Reference Include="$(UnityEditorRoot)/Data/Managed/UnityEngine/*.dll" />
+    <Reference Include="$(UnityEditorRoot)/Data/PlaybackEngines/WebGLSupport/Managed/UnityEngine.WebGLModule.dll" />
     <Reference Include="$(UnityEditorRoot)/Data/Managed/UnityEditor/*.dll" />
     <Reference Include="../../../KimchilySDK/Packages/com.kimchily.typescript/Runtime/Plugins/*.dll" />
+    <!-- Unity imports these package assemblies into the runtime project's Library. -->
+    <Reference Include="../../Library/ScriptAssemblies/Unity.TextMeshPro.dll" />
+    <Reference Include="../../Library/ScriptAssemblies/UnityEngine.UI.dll" />
   </ItemGroup>
 </Project>
