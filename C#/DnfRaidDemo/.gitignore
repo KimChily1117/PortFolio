@@ -1,0 +1,15 @@
+# Generated Unity/editor/build output
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+UserSettings/
+Build/
+*.csproj
+*.sln
+*.log
+*.zip
+.vs/
+.idea/
+.DS_Store
+Thumbs.db

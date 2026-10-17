@@ -1,0 +1,561 @@
+{
+  "schema": 1,
+  "actors": [
+    {
+      "id": "player",
+      "resourcePrefix": "Art/player/",
+      "canvasWidth": 500,
+      "canvasHeight": 500,
+      "footX": 250,
+      "footY": 338,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 56,
+      "clips": [
+        {
+          "name": "idle",
+          "fps": 6,
+          "frames": [
+            39,
+            39,
+            40,
+            41
+          ]
+        },
+        {
+          "name": "walk",
+          "fps": 11,
+          "frames": [
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58
+          ]
+        },
+        {
+          "name": "attack",
+          "fps": 24,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "durations": [
+            0.02,
+            0.02,
+            0.02,
+            0.06,
+            0.06,
+            0.05,
+            0.05,
+            0.05
+          ]
+        },
+        {
+          "name": "attack2",
+          "fps": 18,
+          "frames": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "durations": [
+            0.06,
+            0.06,
+            0.06,
+            0.05,
+            0.05,
+            0.05
+          ]
+        },
+        {
+          "name": "attack3",
+          "fps": 21,
+          "frames": [
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "durations": [
+            0.03,
+            0.03,
+            0.04,
+            0.04,
+            0.04,
+            0.075,
+            0.075
+          ]
+        },
+        {
+          "name": "cast",
+          "fps": 9,
+          "frames": [
+            90,
+            91,
+            92,
+            93
+          ]
+        },
+        {
+          "name": "hurt",
+          "fps": 9,
+          "frames": [
+            45,
+            46
+          ]
+        },
+        {
+          "name": "death",
+          "fps": 7,
+          "frames": [
+            47,
+            48,
+            49,
+            50
+          ]
+        },
+        {
+          "name": "jump",
+          "fps": 12,
+          "frames": [
+            63,
+            64,
+            65,
+            66,
+            67
+          ]
+        },
+        {
+          "name": "jump_takeoff",
+          "fps": 14,
+          "frames": [
+            61,
+            62
+          ]
+        },
+        {
+          "name": "jump_rise",
+          "fps": 12,
+          "frames": [
+            63,
+            64
+          ]
+        },
+        {
+          "name": "jump_fall",
+          "fps": 12,
+          "frames": [
+            65,
+            66,
+            67
+          ]
+        },
+        {
+          "name": "land",
+          "fps": 1,
+          "frames": [
+            68
+          ]
+        },
+        {
+          "name": "air_attack",
+          "fps": 18,
+          "frames": [
+            69,
+            70,
+            71,
+            72,
+            73,
+            74
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boss1",
+      "resourcePrefix": "Art/boss1/",
+      "canvasWidth": 500,
+      "canvasHeight": 500,
+      "footX": 250,
+      "footY": 371,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 61,
+      "clips": [
+        {
+          "name": "idle",
+          "fps": 8,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "name": "walk",
+          "fps": 9,
+          "frames": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "name": "attack",
+          "fps": 15,
+          "frames": [
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ]
+        },
+        {
+          "name": "cast",
+          "fps": 10,
+          "frames": [
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104
+          ]
+        },
+        {
+          "name": "hurt",
+          "fps": 10,
+          "frames": [
+            158,
+            159,
+            160,
+            161,
+            162
+          ]
+        },
+        {
+          "name": "death",
+          "fps": 8,
+          "frames": [
+            163,
+            164,
+            165,
+            166,
+            167
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boss2",
+      "resourcePrefix": "Art/boss2/",
+      "canvasWidth": 1200,
+      "canvasHeight": 1200,
+      "footX": 600,
+      "footY": 828,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 48,
+      "clips": [
+        {
+          "name": "idle",
+          "fps": 8,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        },
+        {
+          "name": "walk",
+          "fps": 9,
+          "frames": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "name": "attack",
+          "fps": 13,
+          "frames": [
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        {
+          "name": "cast",
+          "fps": 10,
+          "frames": [
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49
+          ]
+        },
+        {
+          "name": "hurt",
+          "fps": 10,
+          "frames": [
+            96,
+            97,
+            98,
+            99
+          ]
+        },
+        {
+          "name": "death",
+          "fps": 8,
+          "frames": [
+            166,
+            167,
+            168,
+            169,
+            170,
+            171
+          ]
+        }
+      ]
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "bakal_hall",
+      "resource": "Art/arena/bakal_hall",
+      "width": 1280,
+      "height": 720,
+      "playableRect": [
+        100,
+        465,
+        1080,
+        200
+      ],
+      "layoutNote": "Demo layout authored from original Bakal hall PNG tiles; original map placement data was not recovered."
+    }
+  ],
+  "effects": [
+    {
+      "id": "skill_ghostslash",
+      "resourcePrefix": "Art/skill_ghostslash/",
+      "canvasWidth": 800,
+      "canvasHeight": 600,
+      "footX": 400,
+      "footY": 450,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 6,
+      "clips": [
+        {
+          "name": "play",
+          "fps": 14,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skill_sidewind",
+      "resourcePrefix": "Art/skill_sidewind/",
+      "canvasWidth": 500,
+      "canvasHeight": 500,
+      "footX": 250,
+      "footY": 340,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 5,
+      "clips": [
+        {
+          "name": "play",
+          "fps": 14,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boss_firepole",
+      "resourcePrefix": "Art/boss_firepole/",
+      "canvasWidth": 777,
+      "canvasHeight": 742,
+      "footX": 270,
+      "footY": 500,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 9,
+      "clips": [
+        {
+          "name": "play",
+          "fps": 16,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ],
+      "alphaNote": "Source appears additive with opaque black. Runtime copy converts RGB intensity to straight alpha for standard GUI blending; raw decoded PNG remains unchanged."
+    },
+    {
+      "id": "boss_explosion",
+      "resourcePrefix": "Art/boss_explosion/",
+      "canvasWidth": 974,
+      "canvasHeight": 792,
+      "footX": 500,
+      "footY": 690,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 10,
+      "clips": [
+        {
+          "name": "play",
+          "fps": 16,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        }
+      ],
+      "alphaNote": "Source appears additive with opaque black. Runtime copy converts RGB intensity to straight alpha for standard GUI blending; raw decoded PNG remains unchanged."
+    },
+    {
+      "id": "boss_breath",
+      "resourcePrefix": "Art/boss_breath/",
+      "canvasWidth": 169,
+      "canvasHeight": 174,
+      "footX": 84,
+      "footY": 87,
+      "defaultFacing": "right",
+      "filePattern": "{index:04d}",
+      "frameCount": 10,
+      "clips": [
+        {
+          "name": "play",
+          "fps": 16,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        }
+      ],
+      "alphaNote": "Source appears additive with opaque black. Runtime copy converts RGB intensity to straight alpha for standard GUI blending; raw decoded PNG remains unchanged."
+    }
+  ],
+  "notes": [
+    "PNG RGBA full-canvas frames preserve source IMG offsets.",
+    "Clip names, frame order, fps, and foot anchors are visual demo selections, not recovered original ANI scripts.",
+    "The player is a composite male Swordman avatar with katana; skill visual resources include Ghostblade effects.",
+    "Original DNF resources were read only and remain in D:/Games/DNF/ImagePacks2.",
+    "Idle review: player[39,39,40,41] follows the four user reference images, including the duplicate first pose;6fps is demo timing. Boss2 uses the visually selected0-9 breathing cycle at8fps. Original ANI boundaries and timing remain unverified.",
+    "Motion review v0.1.2: player attack0-7, attack2 8-13, attack3 14-20 each use explicit durations totaling0.33s. Takeoff61-62, rise63-64, fall65-67, landing68 and air attack69-74 are visually selected stages; original ANI and timing were not recovered."
+  ]
+}

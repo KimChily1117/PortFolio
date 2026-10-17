@@ -69,6 +69,15 @@ DirectX 클라이언트와 서버의 새 경로 빌드 순서는 [D3D 이전 안
 
 ---
 
+### 5. DNF Raid Demo (Unity 2인 협동 액션)
+
+- Unity 2022.3.16f1 / C# / JSON UDP 기반 호스트 권한 협동 전투 데모입니다.
+- 기본 3타·스킬·회피·점프, 보스 패턴 6종, 페이즈·무력화·승패와 모션 상태 분리를 구현했습니다.
+- [프로젝트·실행 안내](C%23/DnfRaidDemo/README.md) · [전투 코드](C%23/DnfRaidDemo/UnityProject/Assets/Scripts/RaidSimulation.cs) · [네트워크 코드](C%23/DnfRaidDemo/UnityProject/Assets/Scripts/RaidNetwork.cs)
+- Unity 프로젝트·실행 리소스·빌드·검사 스크립트를 포함하며, 리소스 출처와 AI 구현 지원은 [출처](C%23/DnfRaidDemo/THIRD-PARTY.md)에 구분했습니다.
+
+---
+
 ## 📞 Contact
 
 **김선엽 / Game Developer**  
