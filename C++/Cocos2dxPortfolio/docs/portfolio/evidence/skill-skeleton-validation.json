@@ -1,0 +1,112 @@
+{
+  "test": "aster_spine_tests actual bundled runtime; accepts initially empty FX",
+  "total": 21,
+  "passed": 21,
+  "entries": [
+    {
+      "json": "Resources/reference/skills/assets/effect/achates_skill_03_2/achates_skill_03_2.cocos.json",
+      "passed": true,
+      "output": "PASS: 65 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/arameenta_sk3_b/arameenta_sk3_b.cocos.json",
+      "passed": true,
+      "output": "PASS: 38 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/arameenta_sk3_f/arameenta_sk3_f.cocos.json",
+      "passed": true,
+      "output": "PASS: 149 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/arameenta_sk3_m/arameenta_sk3_m.cocos.json",
+      "passed": true,
+      "output": "PASS: 103 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/clarisa_sk2_eff_b/clarisa_sk2_eff_b.cocos.json",
+      "passed": true,
+      "output": "PASS: 13 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/clarisa_sk2_eff_f/clarisa_sk2_eff_f.cocos.json",
+      "passed": true,
+      "output": "PASS: 29 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/clarisa_sk3_eff_b/clarisa_sk3_eff_b.cocos.json",
+      "passed": true,
+      "output": "PASS: 24 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/clarisa_sk3_eff_black/clarisa_sk3_eff_black.cocos.json",
+      "passed": true,
+      "output": "PASS: 32 bones, 2 animations, 1 skins, 40 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/clarisa_sk3_eff_bz2/clarisa_sk3_eff_bz2.cocos.json",
+      "passed": true,
+      "output": "PASS: 15 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/clarisa_sk3_eff_f/clarisa_sk3_eff_f.cocos.json",
+      "passed": true,
+      "output": "PASS: 25 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/clarisa_sk3_eff_fz2/clarisa_sk3_eff_fz2.cocos.json",
+      "passed": true,
+      "output": "PASS: 33 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/nixid_eff_sk3/nixid_eff_sk3.cocos.json",
+      "passed": true,
+      "output": "PASS: 105 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/nixid_eff_sk3_ground/nixid_eff_sk3_ground.cocos.json",
+      "passed": true,
+      "output": "PASS: 7 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/effect/nixid_eff_sk3_self/nixid_eff_sk3_self.cocos.json",
+      "passed": true,
+      "output": "PASS: 30 bones, 1 animations, 1 skins, 20 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/model/achates/achates.cocos.json",
+      "passed": true,
+      "output": "PASS: 202 bones, 20 animations, 1 skins, 400 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/model/araminta/araminta.cocos.json",
+      "passed": true,
+      "output": "PASS: 232 bones, 20 animations, 1 skins, 400 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/model/clarisa/clarisa.cocos.json",
+      "passed": true,
+      "output": "PASS: 183 bones, 20 animations, 1 skins, 400 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/model/dominiel/dominiel.cocos.json",
+      "passed": true,
+      "output": "PASS: 95 bones, 20 animations, 1 skins, 400 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/portrait/c1017/c1017.cocos.json",
+      "passed": true,
+      "output": "PASS: 155 bones, 4 animations, 7 skins, 560 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/portrait/c1028/c1028.cocos.json",
+      "passed": true,
+      "output": "PASS: 169 bones, 1 animations, 7 skins, 140 sampled animated poses"
+    },
+    {
+      "json": "Resources/reference/skills/assets/portrait/c1037/c1037.cocos.json",
+      "passed": true,
+      "output": "PASS: 129 bones, 1 animations, 7 skins, 140 sampled animated poses"
+    }
+  ]
+}

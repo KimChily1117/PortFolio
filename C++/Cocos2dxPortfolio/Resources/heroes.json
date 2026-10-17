@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "heroes": [
+    {"name":"세렌","role":"VANGUARD","skill":"여명의 일격","hp":420,"attack":48,"defense":18,"speed":103},
+    {"name":"루네","role":"ARCANIST","skill":"별빛 개화","hp":285,"attack":59,"defense":10,"speed":96},
+    {"name":"카엘","role":"RANGER","skill":"달빛 화살","hp":325,"attack":52,"defense":12,"speed":118}
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "action-basic": {
+    "snapshots": 17,
+    "hpHeldUntilImpact": true,
+    "hpMatchesAtImpact": true,
+    "enemyApproachVisible": true,
+    "maxActions": 11,
+    "maxEnemyActions": 4,
+    "idleRestorationObserved": true
+  },
+  "action-fast": {
+    "snapshots": 17,
+    "hpHeldUntilImpact": true,
+    "hpMatchesAtImpact": true,
+    "enemyApproachVisible": true,
+    "maxActions": 21,
+    "maxEnemyActions": 9,
+    "idleRestorationObserved": true
+  },
+  "action-pause": {
+    "snapshots": 17,
+    "hpHeldUntilImpact": true,
+    "hpMatchesAtImpact": true,
+    "enemyApproachVisible": true,
+    "maxActions": 10,
+    "maxEnemyActions": 4,
+    "idleRestorationObserved": true,
+    "poseHpAudioClockUnchanged": true
+  },
+  "automaticBattle": {
+    "victoryAfterPresentation": true,
+    "normalActions": 6,
+    "normalImpacts": 6,
+    "compositeS3": 4,
+    "enemyActions": 3,
+    "allActorsAtHome": true
+  },
+  "cutscenesDisabled": {
+    "victoryAfterPresentation": true,
+    "normalActions": 10,
+    "normalImpacts": 10,
+    "compositeS3": 0,
+    "enemyActions": 3,
+    "allActorsAtHome": true,
+    "pendingAudio": 0,
+    "musicPlaying": true
+  }
+}

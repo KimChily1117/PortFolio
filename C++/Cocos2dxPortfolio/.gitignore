@@ -1,0 +1,22 @@
+.deps/
+build*/
+dist/
+.vs/
+.idea/
+*.user
+*.log
+__pycache__/
+local.properties
+.gradle/
+.cxx/
+.externalNativeBuild/
+captures/
+Resources/reference/epicseven/
+Resources/reference/skills/
+Resources/reference/frontend/
+
+Resources/reference/audio/
+
+# Local resource bundles and duplicate documentation archive.
+/Resources/reference/
+/docs.zip

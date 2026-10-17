@@ -1,0 +1,69 @@
+buildscript {
+    repositories { google(); mavenCentral() }
+    dependencies { classpath 'com.android.tools.build:gradle:4.2.2' }
+}
+import com.android.build.gradle.internal.tasks.CompressAssetsTask
+import com.android.builder.packaging.PackagingUtils
+import com.android.zipflinger.BytesSource
+import com.android.zipflinger.ZipArchive
+import java.util.zip.CRC32
+import java.util.zip.ZipFile
+
+// AGP 4.2 schedules one Gradle worker lease per asset. At >35,000 assets,
+// Gradle 6.7 spends minutes contending on its global worker/cache lock.
+// Keep its task inputs, outputs, predicate, compression level and Zipflinger
+// writer, but perform the same work in one task action. Existing archives are
+// reusable only when their entry path, method, length and source CRC all match.
+tasks.withType(CompressAssetsTask).configureEach { assetTask ->
+    actions.clear()
+    doLast {
+        def inputRoot = inputDir.get().asFile.toPath().toAbsolutePath().normalize()
+        def outputRoot = outputDir.get().asFile.toPath().toAbsolutePath().normalize()
+        def predicate = PackagingUtils.getNoCompressPredicateForJavaRes(noCompress.get())
+        def level = compressionLevel.get()
+        def expected = new HashSet<String>()
+        int written = 0
+        int reused = 0
+        project.fileTree(inputRoot.toFile()).files.sort().each { source ->
+            String entryPath = 'assets/' + inputRoot.relativize(source.toPath().toAbsolutePath().normalize()).toString().replace('\\', '/')
+            def destination = outputRoot.resolve(entryPath + '.jar').normalize()
+            if (!destination.startsWith(outputRoot)) throw new GradleException('Asset output escaped its build directory')
+            expected.add(destination.toString())
+            int entryLevel = predicate.test(entryPath) ? 0 : level
+            int method = entryLevel == 0 ? 0 : 8
+            boolean valid = false
+            if (destination.toFile().isFile()) {
+                try {
+                    new ZipFile(destination.toFile()).withCloseable { archive ->
+                        def entry = archive.getEntry(entryPath)
+                        if (archive.size() == 1 && entry && entry.size == source.length() && entry.method == method) {
+                            def crc = new CRC32()
+                            source.withInputStream { stream ->
+                                byte[] buffer = new byte[65536]
+                                int count
+                                while ((count = stream.read(buffer)) != -1) crc.update(buffer, 0, count)
+                            }
+                            valid = crc.value == entry.crc
+                        }
+                    }
+                } catch (IOException ignored) { valid = false }
+            }
+            if (valid) { ++reused } else {
+                java.nio.file.Files.createDirectories(destination.parent)
+                java.nio.file.Files.deleteIfExists(destination)
+                new ZipArchive(destination.toFile()).withCloseable { archive ->
+                    archive.add(new BytesSource(source, entryPath, entryLevel))
+                }
+                ++written
+            }
+            if ((written + reused) % 5000 == 0) logger.lifecycle("Assets: ${written + reused} processed (${reused} unchanged)")
+        }
+        // Remove only obsolete archive files under this task's declared output.
+        project.fileTree(outputRoot.toFile()).matching { include '**/*.jar' }.files.each { stale ->
+            def path = stale.toPath().toAbsolutePath().normalize()
+            if (!path.startsWith(outputRoot)) throw new GradleException('Stale asset escaped its build directory')
+            if (!expected.contains(path.toString())) java.nio.file.Files.delete(path)
+        }
+        logger.lifecycle("Assets complete: ${written} written, ${reused} reused, ${expected.size()} total")
+    }
+}

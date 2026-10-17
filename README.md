@@ -60,6 +60,15 @@ DirectX 클라이언트와 서버의 새 경로 빌드 순서는 [D3D 이전 안
 
 ---
 
+### 4. Cocos2d-x 턴제 전투·스킬 연출 (ASTER에서 확장)
+
+- Cocos2d-x 4 / C++17 기반 로컬 4인 턴제 전투 프로젝트입니다.
+- 전투 규칙과 화면 표현 분리, S3 연출 시간표, Spine·WebP 호환, 저장 마이그레이션을 다룹니다.
+- [포트폴리오 소개·실기기 영상](C++/Cocos2dxPortfolio/docs/portfolio/README.md) · [소스·빌드 안내](C++/Cocos2dxPortfolio/README.md) · [검증 기록](C++/Cocos2dxPortfolio/docs/FINAL_VALIDATION.md)
+- 원작 리소스와 실행 패키지는 포함하지 않으며, 사용 기반과 Codex 구현 지원은 [출처](C++/Cocos2dxPortfolio/docs/portfolio/CREDITS.md)에 구분했습니다.
+
+---
+
 ## 📞 Contact
 
 **김선엽 / Game Developer**  

@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+// Large local reference libraries need several copies during asset packaging.
+// Keep build output relocatable without moving or deleting the source project.
+if (project.hasProperty('asterBuildRoot')) {
+    buildDir = new File(project.property('asterBuildRoot'), 'app')
+}
+
+android {
+    compileSdkVersion 33
+    buildToolsVersion '30.0.3'
+    ndkVersion '21.0.6113669'
+    defaultConfig {
+        applicationId 'com.portfolio.asteridle'
+        minSdkVersion 24
+        targetSdkVersion 33
+        versionCode 2
+        versionName '0.2.0'
+        ndk { abiFilters 'arm64-v8a' }
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_TOOLCHAIN=clang'
+                cppFlags '-std=c++17'
+                targets 'AsterIdle'
+            }
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path '../../CMakeLists.txt'
+            version '3.18.1'
+            if (project.hasProperty('asterBuildRoot')) {
+                buildStagingDirectory new File(project.property('asterBuildRoot'), 'native')
+            }
+        }
+    }
+    // Ogg and WebP are already compressed and are streamed/read as bytes.
+    // Leave JSON/atlas compressed: the full animation library is >1 GiB of JSON.
+    aaptOptions { noCompress 'ogg', 'webp', 'mp3' }
+    sourceSets.main {
+        assets.srcDir '../../Resources'
+        jniLibs.srcDirs = []
+    }
+    buildTypes {
+        debug { debuggable true }
+        release { minifyEnabled false }
+    }
+}
+dependencies { implementation project(':libcocos2dx') }
+apply from: '../asset-compression.gradle'

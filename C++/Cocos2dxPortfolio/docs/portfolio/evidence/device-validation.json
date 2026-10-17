@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "verified_date": "2026-10-15",
+  "device": {
+    "model": "Samsung SM-G955N (Galaxy S8+)",
+    "android": 9,
+    "api": 28,
+    "abi": "arm64-v8a"
+  },
+  "apk": {
+    "checkpoint": "v6 final",
+    "package": "com.portfolio.asteridle",
+    "bytes": 2571368020,
+    "sha256": "511c76a1bcaa30cc2f67ec06979e8076a5c6e260ad6a693614fcc6bbd6d5906c",
+    "installed_base_apk_sha256": "511c76a1bcaa30cc2f67ec06979e8076a5c6e260ad6a693614fcc6bbd6d5906c",
+    "install_mode": "adb install -r --no-streaming; no uninstall or data clear",
+    "asset_validation": "apk-validation.json",
+    "startup_ms": 3534
+  },
+  "save": {
+    "original_v1_backup_preserved": true,
+    "migration_gold_before": 2750,
+    "pending_gold_settled_once": 546,
+    "migration_gold_after": 3296,
+    "victory_reward": 275,
+    "current": {
+      "version": 2,
+      "gold": 3571,
+      "stage": 9,
+      "bestCleared": 8,
+      "victories": 15,
+      "levels": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "same_after_v6_restart_and_final_lobby": true,
+    "manually_edited": false
+  },
+  "checks": [
+    {
+      "checkpoint": "v4",
+      "check": "manual target selection",
+      "result": "pass",
+      "auto": false,
+      "wait_seconds_at_least": 6,
+      "before_and_after": {
+        "hero": "Dominiel",
+        "hp": "420/420",
+        "combat_readiness_percent": 100
+      },
+      "screenshots": [
+        "battle-manual.png",
+        "battle-manual-after.png"
+      ]
+    },
+    {
+      "checkpoint": "v4",
+      "check": "S3 rendering",
+      "result": "pass for observed sequences",
+      "visually_confirmed_skill": "c1037.s3",
+      "screenshots": [
+        "battle-s3-1.png",
+        "battle-s3-2.png"
+      ],
+      "log_evidence": "Aramintha BGHATCH at 1.7s, CUTIN, camera and STOP cues; no accompanying shader compile/link failure observed"
+    },
+    {
+      "checkpoint": "v4",
+      "check": "AUTO battle result",
+      "result": "VICTORY",
+      "stage": "2-3",
+      "gold_reward": 275,
+      "screenshot": "battle-result.png"
+    },
+    {
+      "checkpoint": "v5",
+      "check": "ordinary attack and enemy approach",
+      "result": "pass",
+      "evidence": "ACTION start-impact-complete logs; sampled log reached 31 completions and 31 impacts; video visually shows Clarissa approach/attack and enemy guard/ogre approach",
+      "video": "action-auto.mp4",
+      "cutscenes_enabled_during_motion_capture": false
+    },
+    {
+      "checkpoint": "v5",
+      "check": "menu pauses in-flight enemy attack",
+      "result": "pass",
+      "wait_seconds": 4,
+      "screenshots": [
+        "action-paused-before.png",
+        "action-paused-after.png"
+      ],
+      "both_screenshots_sha256": "cf959dca45df2ef61c277cd64bc440af6476a8af5ae3ff4894d6c4d8a6aaaecb",
+      "resume_in_same_v5_battle": "not tested; subsequent v6 installation replaced process"
+    },
+    {
+      "checkpoint": "v6",
+      "check": "sound library UI and Home/resume",
+      "result": "pass for UI/resume",
+      "entries": 29003,
+      "resume_ms": 339,
+      "screenshots": [
+        "audio-library.png",
+        "audio-resumed.png"
+      ],
+      "individual_library_track_playback": "not verified; captured active playback count was zero"
+    },
+    {
+      "checkpoint": "v6",
+      "check": "final settings and lobby",
+      "result": "pass",
+      "cutscenes_enabled": true,
+      "sound_enabled": true,
+      "screenshots": [
+        "settings-final.png",
+        "lobby-final.png"
+      ]
+    }
+  ],
+  "video": {
+    "file": "action-auto.mp4",
+    "build_checkpoint": "v5",
+    "duration_seconds": 25.02,
+    "codec": "H264",
+    "width": 1480,
+    "height": 720,
+    "average_fps": 24.9,
+    "bytes": 6560398,
+    "audio_track": false,
+    "note": "Android screenrecord contains video only; final v6 adds S3 fallback sound cleanup and QA flag to the same ordinary-action implementation."
+  },
+  "audio": {
+    "battle_backend": "OpenSL/AudioTrack decoded Ogg music, effects and Korean voices; AudioFlinger showed active 24kHz and 48kHz app tracks",
+    "listening_quality": "not assessed",
+    "library_individual_playback": "not verified"
+  },
+  "diagnostics": {
+    "observed_native_or_java_fatal_crash": false,
+    "crash_buffer_empty_during_checks": true,
+    "startup_gl_warning": "OpenGL 0x0501 at ProgramGL::getActiveAttributes:221",
+    "shader_compile_or_link_failure_during_observed_S3": false,
+    "memory_sample_pss_kib": 259382,
+    "memory_sample_is_peak": false,
+    "raw_evidence_location": "work/android-device-evidence (local, excluded from portfolio export)"
+  },
+  "final_state": {
+    "route": "lobby",
+    "cutscenes_enabled": true,
+    "sound_enabled": true,
+    "gold": 3571,
+    "clear_count": 8,
+    "next_stage": "2-4",
+    "screenshot": "lobby-final.png"
+  }
+}

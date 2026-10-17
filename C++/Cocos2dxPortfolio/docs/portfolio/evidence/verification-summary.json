@@ -1,0 +1,129 @@
+{
+  "verification_date": "2026-10-15",
+  "windows": {
+    "binarySha256": "c91380e9290ddfd394c4bab739b7c30d16e18126279bd672ead013d0a74b34e6",
+    "build": "Win32 Release",
+    "ctestPassed": 7,
+    "skillCompilerPassed": 6,
+    "scaleAdapterPassed": 1,
+    "manualWaitSeconds": 52,
+    "manualFinal": "presentations=0 impacts=0 queued=0 turns=0 active=3 manual=1 phase=0 result=0 paused=0",
+    "automaticFinal": "presentations=4 impacts=4 queued=0 turns=10 active=-1 manual=0 phase=1 result=1 paused=0",
+    "pausedSkipFinal": "presentations=4 impacts=4 queued=0 turns=10 active=-1 manual=0 phase=1 result=1 paused=0",
+    "invalidTargetConsumesTurn": false,
+    "pauseVisualAndAudioUnchanged": true,
+    "skipCancelsPendingAudio": true,
+    "basicAttacks": {
+      "action-basic": {
+        "snapshots": 17,
+        "hpHeldUntilImpact": true,
+        "hpMatchesAtImpact": true,
+        "enemyApproachVisible": true,
+        "maxActions": 11,
+        "maxEnemyActions": 4,
+        "idleRestorationObserved": true
+      },
+      "action-fast": {
+        "snapshots": 17,
+        "hpHeldUntilImpact": true,
+        "hpMatchesAtImpact": true,
+        "enemyApproachVisible": true,
+        "maxActions": 21,
+        "maxEnemyActions": 9,
+        "idleRestorationObserved": true
+      },
+      "action-pause": {
+        "snapshots": 17,
+        "hpHeldUntilImpact": true,
+        "hpMatchesAtImpact": true,
+        "enemyApproachVisible": true,
+        "maxActions": 10,
+        "maxEnemyActions": 4,
+        "idleRestorationObserved": true,
+        "poseHpAudioClockUnchanged": true
+      },
+      "automaticBattle": {
+        "victoryAfterPresentation": true,
+        "normalActions": 6,
+        "normalImpacts": 6,
+        "compositeS3": 4,
+        "enemyActions": 3,
+        "allActorsAtHome": true
+      },
+      "cutscenesDisabled": {
+        "victoryAfterPresentation": true,
+        "normalActions": 10,
+        "normalImpacts": 10,
+        "compositeS3": 0,
+        "enemyActions": 3,
+        "allActorsAtHome": true,
+        "pendingAudio": 0,
+        "musicPlaying": true
+      }
+    }
+  },
+  "resources": {
+    "animatedSets": 488,
+    "heroPortraits": 385,
+    "animatedCutins": 427,
+    "cutinDecoderPassed": 427,
+    "s3RigRuntimePassed": 21,
+    "compositeS3": [
+      "c1017.s3",
+      "c1048.s3",
+      "c1028.s3",
+      "c1037.s3"
+    ]
+  },
+  "audio_verified": 29003,
+  "apk": {
+    "file": "EpicSeven-Local-Battle-arm64.apk",
+    "bytes": 2571368020,
+    "sha256": "511c76a1bcaa30cc2f67ec06979e8076a5c6e260ad6a693614fcc6bbd6d5906c",
+    "matchesBuildReceipt": true
+  },
+  "source_hashes": {
+    "Classes/AnimatedCutscene.cpp": "e76f376b76e49ee260f7a2a21668be4c9f3de1945700c7f7315df5522b3c4bf7",
+    "Classes/AnimatedCutscene.h": "78f3ccffa15e869d149a1bcac409f6f2ce65c0acf67ef4b9293ef40ec1e7f221",
+    "Classes/AppDelegate.cpp": "0fde44ce3043eacd2e7c048356155bb6fcfa64f8f4c244d44339f0483660ff28",
+    "Classes/AppDelegate.h": "530c21405ee63d0c128e48f3b6c9796582625329d9584f0a0b112b683a1091d3",
+    "Classes/AudioLibraryScene.cpp": "b54c133d7a1de03a26acc271c0ad930af6b661c07d00c999b54965af9477c773",
+    "Classes/AudioLibraryScene.h": "997a27bc473d7d40cfffa5b77d558a361f3ee89eae07389f55b71ab1333a5443",
+    "Classes/BattleHud.cpp": "9baaf0d32e6ce580ce7b9d9372e57f4b79f2277d642a80c7d8ed193f4a4b5b56",
+    "Classes/BattleHud.h": "66c837b67bb311413dc09cc3317e0cb69a86b84442aed047e8e85c276708d5d1",
+    "Classes/BattleStageBackground.cpp": "08e4501c1bde6c878fb092af53c496e4afd93f134f68899421f1de62263baada",
+    "Classes/BattleStageBackground.h": "f03856943c280f5964b29a06edf3420240e6dfefd03f2db451f4b770fdc0a6c8",
+    "Classes/core/GameModel.cpp": "afbab307cbacc0e5747b25cead241bb02272664de4ec0665cf1b05ab75d7e52e",
+    "Classes/core/GameModel.h": "084fce603bf222f820f8c3e47176dbb42bb2d6d7695c36d58c7d8f7c881a8a2b",
+    "Classes/core/SkillTimeline.cpp": "34a55476a5e76ab22bbc5c40524920410f89430eb0cbb5b542c0f912240a9842",
+    "Classes/core/SkillTimeline.h": "59afe86c694ba83b9cc6e25a4992470fa1161c0058e60cb5279dac8a134f38bc",
+    "Classes/FrontendScene.cpp": "94ce449a62e97f1cafe76bcd311e218e6d656629fdc44cfe38f5a95fc35dc490",
+    "Classes/FrontendScene.h": "1bce10f4ef5d6ac1640909b94d49591f3fbee262464ca77f5f3b2ad7305bf35f",
+    "Classes/GameScene.cpp": "8e0b124494d8f4779da841e1e8c7eedb70532102f06c74e4808bb71074f6baba",
+    "Classes/GameScene.h": "82ad0b56736f682d820fb57f5fee23c73e60a75af465a8df42bafe978d217e5c",
+    "Classes/LegacySpinePose.cpp": "31882b6dfe73a3a7502aff0ee09df88456cf6e5321d6311de0b9811155ec127d",
+    "Classes/LegacySpinePose.h": "6f3da83beae379b274624bbaaa02f26de223e764f4de67d5d7ab2bd61a71e795",
+    "Classes/Presentation.h": "7a857d1ef7aa8e8540d2b2a40b7182b45c280534c2e42576fb97b75ce2d4f201",
+    "Classes/ReferenceAudio.cpp": "f6095712f0935241dbf220d531cf365f0391a5cfa12b2fa940afd6d3e9bccd1e",
+    "Classes/ReferenceAudio.h": "873b723e270dbe3c40da8905fb3dc5aa1975e625bdceed2dc1fc14c1712d0993",
+    "Classes/ResourceGallery.cpp": "e2f0337ffcde1c825b176b205452123cab9c3120181dd9b3bcca487e99562abf",
+    "Classes/ResourceGallery.h": "bd1440febf6736857a2ce315bd82e9034e7985c35618c7226ff1d98e2be27296",
+    "Classes/SaveStore.cpp": "786a893d2fcda1503d98c67a35bd494c6981cad8561aba22a99e18304be24318",
+    "Classes/SaveStore.h": "6872cb397fc74b432a7c4afac74070f961284441339abd76688f2abb0b22fa5a",
+    "Classes/SkillPresentation.cpp": "325e6da2ce7a37b19678643b5821604f8d4308c468322244abf9fe01dc4c23fd",
+    "Classes/SkillPresentation.h": "cfcfb32145d27097ea82cb0baadae5058914a394707b5a6bc60901786b9994c0",
+    "Classes/SpinePreview.cpp": "1649d16852e4b4998f13c1059c00fb7e17843c5509279b29860b998c7f282ae6",
+    "Classes/SpinePreview.h": "5dc6c1a9e4237d2ba8d3b6823bbfdd7c17f9f9429dffb54834e97bb2f9523dfa",
+    "Classes/WebpAnimation.cpp": "9d112814eebda6adee3b8e0bc0b919014367beb1e32dfd7483924a47b2dbeeed",
+    "Classes/WebpAnimation.h": "09680a79ff92353d542d37e415c2c39e412c58f30dda54d9b26fc0a25b511631"
+  },
+  "limits": [
+    "Only 4 composite S3 presentations are connected to combat.",
+    "Battle formulas and server logic are local reconstruction.",
+    "Original runtime pixel comparison and FMOD event timing are unverified.",
+    "Ordinary attack movement and some impact timings are local staging choices.",
+    "Android library individual track playback is unverified.",
+    "Device motion capture is v5; final installed APK and resume checks are v6.",
+    "No performance benchmark or full original-game pixel equivalence is claimed."
+  ]
+}

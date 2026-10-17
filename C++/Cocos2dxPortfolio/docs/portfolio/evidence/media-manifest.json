@@ -1,0 +1,32 @@
+[
+  {
+    "file": "assets/android-lobby.png",
+    "source_in_reconstruction": "captures/android/lobby-final.png",
+    "bytes": 3401816,
+    "sha256": "72195f90fe9c6517dc4db67936c08baff2998cf898340fca8ccb80ecd816d7ce"
+  },
+  {
+    "file": "assets/enemy-impact.png",
+    "source_in_reconstruction": "captures/action-basic/frame-13.png",
+    "bytes": 904575,
+    "sha256": "1451b112d83ebaf7ccda876a4898ba47985eeb057a888dead1a71ead97ff5ce6"
+  },
+  {
+    "file": "assets/ally-attack.png",
+    "source_in_reconstruction": "captures/android/action-current.png",
+    "bytes": 3671261,
+    "sha256": "20e209c80ca6558dbc24e574905aba2e8f8d5b234b6bb382cc4b729f4244ad2c"
+  },
+  {
+    "file": "assets/android-s3.png",
+    "source_in_reconstruction": "captures/android/battle-s3-1.png",
+    "bytes": 503200,
+    "sha256": "411d8a40fc18050a7247db473673f1f393467788a8c83883e192804381847c59"
+  },
+  {
+    "file": "assets/android-auto-battle.mp4",
+    "source_in_reconstruction": "captures/android/action-auto.mp4",
+    "bytes": 6560398,
+    "sha256": "4c5f730aa812b4a12e8aa0651362a06c52703b04584a53b1a9639ceaafd28c28"
+  }
+]
