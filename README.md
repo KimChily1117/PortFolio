@@ -2,31 +2,21 @@
 # 🎮 Game Developer Portfolio - 김선엽
 
 > 실시간 멀티플레이 게임 서버와 클라이언트를 직접 설계/개발한 프로젝트를 정리한 포트폴리오입니다.  
-> MOBA 장르의 Unity 기반 게임과, DirectX11 기반 자체 엔진 MOBA 프로젝트를 통해  
+> Unity 기반 협동 던전 게임과 DirectX11 기반 자체 엔진 MOBA 프로젝트를 통해
 > 네트워크, 엔진 구조, 클라이언트 개발 전반의 실전 경험을 보유하고 있습니다.
 
 ---
 
 ## 📌 프로젝트 목록
 
-### 1. Project_Dawn (Unity 기반 MOBA 프로젝트)
+### 1. Project Dawn — 바칼 협동 레이드
 
-- 🔧 기술 스택: Unity, C# TCP Socket, Google Protobuf, Entity Framework, MSSQL, AWS EC2/RDS  
-- 🧠 핵심 구현:
-  - Room 기반 마을/던전 분리 서버 구조
-  - FSM 기반 몬스터 AI 및 서버 권한 판정
-  - 모바일/PC 크로스플랫폼 구현
-  - 서버-DB 연동 AWS 배포 경험
-
-- 🔗 시연:
-  - [기능 영상](https://youtu.be/SLZUMB9TtIY)
-  - [크로스플랫폼 시연](https://youtu.be/AU5nKUrq1Uo)
-
-📁 폴더 구조:
-```
-C# / Project_Dawn         👉 Unity 클라이언트
-C# / Server               👉 C# 서버
-```
+- Unity / C# / Lua / Protobuf / MySQL / AWS EC2·TLS 기반 1~4인 협동 액션 프로젝트입니다.
+- 방장 Lua 계산·서버 C# 검증, 미확정 입력 재판정, 3×3 방·보스 페이즈·스킬·보상 영속화를 연결했습니다.
+- [최신 통합 소스·README](C%23/ProjectDawnIntegration/README.md) · [구조와 코드](C%23/ProjectDawnIntegration/Docs/ARCHITECTURE.md) · [검증·한계](C%23/ProjectDawnIntegration/Docs/VALIDATION.md)
+- [Notion 포트폴리오·시연](https://www.notion.so/3376402ecd938052b979f38d08fda9a0)
+- 최신 통합 폴더는 코드·문서만 공개합니다. 원본 리소스·빌드·계정·운영 설정은 제외했습니다.
+- 기존 [Dawn 클라이언트](C%23/Project_Dawn)와 [서버](C%23/Server)는 통합 이전 이력입니다.
 
 ---
 
@@ -69,9 +59,9 @@ DirectX 클라이언트와 서버의 새 경로 빌드 순서는 [D3D 이전 안
 
 ---
 
-### 5. DNF Raid Demo (Unity 2인 협동 액션)
+### 5. DNF Raid Demo — 통합 이전 2인 프로토타입
 
-- Unity 2022.3.16f1 / C# / JSON UDP 기반 호스트 권한 협동 전투 데모입니다.
+- 현재는 [Project Dawn 통합본](C%23/ProjectDawnIntegration/README.md)의 기반으로 합쳐졌습니다. 아래는 초기 Unity 2인 UDP 프로토타입 이력입니다.
 - 기본 3타·스킬·회피·점프, 보스 패턴 6종, 페이즈·무력화·승패와 모션 상태 분리를 구현했습니다.
 - [프로젝트·실행 안내](C%23/DnfRaidDemo/README.md) · [전투 코드](C%23/DnfRaidDemo/UnityProject/Assets/Scripts/RaidSimulation.cs) · [네트워크 코드](C%23/DnfRaidDemo/UnityProject/Assets/Scripts/RaidNetwork.cs)
 - Unity 프로젝트·실행 리소스·빌드·검사 스크립트를 포함하며, 리소스 출처와 AI 구현 지원은 [출처](C%23/DnfRaidDemo/THIRD-PARTY.md)에 구분했습니다.
