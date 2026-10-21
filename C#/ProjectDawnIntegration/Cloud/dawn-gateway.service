@@ -1,0 +1,25 @@
+[Unit]
+Description=Project Dawn gateway
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+[Service]
+User=dawn
+Group=dawn
+EnvironmentFile=/etc/projectdawn.conf
+WorkingDirectory=/opt/projectdawn/release
+ExecStart=/usr/bin/python3 /opt/projectdawn/release/ops/launch.py gateway
+Restart=on-failure
+RestartSec=30
+RuntimeDirectory=dawn-gateway
+RuntimeDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/run/dawn-gateway
+LimitNOFILE=4096
+MemoryMax=256M
+[Install]
+WantedBy=multi-user.target

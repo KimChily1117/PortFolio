@@ -1,0 +1,7 @@
+{
+  "name": "com.projectdawn.combat",
+  "version": "0.1.0",
+  "displayName": "ProjectDawn Combat Core",
+  "unity": "2021.3",
+  "description": "Shared deterministic combat, bounded replay and server finalization."
+}

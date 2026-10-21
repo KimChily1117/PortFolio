@@ -1,0 +1,85 @@
+using Google.Protobuf.Protocol;
+using Server.Game.Room;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace Server.Game.Object
+{
+
+
+    public class GameObject
+    {
+        public GameObjectType ObjectType { get; protected set; }
+
+        public int Id
+        {
+            get
+            {
+                return Info.ObjectId;
+            }
+            set
+            {
+                Info.ObjectId = value;
+            }
+        }
+
+
+
+        public GameRoom Room { get; set; }
+        public ObjectInfo Info { get; set; } = new ObjectInfo();
+        public PositionInfo PosInfo { get; private set; } = new PositionInfo();
+
+        public PlayerState CurrentPlayerState { get; protected set; }
+
+
+        public float HP { get; protected set; }
+        public float MaxHP { get; protected set; }
+        public bool IsDead { get; protected set; }
+
+
+        public GameObject()
+        {
+            Info.PosInfo = PosInfo;
+        }
+
+
+        internal void ApplyRaidState(int hp, int maxHp, float x)
+        {
+            HP = hp; MaxHP = maxHp; IsDead = hp <= 0;
+            Info.PosInfo.PosX = x;
+            if (Info.StatInfo == null) Info.StatInfo = new StatInfo();
+            Info.StatInfo.Hp = hp; Info.StatInfo.MaxHp = maxHp;
+        }
+
+        public void OnDamaged(float damage , GameObject attacker)
+        {
+            if (Room?.UsesRaidCore == true || IsDead)
+                return;
+
+            if (damage <= 0)
+                return;
+
+            HP -= damage;
+
+            if (HP <= 0)
+            {
+                IsDead = true;
+                OnDead(attacker);
+            }
+        }
+
+        public virtual void OnDead(GameObject attacker)
+        {
+        }
+
+
+
+        public GameObject GetOwner()
+        {
+            return this;
+        }
+
+    }
+}

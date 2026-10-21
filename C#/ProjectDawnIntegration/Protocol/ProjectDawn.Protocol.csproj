@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>netstandard2.0</TargetFramework></PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+    <Compile Include="../Server/Server/Packet/Protocol.cs" Link="Protocol.cs" />
+    <Compile Include="../Server/Server/Packet/Raid.cs" Link="Raid.cs" />
+  </ItemGroup>
+</Project>

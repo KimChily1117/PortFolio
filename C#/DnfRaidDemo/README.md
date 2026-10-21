@@ -1,3 +1,5 @@
+> 이 폴더는 초기 2인 프로토타입 이력입니다. 최신 1~4인 서버 검증 통합본은 [Project Dawn — 바칼 협동 레이드](../ProjectDawnIntegration/README.md)를 참고하세요.
+
 # DNF Raid Demo
 
 Unity 2022.3.16f1 / C# / Windows x64 / Mono · v0.1.2

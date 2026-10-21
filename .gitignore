@@ -49,3 +49,6 @@ sysinfo.txt
 
 # Lyra is maintained in a separate local workspace and source repository.
 /Unreal Project/Lyra_Clone/
+
+# Authored combat/Unity dependency project files for the integrated Dawn source.
+!/C#/ProjectDawnIntegration/Build/

@@ -1,0 +1,403 @@
+syntax = "proto3";
+
+package Protocol;
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+enum MsgId {
+  S_ENTER_GAME = 0;
+  S_LEAVE_GAME = 1;
+  S_SPAWN = 2;
+  S_DESPAWN = 3;
+  C_MOVE = 4;
+  S_MOVE = 5;
+  C_SKILL = 6;
+  S_SKILL = 7;
+  C_SCENE_MOVE = 8;
+  S_SCENE_MOVE = 9;
+  C_JUMP = 10;
+  S_JUMP = 11;
+  C_COLLISION = 12;
+  S_COLLISION = 13;
+  C_LOGIN = 14;
+  S_LOGIN = 15;
+  S_CONNECTED = 16;
+  C_CREATE_PLAYER = 17;
+  S_CREATE_PLAYER = 18;
+  C_ENTER_GAME = 19;
+  C_CREATE_ROOM = 20;
+  S_CREATE_ROOM = 21;
+  C_ENTER_PARTY = 22;
+  S_ENTER_PARTY = 23;
+  S_DIE = 24;
+  S_ITEM_LIST = 25;
+  S_ADD_ITEM = 26;
+  S_EQUIP_ITEM = 27;
+  C_EQUIP_ITEM = 28;
+  S_CHANGE_STAT = 29;
+  C_UDP_HELLO = 30;
+  S_UDP_HELLO = 31;
+  C_UDP_MOVE = 32;
+  C_SCENE_READY = 33;
+  S_DUNGEON_CLEAR = 34;
+  C_CHANNEL_MOVE = 35;
+  S_CHANNEL_MOVE = 36;
+  C_RAID_HELLO = 37;
+  S_RAID_HELLO = 38;
+  C_RAID_INPUT = 39;
+  C_RAID_PROPOSAL = 40;
+  S_RAID_START = 41;
+  S_RAID_INPUT = 42;
+  S_RAID_PROPOSAL_RESULT = 43;
+  S_RAID_FRAME = 44;
+  S_RAID_ENDED = 45;
+  S_RAID_CLOCK_CHALLENGE = 46;
+  C_RAID_CLOCK_RESPONSE = 47;
+  S_RAID_CLOCK_STATE = 48;
+  C_TOWN_GATE = 49;
+  C_RAID_LEAVE = 50;
+  C_APPEARANCE = 51;
+  S_APPEARANCE = 52;
+  C_CHANNEL_LIST = 53;
+  S_CHANNEL_LIST = 54;
+  S_RAID_RESUME = 55;
+  S_RAID_REWARDS = 56;
+  S_EQUIPMENT_STATS = 57;
+  C_CHAT = 58;
+  S_CHAT = 59;
+  S_CHAT_CONTEXT = 60;
+  C_RAID_CINEMATIC_SKIP = 61;
+  S_RAID_CINEMATIC = 62;
+
+}
+
+enum PlayerState {
+  IDLE = 0;
+  MOVING = 1;
+  RUN = 2;
+  SKILL = 3;
+  ATK = 4;
+  DEAD = 5;
+  JUMP = 6;
+}
+
+enum MoveDir {
+  NONE = 0;
+  UP = 1;
+  DOWN = 2;
+  LEFT = 3;
+  RIGHT = 4;
+}
+
+enum GameObjectType{
+	PLAYER = 0;
+	ENEMY = 1;
+	PROJECTILE = 2;
+}
+
+enum RoomType
+{
+	TOWN = 0;
+	BAKAL = 1;
+	PARTY = 2;
+}
+
+enum PlayerServerState
+{
+	SERVER_STATE_LOGIN = 0;
+	SERVER_STATE_CHARECTERSELECT = 1;
+	SERVER_STATE_INGAME = 2;
+	SERVER_STATE_DUNGEON = 3;
+}
+
+enum SceneType
+{
+	SCENE_NONE = 0;
+	SCENE_LOGIN = 1;
+	SCENE_LOBBY = 2;
+	SCENE_TOWN = 3;
+	SCENE_DUNGEONSELECT = 4;
+	SCENE_BAKAL = 5;
+}
+
+
+enum ItemType {
+  ITEM_TYPE_NONE = 0;
+  ITEM_TYPE_WEAPON = 1;
+  ITEM_TYPE_ARMOR = 2;
+  ITEM_TYPE_CONSUMABLE = 3;
+}
+
+enum WeaponType {
+  WEAPON_TYPE_NONE = 0;
+  WEAPON_TYPE_SWORD = 1;
+  WEAPON_TYPE_BOW = 2;
+}
+
+enum ArmorType {
+  ARMOR_TYPE_NONE = 0;
+  ARMOR_TYPE_HELMET = 1;
+  ARMOR_TYPE_ARMOR = 2;
+  ARMOR_TYPE_BOOTS = 3;
+}
+
+enum ConsumableType {
+   CONSUMABLE_TYPE_NONE = 0;
+   CONSUMABLE_TYPE_POTION = 1;
+}
+
+message S_Connected
+{
+}
+
+message C_Login
+{
+	string uniqueId = 1;
+}
+
+message S_Login
+{
+	int32 loginOK = 1;
+	repeated LobbyPlayerInfo players = 2;
+	string udpToken = 3;
+}
+
+message C_CreatePlayer
+{
+	string name = 1;
+}
+
+
+message S_CreatePlayer
+{
+	LobbyPlayerInfo player = 1;
+}
+
+
+message LobbyPlayerInfo
+{
+	int32 playerDbId = 1;
+	string name = 2;
+	StatInfo statInfo = 3;
+	string appearance = 4;
+}
+
+
+message S_EnterGame {
+  ObjectInfo player = 1;
+}
+
+message C_EnterGame
+{
+	string name = 1;
+}
+
+message S_LeaveGame
+{
+}
+
+message S_Spawn {
+  repeated ObjectInfo objects = 1;
+  repeated LobbyPlayerInfo players = 2;
+}
+
+message S_Despawn {
+  repeated int32 playerIds = 1;
+}
+
+message S_Die{
+	ObjectInfo player = 1;
+}
+
+message C_Move {
+  PositionInfo posInfo = 1;
+}
+
+message S_Move {
+  int32 playerId = 1;
+  PositionInfo posInfo = 2;
+}
+
+message C_Collision {
+	ObjectInfo playerinfo = 1;
+}
+
+message S_Collision {
+	int32 playerId = 1;
+	ObjectInfo playerinfo = 2;
+}
+
+message C_SceneMove {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_SceneMove {
+  ObjectInfo playerinfo = 1;
+  RoomType targetRoomType = 2;
+  int32 targetRoomId = 3;
+  int32 transferId = 4;
+  SceneType sceneType = 5;
+}
+
+message C_SceneReady {
+  int32 targetRoomId = 1;
+  int32 transferId = 2;
+  RoomType targetRoomType = 3;
+  SceneType sceneType = 4;
+}
+
+
+message S_DungeonClear {
+  int32 clearedRoomId = 1;
+  string message = 2;
+  int32 returnDelaySeconds = 3;
+  RoomType targetRoomType = 4;
+  SceneType sceneType = 5;
+}
+
+message C_ChannelMove {
+  int32 targetRoomId = 1;
+}
+
+message S_ChannelMove {
+  bool success = 1;
+  int32 currentRoomId = 2;
+  int32 targetRoomId = 3;
+  string reason = 4;
+}
+
+message C_EquipItem {
+  int32 itemDbId = 1;
+  bool equipped = 2;
+}
+
+message S_EquipItem {
+  int32 itemDbId = 1;
+  bool equipped = 2;
+}
+
+message S_ChangeStat {
+  StatInfo statInfo = 1;
+}
+
+
+message C_CreateRoom {
+  ObjectInfo playerinfo = 1;
+  // 0 keeps the legacy four-player queue; explicit requests support 1..4.
+  int32 party_size = 2;
+}
+
+message S_CreateRoom {
+  ObjectInfo playerinfo = 1;
+  int32 ResponseCode = 2;
+  int32 party_size = 3;
+}
+
+message C_EnterParty {
+  ObjectInfo playerinfo = 1;
+}
+
+message S_EnterParty {
+  ObjectInfo playerinfo = 1;
+  int32 ResponseCode = 2;
+  repeated LobbyPlayerInfo PartyMembers = 3;
+}
+message C_Jump {
+  PositionInfo posInfo = 1;
+}
+
+message S_Jump {
+  int32 playerId = 1;
+  PositionInfo posInfo = 2;
+}
+
+message C_Skill {
+  SkillInfo info = 1;
+}
+
+message S_Skill {
+  int32 playerId = 1;
+  SkillInfo info = 2;
+}
+
+message C_UdpHello {
+  string token = 1;
+}
+
+message S_UdpHello {
+  bool ok = 1;
+  string message = 2;
+}
+
+message C_UdpMove {
+  PositionInfo posInfo = 1;
+  uint32 sequence = 2;
+}
+
+message S_ItemList {
+  repeated ItemInfo items = 1;
+}
+
+message S_AddItem {
+  repeated ItemInfo items = 1;
+}
+
+message ObjectInfo {
+  int32 objectId = 1;
+  string name = 2;
+  PositionInfo posInfo = 3;
+  SkillInfo skillInfo = 4;
+  float damage = 5;
+  bool isReady = 6;
+  bool isMaster = 7;
+  StatInfo statInfo = 8;
+  string appearance = 9;
+}
+
+message PositionInfo {
+  PlayerState state = 1;
+  MoveDir moveDir = 2;
+  float posX = 3;
+  float posY = 4;
+}
+
+message SkillInfo {
+  int32 skillId = 1;
+}
+
+message ItemInfo {
+  int32 itemDbId = 1;
+  int32 templateId = 2;
+  int32 count = 3;
+  int32 slot = 4;
+  bool equipped = 5;
+  int32 physical_attack = 6;
+  int32 physical_defence = 7;
+  float move_speed_percent = 8;
+  float attack_speed_percent = 9;
+  string display_name = 10;
+  string icon_path = 11;
+}
+
+message StatInfo {
+  int32 level = 1;
+  int32 hp = 2;
+  int32 maxHp = 3;
+  int32 attack = 4;
+  float speed = 5;
+  int32 totalExp = 6;
+}
+
+
+
+message C_TownGate { bool publicArea = 1; }
+message C_RaidLeave { int64 encounter = 1; }
+
+message C_Appearance { string look = 1; bool initializeOnly = 2; }
+message S_Appearance { int32 playerId = 1; string look = 2; string error = 3; }
+
+message C_ChannelList {}
+message ChannelSummary { int32 roomId = 1; int32 playerCount = 2; }
+message S_ChannelList { int32 currentRoomId = 1; repeated ChannelSummary rooms = 2; }
+
+message S_EquipmentStats { float physical_attack = 1; float physical_defence = 2; float move_speed_scale = 3; float attack_speed_scale = 4; }

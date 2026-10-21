@@ -1,0 +1,28 @@
+[Unit]
+Description=Project Dawn member game server
+After=network-online.target mysql.service
+Wants=network-online.target
+[Service]
+User=dawn-server
+Group=dawn-server
+EnvironmentFile=/etc/projectdawn/server.env
+Environment=PROJECT_DAWN_DB_PROVIDER=MySql
+Environment=PROJECT_DAWN_CONFIG_PATH=/opt/projectdawn/release/flow-server.config.json
+Environment=PROJECT_DAWN_REQUIRE_REGISTERED_ACCOUNTS=true
+Environment=PROJECT_DAWN_REWARD_OUTBOX=/var/lib/dawn-member-server/reward-outbox
+WorkingDirectory=/opt/projectdawn/release
+ExecStart=/opt/projectdawn/release/server/FlowHost 28182
+Restart=on-failure
+RestartSec=30
+StateDirectory=dawn-member-server
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/dawn-member-server
+LimitNOFILE=4096
+MemoryMax=768M
+[Install]
+WantedBy=multi-user.target

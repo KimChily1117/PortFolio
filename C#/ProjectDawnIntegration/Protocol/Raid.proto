@@ -1,0 +1,74 @@
+syntax = "proto3";
+package Protocol;
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+// Version 1 is a bounded network integration slice, not the full skill catalog.
+message C_RaidHello { int32 version = 1; bool clock_sync = 2; }
+message S_RaidHello { int32 version = 1; string reason = 2; }
+message RaidInputKey { int64 encounter = 1; int32 player = 2; int64 epoch = 3; int64 sequence = 4; }
+message C_RaidInput {
+  RaidInputKey key = 1;
+  int64 client_time_us = 2;
+  int64 clock_version = 3;
+  int32 kind = 4;
+  int32 value = 5;
+  int32 move_x = 6; int32 move_y = 7; int32 buttons = 8;
+}
+message C_RaidProposal {
+  int64 encounter = 1; int64 host_epoch = 2; int64 sequence = 3;
+  int64 start_tick = 4; int32 actor = 5; int32 definition = 6;
+  RaidInputKey origin = 7;
+  string program = 8;
+}
+message RaidFighter {
+  int32 id = 1; int32 x = 2; int32 hp = 3; int32 max_hp = 4;
+  int32 jump_height = 5; bool is_boss = 6; int64 epoch = 7;
+}
+message S_RaidStart {
+  int32 version = 1; int64 encounter = 2; int32 self = 3; int32 host = 4;
+  int64 host_epoch = 5; int64 clock_version = 6;
+  int64 tick_us = 7; int64 input_grace_us = 8; int64 proposal_grace_us = 9;
+  int64 finalization_delay_us = 10; bool receive_time_only = 11;
+  repeated RaidFighter fighters = 12;
+  string ruleset = 13;
+  bytes content = 14; repeated int32 player_slots = 15; bool clock_sync = 16;
+  int64 event_sequence = 17; int64 server_time_us = 18; bool resumed = 19;
+}
+message S_RaidInput {
+  C_RaidInput input = 1; int32 result = 2; int32 original_result = 3;
+  int64 received_us = 4; int64 effective_tick = 5; bool used_receive_time = 6;
+}
+message S_RaidProposalResult { int64 encounter = 1; int64 sequence = 2; int32 result = 3; }
+message RaidEvent {
+  int64 sequence = 1; int64 evaluated_tick = 2; string kind = 3; string key = 4;
+  RaidInputKey origin = 5; int32 target = 6; int32 damage = 7; int32 hp_after = 8;
+}
+message S_RaidFrame {
+  int64 encounter = 1; int64 finalized_tick = 2; int64 server_time_us = 3;
+  repeated RaidFighter fighters = 4; repeated RaidEvent events = 5;
+  bytes content = 6; bytes preview = 7;
+}
+message S_RaidEnded { int64 encounter = 1; string reason = 2; }
+
+message S_RaidClockChallenge { int64 encounter = 1; int64 epoch = 2; string token = 3; }
+message C_RaidClockResponse { int64 encounter = 1; int64 epoch = 2; string token = 3; int64 client_received_us = 4; int64 client_sent_us = 5; }
+message S_RaidClockState { int64 encounter = 1; int64 version = 2; int64 offset_us = 3; bool trusted = 4; int64 expires_us = 5; int64 max_backdate_us = 6; int64 uncertainty_us = 7; int64 round_trip_us = 8; }
+
+message S_RaidResume { string status = 1; int32 remaining_seconds = 2; }
+message RaidReward { int32 slot = 1; int32 player_db_id = 2; string name = 3; bool eligible = 4; int32 amount = 5; string reason = 6; int32 equipment_template = 7; string equipment_name = 8; string equipment_icon = 9; }
+message S_RaidRewards { int64 encounter = 1; string status = 2; repeated RaidReward entries = 3; int64 total_tokens = 4; }
+
+// Authenticated connection supplies voter identity; client cannot specify a slot or grant rewards.
+message C_RaidCinematicSkip { int64 encounter = 1; }
+message S_RaidCinematic {
+  int64 encounter = 1; int32 revision = 2; int32 elapsed_ms = 3;
+  int32 fade_ms = 4; int32 duration_ms = 5; int32 viewers = 6;
+  int32 required = 7; repeated int32 voted_slots = 8;
+  bool complete = 9; string reason = 10;
+}
+
+// Server assigns the audience. Context changes on entry/transfer/reconnect.
+enum ChatScope { CHAT_NONE = 0; CHAT_TOWN = 1; CHAT_DUNGEON = 2; }
+message C_Chat { string text = 1; int64 context = 2; }
+message S_ChatContext { ChatScope scope = 1; int32 room_id = 2; int64 context = 3; }
+message S_Chat { ChatScope scope = 1; int32 room_id = 2; int64 sequence = 3; int32 sender_id = 4; string sender_name = 5; string text = 6; string error = 7; }

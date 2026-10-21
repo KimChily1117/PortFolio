@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework></PropertyGroup><ItemGroup><Compile Include="../Server/ServerCore/Session.cs" Link="Session.cs"/><Compile Include="../Server/ServerCore/RecvBuffer.cs" Link="RecvBuffer.cs"/></ItemGroup></Project>
